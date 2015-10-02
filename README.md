@@ -1,3 +1,3 @@
-Provider Lookup Service API
+Patient Consent Management API
 =============
 
