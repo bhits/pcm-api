@@ -1,0 +1,9 @@
+<xacmlResult>
+	<pdpDecision>Permit</pdpDecision>
+	<purposeOfUse>TREATMENT</purposeOfUse>
+	<messageId>4617a579-1881-4e40-9f98-f85bd81d6502</messageId>
+	<homeCommunityId>2.16.840.1.113883.3.467</homeCommunityId>
+	<pdpObligation>Drug Abuse</pdpObligation>
+	<pdpObligation>Psychiatric Information</pdpObligation>
+	<pdpObligation>HIV</pdpObligation>
+</xacmlResult>

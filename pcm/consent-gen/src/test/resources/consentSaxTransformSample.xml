@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClinicalDocument xmlns="urn:hl7-org:v3"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  classCode="DOCCLIN"
+                  moodCode="EVN">
+   <realmCode code="US"/>
+   <typeId root="2.16.840.1.113883.1.3" extension="09230"/>
+   <templateId root="2.16.840.1.113883.10.20.3"/>
+   <templateId root="2.16.840.1.113883.3.445.1"/>
+   <id root="1.3.6.4.1.4.1.2835.888888" extension="221"/>
+   <code code="57016-8"
+         codeSystem="2.16.840.1.113883.6.1"
+         codeSystemName="LOINC"
+         displayName="Privacy Policy Acknowledgement Document"/>
+   <title representation="TXT" mediaType="text/plain">Consent Authorization</title>
+   <effectiveTime value="20101016263415+0000"/>
+   <confidentialityCode code="N"/>
+   <recordTarget>
+      <patientRole>
+         <id extension="266666666" root="2.16.840.1.113883.3.933"/>
+         <addr>
+            <streetAddressLine/>
+            <city/>
+            <state/>
+            <postalCode/>
+            <country/>
+         </addr>
+         <patient>
+            <name>
+               <given>Albert</given>
+               <family>Smith</family>
+            </name>
+            <administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1"/>
+            <birthTime value="19830218"/>
+         </patient>
+      </patientRole>
+   </recordTarget>
+   <author>
+      <templateId root="2.16.840.1.113883.3.445.2"/>
+      <functionCode code="POACON"
+                    displayName="healthcare power of attorney consent author"
+                    codeSystem="2.16.840.1.113883.1.11.19930"
+                    codeSystemName="ConsenterParticipationFunction Decision Maker"/>
+      <time value="201003122244"/>
+      <assignedAuthor>
+         <id extension="11111111" root="1.3.5.35.1.4436.7"/>
+         <assignedPerson classCode="PSN">
+            <name>
+               <given>Default</given>
+               <family>Authority</family>
+            </name>
+         </assignedPerson>
+         <representedOrganization>
+            <id root="1.3.6.4.1.4.1.2835.2" extension="980983"/>
+            <name>Level Seven Healthcare, Inc.</name>
+            <telecom value="409-444-2353"/>
+            <addr>
+               <streetAddressLine>4444 Healthcare Drive</streetAddressLine>
+               <city>Ann Arbor</city>
+               <state>MI</state>
+               <postalCode>99999</postalCode>
+               <country>US</country>
+            </addr>
+         </representedOrganization>
+      </assignedAuthor>
+   </author>
+   <custodian>
+      <assignedCustodian>
+         <representedCustodianOrganization>
+            <id root="1.3.6.4.1.4.1.2835.2" extension="980983"/>
+            <name>Level Seven Healthcare, Inc.</name>
+            <telecom value="409-444-2353"/>
+            <addr>
+               <streetAddressLine>4444 Healthcare Drive</streetAddressLine>
+               <city>Ann Arbor</city>
+               <state>MI</state>
+               <postalCode>99999</postalCode>
+               <country>US</country>
+            </addr>
+         </representedCustodianOrganization>
+      </assignedCustodian>
+   </custodian>
+   <authenticator>
+      <time value="20091025"/>
+      <signatureCode code="S"/>
+      <assignedEntity>
+         <id extension="112" root="1.3.5.35.1.4436.7"/>
+         <representedOrganization>
+            <name>Adobe Echo Sign</name>
+         </representedOrganization>
+      </assignedEntity>
+   </authenticator>
+   <documentationOf typeCode="DOC">
+      <serviceEvent moodCode="EVN">
+         <templateId root="2.16.840.1.113883.3.445.3"/>
+         <id root="2.16.840.1.113883.3.445.3"/>
+         <code code="57016-8"
+               codeSystem="2.16.840.1.113883.6.1"
+               codeSystemName="LOINC"
+               displayName="Privacy Policy Acknowledgement Document"/>
+         <effectiveTime>
+            <low value="20130904"/>
+            <high value="20140904"/>
+         </effectiveTime>
+      </serviceEvent>
+   </documentationOf>
+   <relatedDocument typeCode="RPLC">
+      <parentDocument classCode="DOCCLIN" moodCode="EVN">
+         <id root="1.3.6.1.4.1.19376.1.5.3.1.2.6" extension="2345"/>
+      </parentDocument>
+   </relatedDocument>
+   <component typeCode="COMP" contextConductionInd="true">
+      <structuredBody>
+         <component typeCode="COMP" contextConductionInd="true">
+            <section classCode="DOCSECT" moodCode="EVN">
+               <templateId root="2.16.840.1.113883.3.445.17"/>
+               <title>Consent Directive Details</title>
+               <text mediaType="text/x-hl7-text+xml">
+                  <paragraph>CONSENT FOR RELEASE OF <content ID="Clinical_Condition_SNOMED-CT_371422002">SUBSTANCE
+                                        ABUSE</content> INFORMATION</paragraph>
+                  <paragraph> I, <content ID="Patient_Name">Albert Smith</content>
+                     <content ID="permit">authorize</content>
+                     <content ID="CustodianOrganization"/> to <content ID="Operation">disclose</content> to
+                                        <content ID="ReceiverOrganization_1"/> all my medical information except the following information: </paragraph>
+                  <paragraph> The purpose of this disclosure is all purpose except:
+                                        <content ID="purpose"/>
+                  </paragraph>
+               </text>
+            </section>
+         </component>
+      </structuredBody>
+   </component>
+</ClinicalDocument>

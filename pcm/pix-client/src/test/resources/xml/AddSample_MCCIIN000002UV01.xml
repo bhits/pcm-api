@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MCCI_IN000002UV01 ITSVersion="XML_1.0" xmlns="urn:hl7-org:v3">
+   <id root="1.1" extension="a5068963-9273-418d-82a2-4009614da813"/>
+   <creationTime value="20131114194023"/>
+   <interactionId root="2.16.840.1.113883.1.6" extension="MCCI_IN000002UV01"/>
+   <processingCode code="T"/>
+   <processingModeCode code="T"/>
+   <acceptAckCode code="NE"/>
+   <receiver typeCode="RCV">
+      <device classCode="DEV" determinerCode="INSTANCE">
+         <id root="1.2.840.114350.1.13.99998.8734"/>
+         <asAgent classCode="AGNT">
+            <representedOrganization classCode="ORG" determinerCode="INSTANCE">
+               <id root="1.2.840.114350.1.13.99998"/>
+            </representedOrganization>
+         </asAgent>
+      </device>
+   </receiver>
+   <sender typeCode="SND">
+      <device classCode="DEV" determinerCode="INSTANCE">
+         <id root="1.2.840.114350.1.13.99999.4567"/>
+         <asAgent classCode="AGNT">
+            <representedOrganization classCode="ORG" determinerCode="INSTANCE">
+               <id root="1.2.840.114350.1.13.99999.1234"/>
+            </representedOrganization>
+         </asAgent>
+      </device>
+   </sender>
+   <acknowledgement>
+      <typeCode code="CA"/>
+      <targetMessage>
+         <id root="21acf7be-007c-41e6-b176-d0969794983b"/>
+      </targetMessage>
+      <acknowledgementDetail/>
+   </acknowledgement>
+</MCCI_IN000002UV01>

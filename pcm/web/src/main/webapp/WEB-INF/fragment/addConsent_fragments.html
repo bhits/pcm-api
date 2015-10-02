@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<body>
+
+<div th:fragment="addConsentFragment" id="consent-add-main" class="container consent-add-container" style="overflow: hidden">
+	<div class="row main-content-wrapper-flux">
+		<div id="content" class="content">
+
+			<!-- JavaScrip Enable Message -->
+			<noscript th:substituteby="fragment/common :: noscriptFragment">
+				<div class="alert alert-warning col-sm-10">
+					<p id="h4-style" class="alert-heading">Warning!</p>
+					<p>
+						You need to have <a
+							href="https://en.wikipedia.org/wiki/JavaScript"
+							th:href="@{https://en.wikipedia.org/wiki/JavaScript}"
+							target="_blank">JavaScript</a>enabled to use this site.
+					</p>
+				</div>
+			</noscript>
+
+
+			<!-- START: Content Region-->
+
+			<div id="page-fullcontent-holder" role="main"
+				class="col-sm-10 col-sm-offset-1" style="adding-bottom: 40px;">
+				<div class="row">
+
+					<!-- COMPONENT: Consents -->
+
+
+					<!-- AUTHORIZE PERSONS SECTION -->
+
+					<div>
+						<section class="top-margin10">
+							<div class="row">
+								<fieldset>
+									<legend>
+										<span th:text="#{I}">I</span>, <span
+											th:text="${patient_fname+' '+patient_lname}">John
+											Doe</span>, <span th:text="#{hereby}">hereby</span>...
+									</legend>
+								</fieldset>
+							</div>
+						</section>
+
+						<section id="consent-container"
+							class="top-margin10 summary-container authorize-disclose-container">
+							<a href="#authorize-modal" role="button"
+								class="consent-authorize-box bottom-margin10"
+								data-edit-button="#edit1,#content1" data-toggle="modal">
+								<div id="consent-from" class="summary-border consent-authorize-by">
+									<div class="form-inline">
+										<p class="no-click">
+											<span th:text="#{Authorize_the_following_person}">
+												Authorize the following individual or
+												organization</span>:
+										</p>
+										<ul id="authorizers" class="provider-ul"></ul>
+									</div>
+								</div>
+							</a>
+
+							<!-- AUTHORIZE MODAL - START -->
+							<div id="authorize-modal" class="modal fade" tabindex="-1"
+								role="dialog" aria-labelledby="authorize-modal"
+								aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+
+											<button type="button" class="close" data-dismiss="modal"
+												aria-hidden="true">X</button>
+											<h1>Authorize</h1>
+<!-- Filter Providers input field commented out--> 											
+									<!-- 		<div id="addConsent-CreateConsent-2buttons"
+												class="form-inline" style="margin: 0 10px; float: right;">
+													<div class="form-group"
+														style="display: inline-block; margin-right: 2px;">
+														<input type="text" class="form-control input-sm"
+														style="width: auto;" placeholder="Filter Providers" />
+													</div>												
+												</div> 
+									-->
+											<div class="clearfix"></div>
+
+										</div>
+										<div class="modal-body">
+											<div>
+												<form class="inputformPerson" th:object="${consentDto}">
+													<div>
+														<fieldset>
+														<legend>Please select <strong>one</strong>
+															individual or organization authorized to
+															share your information:</legend>
+														<h2>Individuals: </h2>
+														<div id="authorize-list" class="modal_checkbox_list authorization-list">
+															<!-- adding new consent -->
+															
+															 <!-- Fix issue #493 Start
+															  This is only a problem found in Internet Explorer browser. 
+															  After it was fixed, user could press "Space" Key to select. -->
+															
+															<div id="authorize-list-container" th:if="${addConsent}">
+																<div
+																	th:each="individualProvider:${individualProvidersDto}">
+																	<label for="inidividualProvider"
+																		th:for="'from'+${individualProvider.npi}" class="">
+																		<input class="toDiscloseList indv-prov"
+																		id="inidividualProvider"
+																		th:field="*{providersPermittedToDisclose}"
+																		th:id="'from'+${individualProvider.npi}"
+																		value="1234567890"
+																		th:value="${individualProvider.npi}" type="radio"
+																		name="providerConsentAuthorizedFrom"
+																		style="float: none;" onkeydown="javascript:radioOnClick();"/><span
+																		th:text="${individualProvider.lastName+', '+individualProvider.firstName}">
+																			Doe, John</span>
+																	</label>
+																</div>
+																<h2>Organizations: </h2>
+																<div
+																	th:each="organizationalProvider:${organizationalProvidersDto}">
+																	<label for="organizationalProvider"
+																		th:for="'from'+${organizationalProvider.npi}"
+																		class=""> <input class="toDiscloseList org-prov"
+																		id="organizationalProvider"
+																		th:field="*{organizationalProvidersPermittedToDisclose}"
+																		th:id="'from'+${organizationalProvider.npi}"
+																		value="1234567890"
+																		th:value="${organizationalProvider.npi}"
+																		type="radio"
+																		name="providerConsentAuthorizedFrom"
+																		style="float: none;" onkeydown="javascript:radioOnClick();"/><span
+																		th:text="${organizationalProvider.orgName}">
+																			Doe, John</span>
+																	</label>
+																</div>
+
+															</div>
+
+															<!-- editing existing consent -->
+															<div id="authorize-list-container" th:if="${!addConsent}">
+																<div
+																	th:each="individualProvider:${individualProvidersDto}">
+																	<label for="inidividualProvider"
+																		th:for="'from'+${individualProvider.npi}" class="">
+																		<input class="toDiscloseList indv-prov"
+																		id="inidividualProvider"
+																		th:field="*{providersPermittedToDisclose}"
+																		th:id="'from'+${individualProvider.npi}"
+																		value="1234567890"
+																		th:value="${individualProvider.npi}" type="radio"
+																		name="providerConsentAuthorizedFrom"
+																		style="float: none;" onkeydown="javascript:radioOnClick();"/><span
+																		th:text="${individualProvider.lastName+', '+individualProvider.firstName}">
+																			Doe, John</span>
+																	</label>
+																	<div
+																		th:if="${consentDto.providersPermittedToDiscloseNpi.contains(individualProvider.npi)}">
+																		<input type="hidden" class="prov-npi-checked-input"
+																			th:value="'from'+${individualProvider.npi}" />
+																	</div>
+																</div>
+																<h2>Organizations: </h2> 
+																<div
+																	th:each="organizationalProvider:${organizationalProvidersDto}">
+																	<label for="organizationalProvider"
+																		th:for="'from'+${organizationalProvider.npi}"
+																		class=""> <input class="toDiscloseList org-prov"
+																		id="organizationalProvider"
+																		th:field="*{organizationalProvidersPermittedToDisclose}"
+																		th:id="'from'+${organizationalProvider.npi}"
+																		value="1234567890"
+																		th:value="${organizationalProvider.npi}"
+																		type="radio"
+																		name="providerConsentAuthorizedFrom"
+																		style="float: none;" onkeydown="javascript:radioOnClick();"/><span
+																		th:text="${organizationalProvider.orgName}">
+																			Doe, John</span>
+																	</label>
+																	<div
+																		th:if="${consentDto.organizationalProvidersPermittedToDiscloseNpi.contains(organizationalProvider.npi)}">
+																		<input type="hidden" class="prov-npi-checked-input"
+																			th:value="'from'+${organizationalProvider.npi}" />
+																	</div>
+																</div>
+															</div>
+														</div>
+														<!-- <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Save changes</button> -->
+														<span class="btn-left-align" style="margin-left: 14px;"><button
+																id="saveauthorizer" class="btn btn-success btn-xs add-btn"
+																data-dismiss="modal" aria-hidden="true">
+																<span class="fa fa-plus fa-white"> Add Selected</span>
+															</button></span>
+														</fieldset>
+													</div>
+												</form>
+
+											</div>
+											<!-- end -->
+										</div>
+										<!-- end modal-body -->
+									</div>
+								</div>
+							</div>
+
+							<!-- AUTHORIZE MODAL - END -->
+							
+							
+							<div th:include="fragment/provider_search_fragments :: providerSearchModalFragment" id="providerSearchSelect-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+							</div>
+							
+							
+							<!-- end ADD PROVIDER Search modal -->
+							
+							<!-- Provider Search Results modal -->                        		
+                           	
+                           	<div id="provider_search_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal"
+												aria-hidden="true">&times;</button>
+											<h4 class="modal-title">Provider Search Results</h4>
+										</div>
+				
+										<div class="modal-body">
+											<div id="Pagination" class="pagination" style="display: none;">
+											</div>
+				
+											<div class="control-group">
+												<!-- Results -->
+												<div class="controls col-sm-11">
+													<p id="noResult" style="display: none;">Sorry, no results
+														found.</p>
+													<p id="noResponse" style="display: none;">Sorry, no
+														response received from provider web service. Please try
+														again.</p>
+													<div id="resultList" hidden="true">
+														<dt>Search Results</dt>
+													</div>
+												</div>
+												<!-- Buttons -->
+												<div class="search-loading hide"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+                           	
+							<!-- end of Provider Search Results modal -->
+							
+
+							<div id="consent-right-arrow-container" class="consent-right-arrow"
+								style="vertical-align: top;">
+								<div id="consent-arrow" class="fa fa-arrow-right"></div>
+							</div>
+							
+							
+							<a href="#disclose-modal" role="button" data-toggle="modal"
+								class="consent-disclose-box"
+								data-edit-button="#edit1,#content1">
+								<div id="consent-to" class="summary-border consent-disclose-to">
+									<div class="form-inline">
+										<p>
+											<span th:text="#{To_disclose_my_information_to}">To
+												disclose my information to</span>:
+										</p>
+										<ul id="consentmadetodisplay" class="provider-ul"></ul>
+									</div>
+								</div>
+							</a>
+							
+							
+							<!-- DISCLOSE MODAL-START -->
+							<div id="disclose-modal" class="modal fade" tabindex="-1"
+								role="dialog" aria-labelledby="disclose-modal"
+								aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal"
+												aria-hidden="true">X</button>
+
+											<h1>Disclosure</h1>
+											<div id="addConsent-DiscloseConsent-2buttons"
+												class="form-inline" style="margin: 0 15px; float: right;">
+<!-- Filter Providers input field commented out-->  										
+										<!--	<div class="form-group"
+													style="display: inline-block; margin-right: 2px;">
+													<input type="text" class="form-control input-sm"
+														style="width: auto;" placeholder="Filter Providers" />
+												</div> 
+										-->
+												<div class="form-group" style="display: inline-block;">
+													<button id="btn_add_provider_search" class="btn btn-success btn-sm add-btn"><span
+														class="fa fa-plus fa-white" style="padding-right: 3px;"></span>Add
+														Provider</button>
+												</div>
+											</div>
+											<div class="clearfix"></div>
+
+										</div>
+										<div class="modal-body">
+											<div>
+												<form class="inputformPerson" th:object="${consentDto}">
+													<div>
+														<fieldset>
+														<legend>Select <strong>one</strong>
+															individual or organization for disclosure:</legend>
+														<h2>Individuals: </h2>
+														<div id="disclose-list" class="modal_checkbox_list disclosure-list">
+															<!-- adding new consent -->
+															<div id="disclose-list-container" th:if="${addConsent}">
+																<div
+																	th:each="individualProvider:${individualProvidersDto}">
+																	<label for="inidividualProvider"
+																		th:for="'to'+${individualProvider.npi}" class="">
+																		<input class="isMadeToList indv-prov" id="inidividualProvider" 
+																		th:field="*{providersDisclosureIsMadeTo}"
+																		th:id="'to'+${individualProvider.npi}"
+																		value="1234567890"
+																		th:value="${individualProvider.npi}" type="radio"
+																		name="providerConsentMadeTo" style="float: none;" 
+																		onkeydown="javascript:butOnClick();"/><span
+																		th:text="${individualProvider.lastName+', '+individualProvider.firstName}">
+																			Doe, John</span>
+																	</label>
+																</div>
+																<h2>Organizations: </h2>
+																<div
+																	th:each="organizationalProvider:${organizationalProvidersDto}">
+																	<label for="organizationalProvider"
+																		th:for="'to'+${organizationalProvider.npi}" class="">
+																		<input class="isMadeToList org-prov"
+																		id="organizationalProvider"
+																		th:field="*{organizationalProvidersDisclosureIsMadeTo}"
+																		th:id="'to'+${organizationalProvider.npi}"
+																		value="1234567890"
+																		th:value="${organizationalProvider.npi}"
+																		type="radio" name="providerConsentMadeTo"
+																		style="float: none;" onkeydown="javascript:butOnClick();"/><span
+																		th:text="${organizationalProvider.orgName}">
+																			Doe, John</span>
+																	</label>
+																</div>
+
+															</div>
+															<!-- editing existing consent -->
+															<div id="disclose-list-container" th:if="${!addConsent}">
+																<div
+																	th:each="individualProvider:${individualProvidersDto}">
+																	<label for="inidividualProvider"
+																		th:for="'to'+${individualProvider.npi}" class="">
+																		<input class="isMadeToList indv-prov" id="inidividualProvider"
+																		th:field="*{providersDisclosureIsMadeTo}"
+																		th:id="'to'+${individualProvider.npi}"
+																		value="1234567890"
+																		th:value="${individualProvider.npi}" type="radio"
+																		name="providerConsentMadeTo" style="float: none;" 
+																		onkeydown="javascript:butOnClick();"/><span
+																		th:text="${individualProvider.lastName+', '+individualProvider.firstName}">
+																			Doe, John</span>
+																	</label>
+																	<div
+																		th:if="${consentDto.providersDisclosureIsMadeToNpi.contains(individualProvider.npi)}">
+																		<input type="hidden" class="prov-npi-checked-input"
+																			th:value="'to'+${individualProvider.npi}" />
+																	</div>
+																</div>
+																<h2>Organizations: </h2>
+																<div
+																	th:each="organizationalProvider:${organizationalProvidersDto}">
+																	<label for="organizationalProvider"
+																		th:for="'to'+${organizationalProvider.npi}" class="">
+																		<input class="isMadeToList org-prov"
+																		id="organizationalProvider"
+																		th:field="*{organizationalProvidersDisclosureIsMadeTo}"
+																		th:id="'to'+${organizationalProvider.npi}"
+																		value="1234567890"
+																		th:value="${organizationalProvider.npi}"
+																		type="radio" name="providerConsentMadeTo"
+																		style="float: none;" onkeydown="javascript:butOnClick();"/><span
+																		th:text="${organizationalProvider.orgName}">
+																			Doe, John</span>
+																	</label>
+																	
+																	<!-- Fix issue #493 End -->
+																	
+																	<div
+																		th:if="${consentDto.organizationalProvidersDisclosureIsMadeToNpi.contains(organizationalProvider.npi)}">
+																		<input type="hidden" class="prov-npi-checked-input"
+																			th:value="'to'+${organizationalProvider.npi}" />
+																	</div>
+																</div>
+
+															</div>
+														</div>
+														<!-- <select style="z-index: 300"  class="condition-input" id="disclose-list" th:field="*{providersDisclosureIsMadeToNpi}"> -->
+														<!-- <option value="individualProvider" th:value="${individualProvidersDto.npi}" th:each="individualProvidersDto:${individualProvidersDto}" th:text="${individualProvidersDto.lastName+', '+individualProvidersDto.firstName}">John, Doe</option> -->
+														<!-- <option value="organizationalProvider" th:value="${organizationalProvidersDto.npi}" th:each="organizationalProvidersDto:${organizationalProvidersDto}" th:text="${organizationalProvidersDto.orgName}">ABC Hospital</option> -->
+														<!-- </select> -->
+														<span class="btn-left-align" style="margin-left: 14px;"><button
+																id="saveconsentmadeto" class="btn btn-success btn-xs add-btn"
+																data-dismiss="modal" aria-hidden="true">
+																<span class="fa fa-plus fa-white">Add Selected</span>
+															</button></span>
+														</fieldset>
+													</div>
+												</form>
+
+											</div>
+											<!-- end -->
+										</div>
+										<!-- end modal-body -->
+									</div>
+								</div>
+							</div>
+							<!-- DISCLOSE MODAL - END -->
+
+						</section>
+						<div class="clearfix"></div>
+
+						<!-- SHARE ALL MEDICAL INFO SECTION -->
+
+						<section class="top-margin10 bottom-margin10">
+							<div id="share-all-med" class="share-media summary-border top-margin10">
+								<p class="inline-block bottom-margin10">
+									<strong><span th:text="#{medical_information}">Medical
+											Information</span></strong>
+								</p>
+								<hr></hr>
+								<p>
+									<span th:text="#{Select_the_type_of_medical_information}">Select
+										how you would like to share your medical information.</span>
+								</p>
+								<!-- Button to trigger modal -->
+								<ul>
+									<li>
+										<div style="">
+											<div class="iradio_square-blue float-left">
+												<input id="allInfo"
+													type="radio" name="medicalinfo" />
+											</div>
+											<div style="overflow: hidden;">
+												<label for="allInfo" style="display: inline;"> <strong><span
+														th:text="#{share}">SHARE</span></strong> <strong><span
+														th:text="#{all}">ALL</span></strong>&nbsp;<span
+													th:text="#{information}">information</span>&nbsp;<span
+													th:text="#{in_my_medical_record}">in my medical
+														record.</span></label>
+											</div>
+										</div>
+									</li>
+									<li>
+
+										<div class="iradio_square-blue float-left" id="input-2"
+											data-target="#share-settings-modal"
+											data-edit-button="#edit1,#content1" data-toggle="modal">
+											<input title="share-settings-radio button"
+												name="medicalinfo" id="selectInfo" type="radio" />
+										</div> <!-- Issue #145 Fix Start 
+								     C2S::Add Consent::Link Applied to Wrong Element(s)
+								     Changed the label for to input:radio id 
+							-->
+										<div style="overflow: hidden;">
+											<label for="selectInfo" style="display: inline;"> <strong><span
+													th:text="#{share}">SHARE</span></strong>&nbsp;<span
+												th:text="#{my_medical_record}">my medical
+													information </span>&nbsp;<strong><span
+													th:text="#{exception}">with exception</span></strong>&nbsp;<span
+												th:text="#{of_specific}">of specific</span>&nbsp;<span
+												th:text="#{information}">information</span><span>.</span>
+											</label> <span> <a id="edit1" href="#share-settings-modal"
+												role="button" class="btn btn-xs btn-info edit"
+												data-toggle="modal">Edit</a>
+											</span>
+										</div> <!-- <div style="display: inline;">
+								<a id="edit1" href="#share-settings-modal" role="button" class="btn btn-xs btn-info edit" data-toggle="modal">
+									Edit
+								</a>
+								Issue #145 Fix End
+							</div> -->
+
+										<div id="content1" class="edit top-margin10">
+											<div class="inline-block">
+												<div id="notsharedmainpage"></div>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+
+							<!-- SHARE SETTINGS MODAL - START -->
+							<div id="share-settings-modal" class="modal fade" tabindex="-1"
+								role="dialog" aria-labelledby="share-settings-modal"
+								aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button id="btn_close_selected_medinfo" type="button"
+												class="close" data-dismiss="modal" aria-hidden="true">X</button>
+											<h1>Privacy Settings</h1>
+										</div>
+										<div class="modal-body">
+											<div>
+												<section>
+													<fieldset>
+													<legend class="sr-only">Sensitive or Medical Information Categories:</legend>
+														<div class="privacy-settings-input-group">
+															<div class="panel-group" id="accordion2">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																		<div class="panel-title accordion-header-style">
+																			<a class="accordion-toggle collapsed"
+																				data-toggle="collapse" data-parent="#accordion2"
+																				href="#collapseOne"
+																				th:text="#{sensitive_information}"> Sensitive
+																				Information Categories </a>
+																		</div>
+																	</div>
+																	<div id="collapseOne" class="panel-collapse collapse">
+																		<div class="panel-body">
+																			<div>
+																				<div class="alert alert-warning">
+																					<strong><span>DO NOT</span></strong>&nbsp;share
+																					the following areas of potentially sensitive
+																					information.
+																				</div>
+
+																				<div class="consent-select">
+																					<div>
+																						<button id="btn_sensitivity_select_all"
+																							class="btn btn-default btn-xs btn-sel-all-tab"
+																							type="button">Select All</button>
+																					</div>
+																					<div>
+																						<button id="btn_sensitivity_deselect_all"
+																							class="btn btn-default btn-xs btn-desel-all-tab"
+																							type="button">Deselect All</button>
+																					</div>
+																				</div>
+
+																				<form id="sensitivityinfo" class="inputform"
+																					th:object="${consentDto}">
+																					<div
+																						th:each="SensitivityPolicyCode:${sensitivityPolicy}">
+																						<span th:if="${addConsent}"> <span>
+																								<input id="Substance-Abuse"
+																								class="checkBoxClass1"
+																								th:field="*{doNotShareSensitivityPolicyCodes}"
+																								th:id="${SensitivityPolicyCode.code}"
+																								type="checkbox" name="sensitivityPolicyInput"
+																								checked="checked"
+																								th:value="${SensitivityPolicyCode.code}" />
+																						</span> <span> <label for="Substance-Abuse"
+																								th:for="${SensitivityPolicyCode.code}"
+																								class="checkbox checkedCheckbox1"
+																								th:text="${SensitivityPolicyCode.displayName}">Substance
+																									Abuse</label>
+																						</span>
+																						</span> <span th:if="${!addConsent}"> <span>
+																								<input id="Substance-Abuse"
+																								class="checkBoxClass1"
+																								th:field="*{doNotShareSensitivityPolicyCodes}"
+																								th:id="${SensitivityPolicyCode.code}"
+																								type="checkbox" name="sensitivityPolicyInput"
+																								checked="checked"
+																								th:value="${SensitivityPolicyCode.code}" />
+																						</span> <span> <label for="Substance-Abuse"
+																								th:for="${SensitivityPolicyCode.code}"
+																								class="checkbox checkedCheckbox1"
+																								th:text="${SensitivityPolicyCode.displayName}">Substance
+																									Abuse</label>
+																						</span> <span
+																							th:if="${consentDto.doNotShareSensitivityPolicyCodes.contains(SensitivityPolicyCode.displayName)}">
+																								<input type="hidden"
+																								class="sensitivity-policy-code-checked-input"
+																								th:value="${SensitivityPolicyCode.code}" />
+																						</span>
+																						</span> <a href="#"
+																							th:id="${'i-icon_' + #strings.replace(SensitivityPolicyCode.displayName, ' ', '-')}"
+																							data-trigger="click" data-toggle="popover"
+																							data-placement="bottom"
+																							data-content="icon context" data-title="title">
+																							<span style="margin-left: 5px;"
+																							class="fa fa-info-circle"></span>
+																						</a> <input
+																							th:attr="data-linkid=${'i-icon_' + #strings.replace(SensitivityPolicyCode.displayName, ' ', '-')},data-intitle=${SensitivityPolicyCode.displayName}"
+																							class="input_i-text"
+																							th:id="${'i-text_' + #strings.replace(SensitivityPolicyCode.displayName, ' ', '-')}"
+																							type="hidden"
+																							th:value="${SensitivityPolicyCode.description}" />
+																					</div>
+																				</form>
+																			</div>
+																		</div>
+																	</div>
+
+																</div>
+
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																		<div class="panel-title accordion-header-style">
+																			<a class="accordion-toggle collapsed"
+																				data-toggle="collapse" data-parent="#accordion2"
+																				href="#collapseTwo"> Medical Information
+																				Categories </a>
+																		</div>
+																	</div>
+																	<div id="collapseTwo" class="panel-collapse collapse">
+																		<div class="panel-body">
+																			<div>
+																				<div class="alert alert-warning">
+																					Select the medical information that you <strong>DO
+																						NOT</strong> wish to share.
+																				</div>
+
+																				<div class="consent-select">
+																					<div>
+																						<button id="btn_med_info_select_all"
+																							class="btn btn-default btn-xs btn-sel-all-tab"
+																							type="button">Select All</button>
+																					</div>
+																					<div>
+																						<button id="btn_med_info_deselect_all"
+																							class="btn btn-default btn-xs btn-desel-all-tab"
+																							type="button">Deselect All</button>
+																					</div>
+																				</div>
+
+																				<form class="inputform" th:object="${consentDto}">
+																					<div id="medicalinfo">
+																						<div
+																							th:each="clinicalDocumentSectionTypeCode:${clinicalDocumentSectionType}">
+																							<span th:if="${addConsent}"> <span>
+																									<input id="conditions" class="checkBoxClass1"
+																									th:field="*{doNotShareClinicalDocumentSectionTypeCodes}"
+																									th:id="${clinicalDocumentSectionTypeCode.code}"
+																									th:value="${clinicalDocumentSectionTypeCode.code}"
+																									type="checkbox"
+																									name="clinicalDocumentSectionTypeInput"
+																									checked="checked" />
+																							</span> <span> <label for="conditions"
+																									class="checkbox checkedCheckbox1"
+																									th:for="${clinicalDocumentSectionTypeCode.code}"
+																									th:text="${clinicalDocumentSectionTypeCode.displayName}">Medical
+																										Information Categories</label>
+																							</span>
+																							</span> <span th:if="${!addConsent}"> <span>
+																									<input id="conditions" class="checkBoxClass1"
+																									th:field="*{doNotShareClinicalDocumentSectionTypeCodes}"
+																									th:id="${clinicalDocumentSectionTypeCode.code}"
+																									th:value="${clinicalDocumentSectionTypeCode.code}"
+																									type="checkbox"
+																									name="clinicalDocumentSectionTypeInput"
+																									checked="checked" />
+																							</span> <span> <label for="conditions"
+																									class="checkbox checkedCheckbox1"
+																									th:for="${clinicalDocumentSectionTypeCode.code}"
+																									th:text="${clinicalDocumentSectionTypeCode.displayName}">Medical
+																										Information Categories</label>
+																							</span> <span
+																								th:if="${consentDto.doNotShareClinicalDocumentSectionTypeCodes.contains(clinicalDocumentSectionTypeCode.displayName)}">
+																									<input type="hidden"
+																									class="doc-sec-type-code-checked-input"
+																									th:value="${clinicalDocumentSectionTypeCode.code}" />
+																							</span>
+																							</span> <a href="#"
+																								th:id="${'i-icon_' + #strings.replace(clinicalDocumentSectionTypeCode.displayName, ' ', '-')}"
+																								data-trigger="click" data-toggle="popover"
+																								data-placement="bottom"
+																								data-content="icon content" data-title="title">
+																								<span style="margin-left: 5px;"
+																								class="fa fa-info-circle"></span>
+																							</a> 
+																							<!-- Bug#1804 fix start -->
+																							<input
+																								th:attr="data-linkid=${'i-icon_' + #strings.replace(clinicalDocumentSectionTypeCode.displayName, ' ', '-')},data-intitle=${clinicalDocumentSectionTypeCode.displayName}"
+																								class="input_i-text"
+																								th:id="${'i-text_' + #strings.replace(clinicalDocumentSectionTypeCode.displayName, ' ', '-')}"
+																								type="hidden"
+																								th:value="#{${#strings.replace(clinicalDocumentSectionTypeCode.displayName, ' ', '_')+'_text'}}" />
+																								<!-- Bug#1804 fix end -->
+																						</div>
+																					</div>
+																				</form>
+																			</div>
+
+																		</div>
+																	</div>
+
+																</div>
+
+<!-- 																<div class="panel panel-default"> -->
+<!-- 																	<div class="panel-heading"> -->
+<!-- 																		<div class="panel-title accordion-header-style"> -->
+<!-- 																			<a class="accordion-toggle collapsed" -->
+<!-- 																				data-toggle="collapse" data-parent="#accordion2" -->
+<!-- 																				href="#collapseThree"> Clinical Document Type -->
+<!-- 																			</a> -->
+<!-- 																		</div> -->
+<!-- 																	</div> -->
+
+<!-- 																	<div id="collapseThree" -->
+<!-- 																		class="panel-collapse collapse"> -->
+<!-- 																		<div class="panel-body"> -->
+<!-- 																			<div> -->
+<!-- 																				<div class="alert alert-warning"> -->
+<!-- 																					Select the clinical document types you <strong>DO -->
+<!-- 																						NOT</strong> wish to share. -->
+<!-- 																				</div> -->
+
+<!-- 																				<div class="consent-select"> -->
+<!-- 																					<div> -->
+<!-- 																						<button id="btn_clinical_doc_select_all" -->
+<!-- 																							class="btn btn-default btn-xs btn-sel-all-tab" -->
+<!-- 																							type="button">Select All</button> -->
+<!-- 																					</div> -->
+<!-- 																					<div> -->
+<!-- 																						<button id="btn_clinical_doc_deselect_all" -->
+<!-- 																							class="btn btn-default btn-xs btn-desel-all-tab" -->
+<!-- 																							type="button">Deselect All</button> -->
+<!-- 																					</div> -->
+<!-- 																				</div> -->
+
+<!-- 																				<form class="inputform" th:object="${consentDto}"> -->
+<!-- 																					<div id="clinicalDocumentType"> -->
+
+<!-- 																						<div -->
+<!-- 																							th:each="clinicalDocumentTypeCode:${clinicalDocumentType}"> -->
+<!-- 																							<span th:if="${addConsent}"> <span> -->
+<!-- 																									<input id="summarizationOfEpisodeNote" -->
+<!-- 																									class="checkBoxClass1" -->
+<!-- 																									th:field="*{doNotShareClinicalDocumentTypeCodes}" -->
+<!-- 																									th:id="${clinicalDocumentTypeCode.code}" -->
+<!-- 																									th:value="${clinicalDocumentTypeCode.code}" -->
+<!-- 																									type="checkbox" -->
+<!-- 																									name="clinicalDocumentTypeInput" -->
+<!-- 																									checked="checked" /> -->
+<!-- 																							</span> <span> <label -->
+<!-- 																									for="summarizationOfEpisodeNote" -->
+<!-- 																									th:for="${clinicalDocumentTypeCode.code}" -->
+<!-- 																									th:text="#{${#strings.replace(clinicalDocumentTypeCode.displayName, ' ', '_')}}" -->
+<!-- 																									class="checkbox checkedCheckbox1">Summarization -->
+<!-- 																										of Episode Note</label> -->
+<!-- 																							</span> -->
+<!-- 																							</span> <span th:if="${!addConsent}"> <span> -->
+<!-- 																									<input id="summarizationOfEpisodeNote" -->
+<!-- 																									class="checkBoxClass1" -->
+<!-- 																									th:field="*{doNotShareClinicalDocumentTypeCodes}" -->
+<!-- 																									th:id="${clinicalDocumentTypeCode.code}" -->
+<!-- 																									th:value="${clinicalDocumentTypeCode.code}" -->
+<!-- 																									type="checkbox" -->
+<!-- 																									name="clinicalDocumentTypeInput" -->
+<!-- 																									checked="checked" /> -->
+<!-- 																							</span> <span> <label -->
+<!-- 																									for="summarizationOfEpisodeNote" -->
+<!-- 																									th:for="${clinicalDocumentTypeCode.code}" -->
+<!-- 																									th:text="#{${#strings.replace(clinicalDocumentTypeCode.displayName, ' ', '_')}}" -->
+<!-- 																									class="checkbox checkedCheckbox1">Summarization -->
+<!-- 																										of Episode Note</label> -->
+<!-- 																							</span> <span -->
+<!-- 																								th:if="${consentDto.doNotShareClinicalDocumentTypeCodes.contains(clinicalDocumentTypeCode.displayName)}"> -->
+<!-- 																									<input type="hidden" -->
+<!-- 																									class="doc-sec-code-checked-input" -->
+<!-- 																									th:value="${clinicalDocumentTypeCode.code}" /> -->
+<!-- 																							</span> -->
+<!-- 																							</span> <a href="#" -->
+<!-- 																								th:id="${'i-icon_' + #strings.replace(clinicalDocumentTypeCode.displayName, ' ', '-')}" -->
+<!-- 																								data-trigger="click" data-toggle="popover" -->
+<!-- 																								data-placement="bottom" -->
+<!-- 																								data-content="icon context" data-title="title"> -->
+<!-- 																								<span style="margin-left: 5px;" -->
+<!-- 																								class="fa fa-info-circle"></span> -->
+<!-- 																							</a> <input -->
+<!-- 																								th:attr="data-linkid=${'i-icon_' +#strings.replace(clinicalDocumentTypeCode.displayName, ' ', '-')},data-intitle=#{${#strings.replace(clinicalDocumentTypeCode.displayName, ' ', '_')}}" -->
+<!-- 																								class="input_i-text" -->
+<!-- 																								th:id="${'i-text_' + #strings.replace(clinicalDocumentTypeCode.displayName, ' ', '-')}" -->
+<!-- 																								type="hidden" -->
+<!-- 																								th:value="#{${#strings.replace(clinicalDocumentTypeCode.displayName, ' ', '_')+'_text'}}" /> -->
+<!-- 																						</div> -->
+<!-- 																					</div> -->
+<!-- 																				</form> -->
+<!-- 																			</div> -->
+<!-- 																		</div> -->
+<!-- 																	</div> -->
+
+<!-- 																</div> -->
+
+
+<!-- 																<div class="panel panel-default"> -->
+<!-- 																	<div class="panel-heading"> -->
+<!-- 																		<div class="panel-title accordion-header-style"> -->
+<!-- 																			<a class="accordion-toggle collapsed" -->
+<!-- 																				data-toggle="collapse" data-parent="#accordion2" -->
+<!-- 																				href="#collapseFour"> Specific Medical -->
+<!-- 																				Information </a> -->
+<!-- 																		</div> -->
+<!-- 																	</div> -->
+<!-- 																	<div id="collapseFour" -->
+<!-- 																		class="panel-collapse collapse"> -->
+<!-- 																		<div class="panel-body"> -->
+<!-- 																			<div class="alert alert-warning"> -->
+<!-- 																				Enter any specific medical information you <strong><span>DO -->
+<!-- 																						NOT</span></strong>&nbsp; wish to share. -->
+<!-- 																			</div> -->
+
+<!-- 																			<div class="form-group ui-widget" id="autocomplete"> -->
+<!-- 																				<label for="condition">Enter a condition:</label> -->
+
+<!-- 																				<input id="condition" type="text" -->
+<!-- 																					class="form-control force-inline condition-input"></input> -->
+<!-- 																				<span class="btn-left-align"><button -->
+<!-- 																						id="addspecmedi" class="btn btn-sm btn-success"> -->
+<!-- 																						<span class="fa fa-plus fa-white"></span> -->
+<!-- 																					</button></span> -->
+<!-- 																				<p class="top-margin10" style="font-size: small;"> -->
+<!-- 																					<em>If you do not know the correct name of -->
+<!-- 																						the condition, please leave this field empty.</em> -->
+<!-- 																				</p> -->
+
+<!-- 																			</div> -->
+<!-- 																			<form> -->
+<!-- 																				<hr class="spacing" /> -->
+<!-- 																				<div> -->
+<!-- 																					<ul id="specmedinfo"> -->
+<!-- 																						<li class="spacing"></li> -->
+<!-- 																					</ul> -->
+<!-- 																					<br /> -->
+<!-- 																					<br /> -->
+<!-- 																					<br /> -->
+<!-- 																				</div> -->
+<!-- 																			</form> -->
+<!-- 																		</div> -->
+<!-- 																	</div> -->
+
+<!-- 																</div> -->
+															</div>
+														</div>
+													</fieldset>
+												</section>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button id="btn_cancel_selected_medinfo"
+												class="btn btn-default" data-dismiss="modal"
+												aria-hidden="true">Cancel</button>
+											<button id="btn_save_selected_medinfo"
+												class="btn btn-primary" data-dismiss="modal"
+												aria-hidden="true">Save changes</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- end of share-settings-modal -->
+
+							<!-- felix modal -->
+							<div id="felix" class="modal fade" tabindex="-1" role="dialog"
+								aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal"
+												aria-hidden="true">×</button>
+											<h3 id="myModalLabel">Substance Abuse</h3>
+										</div>
+										<div class="modal-body">
+											<p>Substance abuse, also known as drug abuse, is a
+												patterned use of a substance (drug) in which the user
+												consumes the substance in amounts or with methods neither
+												approved nor advised by medical professionals. Substance
+												abuse/drug abuse is not limited to mood-altering or
+												psycho-active drugs. If an activity is performed using the
+												objects against the rules and policies of the matter (as
+												in steroids for performance enhancement in sports), it is
+												also called substance abuse.</p>
+										</div>
+										<div class="modal-footer">
+											<button class="btn btn-default" data-dismiss="modal"
+												aria-hidden="true">Close</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- end felix modal -->
+						</section>
+
+						<!-- SHARE FOR PURPOSES SECTION -->
+
+						<section class="bottom-margin10">
+							<div id="share-for-purpose" class="purpose-of-use summary-border">
+								<p class="inline-block bottom-margin10">
+									<strong><span th:text="#{Purpose_of_Use}">Purpose
+											of Use</span></strong>
+								</p>
+								<hr></hr>
+								<p>
+									<span>Choose for what purposes your medical
+										information may be used</span>
+								</p>
+
+								<ul>
+									<li></li>
+									<li>
+										<div>
+											<div class="radio-label-align">
+												<!-- Issue #145 Fix Start 
+									     C2S::Add Consent::Link Applied to Wrong Element(s)
+									     Changed the label for to input:radio id
+								-->
+												<p for="selectPurposes"><strong><span
+														th:text="#{share}">Share</span></strong>&nbsp;<span
+													th:text="#{my_medical_record}">my medical record</span><strong>&nbsp;<span
+														th:text="#{only}">ONLY</span></strong>&nbsp;<span
+													th:text="#{for_the}">for the</span>&nbsp;<span
+													th:text="#{selected_purposes}">selected purposes
+														of use.</span> <span><a id="edit2"
+														href="#selected-purposes-modal" role="button"
+														class="btn btn-xs btn-info edit" data-toggle="modal">
+															Edit</a> </span> </p>
+												<!-- Issue #145 Fix End -->
+											</div>
+											<div></div>
+										</div>
+									</li>
+								</ul>
+
+								<div id="content2" class="edit top-margin10">
+									<div class="inline-block">
+										<div id="sharedpurpose"></div>
+									</div>
+								</div>
+
+
+
+							</div>
+
+							<!-- Modal2 -->
+							<div id="selected-purposes-modal" class="modal fade"
+								tabindex="-1" role="dialog"
+								aria-labelledby="selected-purposes-modal" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal"
+												aria-hidden="true">X</button>
+											<h3>Share for selected purpose only</h3>
+										</div>
+
+										<div class="modal-body">
+											<fieldset>
+												<div>
+												
+													<form class="purposeofshareform"
+														th:object="${consentDto}">
+														<div class="alert alert-warning">
+															Share my information&nbsp;<strong>only</strong>&nbsp;for
+															specified purposes of use.
+														</div>
+
+														<div class="consent-select">
+															<div>
+																<button id="btn_share_purposes_select_all"
+																	class="btn btn-default btn-xs btn-sel-all-tab"
+																	type="button">Select All</button>
+															</div>
+															<div>
+																<button id="btn_share_purposes_deselect_all"
+																	class="btn btn-default btn-xs btn-desel-all-tab"
+																	type="button">Deselect All</button>
+															</div>
+														</div>
+														
+														<div id="purposeOfSharingInputs">
+															<div th:each="purposeOfUseItem:${purposeOfUse}">
+																<span th:if="${addConsent}"> <span> <input
+																		id="emergency"
+																		th:field="*{shareForPurposeOfUseCodes}"
+																		th:id="${purposeOfUseItem.code}"
+																		th:value="${purposeOfUseItem.code}" type="checkbox"
+																		name="purposeOfUseInput" checked="checked" />
+																</span> <span> <label for="emergency"
+																		th:for="${purposeOfUseItem.code}"
+																		th:text="#{${#strings.replace(purposeOfUseItem.displayName, ' ', '_')}}"
+																		class="checkbox checkedCheckbox2">Emergency</label>
+																</span>
+																</span> <span th:if="${!addConsent}"> <span> <input
+																		id="emergency"
+																		th:field="*{shareForPurposeOfUseCodes}"
+																		th:id="${purposeOfUseItem.code}"
+																		th:value="${purposeOfUseItem.code}" type="checkbox"
+																		name="purposeOfUseInput" checked="checked" />
+																</span> <span> <label for="emergency"
+																		th:for="${purposeOfUseItem.code}"
+																		th:text="#{${#strings.replace(purposeOfUseItem.displayName, ' ', '_')}}"
+																		class="checkbox checkedCheckbox2">Emergency</label>
+																</span> <span
+																	th:if="${consentDto.shareForPurposeOfUseCodes.contains(purposeOfUseItem.displayName)}">
+																		<input type="hidden"
+																		class="purpose-use-code-checked-input"
+																		th:value="${purposeOfUseItem.code}" />
+																</span>
+																</span> <a href="#"
+																	th:id="${'i-icon_' + #strings.replace(purposeOfUseItem.displayName, ' ', '-')}"
+																	data-trigger="click" data-toggle="popover"
+																	data-placement="bottom" data-content="icon context"
+																	data-title="title"> <span
+																	style="margin-left: 5px;" class="fa fa-info-circle"></span>
+																</a> <input
+																	th:attr="data-linkid=${'i-icon_' + #strings.replace(purposeOfUseItem.displayName, ' ', '-')},data-intitle=#{${#strings.replace(purposeOfUseItem.displayName, ' ', '_')}}"
+																	class="input_i-text"
+																	th:id="${'i-text_' + #strings.replace(purposeOfUseItem.displayName, ' ', '-')}"
+																	type="hidden"
+																	th:value="#{${#strings.replace(purposeOfUseItem.displayName, ' ', '_')+'_text'}}" />
+															</div>
+														</div>
+														<!-- 									    			<label for="emergency" class="checkbox"> -->
+														<!-- 										    			<input id="emergency" type="checkbox" name="conditions" th:field="*{emergency}" checked="checked"/> Emergency -->
+														<!-- 										    		</label>												     	 -->
+													</form>
+
+
+												</div>
+											</fieldset>
+										</div>
+										<div class="modal-footer">
+											<button id="btn_cancel_selected_purposes"
+												class="btn btn-default" data-dismiss="modal"
+												aria-hidden="true">Cancel</button>
+											<button id="btn_save_selected_purposes"
+												class="btn btn-primary" data-dismiss="modal"
+												aria-hidden="true">Save changes</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- end modal2 -->
+						</section>
+
+						<!-- CONSENT DATES START -->
+						<section class="bottom-margin10">
+							<div id="consent-date-fill" class="summary-border consent-term">
+								<p class="inline-block bottom-margin10">
+									<strong><span th:text="#{Consent_Term}">Consent
+											Term</span></strong>
+								</p>
+								<hr></hr>
+								<p>
+									<span>Enter a start and end date during wich your
+										medical records will be shared.</span>
+								</p>
+								<section id="consent-date" class="bottom-margin10 consent-start-end-date">
+									<div>
+										<section id="consent-start-date" class="consent-start-date-section">
+											<form class="summary-container inputformDate"
+												th:object="${consentDto}">
+													<label for="date-picker-start"><span
+														th:text="#{start}">Consent Start</span></label>
+													<div class="input-group datepicker"
+														data-date-format="mm/dd/yyyy">
+														<span> <input
+															class="datepicker" id="date-picker-start"
+															name="consentStart" style="z-index: 100;"
+															th:value="${consentDto.consentStart}" />
+														</span>
+													</div>
+											</form>
+										</section>
+
+										<section id="consent-end-date" class="consent-end-date-section"> 
+											<form class="summary-container inputformDate"
+												th:object="${consentDto}">
+												
+													<label for="date-picker-end"><span
+														th:text="#{end}">Consent End</span></label>
+													<div class="input-group datepicker date"
+														data-date-format="mm/dd/yyyy">
+														<span> <input
+															class="datepicker" id="date-picker-end"
+															name="consentEnd" style="z-index: 100;"
+															th:value="${consentDto.consentEnd}" />
+														</span>
+													</div>
+											</form>
+										</section>
+										<div class="clearfix"></div>
+									</div>
+								</section>
+							</div>
+						</section>
+						<!-- CONSENT DATES END -->
+						
+						<!-- SAVE/CANCEL BUTTONS -->
+						<section class="save-cancel-buttons-group top-margin10">
+							<div th:switch="${isProviderAdminUser}" class="controls" style="padding-top: 15px;">
+								<button th:case="true" id="consent-add-cancel" type="button"
+									class="btn btn-default" style="margin: 0 10px 0 0;"
+									th:onclick="'window.location.href=\'adminPatientView.html?id='+${patientId}+'\''">
+									<span th:text="#{cancel}">Cancel</span>
+								</button>
+								
+								<button th:case="*" id="consent-add-cancel" type="button"
+									class="btn btn-default" style="margin: 0 10px 0 0;"
+									onclick="window.location.href='listConsents.html'">
+									<span th:text="#{cancel}">Cancel</span>
+								</button>
+								
+								
+								<span id="consent-add-save-section"
+									style="display: inline-block;">
+									<button id="consent-add-save" type="submit"
+										class="btn btn-primary" style="margin: 5px;">
+										<span th:text="#{save}">Save</span>
+									</button>
+								</span>
+							</div>
+							
+							<!-- Consent session expired Modal Start-->
+							<div class="modal fade" id="consent_session_expired_modal" tabindex="-1" role="dialog" aria-labelledby="consentValidationLabel" aria-hidden="true">
+							  <div class="modal-dialog">
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+							        <h4 class="modal-title" id="consentValidationLabel">Please review results below.</h4>
+							      </div>
+							      <div class="modal-body">
+								      	<div id="consent_validation_error_holder" class="alert alert-danger">
+									      	<h4 id="consent_validation_error_header">Whoops!</h4>
+									      	<p id="consent_validation_error_text">The page has expired! Please try login again!</p>
+								      	</div>
+								  </div>
+								  <div class="modal-footer">
+									 <a href="#" class="btn btn-primary redirectToLogin">Re-login</a>
+								  </div>
+								 </div>
+							  </div>
+							 </div>
+							<!-- Consent session expired Modal End-->
+							
+							<!-- Consent Validation Modal Start-->
+							
+							<div class="modal fade" id="consent_validation_modal" tabindex="-1" role="dialog" aria-labelledby="consentValidationLabel" aria-hidden="true">
+							  <div class="modal-dialog">
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+							        <h4 class="modal-title" id="consentValidationLabel">Please review results below.</h4>
+							      </div>
+							      <div class="modal-body">
+							      	<form id="frm_consent_validation_form" class="consentValidationForm" th:object="${consentValidationDto}">
+								      	<div id="consent_validation_error_holder" class="alert alert-danger">
+									      	<h4 id="consent_validation_error_header">Whoops!</h4>
+									      	<p id="consent_validation_error_text">Please make changes to the consent being created to ensure that you are not creating a duplicate.</p>
+								      	</div>
+								        
+								        <div id="pnl_selected_consent" class="panel panel-danger">
+											<div class="panel-heading">
+												<h3 class="panel-title">Create Consent</h3>
+											</div>
+											<div class="panel-body">
+												<div id="selected_authorized_providers">
+													<label class="selected-consent-field-label">Authorized Providers:</label>
+													<span id="selected_authorized_providers_data" class="selected-consent-field-data"></span>
+												</div>
+												<div id="selected_discloseTo_providers">
+													<label class="selected-consent-field-label">Disclose To:</label>
+													<span id="selected_discloseTo_providers_data" class="selected-consent-field-data"></span>
+												</div>
+												<div id="selected_purposeOf_use">
+													<label class="selected-consent-field-label">Purpose of Use:</label>
+													<span id="selected_purposeOf_use_data" class="selected-consent-field-data"></span>
+												</div>
+												<div id="selected_consent_start_date">
+													<label class="selected-consent-field-label">Start Date:</label>
+													<span id="selected_consent_start_date_data" class="selected-consent-field-data"></span>
+												</div>
+												<div id="selected_consent_end_date">
+													<label class="selected-consent-field-label">End Date:</label>
+													<span id="selected_consent_end_date_data" class="selected-consent-field-data"></span>
+												</div>
+											</div>
+										</div>	
+										
+										<div id="pnl_existing_consent" class="panel panel-info">
+											<div class="panel-heading">
+												<h3 class="panel-title">Existing Consent</h3>
+											</div>
+											
+											<div class="panel-body">
+												<div id="existing_authorized_providers">
+													<label class="existing-consent-field-label">Authorized Providers:</label>
+													<span id="existing_authorized_providers_data" class="existing-consent-field-data"></span>
+												</div>
+												<div id="existing_discloseTo_providers">
+													<label class="existing-consent-field-label">Disclose To:</label>
+													<span id="existing_discloseTo_providers_data" class="existing-consent-field-data"></span>
+												</div>
+												<div id="existing_purposeOf_use">
+													<label class="existing-consent-field-label">Purpose of Use:</label>
+													<span id="existing_purposeOf_use_data" class="existing-consent-field-data"></span>
+												</div>
+												<div id="existing_consent_start_date">
+													<label class="existing-consent-field-label">Start Date:</label>
+													<span id="existing_consent_start_date_data" class="existing-consent-field-data"></span>
+												</div>
+												<div id="existing_consent_end_date">
+													<label class="existing-consent-field-label">End Date:</label>
+													<span id="existing_consent_end_date_data" class="existing-consent-field-data"></span>
+												</div>
+												<div id="existing_consent_status">
+													<label class="existing-consent-field-label">Status:</label>
+													<span id="existing_consent_status_data" class="existing-consent-field-data"></span>
+												</div>												
+												<div class="pull-right">
+													<button id="btn_view_existing_consent" class="btn btn-primary">View Existing Consent</button>
+												</div>
+											</div>
+									</div>
+									</form>
+							      </div>
+							      <div class="modal-footer">
+							        <button id="btn_cancel_validation_modal" type="button" class="validation_modal_cntrl btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+							        <button id="btn_continue_editing" type="button" class="validation_modal_cntrl btn btn-success">Continue Editing</button>
+							      </div>
+							    </div>
+							  </div>
+							</div>
+							
+							<!-- Consent Validation Modal End-->							
+							
+						</section>
+					</div>
+
+				</div>
+			</div>
+			<!--end main.col-md-10-->
+		</div>
+		<!-- end content line 96-->
+
+
+
+		<!-- END: Content Region -->
+
+
+
+	</div>
+	<!-- end first row -->
+
+	<ol th:if="${!isProviderAdminUser}" id="tourtest" class="hidden">
+
+		<li data-id="consent-from" class="user-guide consent-authorize-by"
+			data-options="tipLocation:bottom; tipTopOffset:0;tipLeftOffset:0;nubPhonePosition:top"><img
+			class="number-icon" src="../../../resources/img/number-01.png"
+			th:src="@{/resources/img/number-01.png}" alt="step-01" width="20"
+			height="20" />Start by selecting the provider who you authorize to
+			share your health records.
+			<div class="disclaimer">Always consult your doctor or
+				physician to discuss any potential health risks.</div></li>
+		<li data-id="consent-to" class="user-guide consent-disclose-to"
+			data-options="tipLocation:bottom; nubPosition:top; tipTopOffset:0;tipLeftOffset:0;nubPhonePosition:top-right"><img
+			class="number-icon" src="../../../resources/img/number-02.png"
+			th:src="@{/resources/img/number-02.png}" alt="step-02" width="20"
+			height="20" />This field is for selecting the provider or person
+			with whom you want to share your medical information with, such as
+			your doctor, family member or guardian.
+			<div class="disclaimer">Always consult your doctor or
+				physician to discuss any potential health risks.</div></li>
+		<li data-id="share-all-med" class="share-media user-guide show-delayed-next"><img
+			class="number-icon" src="../../../resources/img/number-03.png"
+			th:src="@{/resources/img/number-03.png}" alt="step-03" width="20"
+			height="20" />This section allows you to configure privacy setting
+			for medical information you wish to protect.
+			<div class="disclaimer">Always consult your doctor or
+				physician to discuss any potential health risks.</div></li>
+		<li data-id="share-for-purpose" class="purpose-of-use user-guide show-delayed-next"
+			data-placement="top"><img class="number-icon"
+			src="../../../resources/img/number-04.png"
+			th:src="@{/resources/img/number-04.png}" alt="step-04" width="20"
+			height="20" />This section is for selecting the reasons in which
+			you medical information can be shared.
+			<div class="disclaimer">Always consult your doctor or
+				physician to discuss any potential health risks.</div></li>
+		<li data-id="consent-start-date"
+			class="user-guide show-delayed-next"><img class="number-icon"
+			src="../../../resources/img/number-05.png"
+			th:src="@{/resources/img/number-05.png}" alt="step-05" width="20"
+			height="20" />This field specifies the date this consent becomes
+			effective.
+			<div class="disclaimer">Always consult your doctor or
+				physician to discuss any potential health risks.</div></li>
+		<li data-id="consent-end-date"
+			class="jerry user-guide show-delayed-next"
+			data-options="nubPhonePosition:top-right"><img
+			class="number-icon" src="../../../resources/img/number-06.png"
+			th:src="@{/resources/img/number-06.png}" alt="step-06" width="20"
+			height="20" />This field specifies the date this consent will
+			expire.
+			<div class="disclaimer">Always consult your doctor or
+				physician to discuss any potential health risks.</div></li>
+		<li data-id="consent-add-save-section"
+			class="klinger user-guide show-delayed-next"
+			data-options="tipLocation:left; tipTopOffset:-20;tipLeftOffset:18;nubPhonePosition:top"><img
+			class="number-icon" src="../../../resources/img/number-07.png"
+			th:src="@{/resources/img/number-07.png}" alt="step-07" width="20"
+			height="20" />Clicking the "Save" button will save this consent,
+			and return you to your "My Consents" page.
+			<div class="disclaimer">Always consult your doctor or
+				physician to discuss any potential health risks.</div></li>
+
+	</ol>
+
+	<ul th:if="${!isProviderAdminUser}" id="pulldown_menu">
+		<li>
+			<div style="z-index: 101;">
+				<button id="btn_guide_OnOff" type="button" class="btn btn-default">Guide
+					On</button>
+			</div>
+		</li>
+	</ul>
+	
+	<input type="hidden" class="input_hidden" id="input_isAddConsent" th:value="${addConsent}" value="" />
+	<input type="hidden" class="input_hidden" id="input_isProviderAdminUser" th:value="${isProviderAdminUser}" value="" />
+	
+	<div th:switch="${isProviderAdminUser}" style="display:none;">
+		<form th:case="true" style="display: none;" id="formToBeSubmitted" action="#"
+			th:action="@{'/Administrator/adminPatientViewCreateConsent.html?isAddConsent=' + ${addConsent}}" th:Object="${consentDto}"
+			method="post">
+			<!-- Patient username for which this consent belongs to -->
+			<input id="patientUsername" name="username" type="hidden"
+				th:value="${consentDto.username}" />
+				
+			<!-- Patient id for which this consent belongs to -->
+			<input id="patientId" name="patientId" type="hidden"
+				th:value="${patientId}" />
+	
+			<div th:if="${!addConsent}">
+				<!-- Save on Edit requires Id to update the consent -->
+				<input id="consentId" name="id" type="hidden"
+					th:value="${consentDto.id}" />
+	
+				<div class="specmedinfo-input-div"
+					th:each="DoNotShareClinicalConceptCode:${DoNotShareClinicalConceptCodes}">
+					<input class="specmedinfo-input"
+						th:id="${DoNotShareClinicalConceptCode.code}" type="hidden"
+						th:attr="data-codesys=${DoNotShareClinicalConceptCode.codeSystem},data-dispname=${DoNotShareClinicalConceptCode.displayName}"
+						th:value="${DoNotShareClinicalConceptCode.code} + ';' + ${DoNotShareClinicalConceptCode.displayName}" />
+				</div>
+			</div>
+		</form>
+		
+		<form th:case="*" style="display: none;" id="formToBeSubmitted" action="#"
+			th:action="@{/consents/addConsent.html}" th:Object="${consentDto}"
+			method="post">
+			
+			<!-- Patient username for which this consent belongs to -->
+			<input id="patientUsername" name="username" type="hidden"
+				th:value="${consentDto.username}" />
+				
+			<!-- Patient id for which this consent belongs to -->
+			<input id="patientId" name="patientId" type="hidden"
+				th:value="${patientId}" />
+	
+			<div th:if="${!addConsent}">
+				<!-- Save on Edit requires Id to update the consent -->
+				<input id="consentId" name="id" type="hidden"
+					th:value="${consentDto.id}" />
+	
+				<div class="specmedinfo-input-div"
+					th:each="DoNotShareClinicalConceptCode:${DoNotShareClinicalConceptCodes}">
+					<input class="specmedinfo-input"
+						th:id="${DoNotShareClinicalConceptCode.code}" type="hidden"
+						th:attr="data-codesys=${DoNotShareClinicalConceptCode.codeSystem},data-dispname=${DoNotShareClinicalConceptCode.displayName}"
+						th:value="${DoNotShareClinicalConceptCode.code} + ';' + ${DoNotShareClinicalConceptCode.displayName}" />
+				</div>
+			</div>
+		</form>
+	</div>
+	
+</div>
+
+</body>
+</html>

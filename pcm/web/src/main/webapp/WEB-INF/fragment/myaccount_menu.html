@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" lang="en">
+
+
+<!-- COMPONENT: Language Menu Dropdown -->
+<div class="btn-group btn-right-align hidden-xs" th:fragment="languageFragment">
+	<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+		<span class="fa fa-flag force-inline"></span>
+		<span class="hidden-sm hidden-md force-inline"> Language</span>
+		<span class="caret"></span>
+	</a>
+	
+	<ul class="dropdown-menu" role="menu">
+		<li role="menuitem"><a th:href="@{${currentPageURI}+'?lang=en'}">English</a></li>
+		<li role="menuitem"><a th:href="@{${currentPageURI}+'?lang=cn'}">Chinese</a></li>
+	</ul>
+</div>
+
+
+<div th:fragment="myaccountMenuFragment" class="btn-group pull-right hidden-xs">
+
+	<!-- COMPONENT: User Dropdown -->
+
+	<a class="btn btn-default myaccount-buttons dropdown-toggle" data-toggle="dropdown" href="#">
+		<span class="fa fa-user"></span><span class="force-inline" th:text="' '+#{header_my_account}"> My Account</span>
+		<span class="caret"></span>
+	</a>
+	<form name="accountLogout" id="accountLogout"
+	th:action="@{/resources/j_spring_security_logout}" method="post">
+	</form>
+	
+	<ul role="menu" class="dropdown-menu">
+		<li role="menuitem"><a href="profile.html" th:href="@{/patients/profile.html}" th:text="#{header_my_profile}">My Profile</a></li>
+		<li role="menuitem"><a href="../changePassword.html" th:href="@{/changePassword.html}" th:text="#{header_change_password}">Change Password</a></li>
+		<div role="separator" aria-disabled="true" class="divider"></div>
+		<li role="menuitem"><a href="#" th:href="@{'javascript:document.accountLogout.submit()'}" th:text="#{header_logout}">Logout</a></li>
+	</ul>
+
+</div>
+
+
+<div th:fragment="adminMyAccountMenuFragment" id="adminHome-navbar-buttons" class="admin-navbar-btn">
+	
+	<!-- COMPONENT: User Dropdown -->
+	<div class="btn-group btn-group-sm">
+		<span class="btn-group btn-group-sm">
+			<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+				<span class="fa fa-user" style="margin-right: 2px;"></span>
+				<span class="hidden-xs inline-block" th:text="${adminProfileDto.firstName+' '+adminProfileDto.lastName}">Leo Smith</span>
+				<span class="caret inline-block"></span>
+			</a>
+			<form name="accountLogout" id="accountLogout"
+				th:action="@{/resources/j_spring_security_logout}" method="post">
+			</form>
+
+			<ul role="menu" class="dropdown-menu">
+				<li role="menuitem"><a href="profile.html" th:href="@{/Administrator/editAdminProfile.html}" th:text="#{header_my_profile}">My Profile</a></li>
+				<li role="menuitem"><a href="../changePassword.html" th:href="@{/changePassword.html}" th:text="#{header_change_password}">Change Password</a></li>
+				<li role="menuitem" aria-disabled="true" class="divider"></li>
+				<li role="menuitem"><a href="#" th:href="@{'javascript:document.accountLogout.submit()'}" th:text="#{header_logout}">Logout</a></li>
+			</ul>
+		</span>
+
+	</div>
+
+</div>
+
+
+<div th:fragment="sysAdminMyAccountMenuFragment" class="btn-group pull-right hidden-xs">
+	
+	<!-- <a class="btn btn-default myaccount-buttons" href="#">
+		<span class="fa fa-envelope force-inline"></span><span class="force-inline"> Direct E-Mail</span> 
+		<span class="label label-warning hidden-sm force-inline">3</span>
+	</a> -->
+
+	<!-- COMPONENT: User Dropdown -->
+
+	<a class="btn btn-default myaccount-buttons dropdown-toggle" data-toggle="dropdown" href="#">
+		<span class="fa fa-user"></span><span class="force-inline" th:text="' '+#{header_my_account}"> My Account</span>
+		<span class="caret"></span>
+	</a>
+	<form name="accountLogout" id="accountLogout"
+				th:action="@{/resources/j_spring_security_logout}" method="post">
+	</form>
+	<ul role="menu" class="dropdown-menu">
+		<!-- <li role="menuitem"><a href="profile.html" th:href="@{/patients/profile.html}" th:text="#{header_my_profile}">My Profile</a></li>
+		<li role="menuitem"><a href="../changePassword.html" th:href="@{/changePassword.html}" th:text="#{header_change_password}">Change Password</a></li>
+		<li role="menuitem" aria-disabled="true" class="divider"></li> -->
+		<li role="menuitem"><a href="#" th:href="@{'javascript:document.accountLogout.submit()'}" th:text="#{header_logout}">Logout</a></li>
+	</ul>
+
+</div>
+
+
+
+</html>

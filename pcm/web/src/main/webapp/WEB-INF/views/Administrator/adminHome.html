@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:include="fragment/common :: headerFragment" > 
+	<meta charset="utf-8" />
+	<!-- title needs to be dynamic -->
+	<title>Consent2Share</title>
+	<meta name="description" content="Consent Management System" />
+	<meta name="author" content="FEiSystems" />
+	<!-- END: Meta -->
+	<!-- START: Mobile Specific -->
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!-- END: Mobile Specific -->
+	
+	<!-- Bootstrap related CSS files -->
+<link id="bootstrap-style" href="../../../resources/css/bootstrap.css"
+	rel="stylesheet" th:href="@{/resources/css/bootstrap.css}" />
+<link href="../../../resources/css/font-awesome.css"
+	th:href="@{/resources/css/font-awesome.css}"
+	rel="stylesheet"/>
+
+<!-- Plug-in Stylesheets -->	
+<link href="../../../resources/css/joyride-2.0.3.css" rel="stylesheet"
+	th:href="@{/resources/css/joyride-2.0.3.css}" />
+
+<!-- Custom CSS Files -->
+<link href="../../../resources/css/themes-style.css" rel="stylesheet"
+	th:href="@{/resources/css/themes-style.css}" />
+<link href="../../../resources/css/c2s-core-style.css" rel="stylesheet"
+	th:href="@{/resources/css/c2s-core-style.css}" />
+	
+<!-- END: CSS -->
+	
+	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	        <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	    <![endif]-->
+	<!-- START: Favicon -->
+	<!--    <link rel="shortcut icon" href="images/favicon.ico"> -->
+	<!-- END: Favicon -->
+</head>
+
+<head>
+	<link href="../../../resources/css/modules/jquery-ui.css" rel="stylesheet" th:href="@{/resources/css/modules/jquery-ui.css}"/>
+</head>
+
+<body id="adminHome-page" class="admin-pages">
+
+<div class="container outmost-holder">
+
+<a href="#searchTextBox" class="offscreen">skip to search</a>
+
+	<!-- !START: Page Header -->
+	<header class="navbar navbar-static-top" role="banner" th:with="currentPageTitle=#{header_staff_home}">
+		<div class="container">
+			<div class="navbar-header navbar-inner-header" role="navigation" th:substituteby="fragment/admin_fragments :: admin-navbarHeaderFragment">
+			
+			<!-- EVERYTHING INSIDE HERE IS REPLACED BY THYMELEAF WITH THE navbarHeaderFragment -->
+			<!-- The code below is here only to enhance source code readability -->
+			
+					<!-- <a class="btn btn-info btn-mainmenu" data-toggle="collapse" data-target=".top-nav.navbar-collapse,.sidebar-nav.navbar-collapse">
+						<span class="fa fa-bars"></span>
+					</a> -->
+					<h1>
+						<span class="nav-title">Administrator</span>
+					</h1>
+					
+					
+
+					<span>
+						<div style="position: relative;">
+							<a id="logoFragment" class="navbar-brand brand logo-fragment" th:href="@{/index.html}"  href="index.html"><span id="brand-blue" ></span><img src="../../../resources/img/consent2share-04.svg" th:src="@{/resources/img/consent2share-04.svg}" /></a>
+<!-- WATERMARK -->
+<!-- 						<span id="watermark"><i><p>This site is for DEMONSTRATION PURPOSES only.</p></i></span>    -->
+<!-- END WATERMARK -->						
+						</div>
+					</span>
+					
+					
+				
+					<div id="adminHome-navbar-buttons" class="pull-right">
+							<!-- COMPONENT: User Dropdown -->
+						<p><strong>Medical Facility Name</strong></p>
+						<div class="btn-group btn-group-sm">
+							<div class="btn-group btn-group-sm">
+								<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+									<span class="fa fa-user"></span><span class="hidden-sm hidden-md force-inline">Leo Smith</span>
+									<span class="caret"></span>
+								</a>
+							
+								<ul role="menu" class="dropdown-menu">
+									<li role="menuitem"><a href="editAdminProfile.html">My Profile</a></li>
+									<li role="menuitem"><a href="../changePassword.html" th:href="@{/changePassword.html}" th:text="#{header_change_password}">Change Password</a></li>
+									<li role="menuitem" aria-disabled="true" class="divider"></li>
+									<li role="menuitem"><a href="../index.html" th:href="@{/resources/j_spring_security_logout}" th:text="#{header_logout}">Logout</a></li>
+								</ul>
+							</div>
+							<a class="btn btn-default myaccount-buttons" href="#">
+								<span class="fa fa-envelope force-inline"></span><span class="hidden-sm hidden-md force-inline"> Message Center</span> 
+								<span class="label label-warning hidden-sm force-inline">3</span>
+							</a>
+						</div>
+					</div>
+			</div>
+			<!-- END OF SECTION REPLACED BY THYMELEAF -->
+			
+			<div id="event_notification_bar" th:switch="${notifyevent}">
+				<span th:case="'passChangeSuccess'">
+					<div class="alert alert-success rounded">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+  		    			You have successfully changed your password!
+					</div>
+				</span>
+			</div>
+			
+			<div th:switch="${notify}">
+			<span th:case ="'createPatientFailed'">
+					<div class="alert alert-danger rounded">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+  		    			Error when creating new patient! please check the information.
+  		    			</div>
+  		    			</span>
+					</div>
+			
+		</div>
+	</header>
+	<div id="under-header"></div>
+
+		<!-- END : Page Header -->
+	<div class="container">
+		<div class="row main-content-wrapper">
+			
+			<div class="col-md-12 top-margin20">
+				<div id="adminHomeSearchBar" class="summary-border admin-home-search-bar" role="search">					
+	   					<div class="row">
+	   						<div class="col-md-6 col-sm-5 top-margin10">
+		   						<label class="sr-only" for="searchTextBox">Search Text Box</label>
+		     					<div class="inner-addon left-addon">
+		     						<i class="fa fa-search"></i>
+		     						<input id="searchTextBox" type="text" placeholder="Search here" class="form-control" />
+		     					</div>  					
+							</div>
+							<div class="col-md-3 col-sm-4  top-margin10 bottom-margin10">
+								<div title="plus button" id="patient-Account-btn" class="create-patient-account-btn">
+									<button id="consent-main-plus-btn" class="btn btn-primary add-btn btn-block consent-plus-btn" data-toggle="modal" data-target="#createPatient" onclick="window.location = '#';">
+										<span class="fa fa-plus fa-white"></span><span style="padding-left: 5px;">Create Patient Account</span>
+									</button>
+								</div>
+							</div>
+							<div class="col-md-3 col-sm-3  top-margin10 bottom-margin10">
+								<div title="report button" id="admin-Report-btn">
+									<button id="reports-page-btn" class="btn btn-info add-btn btn-block" type="button" onclick="window.location.href='adminReports.html'">
+										<span>Reports Page</span>
+									</button>
+								</div>
+							</div>							
+	   					</div>			
+    			</div>
+			</div>
+
+<!-- MODAL -->
+			<div class="modal fade create-patient create-patient" id="createPatient" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+					<form id="admin_create_patient_acct_form" th:object="${basicPatientAccountDto}" th:action="@{adminCreatePatientAccount.html}" method="post">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+							<p class="h3-style" id="myModalLabel">Create Patient Account</p>
+						</div>
+					
+						<div class="modal-body">
+							<section class="row">
+								<div class="form-group col-sm-6">
+									<label>First Name</label>
+									<input id="first_name" type="text" th:field="*{firstName}" class="form-control" placeholder="First Name" />
+									<span id="fname_error_text" class="required-text" style="display:none;">First name is required.</span>
+									<span id="fname_client_error_text" class="required-text" style="display: none;">First name is required.</span>
+								</div>
+				
+								<div class="form-group col-sm-6">
+									<label>Last Name</label>
+									<input id="last_name" type="text" th:field="*{lastName}" class="form-control" placeholder="Last Name" />
+									<span id="lname_error_text" class="required-text" style="display:none;">Last name is required.</span>
+									<span id="lname_client_error_text" class="required-text" style="display: none;">Last name is required.</span>
+								</div>
+							</section>
+					
+							<section class="row">
+								<div class="form-group col-sm-4 col-xs-7">
+									<div>
+										<label for="gender">Gender</label>
+									</div>
+									<div class="gender-select-controls">
+										<!-- TODO: Add Thymeleaf integration with administrativeGenderCode field -->
+										<select id="gender" th:field="*{administrativeGenderCode}" class="form-control inline-block">
+											<option selected="selected" value="">- Please Select -</option>
+											<option th:each="gender : ${administrativeGenderCodes}"
+														th:value="${gender.code}" th:text="${gender.displayName}">F</option>
+										</select>
+										<span id="gender_error_text" class="required-text" style="display:none;">Gender Selection is required.</span>
+										<span id="gender_client_error_text" class="required-text" style="display: none;">Gender Selection is required.</span>
+									</div>
+									
+								</div>
+						
+								<div class="form-group col-sm-8 col-xs-12">
+									<div>
+										<label class="control-label">Date of Birth</label>
+									</div>
+									<div id="dob" class="dob-select-controls inline-block date-of-birth">
+										<input type="text" id="date" th:field="*{birthDate}" data-format="MM/DD/YYYY" data-template="MMM D YYYY"
+											name="date" style="display: none;" class="form-control" />
+										<select id="month" class="form-control">
+											<option selected="selected" value="  ">Month</option>
+											<option value="01">January</option>
+											<option value="02">February</option>
+											<option value="03">March</option>
+											<option value="04">April</option>
+											<option value="05">May</option>
+											<option value="06">June</option>
+											<option value="07">July</option>
+											<option value="08">August</option>
+											<option value="09">September</option>
+											<option value="10">October</option>
+											<option value="11">November</option>
+											<option value="12">December</option>
+										</select>
+										<select id="day" class="form-control">
+											<option selected="selected" value="  ">Day</option>
+											<option value="01">01</option>
+											<option value="02">02</option>
+											<option value="03">03</option>
+											<option value="04">04</option>
+											<option value="05">05</option>
+											<option value="06">06</option>
+											<option value="07">07</option>
+											<option value="08">08</option>
+											<option value="09">09</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+											<option value="12">12</option>
+											<option value="13">13</option>
+											<option value="14">14</option>
+											<option value="15">15</option>
+											<option value="16">16</option>
+											<option value="17">17</option>
+											<option value="18">18</option>
+											<option value="19">19</option>
+											<option value="20">20</option>
+											<option value="21">21</option>
+											<option value="22">22</option>
+											<option value="23">23</option>
+											<option value="24">24</option>
+											<option value="25">25</option>
+											<option value="26">26</option>
+											<option value="27">27</option>
+											<option value="28">28</option>
+											<option value="29">29</option>
+											<option value="30">30</option>
+											<option value="31">31</option>
+										</select>
+										<select id="year" class="form-control">
+											<option selected="selected" value="    ">Year</option>
+										</select>
+										<span id="dob_error_text" class="required-text" style="display:none;">Date of Birth is required.</span>
+										<span id="dob_client_error_text" class="required-text" style="display: none;">Date of Birth is required.</span>
+									</div>
+								</div>
+							</section>
+							<section class="row">
+								<div class="form-group col-sm-6">
+								<div>
+										<label>Social security number</label>
+										</div>
+										
+										<input  class="form-group" type="text" id="socialsecurity"  th:field="*{socialSecurityNumber}" name="socialSecurityNumber" style="display: none;"/>
+										  			
+										<input style="width:4em" maxlength="3" id="ssn1" type="text" class="form-control force-inline ssn"/>
+										<input style="width:4em" maxlength="2" id="ssn2" size="2" type="text" class="form-control force-inline ssn"/>
+										<input style="width:5em" maxlength="4" id="ssn3" size="4" type="text" class="form-control force-inline ssn"/>  
+										            
+										<span class="required-text" th:errors="*{socialSecurityNumber}">Social security number is required.</span>
+										<span id="ssn_client_error_text" class="required-text" style="display: none;">Please provide a valid social security number. For example 123-45-6789.</span>
+													
+										
+								</div>
+							</section>
+							<section class="row">
+								<div class="form-group col-sm-6">
+										<label>Email Address</label>
+										<input id="email" name="email" type="text" aria-required="true" th:field="*{email}" class="form-control inline-block" />
+										<span class="required-text" th:errors="*{email}">E-Mail is required.</span>
+										<span id="email_client_error_text" class="required-text" style="display: none;">E-Mail is required.</span>
+								</div>
+							</section>
+						</div>
+					
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" style="float:left;" data-dismiss="modal">Cancel</button>
+							<button id="adminCreatePatientAccountFormSubmitButton" type="submit" class="btn btn-primary">Create Account</button>
+						</div>
+					</form>
+			    </div><!-- /.modal-content -->
+			  </div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+
+
+
+<!-- END MODAL -->			
+						
+			<div class="row">
+				<section class="box col-md-12">
+					
+						<div class="box-header">
+								<h2>
+									<span class="fa fa-user"></span><span class="break"></span>Recent Patient Activity
+								</h2>
+								<div class="box-icon"></div>
+						</div>
+						<div class="box-content">
+                        	<table class="table table-striped table-hover" >
+	                        	<thead>
+									<tr>
+										<th>First Name</th>
+										<th>Last Name</th>
+										<th>DOB</th>
+										<th>Gender</th>
+										<th>Activity Type</th>
+										<th>Date Created</th>                                          
+									</tr>
+								</thead>
+                              	<tbody>
+	                              	<tr th:each="recentActivityDto:${recentActivityDtos}" th:href="@{'adminPatientView.html?id='+${recentActivityDto.patientid}}"
+	                              			onclick="document.location = adminPatientView.html?id=2;"
+	                              			th:onclick="'document.location=\'adminPatientView.html?id=' + ${recentActivityDto.patientid} + '\';'" method="get">
+				                   		 		<td th:text="${recentActivityDto.firstname}">First Name</td>
+				                   		 		<td th:text="${recentActivityDto.lastname}">Last Name</td>
+				                   		 		<td th:text="${recentActivityDto.birthDate==null}? '' : *{#dates.format((recentActivityDto.birthDate), 'MM/dd/yyyy')}">DOB</td>
+				                   		 		<td th:text="${recentActivityDto.administrativeGenderCode}">Gender</td>
+				                   		 		<td th:text="${recentActivityDto.activity+' '+recentActivityDto.type}">Consent Signed</td>
+				              		     		<td th:text="${recentActivityDto.timestamp}">01/02/2013</td>  
+	                                </tr>
+                              	</tbody>
+                       		</table> 
+                		</div>
+				</section>
+			</div>
+		</div>
+	</div>
+<!-- START: Footer Region -->
+<footer class="bottom" th:include="fragment/common :: [//footer[@id='center-footer']]">
+
+		<!-- COMPONENT: Copyright Information -->
+		<p class="top-margin10 pull-left">&copy; <a class="footer-link" href="" target="_blank">A SAMHSA Public Service</a> 2013</p>
+</footer>
+<!-- END: Footer Region -->
+</div>	
+
+<!-- START: JavaScript -->	
+<script src="../../../resources/js/dateValidator.js"
+	th:src="@{/resources/js/dateValidator.js}"
+	type="text/javascript"></script>
+<script src="../../../resources/js/jquery-ui.min.js"
+	th:src="@{/resources/js/jquery-ui.min.js}"
+	type="text/javascript"></script>
+<script src="../../resources/js/jquery.autotab-1.1b.js"
+	th:src="@{/resources/js/jquery.autotab-1.1b.js}" 
+	type="text/javascript"></script>
+
+<!-- Custom JavaScript -->
+<script src="../../../resources/js/validatorFunctions.js"
+	th:src="@{/resources/js/validatorFunctions.js}"
+	type="text/javascript"></script>
+<script src="../../../resources/js/webpage-js/profile_registration.js"
+	th:src="@{/resources/js/webpage-js/profile_registration.js}"
+	type="text/javascript"></script>
+<script src="../../../resources/js/webpage-js/userAccountInfoValidation.js"
+	th:src="@{/resources/js/webpage-js/userAccountInfoValidation.js}"
+	type="text/javascript"></script>
+<script src="../../../resources/js/webpage-js/Administrator/adminHome.js"
+	th:src="@{/resources/js/webpage-js/Administrator/adminHome.js}"
+	type="text/javascript"></script>
+	
+<!-- END: JavaScript -->
+</body>
+</html>

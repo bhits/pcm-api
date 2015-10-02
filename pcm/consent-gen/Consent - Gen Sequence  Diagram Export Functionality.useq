@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence-diagram version="1.1.4" icons="true" automaticImage="PNG">  
+  <object id="1" language="java" name="gov.samhsa.consent2share.web.ConsentController" project="consent2share-web" 
+    file="/consent2share-web/src/main/java/gov/samhsa/consent2share/web/ConsentController.java" binary="false" 
+    label="consentController" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="105" y="0"/>    
+    <execution id="2">      
+      <position height="621" width="141" x="5" y="78"/>    
+    </execution>    
+    <execution id="5">      
+      <position height="615" width="141" x="5" y="712"/>    
+    </execution>    
+    <execution id="8">      
+      <position height="583" width="141" x="5" y="1353"/>    
+    </execution>  
+  </object>  
+  <object id="11" language="java" name="gov.samhsa.consent2share.service.consentexport.ConsentExportService" 
+    project="consent2share-core" 
+    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/service/consentexport/ConsentExportService.java" 
+    binary="false" label="consentExportService" type="interface" autoSize="true">    
+    <position height="-1" width="-1" x="254" y="0"/>    
+    <execution id="4">      
+      <position height="579" width="218" x="150" y="99"/>    
+    </execution>    
+    <execution id="7">      
+      <position height="573" width="218" x="150" y="733"/>    
+    </execution>    
+    <execution id="10">      
+      <position height="541" width="218" x="150" y="1374"/>    
+    </execution>  
+  </object>  
+  <object id="18" language="java" name="gov.samhsa.consent2share.service.consentexport.ConsentExportServiceImpl" 
+    project="consent2share-core" 
+    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/service/consentexport/ConsentExportServiceImpl.java" 
+    binary="false" label="consentExportServiceImpl" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="520" y="0"/>    
+    <execution id="13">      
+      <position height="537" width="218" x="372" y="120"/>    
+    </execution>    
+    <execution id="15">      
+      <position height="531" width="218" x="372" y="754"/>    
+    </execution>    
+    <execution id="17">      
+      <position height="499" width="218" x="372" y="1395"/>    
+    </execution>  
+  </object>  
+  <object id="25" language="java" name="gov.samhsa.consent.ConsentBuilder" project="consent-gen" 
+    file="/consent-gen/src/main/java/gov/samhsa/consent/ConsentBuilder.java" binary="false" label="consentBuilder" 
+    type="interface" autoSize="true">    
+    <position height="-1" width="-1" x="711" y="0"/>    
+    <execution id="20">      
+      <position height="495" width="110" x="594" y="141"/>    
+    </execution>    
+    <execution id="22">      
+      <position height="480" width="110" x="594" y="784"/>    
+    </execution>    
+    <execution id="24">      
+      <position height="457" width="110" x="594" y="1416"/>    
+    </execution>  
+  </object>  
+  <object id="32" language="java" name="gov.samhsa.consent.ConsentBuilderImpl" project="consent-gen" 
+    file="/consent-gen/src/main/java/gov/samhsa/consent/ConsentBuilderImpl.java" binary="false" 
+    label="consentBuilderImpl" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="803" y="0"/>    
+    <execution id="27">      
+      <position height="453" width="134" x="708" y="162"/>    
+    </execution>    
+    <execution id="29">      
+      <position height="434" width="134" x="708" y="809"/>    
+    </execution>    
+    <execution id="31">      
+      <position height="415" width="134" x="708" y="1437"/>    
+    </execution>  
+  </object>  
+  <object id="45" language="java" name="gov.samhsa.consent.ConsentDtoFactory" project="consent-gen" 
+    file="/consent-gen/src/main/java/gov/samhsa/consent/ConsentDtoFactory.java" binary="false" label="consentDtoFactory" 
+    type="interface" autoSize="true">    
+    <position height="-1" width="-1" x="970" y="0"/>    
+    <execution id="34">      
+      <position height="206" width="131" x="846" y="183"/>    
+    </execution>    
+    <execution id="38">      
+      <position height="190" width="7" x="908" y="815"/>    
+    </execution>    
+    <execution id="42">      
+      <position height="147" width="131" x="846" y="1458"/>    
+    </execution>  
+  </object>  
+  <object id="52" language="java" name="gov.samhsa.consent2share.service.consentexport.ConsentDtoFactoryImpl" 
+    project="consent2share-core" 
+    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/service/consentexport/ConsentDtoFactoryImpl.java" 
+    binary="false" label="consentDtoFactoryImpl" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="1120" y="0"/>    
+    <execution id="47">      
+      <position height="172" width="218" x="981" y="196"/>    
+    </execution>    
+    <execution id="49">      
+      <position height="148" width="218" x="981" y="836"/>    
+    </execution>    
+    <execution id="51">      
+      <position height="105" width="218" x="981" y="1479"/>    
+    </execution>  
+  </object>  
+  <object id="63" language="java" name="gov.samhsa.consent2share.domain.consent.ConsentRepository" 
+    project="consent2share-core" 
+    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/domain/consent/ConsentRepository.java" 
+    binary="false" label="consentRepository" type="interface" autoSize="true">    
+    <position height="-1" width="-1" x="1245" y="0"/>    
+    <execution id="54">      
+      <position height="21" width="191" x="1203" y="217"/>    
+    </execution>    
+    <execution id="58">      
+      <position height="21" width="191" x="1203" y="857"/>    
+    </execution>  
+  </object>  
+  <object id="64" language="java" name="gov.samhsa.consent.ConsentTransformer" project="consent-gen" 
+    file="/consent-gen/src/main/java/gov/samhsa/consent/ConsentTransformer.java" binary="false" 
+    label="consentTransformer" type="interface" autoSize="true">    
+    <position height="-1" width="-1" x="1041" y="0"/>    
+    <execution id="36">      
+      <position height="165" width="141" x="1398" y="429"/>    
+    </execution>    
+    <execution id="40">      
+      <position height="187" width="141" x="1398" y="1035"/>    
+    </execution>    
+    <execution id="44">      
+      <position height="192" width="141" x="1398" y="1639"/>    
+    </execution>  
+  </object>  
+  <object id="71" language="java" name="gov.samhsa.consent.ConsentTransformerImpl" project="consent-gen" 
+    file="/consent-gen/src/main/java/gov/samhsa/consent/ConsentTransformerImpl.java" binary="false" 
+    label="consentTransformerImpl" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="762" y="0"/>    
+    <execution id="66">      
+      <position height="123" width="165" x="1543" y="450"/>    
+    </execution>    
+    <execution id="73">      
+      <position height="21" width="165" x="1543" y="488"/>    
+    </execution>    
+    <execution id="75">      
+      <position height="21" width="165" x="1543" y="531"/>    
+    </execution>    
+    <execution id="68">      
+      <position height="145" width="165" x="1543" y="1056"/>    
+    </execution>    
+    <execution id="77">      
+      <position height="21" width="165" x="1543" y="1098"/>    
+    </execution>    
+    <execution id="79">      
+      <position height="21" width="165" x="1543" y="1159"/>    
+    </execution>    
+    <execution id="70">      
+      <position height="150" width="165" x="1543" y="1660"/>    
+    </execution>    
+    <execution id="81">      
+      <position height="21" width="165" x="1543" y="1712"/>    
+    </execution>    
+    <execution id="83">      
+      <position height="21" width="165" x="1543" y="1768"/>    
+    </execution>  
+  </object>  
+  <object id="84" language="java" name="gov.samhsa.consent2share.service.consentexport.ConsentExportMapper" 
+    project="consent2share-core" 
+    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/service/consentexport/ConsentExportMapper.java" 
+    binary="false" label="consentExportMapper" type="interface" autoSize="true">    
+    <position height="-1" width="-1" x="1311" y="0"/>    
+    <execution id="56">      
+      <position height="63" width="218" x="1712" y="284"/>    
+    </execution>    
+    <execution id="60">      
+      <position height="63" width="218" x="1712" y="900"/>    
+    </execution>    
+    <execution id="62">      
+      <position height="63" width="218" x="1712" y="1500"/>    
+    </execution>  
+  </object>  
+  <object id="91" language="java" name="gov.samhsa.consent2share.service.consentexport.ConsentExportMapperImpl" 
+    project="consent2share-core" 
+    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/service/consentexport/ConsentExportMapperImpl.java" 
+    binary="false" label="consentExportMapperImpl" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="892" y="0"/>    
+    <execution id="86">      
+      <position height="21" width="218" x="1934" y="305"/>    
+    </execution>    
+    <execution id="88">      
+      <position height="21" width="218" x="1934" y="921"/>    
+    </execution>    
+    <execution id="90">      
+      <position height="21" width="218" x="1934" y="1521"/>    
+    </execution>  
+  </object>  
+  <message id="3" operation="exportConsent2CDAR2(java.lang.Long):java.lang.String">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="4"/>  
+  </message>  
+  <message id="6" operation="exportConsent2XACML(java.lang.Long):java.lang.String">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="7"/>  
+  </message>  
+  <message id="9" operation="exportConsent2XACML(gov.samhsa.consent2share.domain.consent.Consent):java.lang.String">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="10"/>  
+  </message>  
+  <message id="12" operation="exportConsent2CDAR2(java.lang.Long):java.lang.String">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="13"/>  
+  </message>  
+  <message id="14" operation="exportConsent2XACML(java.lang.Long):java.lang.String">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="15"/>  
+  </message>  
+  <message id="16" operation="exportConsent2XACML(gov.samhsa.consent2share.domain.consent.Consent):java.lang.String">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="17"/>  
+  </message>  
+  <message id="19" operation="buildConsent2Cdar2(long):java.lang.String">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="20"/>  
+  </message>  
+  <message id="21" operation="buildConsent2Xacml(java.lang.Object):java.lang.String">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="22"/>  
+  </message>  
+  <message id="23" operation="buildConsent2Xacml(java.lang.Object):java.lang.String">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="24"/>  
+  </message>  
+  <message id="26" operation="buildConsent2Cdar2(long):java.lang.String">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="27"/>  
+  </message>  
+  <message id="28" operation="buildConsent2Xacml(java.lang.Object):java.lang.String" x="614" y="790">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="29"/>  
+  </message>  
+  <message id="30" operation="buildConsent2Xacml(java.lang.Object):java.lang.String">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="31"/>  
+  </message>  
+  <message id="33" operation="createConsentDto(long):gov.samhsa.consent.ConsentDto">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="34"/>  
+  </message>  
+  <message id="35" operation="transform(gov.samhsa.consent.ConsentDto,java.lang.String):java.lang.String">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="36"/>  
+  </message>  
+  <message id="37" operation="createConsentDto(java.lang.Object):gov.samhsa.consent.ConsentDto">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="38"/>  
+  </message>  
+  <message id="39" operation="transform(gov.samhsa.consent.ConsentDto,java.lang.String):java.lang.String" x="953" 
+    y="1013">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="40"/>  
+  </message>  
+  <message id="41" operation="createConsentDto(java.lang.Object):gov.samhsa.consent.ConsentDto">    
+    <end type="SOURCE" refId="31"/>    
+    <end type="TARGET" refId="42"/>  
+  </message>  
+  <message id="43" operation="transform(gov.samhsa.consent.ConsentDto,java.lang.String):java.lang.String" x="1077" 
+    y="1622">    
+    <end type="SOURCE" refId="31"/>    
+    <end type="TARGET" refId="44"/>  
+  </message>  
+  <message id="46" operation="createConsentDto(long):gov.samhsa.consent.ConsentDto">    
+    <end type="SOURCE" refId="34"/>    
+    <end type="TARGET" refId="47"/>  
+  </message>  
+  <message id="48" operation="createConsentDto(java.lang.Object):gov.samhsa.consent.ConsentDto">    
+    <end type="SOURCE" refId="38"/>    
+    <end type="TARGET" refId="49"/>  
+  </message>  
+  <message id="50" operation="createConsentDto(java.lang.Object):gov.samhsa.consent.ConsentDto">    
+    <end type="SOURCE" refId="42"/>    
+    <end type="TARGET" refId="51"/>  
+  </message>  
+  <message id="53" operation="findOne(ID):T">    
+    <end type="SOURCE" refId="47"/>    
+    <end type="TARGET" refId="54"/>  
+  </message>  
+  <message id="55" operation="map(gov.samhsa.consent2share.domain.consent.Consent):gov.samhsa.consent.ConsentDto">    
+    <end type="SOURCE" refId="47"/>    
+    <end type="TARGET" refId="56"/>  
+  </message>  
+  <message id="57" operation="findOne(ID):T">    
+    <end type="SOURCE" refId="49"/>    
+    <end type="TARGET" refId="58"/>  
+  </message>  
+  <message id="59" operation="map(gov.samhsa.consent2share.domain.consent.Consent):gov.samhsa.consent.ConsentDto">    
+    <end type="SOURCE" refId="49"/>    
+    <end type="TARGET" refId="60"/>  
+  </message>  
+  <message id="61" operation="map(gov.samhsa.consent2share.domain.consent.Consent):gov.samhsa.consent.ConsentDto">    
+    <end type="SOURCE" refId="51"/>    
+    <end type="TARGET" refId="62"/>  
+  </message>  
+  <message id="65" operation="transform(gov.samhsa.consent.ConsentDto,java.lang.String):java.lang.String">    
+    <end type="SOURCE" refId="36"/>    
+    <end type="TARGET" refId="66"/>  
+  </message>  
+  <message id="67" operation="transform(gov.samhsa.consent.ConsentDto,java.lang.String):java.lang.String">    
+    <end type="SOURCE" refId="40"/>    
+    <end type="TARGET" refId="68"/>  
+  </message>  
+  <message id="69" operation="transform(gov.samhsa.consent.ConsentDto,java.lang.String):java.lang.String">    
+    <end type="SOURCE" refId="44"/>    
+    <end type="TARGET" refId="70"/>  
+  </message>  
+  <message id="72" operation="jaxbMarshall(gov.samhsa.consent.ConsentDto):java.io.ByteArrayOutputStream">    
+    <end type="SOURCE" refId="66"/>    
+    <end type="TARGET" refId="73"/>  
+  </message>  
+  <message id="74" 
+    operation="saxonTransform(java.lang.String,javax.xml.transform.stream.StreamSource):javax.xml.transform.stream.StreamResult">    
+    <end type="SOURCE" refId="66"/>    
+    <end type="TARGET" refId="75"/>  
+  </message>  
+  <message id="76" operation="jaxbMarshall(gov.samhsa.consent.ConsentDto):java.io.ByteArrayOutputStream">    
+    <end type="SOURCE" refId="68"/>    
+    <end type="TARGET" refId="77"/>  
+  </message>  
+  <message id="78" 
+    operation="saxonTransform(java.lang.String,javax.xml.transform.stream.StreamSource):javax.xml.transform.stream.StreamResult">    
+    <end type="SOURCE" refId="68"/>    
+    <end type="TARGET" refId="79"/>  
+  </message>  
+  <message id="80" operation="jaxbMarshall(gov.samhsa.consent.ConsentDto):java.io.ByteArrayOutputStream">    
+    <end type="SOURCE" refId="70"/>    
+    <end type="TARGET" refId="81"/>  
+  </message>  
+  <message id="82" 
+    operation="saxonTransform(java.lang.String,javax.xml.transform.stream.StreamSource):javax.xml.transform.stream.StreamResult">    
+    <end type="SOURCE" refId="70"/>    
+    <end type="TARGET" refId="83"/>  
+  </message>  
+  <message id="85" operation="map(gov.samhsa.consent2share.domain.consent.Consent):gov.samhsa.consent.ConsentDto">    
+    <end type="SOURCE" refId="56"/>    
+    <end type="TARGET" refId="86"/>  
+  </message>  
+  <message id="87" operation="map(gov.samhsa.consent2share.domain.consent.Consent):gov.samhsa.consent.ConsentDto">    
+    <end type="SOURCE" refId="60"/>    
+    <end type="TARGET" refId="88"/>  
+  </message>  
+  <message id="89" operation="map(gov.samhsa.consent2share.domain.consent.Consent):gov.samhsa.consent.ConsentDto">    
+    <end type="SOURCE" refId="62"/>    
+    <end type="TARGET" refId="90"/>  
+  </message>
+</sequence-diagram>

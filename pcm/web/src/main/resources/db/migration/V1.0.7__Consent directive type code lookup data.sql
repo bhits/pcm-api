@@ -1,0 +1,4 @@
+insert into consent_directive_type_code (id, code, display_name, code_system_name, code_system) values (1, 'EMRGONLY', 'emergency only', 'ActPolicyType', '2.16.840.1.113883.1.11.19886');
+insert into consent_directive_type_code (id, code, display_name, code_system_name, code_system) values (2, 'NOPP', 'notice of privacy practices', 'ActPolicyType', '2.16.840.1.113883.1.11.19886');
+insert into consent_directive_type_code (id, code, display_name, code_system_name, code_system) values (3, 'OPTIN', 'opt-in', 'ActPolicyType', '2.16.840.1.113883.1.11.19886');
+insert into consent_directive_type_code (id, code, display_name, code_system_name, code_system) values (4, 'OPTOUT', 'opt-out', 'ActPolicyType', '2.16.840.1.113883.1.11.19886');

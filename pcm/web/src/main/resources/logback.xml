@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration scan="${AUTO_SCAN}" scanPeriod="${SCAN_PERIOD}">
+
+	<include file="${C2S_PROPS}/pcm-pg-config-logback_included.xml"/>
+
+</configuration>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<body>
+	
+<!-- admin page navbar header fragment with my account menu and logo only (no back button) -->
+<div th:fragment="admin-navbarHeaderFragment" class="navbar-header navbar-inner-header" role="navigation">
+		
+	<div id="page-title-left" class="left-page-title">
+		<h1 class="nav-title" th:text="${currentPageTitle}">Page Title</h1>
+		<span id="facility-name" class="med-facility-name">Medical Facility Name</span>
+	</div>
+	
+	<span th:substituteby="fragment/common :: adminLogoFragment">
+			<a id="logoFragment" class="navbar-brand brand logo-fragment" th:href="@{/index.html}"  href="index.html"><span id="brand-blue" class="app-brand"></span><img src="../../../resources/img/consent2share-04.svg" th:src="@{/resources/img/consent2share-04.svg}" /></a>
+			<span id="watermark" class="pg-watermark"><i><p>This site is for DEMONSTRATION PURPOSES only.</p></i></span>
+		</span>
+	
+	<div id="page-title-right">
+		<!-- COMPONENT: Header Menu-->
+	
+		<div th:substituteby="fragment/myaccount_menu :: adminMyAccountMenuFragment"
+			id="adminHome-navbar-buttons" class="admin-navbar-btn">
+			
+			<!-- COMPONENT: User Dropdown -->
+			<div class="btn-group btn-group-sm">
+				<span class="btn-group btn-group-sm">
+					<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="fa fa-user" style="margin-right: 2px;"></span>
+						<span class="hidden-xs inline-block">Leo Smith</span>
+						<span class="caret inline-block"></span>
+					</a>
+					
+					<ul role="menu" class="dropdown-menu">
+						<li role="menuitem"><a href="profile.html" th:href="@{/Administrator/editAdminProfile.html}" th:text="#{header_my_profile}">My Profile</a></li>
+						<li role="menuitem"><a href="../changePassword.html" th:href="@{/changePassword.html}" th:text="#{header_change_password}">Change Password</a></li>
+						<li role="menuitem" aria-disabled="true" class="divider"></li>
+						<li role="menuitem"><a href="../index.html" th:href="@{/resources/j_spring_security_logout}" th:text="#{header_logout}">Logout</a></li>
+					</ul>
+				</span>
+				
+			</div>
+					
+		</div>
+		
+	</div>
+		
+</div>
+	
+<!-- new edit AdminProfile fragment -->
+<div th:fragment="editAdminProfile-navbarHeaderFragment" class="navbar-header navbar-inner-header" role="navigation">
+		
+		<a th:substituteby="fragment/common :: backButtonFragment" id="bread-crumb-btn" th:href="@{${backPageURI}}" href="#" class="btn btn-info breadcrumb-btn">
+			<span class="fa fa-chevron-left fa-white"></span>
+		</a>
+		
+		<div id="page-title-left" class="left-page-title">
+			<h1 class="nav-title">Administrator Home</h1>
+			<span id="facility-name" class="med-facility-name">Medical Facility Name</span>
+		</div>
+		
+		<div id="page-title-right">
+		
+			<span id="adminHome-navbar-buttons" class="admin-navbar-btn">
+				<!-- COMPONENT: User Dropdown -->
+				<div class="btn-group btn-group-sm">
+					<span class="btn-group btn-group-sm">
+						<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+							<span class="fa fa-user" style="margin-right: 2px;"></span><span class="hidden-xs inline-block">Leo Smith</span>
+							<span class="caret inline-block"></span>
+						</a>
+							
+						<ul role="menu" class="dropdown-menu">
+							<li role="menuitem"><a href="adminHome.html">Admin Home</a></li>					
+							<li role="menuitem"><a href="../changePassword.html" th:href="@{/changePassword.html}" th:text="#{header_change_password}">Change Password</a></li>
+							<li role="menuitem" aria-disabled="true" class="divider"></li>
+							<li role="menuitem"><a href="../index.html" th:href="@{/resources/j_spring_security_logout}" th:text="#{header_logout}">Logout</a></li>
+						</ul>
+					</span>
+				</div>			
+			</span>
+		
+			<span>
+				<a id="logoFragment" class="navbar-brand brand logo-fragment " th:href="@{/index.html}"  href="index.html"><span id="brand-blue" class="hidden-xs app-brand"></span><img src="../../../resources/img/consent2share-04.svg" th:src="@{/resources/img/consent2share-04.svg}" /></a>
+<!-- WATERMARK -->
+<!-- 			<span id="watermark"><i><p>This site is for DEMONSTRATION PURPOSES only.</p></i></span>    -->
+<!-- END WATERMARK -->						
+			</span>
+			<div class="clear"></div>
+		</div>
+	</div>
+
+
+<!-- admin page navbar header fragment with my account menu, logo, & back button -->
+<div th:fragment="admin-navbarHeaderFragmentBackButton" class="navbar-header navbar-inner-header" role="navigation">
+		
+		<a th:substituteby="fragment/common :: backButtonFragment" id="bread-crumb-btn"   th:href="@{${backPageURI}}" href="#" class="btn btn-info breadcrumb-btn">
+			<span class="fa fa-chevron-left fa-white"></span>
+		</a>
+			
+			<div id="page-title-left" class="left-page-title">
+				<h1 class="nav-title" th:text="${currentPageTitle}">Page Title</h1>
+				<span id="facility-name" class="med-facility-name" >Medical Facility Name</span>
+			</div>
+
+			
+			
+			<span th:substituteby="fragment/common :: adminLogoFragment">
+				<a id="logoFragment" class="navbar-brand brand logo-fragment" th:href="@{/index.html}"  href="index.html"><span id="brand-blue" class="app-brand"></span><img src="../../../resources/img/consent2share-04.svg" th:src="@{/resources/img/consent2share-04.svg}" /></a>
+				<span id="watermark" class="pg-watermark"><i><p>This site is for DEMONSTRATION PURPOSES only.</p></i></span>
+			</span>
+
+			<!-- COMPONENT: Header Menu-->
+
+			<div id="page-title-right">
+			<div th:substituteby="fragment/myaccount_menu :: adminMyAccountMenuFragment"
+			id="adminHome-navbar-buttons" class="admin-navbar-btn">
+			
+			<!-- COMPONENT: User Dropdown -->
+			<div class="btn-group btn-group-sm">
+				<span class="btn-group btn-group-sm">
+					<a class="btn btn-default myaccount-buttons dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="fa fa-user" style="margin-right: 2px;"></span>
+						<span class="hidden-xs inline-block">Leo Smith</span>
+						<span class="caret inline-block"></span>
+					</a>
+					
+					<ul role="menu" class="dropdown-menu">
+						<li role="menuitem"><a href="profile.html" th:href="@{/Administrator/editAdminProfile.html}" th:text="#{header_my_profile}">My Profile</a></li>
+						<li role="menuitem"><a href="../changePassword.html" th:href="@{/changePassword.html}" th:text="#{header_change_password}">Change Password</a></li>
+						<li role="menuitem" aria-disabled="true" class="divider"></li>
+						<li role="menuitem"><a href="../index.html" th:href="@{/resources/j_spring_security_logout}" th:text="#{header_logout}">Logout</a></li>
+					</ul>
+				</span>
+
+			</div>
+					
+		</div>
+		</div>
+	
+</div>
+
+<!-- admin page navbar header fragment with my account menu, logo, & back button without facility name!!! -->
+<div th:fragment="admin-navbarHeaderFragmentBackButtonNoFacilityName" class="navbar-header navbar-inner-header" role="navigation">
+		
+		<div id="page-title-left-no-facility-name">
+			<a th:substituteby="fragment/common :: backButtonFragment"   th:href="@{${backPageURI}}" href="#" class="btn btn-info breadcrumb-btn breadcrumb-btn">
+				<span class="fa fa-chevron-left fa-white"></span>
+			</a>
+
+			<h1 class="fragment-back-no-facility-name">
+				<span class="nav-title" th:text="${currentPageTitle}">Page Title</span>
+			</h1>
+		</div>
+	
+
+			
+			
+			<span th:substituteby="fragment/common :: adminLogoFragment">
+				<a id="logoFragment" class="navbar-brand brand logo-fragment" th:href="@{/index.html}"  href="index.html"><span id="brand-blue" class="app-brand"></span><img src="../../../resources/img/consent2share-04.svg" th:src="@{/resources/img/consent2share-04.svg}" /></a>
+				<span id="watermark" class="pg-watermark"><i><p>This site is for DEMONSTRATION PURPOSES only.</p></i></span>
+			</span>
+
+			<!-- COMPONENT: Header Menu-->
+
+			<div id="page-title-right">
+				<div id="adminHome-navbar-buttons" th:substituteby="fragment/myaccount_menu :: adminMyAccountMenuFragment" class="admin-navbar-btn">
+			
+					<!-- COMPONENT: User Dropdown -->
+					<div class="btn-group btn-group-sm">
+						<span class="btn-group btn-group-sm">
+							<a class="btn btn-default myaccount-buttons dropdown-toggle" data-toggle="dropdown" href="#">
+								<span class="fa fa-user" style="margin-right: 2px;"></span>
+								<span class="hidden-xs inline-block">Leo Smith</span>
+								<span class="caret inline-block"></span>
+							</a>
+							
+							<ul role="menu" class="dropdown-menu">
+								<li role="menuitem"><a href="profile.html" th:href="@{/Administrator/editAdminProfile.html}" th:text="#{header_my_profile}">My Profile</a></li>
+								<li role="menuitem"><a href="../changePassword.html" th:href="@{/changePassword.html}" th:text="#{header_change_password}">Change Password</a></li>
+								<li role="menuitem" aria-disabled="true" class="divider"></li>
+								<li role="menuitem"><a href="../index.html" th:href="@{/resources/j_spring_security_logout}" th:text="#{header_logout}">Logout</a></li>
+							</ul>
+						</span>
+						
+					</div>
+					
+				</div>
+			</div>
+	
+</div>
+
+
+</body>
+</html>

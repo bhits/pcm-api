@@ -1,0 +1,113 @@
+package AnnotationRules
+
+import gov.samhsa.acs.brms.domain.ClinicalFact
+import gov.samhsa.acs.brms.domain.Confidentiality
+import gov.samhsa.acs.brms.domain.FactModel
+import gov.samhsa.acs.brms.domain.ObligationPolicyDocument
+import gov.samhsa.acs.brms.domain.RefrainPolicy
+import gov.samhsa.acs.brms.domain.RuleExecutionContainer
+import gov.samhsa.acs.brms.domain.RuleExecutionResponse
+import gov.samhsa.acs.brms.domain.Sensitivity
+import gov.samhsa.acs.brms.domain.SubjectPurposeOfUse
+import gov.samhsa.acs.brms.domain.UsPrivacyLaw
+import gov.samhsa.acs.brms.domain.XacmlResult
+
+global gov.samhsa.acs.brms.domain.RuleExecutionContainer ruleExecutionContainer
+
+
+
+
+rule "Substance abuse (disorder)"
+	dialect "mvel"
+	when
+		$xacml : XacmlResult( subjectPurposeOfUse == SubjectPurposeOfUse.treatment )
+		$cd : ClinicalFact( code == "66214007" , codeSystem == "2.16.840.1.113883.6.96" , c32SectionLoincCode == "11450-4" )
+	then
+		RuleExecutionResponse $ruleExecutionResponse = new RuleExecutionResponse();
+		$ruleExecutionResponse.setSensitivity( Sensitivity.ETH );
+		$ruleExecutionResponse.setImpliedConfSection( Confidentiality.R );
+		$ruleExecutionResponse.setClinicalFact( $cd );
+		$ruleExecutionResponse.setUSPrivacyLaw( UsPrivacyLaw._42CFRPart2 );
+		$ruleExecutionResponse.setDocumentObligationPolicy( ObligationPolicyDocument.ENCRYPT );
+		$ruleExecutionResponse.setDocumentRefrainPolicy( RefrainPolicy.NODSCLCD );
+		insertLogical( $ruleExecutionResponse );
+		ruleExecutionContainer.addExecutionResponse( $ruleExecutionResponse );
+end
+
+
+
+
+rule "Drug abuse (disorder)"
+	dialect "mvel"
+	when
+		$xacml : XacmlResult( subjectPurposeOfUse == SubjectPurposeOfUse.treatment )
+		$cd : ClinicalFact( code == "26416006" , codeSystem == "2.16.840.1.113883.6.96" , c32SectionLoincCode == "11450-4" )
+	then
+		RuleExecutionResponse $ruleExecutionResponse = new RuleExecutionResponse();
+		$ruleExecutionResponse.setSensitivity( Sensitivity.ETH );
+		$ruleExecutionResponse.setImpliedConfSection( Confidentiality.R );
+		$ruleExecutionResponse.setClinicalFact( $cd );
+		$ruleExecutionResponse.setDocumentObligationPolicy( ObligationPolicyDocument.ENCRYPT );
+		$ruleExecutionResponse.setDocumentRefrainPolicy( RefrainPolicy.NODSCLCD );
+		$ruleExecutionResponse.setUSPrivacyLaw( UsPrivacyLaw._42CFRPart2 );
+		insertLogical( $ruleExecutionResponse );
+		ruleExecutionContainer.addExecutionResponse( $ruleExecutionResponse );
+end
+
+
+
+
+rule "DocumentLevelRule"
+	dialect "mvel"
+	when
+		$cd : ClinicalFact( code == "DOCUMENT" )
+	then
+		RuleExecutionResponse $ruleExecutionResponse = new RuleExecutionResponse();
+		$ruleExecutionResponse.setUSPrivacyLaw( UsPrivacyLaw._42CFRPart2 );
+		$ruleExecutionResponse.setDocumentObligationPolicy( ObligationPolicyDocument.ENCRYPT );
+		$ruleExecutionResponse.setDocumentRefrainPolicy( RefrainPolicy.NODSCLCD );
+		insertLogical( $ruleExecutionResponse );
+		ruleExecutionContainer.addExecutionResponse( $ruleExecutionResponse );
+end
+
+
+rule "Clinical Rule Mental health problem (finding) REDACT"
+	dialect "mvel"
+	when
+		$xacml : XacmlResult( subjectPurposeOfUse == SubjectPurposeOfUse.treatment )
+		$cd : ClinicalFact( codeSystem == "2.16.840.1.113883.6.96" , code == "413307004" , c32SectionLoincCode == "11450-4" )
+	then
+		RuleExecutionResponse $ruleExecutionResponse = new RuleExecutionResponse();
+		$ruleExecutionResponse.setSensitivity( Sensitivity.PSY );
+		$ruleExecutionResponse.setImpliedConfSection( Confidentiality.R );
+		$ruleExecutionResponse.setUSPrivacyLaw( UsPrivacyLaw._42CFRPart2 );
+		$ruleExecutionResponse.setDocumentRefrainPolicy( RefrainPolicy.NODSCLCD );
+		$ruleExecutionResponse.setDocumentObligationPolicy( ObligationPolicyDocument.ENCRYPT );
+		$ruleExecutionResponse.setClinicalFact( $cd );
+		insertLogical( $ruleExecutionResponse );
+		ruleExecutionContainer.addExecutionResponse( $ruleExecutionResponse );
+end
+
+
+
+
+rule "Acute HIV"
+	dialect "mvel"
+	when
+		$xacml : XacmlResult( subjectPurposeOfUse == SubjectPurposeOfUse.treatment )
+		$cd : ClinicalFact( code == "111880001" , codeSystem == "2.16.840.1.113883.6.96" , c32SectionLoincCode == "11450-4" )
+	then
+		RuleExecutionResponse $ruleExecutionResponse = new RuleExecutionResponse();
+		$ruleExecutionResponse.setClinicalFact( $cd );
+		$ruleExecutionResponse.setSensitivity( Sensitivity.HIV );
+		$ruleExecutionResponse.setImpliedConfSection( Confidentiality.V );
+		$ruleExecutionResponse.setUSPrivacyLaw( UsPrivacyLaw._42CFRPart2 );
+		$ruleExecutionResponse.setDocumentRefrainPolicy( RefrainPolicy.NODSCLCD );
+		$ruleExecutionResponse.setDocumentObligationPolicy( ObligationPolicyDocument.ENCRYPT );
+		insertLogical( $ruleExecutionResponse );
+		ruleExecutionContainer.addExecutionResponse( $ruleExecutionResponse );
+end
+
+
+
+

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PRPA_IN201310UV02 ITSVersion="XML_1.0" xmlns="urn:hl7-org:v3">
+	<id root="1.1" extension="f329ae8c-7bb7-47f4-91a0-74ab5ea098e6" />
+	<creationTime value="20131114181858" />
+	<interactionId root="2.16.840.1.113883.1.6" extension="PRPA_IN201310UV02" />
+	<processingCode code="P" />
+	<processingModeCode code="T" />
+	<acceptAckCode code="NE" />
+	<receiver typeCode="RCV">
+		<device classCode="DEV" determinerCode="INSTANCE">
+			<id root="1.2.840.114350.1.13.99998.8734" />
+		</device>
+	</receiver>
+	<sender typeCode="SND">
+		<device classCode="DEV" determinerCode="INSTANCE">
+			<id root="1.2.840.114350.1.13.99999.4567" />
+		</device>
+	</sender>
+	<acknowledgement>
+		<typeCode code="AS" />
+		<targetMessage>
+			<id root="2220c1c4-87ef-11dc-b865-3603d6866807" />
+		</targetMessage>
+		<acknowledgementDetail typeCode="E">
+			<code code="204" />
+			<text>Unknown Key Identifier - patient ID PUI1000100600011 in domain
+				&amp;2.16.840.1.113883.3.72.5.9.1&amp;ISO</text>
+			<location>//controlActProcess/queryByParameter/parameterList/patientIdentifier/value/@extension='PUI1000100600011'</location>
+		</acknowledgementDetail>
+	</acknowledgement>
+	<controlActProcess classCode="CACT" moodCode="EVN">
+		<code code="PRPA_TE201310UV02" />
+		<queryAck>
+			<queryId root="1.2.840.114350.1.13.99999.4567.34" extension="018499884245" />
+			<queryResponseCode code="AS" />
+		</queryAck>
+		<queryByParameter>
+			<queryId root="1.2.840.114350.1.13.99999.4567.34" extension="018499884245" />
+			<statusCode code="new" />
+			<responsePriorityCode code="I" />
+			<parameterList>
+				<patientIdentifier>
+					<value root="2.16.840.1.113883.3.72.5.9.1" extension="PUI1000100600011" />
+					<semanticsText>Patient.Id</semanticsText>
+				</patientIdentifier>
+			</parameterList>
+		</queryByParameter>
+	</controlActProcess>
+</PRPA_IN201310UV02>

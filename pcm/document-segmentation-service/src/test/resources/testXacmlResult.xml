@@ -1,0 +1,60 @@
+<xacmlResult>
+	<pdpDecision>PERMIT</pdpDecision>
+	<purposeOfUse>TREATMENT</purposeOfUse>
+	<messageId>cf8cace6-6331-4a45-8e79-5bf503925be4</messageId>
+	<homeCommunityId>2.16.840.1.113883.4.357</homeCommunityId>
+
+	<!-- SECTION CODES -->
+
+	<!-- Encounters -->
+	<pdpObligation>46240-8</pdpObligation>
+	<!-- Hospital Admission Diagnosis -->
+	<pdpObligation>46241-6</pdpObligation>
+	<!-- History of Past Illness -->
+	<pdpObligation>11348-0</pdpObligation>
+	<!-- Findings -->
+	<pdpObligation>18782-3</pdpObligation>
+	<!-- Procedure Description -->
+	<pdpObligation>29554-3</pdpObligation>
+	<!-- Allergies 48765-2-->
+	<pdpObligation>@Allergies</pdpObligation>
+	<!-- Chief Complaint -->
+	<pdpObligation>10154-3</pdpObligation>
+	<!-- Results 30954-2-->
+	<pdpObligation>@Results</pdpObligation>
+	<!-- Assessment -->
+	<pdpObligation>51848-0</pdpObligation>
+	<!-- DICOM Object Catalog -->
+	<pdpObligation>121181</pdpObligation>
+	<!-- Plan of Care -->
+	<pdpObligation>18776-5</pdpObligation>
+	<!-- Social History -->
+	<pdpObligation>29762-2</pdpObligation>
+	<!-- Family History -->
+	<pdpObligation>10157-6</pdpObligation>
+	<!-- Medications 10160-0 -->
+	<pdpObligation>@Medications</pdpObligation>
+	<!-- Problem 11450-4-->
+	<pdpObligation>@Problems</pdpObligation>
+	<!-- Immunizations -->
+	<pdpObligation>11369-6</pdpObligation>
+	<!-- Functional Status -->
+	<pdpObligation>47420-5</pdpObligation>
+
+	<!-- SENSITIVITY CODES -->
+
+	<!-- HIV/AIDS information -->
+	<pdpObligation>HIV</pdpObligation>
+	<!-- Psychiatry information -->
+	<pdpObligation>PSY</pdpObligation>
+	<!-- Substance abuse information -->
+	<pdpObligation>ETH</pdpObligation>
+	<!-- Genetic disease information -->
+	<pdpObligation>GDIS</pdpObligation>
+	<!-- Sexual assault, abuse, or domestic violence information -->
+	<pdpObligation>SDV</pdpObligation>
+	<!-- Sexuality and reproductive health information -->
+	<pdpObligation>SEX</pdpObligation>
+	<!-- Sexually transmitted disease information -->
+	<pdpObligation>STD</pdpObligation>
+</xacmlResult>

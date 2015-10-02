@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/common :: headerFragment" lang="en">
+	
+	<!-- START: Meta -->
+
+	<meta charset="utf-8" />
+	<title>Login Trouble Password</title>
+	<meta name="description" content="Consent Management System" />
+	<meta name="author" content="FEiSystems" />
+
+	<!-- END: Meta -->
+	
+	<!-- START: Mobile Specific -->
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	
+	<!-- END: Mobile Specific -->
+
+	<!-- START: CSS -->
+
+	<link id="bootstrap-style" href="../../resources/css/bootstrap.css" rel="stylesheet" />
+	<link href="../resources/css/themes-style.css" rel="stylesheet" type="text/css" />
+	<link href="../resources/css/c2s-core-style.css" rel="stylesheet" type="text/css" />
+
+	<!-- END: CSS -->
+
+	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+		<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- START: Favicon -->
+		<!-- 	<link rel="shortcut icon" href="img/favicon.ico"> -->
+	<!-- END: Favicon -->		
+</head>
+
+<body>
+<div id="signup1-main" class="container outmost-holder">
+	<!-- START: Page Header -->
+	<header class="navbar navbar-static-top" role="banner" th:with="currentPageTitle='Share with confidence.',backPageURI=@{loginTrouble.html}">
+		<div class="container">
+			<div class="navbar-header navbar-inner-header" role="navigation" th:substituteby="fragment/common :: navbarHeaderFragmentBackOnly">
+			<!-- EVERYTHING INSIDE HERE IS REPLACED BY THYMELEAF WITH THE navbarHeaderFragmentBasic -->
+			<!-- The code below is here only to enhance source code readability -->
+				<a id="bread-crumb-btn" th:href="@{${backPageURI}}" href="loginTrouble.html" class="btn btn-info breadcrumb-btn" >
+					<span class="fa fa-chevron-left fa-white"></span>
+				</a>
+				
+				<h1>
+					<span class="nav-title" th:text="${currentPageTitle}">Share with confidence.</span>
+				</h1>
+	
+				<span th:substituteby="fragment/common :: logoFragment">
+					<div style="position: relative;">
+						<a id="logoFragment" class="navbar-brand brand logo-fragment" th:href="@{/index.html}"  href="index.html"><span id="brand-blue"></span><img src="../../resources/img/consent2share-04.svg" th:src="@{/resources/img/consent2share-04.svg}" /></a>
+						<span id="watermark" class="pg-watermark"><i><p>This site is for DEMONSTRATION PURPOSES only.</p></i></span>
+					</div>
+				</span>
+			<!-- END OF SECTION REPLACED BY THYMELEAF -->
+			</div>
+		</div>
+	</header>
+	<div id="under-header"></div>
+	<!-- END : Page Header -->
+	
+	<div class="row main-content-wrapper-flux">					
+		<div id="content" class="content">
+	
+	<!-- JavaScrip Enable Message -->		
+	<noscript th:substituteby="fragment/common :: noscriptFragment">
+		<div class="alert alert-warning col-md-10 col-sm-10">
+			<p id="h4-style" class="alert-heading">Warning!</p>
+			<p>You need to have <a href="https://en.wikipedia.org/wiki/JavaScript" th:href="@{https://en.wikipedia.org/wiki/JavaScript}"
+			target="_blank">JavaScript</a>enabled to use this site.</p>
+		</div>
+	</noscript>
+			
+
+				
+	<!-- !START: Content Region-->
+	
+	<div id="page-fullcontent-holder" role="main" class="col-sm-10 col-sm-offset-1">			
+		<div class="row">			
+
+		<!-- !COMPONENT: Create CMS Account -->
+	
+			<div class="col-sm-9">
+				
+				 <section class="top-margin10">
+				 	<form id="other-troubles" name="other-troubles" th:action="@{/loginTroubleOther.html}" action="loginTroubleOther.html" method="post" class="form-horizontal">
+							<fieldset id="login-thirdparty" class="row thirdparty-container">
+							
+								<legend>Trouble accessing your account?</legend>
+								
+								<div class="alert alert-info top-margin10">Help us to identify the difficulties you are experiencing signing into your account.</div>
+								<div class="container">
+								
+									<div class="form-group">
+										<label class="col-sm-12">Please choose one:</label>
+										
+		                                <div class="radio col-sm-12">
+	                                		<label for="password">
+	                                			<input id="password" type="radio" name="optionRadio" value="login-trouble-password.html" /> I do not know my password.
+	                                		</label>
+		                                </div>
+		                                
+		                                <div class="radio col-sm-12">												     	
+		                                	<label for="user-name">
+			                            		<input id="user-name" type="radio" name="optionRadio" value="login-trouble-username.html" /> I do not know my username.
+			                            	</label>
+			                            </div>
+			                            
+			                            <div class="radio col-sm-12">
+			                            	<label for="someone-else">
+			                            		<input id="someone-else" type="radio" name="optionRadio" value="#" /> I believe someone else is using my account.
+			                            	</label>
+			                            </div>
+			                            
+			                            <div class="radio col-sm-12">
+			                            	<label for="reason-4">
+			                            		<input id="reason-4" type="radio" name="optionRadio" value="#" /> I am having difficulty Reason 4.
+			                            	</label>
+			                            </div>
+			                            
+			                            <div class="radio col-sm-12">
+			                            	<label for="reason-5">
+			                            		<input id="reason-5" type="radio" name="optionRadio" value="#" /> I am having difficulty Reason 5.
+			                            	</label>
+			                            </div>
+			                            
+			                            <div class="radio col-sm-12">
+			                            	<label for="reason-6">
+			                            		<input id="reason-6" type="radio" name="optionRadio" value="#" /> I am having difficulty Reason 6.
+			                            	</label>
+			                            </div>
+			                            
+			                            <div class="radio col-sm-12">
+			                            	<label for="need-someone">
+			                            		<input id="need-someone" type="radio" name="optionRadio" value="#" /> I'm need to speak with someone.
+			                            	</label>
+			                            </div>
+		                            </div>
+                                	
+                                	<div class="form-group">
+                                		<div class="col-sm-4">                                	
+	                                		<label for="email">Enter the email address used to create your account:</label>
+                                			<input id="email" name="email" type="text" aria-required="true" class="form-control"/>
+                                		</div>
+                                	</div>
+                                	
+                            		<div class="row bottom-btn-group">
+	                                	<div class="submit-cancel-controls">
+	                                		<button type="button" class="btn btn-default" onClick="window.location.href='index.html'" style="margin: 0 10px 0 0;">Cancel</button>
+	                                		<button class="btn btn-primary" type="submit" value="Next">Next</button> 
+                                    	</div>
+                                	</div>
+                                </div>
+	                      </fieldset>
+	                  </form>
+	                  <p class="bottom-margin10"><a href="index.html"><small><em>Don't have an account?</em></small></a></p>
+               </section>
+               
+			</div>
+
+		</div><!--/#content.col-sm-10-->
+	</div><!--/row-->
+	</div>
+	<!-- END: Content Region -->
+
+
+	</div>
+	
+	<!-- !START: Footer Region -->		
+		<!-- !START: Footer Region -->
+		<footer class="bottom" th:substituteby="fragment/common :: indexFooterFragment3">
+			<div>
+				<!-- COMPONENT: Action Buttons -->
+				<!--
+				<a href="#" class="btn pull-left" data-dismiss="modal">Close</a>
+				<a href="#" class="btn btn-primary pull-right">Save changes</a>
+				-->
+				
+				<!-- COMPONENT: Copyright Information -->
+				<p class="top-margin10 pull-left">&copy; <a class="footer-link" href="" target="_blank">A SAMHSA Public Service</a> 2013</p>
+			</div>
+		</footer>
+	
+	<!-- END: Footer Region --> 
+	</div>
+	
+</body>
+</html>

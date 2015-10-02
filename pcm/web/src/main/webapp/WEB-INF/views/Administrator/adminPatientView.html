@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:include="fragment/common :: headerFragment" > 
+	<meta charset="utf-8" />
+	<!-- title needs to be dynamic -->
+	<title>Consent2Share</title>
+	<meta name="description" content="Consent Management System" />
+	<meta name="author" content="FEiSystems" />
+	<!-- END: Meta -->
+	<!-- START: Mobile Specific -->
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!-- END: Mobile Specific -->
+	<!-- START: CSS -->
+	<link id="bootstrap-style" href="../../../resources/css/bootstrap.css"
+		rel="stylesheet"/>
+	<link href="../../../resources/css/bootstrap-toggle-buttons.css"
+		rel="stylesheet"/>
+	<link href="../../../resources/css/joyride-2.0.3.css" rel="stylesheet" />
+	<link href="../../../resources/css/themes-style.css" rel="stylesheet"/>
+	<link href="../../../resources/css/c2s-core-style.css" rel="stylesheet"/>
+	<link href="../../../resources/css/blue.css" rel="stylesheet"/>
+	
+	<!-- END: CSS -->
+	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	        <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	    <![endif]-->
+	<!-- START: Favicon -->
+	<!--    <link rel="shortcut icon" href="images/favicon.ico"> -->
+	<!-- END: Favicon -->
+</head>
+
+<head>
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+	<!-- START: CSS -->
+	<link href="../../../resources/css/modules/aero.css" th:href="@{/resources/css/modules/aero.css}" rel="stylesheet"/>
+	<link href="../../../resources/css/modules/blue.css" th:href="@{/resources/css/modules/blue.css}" rel="stylesheet"/>
+	<link href="../../../resources/css/modules/jquery-ui.css" rel="stylesheet" th:href="@{/resources/css/modules/jquery-ui.css}"/>
+	<link href="../../../resources/css/custom/sidebar.css" rel="stylesheet" th:href="@{/resources/css/custom/sidebar.css}"/>
+	
+	<style type="text/css">
+		.modal_checkbox_list {
+			margin-bottom: 5px;
+		}
+		
+		.modal-opts-row {
+			padding-bottom: 4px;
+			border-bottom: #e5e5e5 1pt solid;
+			margin-bottom: 5px;
+		}
+		
+	</style>
+	<!-- END: CSS -->
+</head>
+
+<body id="adminPatientView-page" class="admin-pages admin-patient-view-page">
+
+<span th:each="npi:${npiList}">
+	<input type="hidden" class="npi-list-input form-control" th:id="'npiList-NPI' + ${npi}" th:value="${npi}" id="npiList-NPInone" value="" />
+</span>
+
+<div class="container outmost-holder">
+	<!-- !START: Page Header -->
+	<header class="navbar navbar-static-top" role="banner" th:with="currentPageTitle=#{header_staff_patient_view},backPageURI='/Administrator/adminHome.html'">
+		<div class="container">
+			<div class="navbar-header navbar-inner-header" role="navigation" th:substituteby="fragment/admin_fragments :: admin-navbarHeaderFragmentBackButtonNoFacilityName">
+		
+				<!-- EVERYTHING INSIDE HERE IS REPLACED BY THYMELEAF WITH THE navbarHeaderFragment -->
+				<!-- The code below is here only to enhance source code readability -->
+				
+				<a th:substituteby="fragment/common :: backButtonFragment" id="bread-crumb-btn" th:href="@{${backPageURI}}" href="#" class="btn btn-info breadcrumb-btn">
+					<span class="fa fa-chevron-left fa-white"></span>
+				</a>
+				
+				<div id="page-title-left" class="left-page-title">
+					<h1 class="nav-title" th:text="${currentPageTitle}">Patient View</h1>
+					<span id="facility-name" class="med-facility-name">Medical Facility Name</span>
+				</div>
+				
+				<span th:substituteby="fragment/common :: logoFragment">
+					<div style="position: relative;">
+						<a id="logoFragment" class="navbar-brand brand logo-fragment" th:href="@{/index.html}"  href="index.html"><span id="brand-blue" ></span><img src="../../../resources/img/consent2share-04.svg" th:src="@{/resources/img/consent2share-04.svg}" /></a>
+						<span id="watermark"><i><p>This site is for DEMONSTRATION PURPOSES only.</p></i></span>
+					</div>
+				</span>
+				
+				<!-- COMPONENT: Header Menu-->
+			
+				<span th:substituteby="fragment/myaccount_menu :: adminMyAccountMenuFragment"
+					id="adminHome-navbar-buttons">
+					
+					<!-- COMPONENT: User Dropdown -->
+					<div class="btn-group btn-group-sm">
+						<span class="btn-group btn-group-sm">
+							<a class="btn btn-default myaccount-buttons dropdown-toggle" data-toggle="dropdown" href="#">
+								<span class="fa fa-user" style="margin-right: 2px;"></span>
+								<span class="hidden-xs inline-block">Leo Smith</span>
+								<span class="caret inline-block"></span>
+							</a>
+							
+							<ul role="menu" class="dropdown-menu">
+								<li role="menuitem"><a href="profile.html" th:href="@{/Administrator/editAdminProfile.html}" th:text="#{header_my_profile}">My Profile</a></li>
+								<li role="menuitem"><a href="../changePassword.html" th:href="@{/changePassword.html}" th:text="#{header_change_password}">Change Password</a></li>
+								<li role="menuitem" aria-disabled="true" class="divider"></li>
+								<li role="menuitem"><a href="../index.html" th:href="@{/resources/j_spring_security_logout}" th:text="#{header_logout}">Logout</a></li>
+							</ul>
+						</span>
+						
+						<a class="btn btn-default" href="#">
+							<span class="fa fa-envelope force-inline"></span><span class="force-inline"> Message Center</span> 
+							<span class="label label-warning hidden-sm force-inline">3</span>
+						</a>
+					</div>
+					
+				</span>
+
+
+				<!-- END OF SECTION REPLACED BY THYMELEAF -->
+			</div>
+
+			
+			<!-- ************* Notification Bars ************** -->
+			<div id="event_notification_bar" th:switch="${notifyEvent}">
+				<span th:case="'submit'">
+					<div th:if="${statusEvent} == 'success'" class="alert alert-success rounded">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+  		    			You have successfully submitted a patient's consent!
+					</div>
+					
+					<div th:if="${statusEvent} != 'success'" class="alert alert-danger rounded">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+  		    			Unable to submit patient's consent!
+					</div>
+				</span>
+				
+				<span th:case="'delete'">
+					<div th:if="${statusEvent} == 'success'" class="alert alert-success rounded">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+  		    			You have successfully deleted a patient's consent!
+					</div>
+					
+					<div th:if="${statusEvent} != 'success'" class="alert alert-danger rounded">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+  		    			Unable to delete patient's consent!
+					</div>
+				</span>
+				
+				<span th:case="'editpatientprofile'">
+					<div th:if="${statusEvent} == 'success'" class="alert alert-success rounded">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+  		    			You have successfully edited a patient's profile information!
+					</div>
+					
+					<div th:if="${statusEvent} != 'success'" class="alert alert-danger rounded">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+  		    			Unable to edit patient's profile information!
+					</div>
+				</span>
+				
+				<span th:case="'createpatientconsent'">
+					<div th:if="${statusEvent} == 'success'" class="alert alert-success rounded">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+  		    			You have successfully created a new patient consent!
+					</div>
+					
+					<div th:if="${statusEvent} != 'success'" class="alert alert-danger rounded">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+  		    			Unable to create new patient consent!
+					</div>
+				</span>
+				
+				<span th:case="'editpatientconsent'">
+					<div th:if="${statusEvent} == 'success'" class="alert alert-success rounded">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+  		    			You have successfully edited a patient's saved consent!
+					</div>
+					
+					<div th:if="${statusEvent} != 'success'" class="alert alert-danger rounded">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+  		    			Unable to edit patient's saved consent!
+					</div>
+				</span>
+				
+				<span th:case="'revokepatientconsent'">
+					<div th:if="${statusEvent} == 'success'" class="alert alert-success rounded">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+  		    			You have successfully submitted a patient's consent revocation!
+					</div>
+					
+					<div th:if="${statusEvent} != 'success'" class="alert alert-danger rounded">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+  		    			Unable to submit patient's consent revocation!
+					</div>
+				</span>
+			</div>
+
+			
+			<!-- ************ End Notification Bars ************ -->
+
+		</div>
+	</header>
+		<div id="under-header"></div>
+
+		<!-- END : Page Header -->
+	<div id="home-page" class="container">
+
+		<div class="row main-content-wrapper">
+			<div>
+				<!-- !START: Patient Information -->
+				<div id="section-header"  class="patient-info-section" th:object="${patientProfileDto}"><!-- <div id="section-header" th:object="${currentUser}"> -->
+				<div class="container">
+					<div class="row">
+					
+						<div id="patient-info" class="box col-md-4 col-sm-4" >
+							<div id="patient-photo">
+								<img class="dashboard-avatar" alt="Profile picture" title="Profile picture" src="../../../resources/img/avatar.gif" th:src="@{/resources/img/avatar.gif}"/>
+							</div>
+							<div class="patient-profile">
+								<div class="person" th:text="*{firstName + ' ' + lastName}"> John Doe</div>
+								<div class="gender" th:text="*{administrativeGenderCode}"> Male</div>
+								<div class="birth-date" th:text="*{birthDate==null}?  '' : *{#dates.format(birthDate, 'MM/dd/yyyy')}"> 10/20/1980</div>
+							</div>				
+							<div class="edit-profile">
+								<button  type="button" class="btn btn-default" data-toggle="modal" data-target="#editPatient">
+									<span class="fa fa-pencil"></span> Edit Profile
+								</button>
+							</div>
+					
+						</div>
+						
+						
+				
+<!-- EDIT PATIENT MODAL -->
+						<div  id="editPatient" class="modal fade edit-patient"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							  <div class="modal-dialog">
+							    <div class="modal-content">
+							      <form id="admin_edit_patient_form" action="#"
+													th:action="@{/Administrator/adminEditPatientProfile.html}"
+													th:object="${patientProfileDto}" method="post">
+							      <div class="modal-header">
+							        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+							        <p class="h3-style" id="myModalLabel">Patient Profile</p>
+							      </div>
+							      <div class="modal-body">
+							      	
+							      	<section th:if="*{username==null}">
+											<div class="panel-group" id="accordion">
+										  <div class="panel panel-default">
+										    <div class="panel-heading">
+										      <h4 class="panel-title">
+										        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+										          Verification Code
+										        </a>
+										      </h4>
+										    </div>
+										    <div id="collapseOne" class="panel-collapse collapse">
+										      <div class="panel-body">
+												
+												<div class="col-sm-7">
+													<label style="font-size:large">Code:</label>
+													<span id="verificationCode" style="font-size:large" th:text="${patientProfileDto.verificationCode}">000 000 0000000</span>
+												</div>
+											
+												<div>
+													<button type="button" id="send_login_information" class="btn btn-primary" th:value="${patientProfileDto.id}">Send Verification Email</button>
+												</div>
+												
+												<div class="top-margin10">
+													<p style="font-size:small;">The Patient is required to use this Verification Code when setting up their account login information for the first time.</p>
+												</div>
+										      </div>
+										    </div>
+										  </div>
+										 </div> 
+							
+									</section>
+							      	
+							      	<section class="row">
+							        	<fieldset class="form-group col-sm-12">
+							      			<legend>Edit Required Account Information</legend>
+							      		</fieldset>
+							      	</section>
+							      	<input id="id" name="patientId" type="text" aria-required="true" th:field="*{id}"  class="form-control inline-block" style="display: none;" />
+							      								      	
+							      	<section class="row">
+										<div class="form-group col-sm-6">
+											<div>
+												<label for="first_name">First Name</label>
+											</div>
+											<div>
+												<input id="first_name" name="firstname" type="text" aria-required="true" th:field="*{firstName}" class="form-control inline-block" />
+												<span id="fname_server_error_text" class="required-text" style="display: none;">First name is required.</span>
+												<span id="fname_client_error_text" class="required-text" style="display: none;">First name is required.</span>
+											</div>
+										</div>
+
+										<div class="form-group col-sm-6">
+											<div>
+												<label for="last_name">Last Name</label>
+											</div>
+											<div>
+												<input id="last_name" name="lastname" type="text"
+													aria-required="true" th:field="*{lastName}" class="form-control inline-block" /> 
+												<span id="lname_server_error_text" class="required-text" style="display: none;">Last name is required.</span>
+												<span id="lname_client_error_text" class="required-text" style="display: none;">Last name is required.</span>
+											</div>
+										</div>
+									</section>
+									
+									<section class="row">
+									
+										<div class="form-group col-sm-5 col-xs-8">
+											<div>
+												<label for="gender">Gender</label>
+											</div>
+											<div class="controls">
+												<select id="gender" th:field="*{administrativeGenderCode}" class="form-control inline-block">
+													<option selected="selected" value="">Please Select</option>
+													<option th:each="gender : ${administrativeGenderCodes}"
+														th:value="${gender.code}" th:text="${gender.displayName}">F</option>
+												</select>
+												<span id="gender_server_error_text" class="required-text" style="display: none;">Gender Selection is required.</span>
+												<span id="gender_client_error_text" class="required-text" style="display: none;">Gender Selection is required.</span>
+											</div>
+										</div>
+
+										<div class="form-group col-sm-7 col-xs-12">
+											<div>
+												<label class="control-label">Date of Birth</label>
+											</div>
+											<div id="dob" class="controls inline-block date-of-birth">
+												<input type="text" id="date" data-format="MM/DD/YYYY" data-template="MMM D YYYY"
+													name="date" style="display: none;" th:field="*{birthDate}" class="form-control" />
+												<select id="month" class="form-control">
+													<option selected="selected" value="  ">Month</option>
+													<option value="01">January</option>
+													<option value="02">February</option>
+													<option value="03">March</option>
+													<option value="04">April</option>
+													<option value="05">May</option>
+													<option value="06">June</option>
+													<option value="07">July</option>
+													<option value="08">August</option>
+													<option value="09">September&nbsp;</option>
+													<option value="10">October</option>
+													<option value="11">November</option>
+													<option value="12">December</option>
+												</select>
+												<select id="day" class="form-control">
+													<option selected="selected" value="  ">Day</option>
+													<option value="01">01</option>
+													<option value="02">02</option>
+													<option value="03">03</option>
+													<option value="04">04</option>
+													<option value="05">05</option>
+													<option value="06">06</option>
+													<option value="07">07</option>
+													<option value="08">08</option>
+													<option value="09">09</option>
+													<option value="10">10</option>
+													<option value="11">11</option>
+													<option value="12">12</option>
+													<option value="13">13</option>
+													<option value="14">14</option>
+													<option value="15">15</option>
+													<option value="16">16</option>
+													<option value="17">17</option>
+													<option value="18">18</option>
+													<option value="19">19</option>
+													<option value="20">20</option>
+													<option value="21">21</option>
+													<option value="22">22</option>
+													<option value="23">23</option>
+													<option value="24">24</option>
+													<option value="25">25</option>
+													<option value="26">26</option>
+													<option value="27">27</option>
+													<option value="28">28</option>
+													<option value="29">29</option>
+													<option value="30">30</option>
+													<option value="31">31</option>
+												</select>
+												<select id="year" class="form-control">
+													<option selected="selected" value="    ">Year&nbsp;</option>
+												</select>
+												<span id="dob_server_error_text" class="required-text" style="display: none;">Date of Birth is required.</span>
+												<span id="dob_client_error_text" class="required-text" style="display: none;">Date of Birth is required.</span>
+											</div>
+										</div>
+										
+									</section>
+
+													<section class="row">
+														<div class="form-group col-sm-6">
+															<div>
+																<label>Social security number</label>
+															</div>
+
+															<input class="form-group" type="text" id="socialsecurity"
+																th:field="*{socialSecurityNumber}"
+																name="socialSecurityNumber" style="display: none;" /> <input
+																style="width: 4em" maxlength="3" id="ssn1" type="text"
+																class="form-control force-inline ssn" /> <input
+																style="width: 4em" maxlength="2" id="ssn2" size="2"
+																type="text" class="form-control force-inline ssn" /> <input
+																style="width: 5em" maxlength="4" id="ssn3" size="4"
+																type="text" class="form-control force-inline ssn" /> <span
+																class="required-text"
+																th:errors="*{socialSecurityNumber}">Social
+																security number is required.</span> <span
+																id="ssn_client_error_text" class="required-text"
+																style="display: none;">Please provide a valid
+																social security number. For example 123-45-6789.</span>
+
+
+														</div>
+													</section>
+
+													<!-- 										<div class="form-group col-sm-6"> -->
+<!-- 											<div> -->
+<!-- 												<label for="socialsecurity">Social Security Number</label> -->
+<!-- 											</div> -->
+<!-- 											<div> -->
+<!-- 												<input id="socialsecurity" name="socialSecurityNumber" type="text" -->
+<!-- 													th:field="*{socialSecurityNumber}" class="form-control" /> -->
+<!-- 												<span id="ssn_server_error_text" class="required-text" th:errors="*{socialSecurityNumber}"> -->
+<!-- 													Please provide a valid social security number. For example 123-45-6789.</span> -->
+<!-- 												<span id="ssn_client_error_text" class="required-text" style="display: none;"> -->
+<!-- 													Please provide a valid social security number. For example 123-45-6789.</span> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+									
+									<section class="row">
+									
+										<div class="form-group col-sm-7">
+											<div>
+												<label for="email">Email</label>
+											</div>
+											<div>
+												<input id="email" name="email" type="text" aria-required="true" th:field="*{email}" class="form-control inline-block" />
+												<span id="email_server_error_text" class="required-text" style="display: none;">E-Mail is required.</span>
+												<span id="email_client_error_text" class="required-text" style="display: none;">E-Mail is required.</span>
+											</div>
+										</div>
+											
+									</section>
+									
+									<section class="row">
+										<fieldset class="form-group col-sm-12">
+											<legend>Edit Additional Account Information</legend>
+										</fieldset>
+									</section>
+									
+									<div class="username-container" style="margin: 0px; display: block;">
+									
+										<section class="row">
+										
+											<div class="form-group col-sm-12">
+												<div>
+													<label for="street">Street Address</label>
+												</div>
+												<div>
+													<input id="street" name="streetAddressLine" type="text" th:field="*{addressStreetAddressLine}" class="form-control" />
+													<span id="street_server_error_text" class="required-text" style="display: none;">Please provide a valid street address.</span>
+													<span id="street_client_error_text" class="required-text" style="display: none;">Please provide a valid street address.</span>
+												</div>
+											</div>
+											
+										</section>
+										
+										<section class="row">
+										
+												<div class="form-group col-sm-5">	
+													<div>
+														<label for="city">City</label>
+													</div>
+													<div>
+														<input id="city" name="city" type="text" th:field="*{addressCity}" class="form-control" />
+														<span id="city_server_error_text" class="required-text" style="display: none;">Please provide a valid city.</span>
+														<span id="city_client_error_text" class="required-text" style="display: none;">Please provide a valid city.</span>
+													</div>
+												</div>
+												
+												<div class="form-group col-sm-4">
+													<div>
+														<label for="state">State</label>
+													</div>
+													<div>
+														<select id="state" th:field="*{addressStateCode}" class="form-control">
+															<option selected="selected" value="">- Select -</option>
+															<option th:each="addressState : ${stateCodes_Edit}" th:value="${addressState.code}"
+																th:text="${addressState.displayName}">Alabama</option>
+														</select>
+														<span id="state_server_error_text" class="required-text" style="display: none;">Please provide a valid state.</span>
+														<span id="state_client_error_text" class="required-text" style="display: none;">Please provide a valid state.</span>
+													</div>																		
+												</div>
+												
+												<div class="form-group col-sm-3">
+													<div>
+														<label for="zip">Zip Code</label>
+													</div>
+													<div>
+														<input id="zip" name="postalCode" type="text"
+															th:field="*{addressPostalCode}" class="form-control" />
+														<span id="zip_server_error_text" class="required-text" style="display: none;">Please provide a valid zip state</span>
+														<span id="zip_client_error_text" class="required-text" style="display: none;">Please provide a valid zip state</span>
+													</div>
+												</div>
+											
+										</section>
+									</div>
+									
+									<section class="row top-margin10">
+									
+										<div class="form-group col-sm-6">
+											<div>
+												<label for="phone">Phone Number</label>
+											</div>
+											<div>
+												<input id="phone" name="telephone" type="text" th:field="*{telephoneTelephone}" class="form-control" />
+												<span id="phone_server_error_text" class="required-text" style="display: none;">Please provide a valid phone number.For example <span style="white-space: nowrap;">123-456-7890.</span></span>
+												<span id="phone_client_error_text" class="required-text" style="display: none;">Please provide a valid phone number.For example <span style="white-space: nowrap;">123-456-7890.</span></span>
+											</div>
+										</div>
+
+									
+									
+									</section>
+									
+									<!-- <section class="row">
+									
+																				
+										<div class="form-group col-sm-6">
+											<div>
+												<p>Enterprise Identifier (EID)</p>
+											</div>
+											<div>
+												<span id="enterprise_identifier" th:text="*{enterpriseIdentifier}?: 'You must enter a valid MRN to view the Enterprise Identifier.'" >
+												You must enter a valid MRN to view the Enterprise Identifier.
+												</span>
+											</div>												
+											div>
+												<input id="enterprise_identifier" name="enterpriseIdentifier" type="text"
+													th:field="*{enterpriseIdentifier}" class="form-control" th:disabled="true"/>
+											</div
+										</div>
+										
+									</section> -->
+									
+									<section class="row">
+									
+										<div class="form-group col-sm-6">
+											<div>
+												<label for="marital_status">Marital Status</label>
+											</div>
+											<div>
+												<select id="marital_status" th:field="*{maritalStatusCode.code}" class="form-control">
+													<option selected="selected" value="">Please Select</option>
+													<option th:each="maritalStatus : ${maritalStatusCodes}" th:value="${maritalStatus.code}"
+														th:text="${maritalStatus.displayName}">Married</option>
+												</select>
+												<span id="marital_server_error_text" class="required-text" th:errors="*{maritalStatusCode.code}">
+														Please provide a valid marital status.</span>
+												<span id="marital_client_error_text" class="required-text" style="display: none;">
+														Please provide a valid marital status.</span>
+											</div>
+										</div>
+										
+										<div class="form-group col-sm-6">
+											<div>
+												<label for="religious_affiliation">Religious Affiliation</label>
+											</div>
+											<div>
+												<select id="religious_affiliation" th:field="*{religiousAffiliationCode.code}" class="form-control">
+													<option selected="selected" value="">Please Select</option>
+													<option th:each="religiousAffiliation : ${religiousAffiliationCodes}"
+														th:value="${religiousAffiliation.code}" th:text="${religiousAffiliation.displayName}">Voodoo</option>
+												</select>
+												<span id="religion_server_error_text" class="required-text" th:errors="*{religiousAffiliationCode.code}">
+														Please provide a valid religious affiliation.</span>
+												<span id="religion_client_error_text" class="required-text" style="display: none;">
+														Please provide a valid religious affiliation.</span>
+											</div>
+										</div>
+											
+									</section>
+									
+									<section class="row">
+										
+										<div class="form-group col-sm-6">
+											<div>
+												<label for="race">Race/Ethnicity</label>
+											</div>
+											<div>
+												<select id="race" th:field="*{raceCode.code}" class="form-control">
+													<option selected="selected" value="">Please Select</option>
+													<option th:each="race : ${raceCodes}" th:value="${race.code}" th:text="${race.displayName}">White</option>
+												</select>
+												<span id="race_server_error_text" class="required-text" th:errors="*{raceCode.code}">
+														Please provide a valid race/ethnicity.</span>
+												<span id="race_client_error_text" class="required-text" style="display: none;">
+														Please provide a valid race/ethnicity.</span>
+											</div>
+										</div>
+										
+										<div class="form-group col-sm-6">
+											<div>
+												<label for="language">Primary Language Spoken</label>
+											</div>
+											<div>
+												<select th:field="*{languageCode.code}" class="form-control">
+														<option selected="selected" value="">Please Select</option>
+														<option th:each="language : ${languageCodes}" th:value="${language.code}"
+															th:text="${language.displayName}">English, US</option>
+												</select>
+												<span id="language_server_error_text" class="required-text" th:errors="*{languageCode.code}">
+														Please provide a valid language.</span>
+												<span id="language_client_error_text" class="required-text" style="display: none;">
+														Please provide a valid language.</span>
+											</div>
+										</div>
+										
+									</section>															
+								</div>
+										<!-- COMPONENT: Connections -->
+							    <div class="modal-footer">
+							    	<button type="button" class="btn btn-default" style="float:left;" data-dismiss="modal">Cancel</button>
+							        <button id="adminEditPatientFormSubmitButton" type="submit" class="btn btn-primary">Update Profile</button>
+							    </div>
+							  </form>
+							</div><!-- /.modal-content -->
+						  </div><!-- /.modal-dialog -->
+						</div><!-- /.modal -->
+			
+			
+<!-- END EDIT PATIENT MODAL -->
+			
+			<div class="box well col-sm-8 col-xs-12 btn-bar">
+				<a th:href="@{/Administrator/adminPatientViewCreateConsent.html}+'?id='+${patientProfileDto.id}"  type="button" class="btn btn-primary"><span class="fa fa-plus"></span> Create Consent</a>
+<!-- 			<button type="button" class="btn btn-primary"><span class="fa fa-plus"></span> Manage Providers</button> -->
+				
+			</div>
+											
+						
+				</div>
+			</div>
+			<span class="divide"> </span>
+		</div>
+	</div>
+
+
+
+
+
+			<!-- END: Patient Information -->
+
+	<div id="content" class="content">
+
+
+				<!-- JavaScrip Enable Message -->
+				<noscript th:substituteby="fragment/common :: noscriptFragment">
+					<div class="alert alert-warning col-sm-10">
+						<p id="h4-style" class="alert-heading">Warning!</p>
+						<p>You need to have <a href="https://en.wikipedia.org/wiki/JavaScript" th:href="@{https://en.wikipedia.org/wiki/JavaScript}"
+						target="_blank">JavaScript</a>enabled to use this site.</p>
+					</div>
+				</noscript>
+
+<!-- START: Content Region-->
+				
+				<div class="row grid-layout">
+					
+				<!-- GRID: Start Notifications -->
+					<div class="box col-sm-6">
+						<div class="box-header">
+							<h2>
+								<span class="fa fa-inbox"></span><span class="break"></span>Notifications
+							</h2>
+						</div>
+						<div class="box-content">
+							<table class="table table-striped table-hover">
+								  <thead>
+									  <tr>
+										  <th></th>
+										  <th>Message</th>
+										  <th>Created</th>										                                            
+									  </tr>
+								  </thead>   
+								  <tbody>
+<!-- 									<tr> -->
+<!-- 										<td class="center"> <span class="fa fa-bell-o"></span></td> -->
+<!-- 										<td>Your consent has been revoked.</td> -->
+<!-- 										<td class="center">2012/01/01</td>										                                      -->
+<!-- 									</tr> -->
+<!-- 									<tr> -->
+<!-- 										<td class="center"><span class="fa fa-refresh"></span></td> -->
+<!-- 										<td>Your consent is ready to be signed.</td> -->
+<!-- 										<td class="center">2012/01/01</td>									                                    -->
+<!-- 									</tr> -->
+									   <tr th:each="systemNotificationDto : ${systemNotificationDtos}">
+									        <td th:switch="${systemNotificationDto.notificationType}"> 
+									        	<span th:case="'consent_needs_signing'"> <span class="fa fa-flag" style="color: #038CD2;"></span></span>
+									        	<span th:case="'consent_revoke_needs_signing'"> <span class="fa fa-flag" style="color: #038CD2;"></span></span>
+										        <span th:case="*"> <span class="fa fa-check" style="color: #468847;"></span></span>
+									        </td>
+								      		<td	th:text="${systemNotificationDto.notificationMessage}">notificationMessage</td>
+								      		<td class="center" th:text="${systemNotificationDto.sendDate==null}? '' : *{#dates.format((systemNotificationDto.sendDate), 'MM/dd/yyyy')}">01/01/2012</td>
+								      </tr>															   
+								  </tbody>
+							 </table>  
+						</div>
+					</div>
+				<!-- GRID: End Notifications -->
+				
+				<!-- GRID: Start Patient Consent -->
+					<div class="box col-sm-6 col-xs">
+						<div>
+						<div class="box-header">
+							<h2>
+								<span class="fa fa-list"></span><span class="break"></span>Patient Consents
+							</h2>
+						</div>
+														
+						<div class="box-content">
+							<table id="patient_consents_list" class="table table-striped table-hover">
+								<thead>
+									<tr>
+										<th>Consent From</th>
+										<th>Status</th>
+										<th>Created</th>
+								</tr>
+								</thead>   
+								<tbody>
+									<tr th:each="consentEntry:${consentListDto}">
+											<input type="hidden" name="doctype" th:id="'doctype_'+${consentEntry.id}" th:value="${'consent'}"/>
+											<input type="hidden" name="consentId" th:id="'consentId_'+${consentEntry.id}" th:value="${consentEntry.id}" value="" />
+										<td class="center">
+											<li style="list-style-type: none;" th:each="discloseName:${consentEntry.toDiscloseName}">
+										  		<span th:text="${discloseName}">Washington, George</span>
+											</li>
+										</td>
+										<td class="center" th:switch="${consentEntry.consentStage}" >
+											<span th:case="CONSENT_SAVED" class="label label-info">Saved</span>
+											<span th:case="CONSENT_SUBMITTED" class="label label-warning">Pending</span>
+											<span th:case="CONSENT_SIGNED"> 
+												<span th:switch="${consentEntry.revokeStage}">
+													<span th:case="REVOCATION_NOT_SUBMITTED" class="label label-primary">Signed</span>
+													<span th:case="REVOCATION_SUBMITTED" class="label label-warning">Withdrawal Pending</span>
+													<span th:case="REVOCATION_REVOKED" class="label label-default">Revoked</span>
+												</span>
+											</span>
+										</td>
+										<td class="center" th:text="${consentEntry.consentStart==null}? '' : *{#dates.format((consentEntry.consentStart), 'MM/dd/yyyy')}">01/01/2012</td>
+										
+								<!-- Modal -->
+										<div class="modal fade" th:id="'consent_options_modal_'+${consentEntry.id}" tabindex="-1" role="dialog" aria-hidden="true">
+										  <div class="modal-dialog">
+										    <div class="modal-content">
+										      <div class="modal-header">
+										        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+										        <h3 class="modal-title" th:id="'consentOptions_'+${consentEntry.id}">Consent Options</h3>
+										      </div>
+										      <div class="modal-body">
+										        <div class="container">
+										        	<!-- View Consent -->
+										        	<div class="row modal-opts-row">
+										        		<span style="font-size: 15px; font-weight: bold;">I want to:</span>
+										        	</div>
+										        	<div class="row modal-opts-row">
+										        		<div class="col-sm-12 hover-state">
+										        			<span class="fa fa-folder-open"></span>
+										        			<span class="cmd-view-consent" th:value="${consentEntry.id}">View this Consent</span>
+										        		</div>
+										        	</div>
+										        	
+										        	<!-- Edit Consent -->
+										        	<div th:if="${consentEntry.consentStage} == 'CONSENT_SAVED'" class="row modal-opts-row">
+										        		<div class="col-sm-12 hover-state">
+										        			<span class="fa fa-edit"></span>
+										        			<span class="cmd-edit-consent" th:value="${consentEntry.id}">Edit This Consent</span>
+										        		</div>
+										        	</div>
+										        	
+										        	<!-- Try Consent -->
+										        	<div class="row modal-opts-row">
+										        		<div class="col-sm-12 hover-state">
+										        			<span class="fa fa-search"></span>
+										        			<span class="cmd-tryPolicy-consent" th:value="${consentEntry.id}">Try My Consent Settings against My Medical Record before Sharing</span>
+										        		</div>
+										        	</div>
+										        	
+										        	<!-- Submit Consent -->
+										        	<div th:if="${consentEntry.consentStage} == 'CONSENT_SAVED'" class="row modal-opts-row">
+										        		<div class="col-sm-12 hover-state">
+										        			<span class="fa fa-share"></span>
+										        			<span class="cmd-submit-consent" th:value="${consentEntry.id}">Submit My Consent for Signing</span>
+										        		</div>
+										        		<form th:name="'form_submit_consent_'+${consentEntry.id}" th:id="'form_submit_consent_'+${consentEntry.id}" method="post"
+										        				th:action="@{/Administrator/adminPatientViewSubmitConsent.html}">
+										        			<input name="consentId" type="hidden" th:value="${consentEntry.id}" />
+										        			<input name="patientId" type="hidden" th:value="${patientProfileDto.id}" />
+										        		</form>
+										        	</div>
+										        	
+										        	<!-- Delete Consent -->
+										        	<div th:if="${consentEntry.consentStage} == 'CONSENT_SAVED' or ${consentEntry.consentStage} == 'CONSENT_SUBMITTED'" class="row modal-opts-row">
+										        		<div class="col-sm-12 hover-state">
+										        			<span class="fa fa-times"></span>
+										        			<span class="cmd-delete-consent" th:value="${consentEntry.id}">Delete This Consent</span>
+										        		</div>
+										        		<form th:name="'form_delete_consent_'+${consentEntry.id}" th:id="'form_delete_consent_'+${consentEntry.id}" method="post"
+										        				th:action="@{/Administrator/adminPatientViewDeleteConsent.html}" onSubmit="return confirm('Are you sure you want to delete this consent?');">
+										        			<input name="consentId" type="hidden" th:value="${consentEntry.id}" />
+										        			<input name="patientId" type="hidden" th:value="${patientProfileDto.id}" />
+										        		</form>
+										        	</div>
+										        	
+										        	<!-- revoke Consent -->
+										        	<div th:if="${consentEntry.consentStage} == 'CONSENT_SIGNED' and ${consentEntry.revokeStage} == 'REVOCATION_NOT_SUBMITTED'" class="row modal-opts-row">
+										        		<div class="col-sm-12 hover-state">
+										        			<span class="fa fa-times"></span>
+										        			<!-- <button class="btn btn-success btn-lg btn-block cmd-revoke-consent" th:value="${consentEntry.id}">Revoke This Consent</button> -->
+										        			<span class="cmd-revoke-choice-consent" th:value="${consentEntry.id}">Revoke This Consent</span>
+										        		</div>						
+										        	</div>
+										        	
+										        </div>
+										      </div>
+										    </div><!-- /.modal-content -->
+										  </div><!-- /.modal-dialog -->
+										</div>
+								<!-- end /.modal -->
+										
+		<!-- start Patient revoke Consent modal-->
+										
+				<div th:if="${consentEntry.consentStage} == 'CONSENT_SIGNED' and ${consentEntry.revokeStage} == 'REVOCATION_NOT_SUBMITTED'" >
+						<div th:id="'consent_revoke_modal_'+${consentEntry.id}" class="modal fade" tabindex="-1"
+				role="dialog" aria-labelledby="clinical-annotation-modal"
+				aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">X</button>
+							<p class="h3-style">Withdrawal of Consent to Participate in C2S</p>
+						</div>
+		
+						<div class="modal-body">
+							<div>
+								<div class="alert alert-warning">
+									<span>Withdrawal of Consent to Participate in Health
+										Information Exchange</span>
+								</div>
+		
+								<div class="row col-sm-12">
+									<div class="row">
+										<div class="col-sm-12">I have previously signed a patient
+											consent form allowing my providers to access my electronic
+											health records through the Consent 2 Share system and now want
+											to withdraw that consent. If I sign this form as the Patient's
+											Legal Representative, I understand that all references in this
+											form to "me" or "my" refer to the Patient.</div>
+									</div>
+		
+									<div class="row">
+										<div class="col-sm-12 top-margin10">By withdrawing
+											my Consent, I understand that:</div>
+									</div>
+		
+		
+									<div class="row">
+										<div class="col-sm-12 top-margin10">1) I Deny Consent for all Participants to access my
+														electronic health information through Consent 2 Share for
+														any purpose, <em>EXCEPT in a medical emergency.</em></div>
+									</div>
+								</div>
+		
+								<form class="row col-sm-11 col-sm-offset-1" th:id="'form_revoke_consent_'+${consentEntry.id}" th:action="@{/Administrator/adminPatientViewRevokeConsent.html}" method="post" >
+										<input name="consentId" type="hidden" th:value="${consentEntry.id}" />
+										<input name="patientId" type="hidden" th:value="${patientProfileDto.id}" />
+										<input name="revokationType" type="hidden" value="EMERGENCY ONLY" />
+<!-- 									<ul> -->
+<!-- 										<li> -->
+<!-- 											<div class="col-sm-12 top-margin10" style="z-index:1;"> -->
+<!-- 												<div class="col-sm-3"> -->
+<!-- 													<label class="radio"> <input name="revokationType" type="radio" -->
+<!-- 														th:id="'optionsRadio1_'+${consentEntry.id}" value="EMERGENCY ONLY" /> <strong>No -->
+<!-- 															Except</strong> -->
+<!-- 													</label> -->
+<!-- 												</div> -->
+<!-- 												<div class="col-sm-9"> -->
+<!-- 													I Deny Consent for all Participants to access my electronic -->
+<!-- 													health information through Consent 2 Share for any purpose, <em>EXCEPT -->
+<!-- 														in a medical emergency.</em> By checking this box you agree, "No, -->
+<!-- 													none of the Participants may be given access to my medical -->
+<!-- 													records through Consent 2 Share unless it is a medical -->
+<!-- 													emergency." -->
+<!-- 												</div> -->
+<!-- 											</div> -->
+<!-- 										</li> -->
+<!-- 										<hr class="top-margin10 col-sm-11"></hr> -->
+		
+<!-- 										<li> -->
+<!-- 											<div class="col-sm-12 top-margin10" style="z-index:1;"> -->
+<!-- 												<div class="col-sm-3"> -->
+<!-- 													<label class="radio"> <input name="revokationType" type="radio" -->
+<!-- 														th:id="'optionsRadio2_'+${consentEntry.id}" value="NO NEVER" /> <strong>No -->
+<!-- 															Never</strong> -->
+<!-- 													</label> -->
+<!-- 												</div> -->
+<!-- 												<div class="col-sm-9"> -->
+<!-- 													I Deny Consent for all Participants to access my electronic -->
+<!-- 													health information through Consent 2 Share for any purpose, <em>INCLUDING -->
+<!-- 														in a medical emergency.</em> -->
+<!-- 												</div> -->
+<!-- 											</div> -->
+<!-- 										</li> -->
+<!-- 									</ul> -->
+								</form>
+		
+								<div class="row col-sm-12">
+									<div class="row">
+										<div class="col-sm-12 top-margin10">2) Health care provider
+											and health insurers that I am enrolled with will no longer be
+											able to access health information about me through Consent 2
+											Share, except in an emergency.</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12 top-margin10">3) The Withdrawal of
+											Consent will not affect the exchange of my health information
+											while my Consent was in effect.</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12 top-margin10">4) No Consent 2 Share
+											participating provider will deny me medical care and my
+											insurance eligibility will not be affected based on my
+											Withdrawal of Consent.</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12 top-margin10">5) If I wish to reinstate
+											Consent, I may do so by signing and completing a new Patient
+											Consent form and returning it to a participating provider or
+											payer.</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12 top-margin10">6) Withdrawing my consent
+											does not prevent my health care provider from submitting claims
+											to my health insurer for reimbursement for services rendered to
+											me.</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12 top-margin10">7) I understand that I
+											will get a copy of this form after I sign it.</div>
+									</div>
+								</div>
+		
+							</div>
+						</div>
+		
+						<div class="modal-footer">
+							<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
+							<button class="btn btn-success cmd-submit-revokation" th:value="${consentEntry.id}" >
+								<span style="margin-right: 0px" class="fa fa-edit" ></span>
+								Sign
+							</button>
+						</div>
+					</div>
+				</div>
+				</div>
+			</div>
+		<!-- end revoke Consent modal -->
+									</tr>
+									
+									
+									
+									 <!-- <tr>
+										<td class="center">Fairfax Medical Center</td>
+										<td class="center">
+											<span class="label label-primary">Signed</span>
+										</td>  
+										<td class="center">2012/01/01</td>							                                     
+									</tr>
+									<tr>
+										<td class="center">Community Memorial Health Center</td>
+										<td class="center">
+											<span class="label label-warning">Pending</span>
+										</td> 
+										<td class="center">2012/01/01</td>			                                      
+									</tr>
+									<tr>
+										<td class="center">David Davidson, Psy.D</td>
+										<td class="center">
+											<span class="label label-warning">Pending</span>
+										</td> 
+										<td class="center">2012/01/01</td>								                                      
+									</tr>
+									<tr>
+										<td class="center"> George Washington Hospital</td>
+										<td class="center">
+											<span class="label label-default">Revoked</span>
+										</td>  
+										<td class="center">2012/01/01</td>									                                     
+									</tr>	  -->					   
+								  </tbody>
+							 </table>  
+						</div>
+							
+					
+						</div>
+						
+					<!-- end Patient Consents -->
+						
+					</div>
+				<!-- GRID: End Patient Consent -->					
+			
+				</div>
+			
+
+
+				<div class="row grid-layout">
+
+					<div class="clearfix visible-xs">
+					</div>
+				
+				
+				<!-- GRID: Start Patient Providers -->
+					<div class="box col-sm-12">
+							<div class="box-header">
+								<h2>
+									<span class="fa fa-list"></span><span class="break"></span>Patient Providers
+								</h2>
+								<div style="float: right; margin-right: 5px;">
+									<button id="btn_add_providers" class="btn btn-success btn-xs add-btn">
+										<span class="fa fa-plus fa-white"><span style="margin-left: 3px;">Add Providers</span></span>
+									</button>
+								</div>
+								
+							</div>
+							<div class="box-content" id="patient_providers_container">
+								<table id="patient_providers_list" class="table table-striped table-hover">
+								  <thead>
+									  <tr>
+									  	<th>Provider</th>
+										<th>Specialty</th>
+										<th>Phone Number</th>									                                         
+									  </tr>
+								  </thead>   
+								  <tbody>
+								  
+								 	  <tr th:each="individualProvider : ${individualProviders}" th:id="'provider_row_NPI'+${individualProvider.npi}" th:attr="data-npi=${individualProvider.npi},data-prov-id=${individualProvider.id},data-prov-type='IND'">
+								      		<td	class="center" th:text="${individualProvider.lastName+', '+individualProvider.firstName}">lastName+firstName</td>
+			                   		 		<td th:text="${individualProvider.providerTaxonomyDescription}">specialty</td>
+			                   		 		<td>   
+			              		     			<input type="hidden" id="prov-phone-input-NPInone" th:id="'prov-phone-input-NPI'+${individualProvider.npi}" class="prov-phone-input" th:attr="data-npi=${individualProvider.npi}" th:value="${individualProvider.practiceLocationAddressTelephoneNumber}" />
+			              		     			<span id="prov-phone-display-NPInone" th:id="'prov-phone-display-NPI'+${individualProvider.npi}" class="prov-phone-display"></span>
+			                   		 		</td>
+			                   		 		
+			                   		 		<div class="modal fade crd-provider-modal" th:id="'crd_provider_modal_NPI'+${individualProvider.npi}" id="crd_provider_modal_NPInone" tabindex="-1" role="dialog" th:attr="aria-labelledby='crd_provider_modal-title_NPI'+${individualProvider.npi},data-prov-id=${individualProvider.id},data-prov-type='IND'" aria-hidden="true">
+											  <div class="modal-dialog">
+											    <div class="modal-content">
+											      <div class="modal-header">
+											        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+											        <h3 class="modal-title" th:id="'crd_provider_modal-title_NPI'+${individualProvider.npi}" id="crd_provider_modal-title_NPInone">Provider Details</h3>
+											      </div>
+											      <div class="modal-body">
+											      
+											      	<div th:with="crd_provider_name=${individualProvider.lastName+', '+individualProvider.firstName}, crd_provider_npi=${individualProvider.npi}, crd_provider_specialty=${individualProvider.providerTaxonomyDescription}, crd_provider_phone=${individualProvider.practiceLocationAddressTelephoneNumber}, crd_provider_firstLinePracticeLocationAddress=${individualProvider.firstLinePracticeLocationAddress}, crd_provider_practiceLocationAddressCityName=${individualProvider.practiceLocationAddressCityName}, crd_provider_practiceLocationAddressStateName=${individualProvider.practiceLocationAddressStateName}, crd_provider_practiceLocationAddressPostalCode=${individualProvider.practiceLocationAddressPostalCode}, crd_provider_id=${individualProvider.id}, crd_provider_type='IND'">
+								                		<div th:substituteby="fragment/provider_card_fragments :: providerCardFragment" class="provider_record_space">
+								                			<div class="provider_record_box">
+																<div class="provider_record_header">
+																	<p class="result_row">
+																		<span class="result_field provider_name_field" th:text="${crd_provider_name}">Healthcare Provider Name</span>
+																		<span class="result_field" th:text="'[NPI: '+${crd_provider_npi}+']'">[NPI: 0123456789]</span>
+																	</p>
+																	<p class="result_row add_button_space">
+																		<span class="result_field"><button class="btn btn-xs btn-danger"><span class="fa fa-minus fa-white"></span></button></span>Remove this Provider.
+																	</p>
+																</div>
+																<p class="result_row"><span class="result_field provider_specialty_field" th:text="${crd_provider_specialty}">Provider Specialty Field</span></p>
+																<input type="hidden" th:id="'prov-address-input-NPI'+${crd_provider_npi}" class="prov-address-input" th:attr="data-npi=${crd_provider_npi},data-streetaddress=${crd_provider_firstLinePracticeLocationAddress},data-city=${crd_provider_practiceLocationAddressCityName},data-state=${crd_provider_practiceLocationAddressStateName},data-zip=${crd_provider_practiceLocationAddressPostalCode}" />
+																<p class="result_row"><span th:id="'prov-address-display-NPI'+${crd_provider_npi}" class="result_field prov-address-display">123 Main Street, Anytown, MD 12345-1234</span></p>
+																<p class="result_row"><span th:id="'crd-prov-phone-display-NPI'+${crd_provider_npi}" class="result_field prov-phone-display" th:text="${crd_provider_phone}">(800) 888-8888</span></p>
+															</div>
+								                			</div>                			               			
+								                		</div>
+							                		</div>
+											      
+											      <div class="modal-footer">
+											        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+											      </div>
+											    </div>
+											  </div>
+											</div>
+								      </tr>
+								      
+								      <tr th:each="organizationalProvider : ${organizationalProviders}" th:id="'provider_row_NPI'+${organizationalProvider.npi}" th:attr="data-npi=${organizationalProvider.npi},data-prov-id=${organizationalProvider.id},data-prov-type='ORG'">
+								     		<td class="center" th:text="${organizationalProvider.orgName}">lastName+firstName</td>
+			                   		 		<td th:text="${organizationalProvider.providerTaxonomyDescription}">specialty</td>
+			                   		 		<td>   
+			              		     			<input type="hidden" id="prov-phone-input-NPInone" th:id="'prov-phone-input-NPI'+${organizationalProvider.npi}" class="prov-phone-input" th:attr="data-npi=${organizationalProvider.npi}" th:value="${organizationalProvider.practiceLocationAddressTelephoneNumber}" />
+			              		     			<span id="prov-phone-display-NPInone" th:id="'prov-phone-display-NPI'+${organizationalProvider.npi}" class="prov-phone-display"></span>
+			                   		 		</td>
+			                   		 		
+			                   		 		<div class="modal fade crd-provider-modal" th:id="'crd_provider_modal_NPI'+${organizationalProvider.npi}" id="crd_provider_modal_NPInone" tabindex="-1" role="dialog" th:attr="aria-labelledby='crd_provider_modal-title_NPI'+${organizationalProvider.npi},data-prov-id=${organizationalProvider.id},data-prov-type='ORG'" aria-hidden="true">
+											  <div class="modal-dialog">
+											    <div class="modal-content">
+											      <div class="modal-header">
+											        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+											        <h3 class="modal-title" th:id="'crd_provider_modal-title_NPI'+${organizationalProvider.npi}" id="crd_provider_modal-title_NPInone">Provider Details</h3>
+											      </div>
+											      <div class="modal-body">
+			                   		 		
+					                   		 		<div th:with="crd_provider_name=${organizationalProvider.orgName}, crd_provider_npi=${organizationalProvider.npi}, crd_provider_specialty=${organizationalProvider.providerTaxonomyDescription}, crd_provider_firstLinePracticeLocationAddress=${organizationalProvider.firstLinePracticeLocationAddress}, crd_provider_practiceLocationAddressCityName=${organizationalProvider.practiceLocationAddressCityName}, crd_provider_practiceLocationAddressStateName=${organizationalProvider.practiceLocationAddressStateName}, crd_provider_practiceLocationAddressPostalCode=${organizationalProvider.practiceLocationAddressPostalCode}, crd_provider_phone=${organizationalProvider.practiceLocationAddressTelephoneNumber}, crd_provider_id=${organizationalProvider.id}, crd_provider_type='ORG'">
+								                		<div th:substituteby="fragment/provider_card_fragments :: providerCardFragment" class="provider_record_space">
+								                			<div class="provider_record_box">
+								                				<div class="provider_record_header">
+								                					<p class="result_row">
+								                						<span class="result_field provider_name_field">Healthcare Provider Name</span>
+								                						<span class="result_field">[NPI: 0123456789]</span>
+								                					</p>
+								                					<p class="result_row add_button_space">
+								                						<span class="result_field"><button class="btn btn-xs btn-danger"><span class="fa fa-minus fa-white"></span></button></span>Remove this Provider.
+								                					</p>
+								                				</div>
+								                				<p class="result_row"><span class="result_field provider_specialty_field">Provider Specialty Field</span></p>
+								                				<p class="result_row"><span class="result_field">123 Main Street, Anytown, MD 12345-1234</span></p>
+								                				<p class="result_row"><span class="result_field">(800) 888-8888</span></p>
+								                			</div>                			               			
+								                		</div>
+							                		</div>
+							                		
+							                	  </div>
+											      <div class="modal-footer">
+											        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+											      </div>
+											    </div>
+											  </div>
+											</div>
+								      </tr>
+								      
+								  </tbody>
+								</table>  
+							</div>
+						</div>
+				<!-- GRID: End Patient Providers -->				
+				
+				</div>
+				
+			</div><!--/row-->
+			
+			
+			
+			<div th:include="fragment/provider_search_fragments :: providerSearchModalFragment" id="providerSearchSelect-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+			</div>
+			
+							
+			<!-- Provider Search modal -->
+			<div id="provider_search_modal" class="modal fade" tabindex="-1"
+				role="dialog" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+							<h4 class="modal-title">Provider Search Results</h4>
+						</div>
+
+						<div class="modal-body">
+							<div id="Pagination" class="pagination" style="display: none;">
+							</div>
+
+							<div class="control-group">
+								<!-- Results -->
+								<div class="controls col-sm-11">
+									<p id="noResult" style="display: none;">Sorry, no results
+										found.</p>
+									<p id="noResponse" style="display: none;">Sorry, no
+										response received from provider web service. Please try
+										again.</p>
+									<div id="resultList" hidden="true">
+										<dt>Search Results</dt>
+									</div>
+								</div>
+								<!-- Buttons -->
+								<div class="search-loading hide"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end of Provider Search modal -->
+										
+										
+			</div><!-- END: Content Region -->
+			</div>
+				
+	<div class="hidden">
+		<input id="patientId" type="hidden" th:value="${patientProfileDto.id}" />
+		<input th:if="${duplicate_consent_id} != null" id="duplicate_consent_id" type="hidden" th:value="${duplicate_consent_id}" />
+	</div>
+	
+<!-- </div> -->
+<!-- START: Footer Region -->
+<footer class="bottom" th:include="fragment/common :: [//footer[@id='center-footer']]">
+
+		<!-- COMPONENT: Copyright Information -->
+		
+</footer>
+<!-- END: Footer Region -->
+
+</div>
+
+<!-- START: JavaScript -->
+
+<script src="../../../resources/js/dateValidator.js" 
+	th:src="@{/resources/js/dateValidator.js}"
+	type="text/javascript"></script>
+<script src="../../../resources/js/jquery.toggle.buttons.js"
+		th:src="@{/resources/js/jquery.toggle.buttons.js}"
+		type="text/javascript"></script>
+<script src="../../../resources/js/jquery.cookie.js"
+		th:src="@{/resources/js/jquery.cookie.js}" type="text/javascript"></script>
+<script src="../../../resources/js/modernizr.mq.js"
+		th:src="@{/resources/js/modernizr.mq.js}" type="text/javascript"></script>
+<script  src="../../resources/js/jquery.autotab-1.1b.js"
+		th:src="@{/resources/js/jquery.autotab-1.1b.js}" 
+		type="text/javascript"></script>
+
+<!-- Custom JavaScript -->
+<script src="../../../resources/js/formatParser.js" 
+		th:src="@{/resources/js/formatParser.js}"
+		type="text/javascript"></script>
+<script src="../../../resources/js/validatorFunctions.js"
+		th:src="@{/resources/js/validatorFunctions.js}"
+		type="text/javascript"></script>
+<script src="../../../resources/js/webpage-js/profile_registration.js" 
+		th:src="@{/resources/js/webpage-js/profile_registration.js}"
+		type="text/javascript"></script>
+<script src="../../../resources/js/webpage-js/userAccountInfoValidation.js" 
+		th:src="@{/resources/js/webpage-js/userAccountInfoValidation.js}"
+		type="text/javascript"></script>
+<script src="../../resources/js/webpage-js/providerSearchCriteriaValidation.js"
+		th:src="@{/resources/js/webpage-js/providerSearchCriteriaValidation.js}" 
+		type="text/javascript"></script>
+<script src="../../../resources/js/webpage-js/Administrator/adminProviderSearch.js"
+		th:src="@{/resources/js/webpage-js/Administrator/adminProviderSearch.js}"
+		type="text/javascript" th:inline="javascript"></script>
+
+<script src="../../../resources/js/webpage-js/Administrator/adminPatientView.js"
+		th:src="@{/resources/js/webpage-js/Administrator/adminPatientView.js}"
+		type="text/javascript" th:inline="javascript"></script>
+	
+<!-- END: JavaScript -->
+
+</body>
+</html>

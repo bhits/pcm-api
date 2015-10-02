@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema elementFormDefault="qualified"
+	targetNamespace="http://schema.samhsa.gov/ds4p/XDSbRegistry/Message"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://schema.samhsa.gov/ds4p/XDSbRegistry/Message">
+	<complexType name="MessageBody">
+		<sequence>
+			<any minOccurs="0" maxOccurs="unbounded" namespace="##any" />
+		</sequence>
+	</complexType>
+	<element name="RegistryRequest">
+		<complexType>
+			<sequence>
+				<element name="Input" minOccurs="0" type="xs:anyType"></element>
+			</sequence>
+		</complexType>
+	</element>
+</schema>

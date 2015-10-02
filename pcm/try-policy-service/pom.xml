@@ -1,0 +1,181 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>gov.samhsa.pcm</groupId>
+		<artifactId>pcm</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>try-policy-service</artifactId>
+	<packaging>jar</packaging>
+
+	<name>Try My Policy Service</name>
+
+	<properties>
+		<wsdl-folder>${basedir}/src/main/resources/wsdl</wsdl-folder>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>gov.samhsa.pcm</groupId>
+			<artifactId>common-library</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>gov.samhsa.pcm</groupId>
+			<artifactId>audit-service</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>gov.samhsa.pcm</groupId>
+			<artifactId>context-handler-service</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>gov.samhsa.pcm</groupId>
+			<artifactId>c32-service-client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>gov.samhsa.pcm</groupId>
+			<artifactId>xdsb-repository-client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>gov.samhsa.pcm</groupId>
+			<artifactId>xdsb-registry-client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>gov.samhsa.pcm</groupId>
+			<artifactId>document-segmentation-client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-ws-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-bindings-soap</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.saxon</groupId>
+			<artifactId>Saxon-HE</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjtools</artifactId>
+		</dependency>
+
+		<!-- Testing -->
+
+		<!-- Web stack-specific dependencies that are internally needed by the 
+			Endpoint object as it exposes a web service -->
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http-jetty</artifactId>
+		</dependency>
+
+		<!-- Below used by embedded Jetty (which implements Endpoint in CXF) -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>gov.samhsa.pcm</groupId>
+			<artifactId>common-unit</artifactId>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</testResource>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>**/*.properties</exclude>
+				</excludes>
+			</testResource>
+		</testResources>
+
+		<plugins>
+			<!-- Add generated-sources as source folder -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+			        <execution>
+			         <id>add-source</id>
+			            <phase>generate-sources</phase>
+			            <goals>
+			                <goal>add-source</goal>
+			            </goals>
+			            <configuration>
+			                <sources>
+			                    <source>target/generated-sources/</source>
+			                </sources>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-codegen-plugin</artifactId>
+				<executions>
+					<execution>
+						<configuration>
+							<sourceRoot>
+								${basedir}/target/generated-sources
+							</sourceRoot>
+							<wsdlOptions>
+								<wsdlOption>
+									<wsdl>
+										${wsdl-folder}/TryPolicy.wsdl
+									</wsdl>
+								</wsdlOption>
+							</wsdlOptions>
+						</configuration>
+						<goals>
+							<goal>wsdl2java</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>

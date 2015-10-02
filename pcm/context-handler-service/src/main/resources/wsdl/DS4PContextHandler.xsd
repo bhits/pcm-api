@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. 
+	RI's version is Metro/2.1.1-b09 (branches/2.1-6834; 2011-07-16T17:14:48+0000) 
+	JAXWS-RI/2.2.5-promoted-b04 JAXWS/2.2. -->
+<xs:schema xmlns:tns="http://ws.ds4p.ehtac.va.gov/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	version="1.0" targetNamespace="http://ws.ds4p.ehtac.va.gov/">
+
+	<xs:element name="enforcePolicy" type="tns:enforcePolicy" />
+
+	<xs:element name="enforcePolicyResponse" type="tns:enforcePolicyResponse" />
+
+	<xs:element name="getAuthorizationObligations" type="tns:getAuthorizationObligations" />
+
+	<xs:element name="getAuthorizationObligationsResponse" type="tns:getAuthorizationObligationsResponse" />
+
+	<xs:element name="policyEnforcementObject">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="messageId" type="xs:string" />
+				<xs:element name="resourceId" type="xs:string" />
+				<xs:element name="resourceName" type="xs:string" />
+				<xs:element name="homeCommunityId" type="xs:string" />
+				<xs:element name="purposeOfUse" type="xs:string" />
+				<xs:element name="pdpDecision" type="xs:string" />
+				<xs:element name="pdpStatus" type="xs:string" />
+				<xs:element name="pdpObligation" type="xs:string"
+					nillable="true" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="pdpRequest" type="xs:string" />
+				<xs:element name="pdpResponse" type="xs:string" />
+				<xs:element name="requestTime" type="xs:dateTime" />
+				<xs:element name="responseTime" type="xs:dateTime" />
+				<xs:element ref="tns:xacmlResultType" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="xacmlObligationsType">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="xacmlObligations" type="xs:string"
+					nillable="true" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="xacmlResultType">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="xacmlResultTypeDecision" type="xs:string" />
+				<xs:element name="xacmlResultTypeResourceId" type="xs:string" />
+				<xs:element ref="tns:xacmlStatusType" />
+				<xs:element ref="tns:xacmlObligationsType" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="xacmlStatusDetailType">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="xacmlStatusDetail" type="xs:string"
+					nillable="true" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="xacmlStatusType">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="xacmlStatusCodeType" type="xs:string" />
+				<xs:element ref="tns:xacmlStatusDetailType" />
+				<xs:element name="xacmlStatusMessage" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="xspaResource">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="resourceId" type="xs:string" />
+				<xs:element name="resourceName" type="xs:string" />
+				<xs:element name="resourceType" type="xs:string" />
+				<xs:element name="resourceAction" type="xs:string" />
+				<xs:element name="resourceDestination" type="xs:string"
+					minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="xspaSubject">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="subjectId" type="xs:string" />
+				<xs:element name="userName" type="xs:string" />
+				<xs:element name="userId" type="xs:string" />
+				<xs:element name="subjectPurposeOfUse" type="xs:string" />
+				<xs:element name="subjectNPI" type="xs:string" minOccurs="0" />
+				<xs:element name="subjectLocality" type="xs:string" />
+				<xs:element name="organization" type="xs:string" />
+				<xs:element name="organizationId" type="xs:string"
+					minOccurs="0" />
+				<xs:element name="subjectStructuredRole" type="xs:string"
+					maxOccurs="unbounded" />
+				<xs:element name="subjectFunctionalRole" type="xs:string"
+					nillable="true" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="subjectPermissions" type="xs:string"
+					nillable="true" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="subjectEmailAddress" type="xs:string"
+					minOccurs="0" />
+				<xs:element name="messageId" type="xs:string" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="getAuthorizationObligations">
+		<xs:sequence>
+			<xs:element name="messageId" type="xs:string" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="getAuthorizationObligationsResponse">
+		<xs:sequence>
+			<xs:element name="return" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="messageId" type="xs:string" />
+						<xs:element name="resourceId" type="xs:string" />
+						<xs:element name="resourceName" type="xs:string" />
+						<xs:element name="homeCommunityId" type="xs:string" />
+						<xs:element name="purposeOfUse" type="xs:string" />
+						<xs:element name="pdpDecision" type="xs:string" />
+						<xs:element name="pdpStatus" type="xs:string" />
+						<xs:element name="pdpObligation" type="xs:string"
+							nillable="true" minOccurs="0" maxOccurs="unbounded" />
+						<xs:element name="pdpRequest" type="xs:string" />
+						<xs:element name="pdpResponse" type="xs:string" />
+						<xs:element name="requestTime" type="xs:dateTime" />
+						<xs:element name="responseTime" type="xs:dateTime" />
+						<xs:element ref="tns:xacmlResultType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="enforcePolicy">
+		<xs:sequence>
+			<xs:element name="xspasubject" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="subjectId" type="xs:string" />
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="userId" type="xs:string" />
+						<xs:element name="subjectPurposeOfUse" type="xs:string" />
+						<xs:element name="subjectNPI" type="xs:string"
+							minOccurs="0" />
+						<xs:element name="subjectLocality" type="xs:string" />
+						<xs:element name="organization" type="xs:string" />
+						<xs:element name="organizationId" type="xs:string"
+							minOccurs="0" />
+						<xs:element name="subjectStructuredRole" type="xs:string"
+							maxOccurs="unbounded" />
+						<xs:element name="subjectFunctionalRole" type="xs:string"
+							nillable="true" minOccurs="0" maxOccurs="unbounded" />
+						<xs:element name="subjectPermissions" type="xs:string"
+							nillable="true" minOccurs="0" maxOccurs="unbounded" />
+						<xs:element name="subjectEmailAddress" type="xs:string"
+							minOccurs="0" />
+						<xs:element name="messageId" type="xs:string"
+							minOccurs="0" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="xsparesource" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="resourceId" type="xs:string" />
+						<xs:element name="resourceName" type="xs:string" />
+						<xs:element name="resourceType" type="xs:string" />
+						<xs:element name="resourceAction" type="xs:string" />
+						<xs:element name="resourceDestination" type="xs:string"
+							minOccurs="0" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="enforcePolicyResponse">
+		<xs:sequence>
+			<xs:element name="return" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="messageId" type="xs:string" />
+						<xs:element name="resourceId" type="xs:string" />
+						<xs:element name="resourceName" type="xs:string" />
+						<xs:element name="homeCommunityId" type="xs:string" />
+						<xs:element name="purposeOfUse" type="xs:string" />
+						<xs:element name="pdpDecision" type="xs:string" />
+						<xs:element name="pdpStatus" type="xs:string" />
+						<xs:element name="pdpObligation" type="xs:string"
+							nillable="true" minOccurs="0" maxOccurs="unbounded" />
+						<xs:element name="pdpRequest" type="xs:string" />
+						<xs:element name="pdpResponse" type="xs:string" />
+						<xs:element name="requestTime" type="xs:dateTime" />
+						<xs:element name="responseTime" type="xs:dateTime" />
+						<xs:element ref="tns:xacmlResultType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,397 @@
+/* SASS to LESS Conversion 03/11/15 */
+/* BEGIN Base Classes */
+
+body {
+  color: #003367;
+  background-color: #FFFFFF;
+  font-family: Verdana, Tahoma, sans-serif;
+  font-size: 11px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+hr {
+	width: 90%;
+}
+
+table {
+	line-height: 10pt;
+	border-collapse:collapse;
+	border-spacing:0; 
+}
+
+tr {
+  background-color: #ccccff;
+}
+
+
+/* BEGIN Custom Table Classes  */
+/*---------------------------------------------------------------------------------------*/
+
+body {
+	padding-top: 70px !important;
+}
+
+.navbar-inverse {
+	background-color: #6f6f6f;
+	border-color: white;
+}
+
+.navbar-fixed-top {
+	border-radius: 0;
+}
+
+div.div-entry {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+ul {
+	padding-left: 0px;
+	margin-bottom: 0;	
+}
+
+li {
+	list-style: none;	
+	padding: 0px;
+	margin-bottom: 1px;
+}
+
+li:last-child {
+	margin-bottom: 0;
+}
+
+li a {
+	display: block;
+	padding: 8px 15px;
+	color:#2a6496;
+	font-size: 12pt;
+	font-weight: bold;
+	background-color: #e1edf0;
+}
+
+li a:hover {
+	text-decoration: none;
+	color: white;
+	background-color: #1488B8;
+}
+	
+li:last-child a {
+	border-radius: 0 0 4px 4px;
+}	
+		
+h1 {
+	font-size: 12pt;
+	font-weight: bold;
+}
+
+h2, h3, h4 {
+	font-size: 14pt;
+	font-weight: bold;
+}
+	
+h2, h3 {
+	background-color: #333;
+	color: white;
+	padding: 7px 15px;
+	border-radius: 4px 4px 0 0;
+	margin-bottom: 0;
+	margin-top: 0;
+}
+
+h2 a, h3 a {
+ 	color: white;
+ 	text-decoration: none;
+}
+
+h2 a:hover, h3 a:hover {
+	text-decoration: none;
+	color: white;
+}
+
+.h1center {
+	font-size: 15pt;
+	font-weight: bold;
+	text-align: center;
+}
+
+.education-text {
+	color: white;
+	margin: 10px 30px 15px;
+}
+
+div.education-text > div:first-child {
+	float: left;
+	margin: 0 10px 41px 0;
+	color: red;
+}
+
+.narr_header {
+	background-color: #e1edf0;
+	height: 100%;
+	min-height: 100%;
+	font-weight: bold;
+}
+
+.row {
+	margin: 0;	
+}
+
+.div-cell {
+	padding: 10px;
+	word-wrap: break-word;
+}
+
+.border_box > .row:first-child .div-cell:first-child {
+	border-top-left-radius: 6px;
+}
+
+.border_box > .row:last-child .div-cell:first-child {
+	border-bottom-left-radius: 6px;
+}
+
+.border_box {
+	border: 2px #697181 solid;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	margin-bottom:10px;
+}
+
+.borderbottom {
+	border-bottom: 1px #b2b6b8 solid;
+}
+			
+.rwd-table {
+	margin: 1em 0;
+	border-radius: 6px;
+	ebkit-border-radius: 6px;
+  	-moz-border-radius: 6px;
+	overflow: hidden;
+	border: 1px green solid;
+}
+
+.rwd-table tr {
+	border-top: 1px solid red;
+	border-bottom: 1px solid red;
+}
+
+.rwd-table tr:last-child {
+	border-top: 1px solid red;
+	border-bottom: 0px;
+}
+
+.td_label {
+	color: #5d5d5d;
+	font-weight: bold;
+	background-color: #e5f2f7;
+	padding: 10px 15px;
+}
+
+.td_result {
+	color: #5d5d5d;
+	font-weight: normal;
+	padding: 10px 15px;	
+}
+
+.table-responsive {
+	width: 100%;
+	margin-bottom: 15px;
+	border: 2px solid #697181;
+}
+
+.table {
+	border: none;
+}
+
+
+/*---------------------------------------------------------------*/
+@media only screen and (min-width: 769px) and (max-width: 1020px) {
+	body {
+		padding-top: 90px !important;
+	}
+}
+
+/*---------------------------------------------------------------*/
+@media only screen and (max-width: 768px) {
+	body {
+		padding-top: 80px !important;
+	}
+	
+	h2, h3 {
+		font-size: 12pt;
+	}	
+	
+	li a {
+		font-size: 10pt;
+		padding: 7px 15px;
+	}
+	
+	.education-text {
+		margin: 10px 10px;
+	}
+	
+	div.education-text > div:first-child {
+		margin: 0 10px -1px 0;
+	}
+}
+/*---------------------------------------------------------------*/
+
+/*============================================================================ 
+991px wide - CUSTOM for TABLE - (max-width: 991px)
+============================================================================*/
+
+@media only screen and (max-width: 991px) {
+	.table-responsive {
+		overflow-y: hidden;
+		overflow-x: scroll;
+	}
+}
+
+
+/*============================================================================ 
+Min Width 480px to Max Width 768px Wide - MOBILE - Landscape, Tablet Portrait (devices and browsers) 
+	(min-width: 480px) and (max-width: 768px)
+============================================================================*/
+
+@media only screen and (min-width: 480px) and (max-width: 768px) {
+	body {
+		font-size: 12px;
+	}
+}
+
+/*============================================================================ 
+479px wide - MOBILE LANDSCAPE - Mobile Landscape Size (devices and browsers)
+============================================================================*/
+
+@media only screen and (max-width: 479px) {
+	body {
+		font-size: 11px;
+	}
+}
+
+/* ----------------------------------------------end Custom ------------------------------------------------------------*/
+
+.td_label_sm {
+	width: 20%;
+	color: #5d5d5d;
+	font-weight: bold;
+	background-color: #e5f2f7;
+}
+
+.td_label_med {
+	width: 50%;
+	font-weight: bold;
+	background-color: #e5f2f7;
+}
+
+.td_label_lg {
+	width: 80%;
+	font-weight: bold;
+	background-color: #e5f2f7;
+}
+
+.td_detail_sm {
+	width: 20%;
+	background-color: white;
+}
+
+
+.td_detail_med {
+	width: 50%;
+	background-color: white;
+}
+
+.td_detail_lg {
+	width: 80%;
+	background-color: white;
+}
+
+
+table td {
+	font-family:Arial, sans-serif;
+	font-size:14px;
+	padding:10px 5px;
+	overflow:hidden;
+	word-break:normal;
+	border-color:#999;
+	color:#444;
+	border-style:solid;
+	border-width:0px;
+	border-top-width:0px;
+	border-bottom-width:1px;
+} 
+
+
+table .narr_th {
+	font-family:Arial, sans-serif;
+	font-size:14px;
+	font-weight:normal;
+	overflow:hidden;
+	word-break:normal;
+	padding:10px 5px;
+	color:#fff;
+	border-style:solid;
+	border-width:0px;
+	border-color:#999;
+	border-top-width:1px;
+	border-bottom-width:1px;
+}
+
+.header_table {
+	font-family:Arial, sans-serif;
+	font-size:14px;
+	font-weight:normal;
+	overflow:hidden;
+	word-break:normal;
+	padding:10px 5px;
+	color:#fff;
+	border-style:solid;
+	border-width:0px;
+	border-color:#999;
+	border-top-width:1px;
+	border-bottom-width:1px;
+}
+
+.header_table td{
+	width: 1%;
+}
+
+.narr_table {
+	width: 100%;
+	margin-bottom: 0 !important;
+}
+
+.narr_tr {
+	background-color:#F7FDFA;
+}
+
+.narr_th {
+	color: white;
+	background-color: #26ADE4;
+}
+
+table .header_table{
+	border: 1pt inset #00008b;
+}
+
+.redact{
+	font-weight: 700;
+	color: #c30000;
+	background-color: #fccdcd;
+	border-top: 2px solid !important;
+	border-bottom: 2px solid !important;
+	border-left: 0 !important;
+	border-right: 0 !important;
+	border-color: red;
+}
+
+.table-responsive.demo{
+	width: 80%;
+	height: auto;
+	border: gray;
+	border-style: solid;
+	border-width: 2px; 
+	padding: 5px;
+	margin-left: 10%;
+}

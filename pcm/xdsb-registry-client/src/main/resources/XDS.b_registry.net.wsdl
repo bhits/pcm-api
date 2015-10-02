@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="DocumentRegistryService"
+	targetNamespace="http://samhsa.gov/ds4p/XDSbRegistry/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:tns="http://samhsa.gov/ds4p/XDSbRegistry/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+	xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:i0="urn:ihe:iti:xds-b:2007"
+	xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract"
+	xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex"
+	xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata">
+	<wsp:Policy wsu:Id="XDSRegistry_HTTPS_Endpoint_policy">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<sp:TransportBinding
+					xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+					<wsp:Policy>
+						<sp:TransportToken>
+							<wsp:Policy>
+								<sp:HttpsToken RequireClientCertificate="true" />
+							</wsp:Policy>
+						</sp:TransportToken>
+						<sp:AlgorithmSuite>
+							<wsp:Policy>
+								<sp:Basic256 />
+							</wsp:Policy>
+						</sp:AlgorithmSuite>
+						<sp:Layout>
+							<wsp:Policy>
+								<sp:Strict />
+							</wsp:Policy>
+						</sp:Layout>
+					</wsp:Policy>
+				</sp:TransportBinding>
+				<wsaw:UsingAddressing />
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+	<wsp:Policy wsu:Id="XDSRegistry_HTTP_Endpoint_policy">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<wsaw:UsingAddressing />
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+	<wsdl:import namespace="urn:ihe:iti:xds-b:2007"
+		location="XDS.b_registry_messages_and_porttype.wsdl" />
+	<wsdl:types />
+	<wsdl:binding name="XDSRegistry_HTTPS_Endpoint" type="i0:XDSRegistry">
+		<wsp:PolicyReference URI="#XDSRegistry_HTTPS_Endpoint_policy" />
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="RegistryStoredQuery">
+			<soap12:operation soapAction="urn:ihe:iti:2007:RegistryStoredQuery"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="RegisterDocumentSet">
+			<soap12:operation soapAction="urn:ihe:iti:2007:RegisterDocumentSet-b"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="UpdateDocumentSet">
+			<soap12:operation soapAction="urn:ihe:iti:2010:UpdateDocumentSet"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="DeleteDocumentSet">
+			<soap12:operation soapAction="urn:ihe:iti:2010:DeleteDocumentSet"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="PatientRegistryRecordAdded">
+			<soap12:operation soapAction="urn:hl7-org:v3:PRPA_IN201301UV02"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="PatientRegistryRecordRevised">
+			<soap12:operation soapAction="urn:hl7-org:v3:PRPA_IN201302UV02"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="PatientRegistryDuplicatesResolved">
+			<soap12:operation soapAction="urn:hl7-org:v3:PRPA_IN201304UV02"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="XDSRegistry_HTTP_Endpoint" type="i0:XDSRegistry">
+		<wsp:PolicyReference URI="#XDSRegistry_HTTP_Endpoint_policy" />
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="RegistryStoredQuery">
+			<soap12:operation soapAction="urn:ihe:iti:2007:RegistryStoredQuery"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="RegisterDocumentSet">
+			<soap12:operation soapAction="urn:ihe:iti:2007:RegisterDocumentSet-b"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="UpdateDocumentSet">
+			<soap12:operation soapAction="urn:ihe:iti:2010:UpdateDocumentSet"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="DeleteDocumentSet">
+			<soap12:operation soapAction="urn:ihe:iti:2010:DeleteDocumentSet"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="PatientRegistryRecordAdded">
+			<soap12:operation soapAction="urn:hl7-org:v3:PRPA_IN201301UV02"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="PatientRegistryRecordRevised">
+			<soap12:operation soapAction="urn:hl7-org:v3:PRPA_IN201302UV02"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="PatientRegistryDuplicatesResolved">
+			<soap12:operation soapAction="urn:hl7-org:v3:PRPA_IN201304UV02"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="DocumentRegistryService">
+		<wsdl:port name="XDSRegistry_HTTPS_Endpoint" binding="tns:XDSRegistry_HTTPS_Endpoint">
+			<soap12:address location="https://localhost:9080/xdsservice/xdsregistry" />
+			<wsa10:EndpointReference>
+				<wsa10:Address>https://localhost:9080/xdsservice/xdsregistry
+				</wsa10:Address>
+			</wsa10:EndpointReference>
+		</wsdl:port>
+		<wsdl:port name="XDSRegistry_HTTP_Endpoint" binding="tns:XDSRegistry_HTTP_Endpoint">
+			<soap12:address location="http://localhost:8080/xdsservice/xdsregistry" />
+			<wsa10:EndpointReference>
+				<wsa10:Address>http://localhost:8080/xdsservice/xdsregistry
+				</wsa10:Address>
+			</wsa10:EndpointReference>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

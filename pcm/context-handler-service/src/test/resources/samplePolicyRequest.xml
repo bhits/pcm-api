@@ -1,0 +1,37 @@
+<Request xmlns="urn:oasis:names:tc:xacml:2.0:context:schema:os"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Subject>
+		<Attribute
+			AttributeId="urn:oasis:names:tc:xacml:1.0:subject-category:recipient-subject"
+			DataType="http://www.w3.org/2001/XMLSchema#string">
+			<AttributeValue>1568797520</AttributeValue>
+		</Attribute>
+		<Attribute
+			AttributeId="urn:oasis:names:tc:xacml:1.0:subject-category:intermediary-subject"
+			DataType="http://www.w3.org/2001/XMLSchema#string">
+			<AttributeValue>1285969170</AttributeValue>
+		</Attribute>
+		<Attribute AttributeId="gov.samhsa.consent2share.purpose-of-use-code"
+			DataType="http://www.w3.org/2001/XMLSchema#string">
+			<AttributeValue>TREAT</AttributeValue>
+		</Attribute>
+	</Subject>
+	<Resource>
+		<Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
+			DataType="http://www.w3.org/2001/XMLSchema#string">
+			<AttributeValue>consent2share@outlook.com</AttributeValue>
+		</Attribute>
+	</Resource>
+	<Action>
+		<Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+			DataType="http://www.w3.org/2001/XMLSchema#string">
+			<AttributeValue>write</AttributeValue>
+		</Attribute>
+	</Action>
+	<Environment>
+		<Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:environment:current-dateTime"
+			DataType="http://www.w3.org/2001/XMLSchema#dateTime">
+			<AttributeValue>2013-06-13T00:00:00-04:00</AttributeValue>
+		</Attribute>
+	</Environment>
+</Request>

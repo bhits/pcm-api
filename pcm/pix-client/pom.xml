@@ -1,0 +1,143 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>gov.samhsa.pcm</groupId>
+		<artifactId>pcm</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>pix-client</artifactId>
+
+
+	<dependencies>
+		<!-- ACS Dependencies -->
+		<dependency>
+			<groupId>gov.samhsa.pcm</groupId>
+			<artifactId>xdsb-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>gov.samhsa.pcm</groupId>
+			<artifactId>common-library</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-jxpath</groupId>
+			<artifactId>commons-jxpath</artifactId>
+		</dependency>
+		<!-- Apache CXF dependencies -->
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
+		</dependency>
+
+		<!-- Testing -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>pix-client</finalName>
+		<plugins>
+			<!-- Add generated-sources as source folder -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+			        <execution>
+			         <id>add-source</id>
+			            <phase>generate-sources</phase>
+			            <goals>
+			                <goal>add-source</goal>
+			            </goals>
+			            <configuration>
+			                <sources>
+			                    <source>target/generated-sources/</source>
+			                </sources>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
+			<!-- Generate Java classes from WSDL during build (using CXF) -->
+			<plugin>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-codegen-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-sources</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<sourceRoot>${basedir}/target/generated-sources</sourceRoot>
+							<wsdlOptions>
+								<wsdlOption>
+									<wsdl>${basedir}/src/main/resources/wsdl/PIXPDQManager.wsdl</wsdl>
+									<wsdlLocation>classpath:PIXPDQManager.wsdl</wsdlLocation>
+									<extraargs>
+										<extraarg>-client</extraarg>
+										<!-- This argument resolves the max enum member issue while generating 
+											the classes. -->
+										<extraarg>-xjc-b,${basedir}/src/main/resources/bindings/bindings.xjb</extraarg>
+										<!-- TODO: The namespace of the generated classes are manually 
+											mapped as below, because some classes were interfering with XDS.b generated 
+											classes. The org.hl7.v3 classes can be moved to a shared artifact in the 
+											future. -->
+										<extraarg>-p</extraarg>
+										<extraarg>urn:hl7-org:v3=org.hl7.v3.types</extraarg>
+										<!-- <extraarg>-impl</extraarg> -->
+										<!-- -fe cxf to generate the port code AutoCloseable -->
+										<extraarg>-fe</extraarg>
+										<extraarg>cxf</extraarg>
+									</extraargs>
+								</wsdlOption>
+							</wsdlOptions>
+						</configuration>
+						<goals>
+							<goal>wsdl2java</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Add generated sources - avoids having to copy generated sources to 
+				build location -->
+		
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<configuration>
+					<instrumentation>
+						<excludes>
+							<exclude>org/hl7/v3/types/*.class</exclude>
+							<exclude>org/openhie/openpixpdq/services/*.class</exclude>
+							<exclude>gov/samhsa/consent2share/pixclient/service/PixManagerServiceException.class</exclude>
+						</excludes>
+					</instrumentation>
+					<formats>
+						<format>html</format>
+						<format>xml</format>
+					</formats>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
+</project>

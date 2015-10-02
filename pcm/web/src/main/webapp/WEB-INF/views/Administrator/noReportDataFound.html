@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:include="fragment/common :: headerFragment">
+<meta charset="utf-8" />
+<!-- title needs to be dynamic -->
+<title>Consent2Share</title>
+<meta name="description" content="Consent Management System" />
+<meta name="author" content="FEiSystems" />
+<!-- END: Meta -->
+<!-- START: Mobile Specific -->
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- END: Mobile Specific -->
+
+<!-- Bootstrap related CSS files -->
+<link id="bootstrap-style" href="../../../resources/css/bootstrap.css"
+	rel="stylesheet" th:href="@{/resources/css/bootstrap.css}" />
+<link href="../../../resources/css/font-awesome.css"
+	th:href="@{/resources/css/font-awesome.css}" rel="stylesheet" />
+
+<!-- Custom CSS Files -->
+<link href="../../../resources/css/themes-style.css" rel="stylesheet"
+	th:href="@{/resources/css/themes-style.css}" />
+<link href="../../../resources/css/c2s-core-style.css" rel="stylesheet"
+	th:href="@{/resources/css/c2s-core-style.css}" />
+</head>
+
+<body>
+	<div class="container outmost-holder">
+		
+		<header class="navbar navbar-static-top" role="banner" th:with="currentPageTitle=#{header_staff_admin_reports}">
+			<div class="navbar-container">
+				<div class="navbar-header navbar-inner-header" role="navigation" th:substituteby="fragment/common :: navbarHeaderFragmentBasic">
+				</div>
+			</div>
+		</header>
+
+		<div id="under-header"></div>
+		<!-- END : Page Header -->
+
+		<div class="container">
+			<div class="row main-content-wrapper">
+
+				<!-- START: Content Region-->
+				<div role="main"
+					class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+					<div class="row">
+
+						<!-- Reports List -->
+						<section class="top-margin10">
+							<fieldset id="edit-login-required" class="row">
+
+								<legend>Reports</legend>
+
+								<div class="panel panel-default top-margin15">
+									<div class="panel-heading">
+										<h3 class="panel-title">Manager's Account Activity Report</h3>
+									</div>
+									<div class="panel-body">
+										<div class="alert alert-danger">
+											<div class="text-center bold">
+												<div>Sorry, no results were found for:</div> 
+												<div>By Date Range </div>
+												<div>Please try again. </div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</section>
+						<button id="btnClosePage" class="btn btn-primary" >Close Page</button>
+
+						<!-- END Reports Lists -->
+					</div>
+				</div>
+				<!--/#content.col-md-10-->
+			</div>
+		</div>
+		
+		<!-- START: Footer Region -->
+		<footer class="bottom" th:include="fragment/common :: [//footer[@id='center-footer']]"></footer>
+		<!-- END: Footer Region -->
+		
+	</div>
+
+	<!-- Custom JavaScript -->
+	<script
+		src="../../../resources/js/webpage-js/Administrator/noReportDataFound.js"
+		th:src="@{/resources/js/webpage-js/Administrator/noReportDataFound.js}"
+		type="text/javascript"></script>
+
+	<!-- END: JavaScript -->
+</body>
+</html>

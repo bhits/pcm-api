@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="PatientIdentityFeed" targetNamespace="urn:hl7-org:v3"
+	xmlns:mstns="urn:hl7-org:v3" xmlns="urn:hl7-org:v3" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	attributeFormDefault="qualified" elementFormDefault="qualified">
+	<xs:element name="id">
+		<xs:complexType>
+			<xs:attribute name="root" form="unqualified" type="xs:string" />
+			<xs:attribute name="nullFlavor" form="unqualified" type="xs:string" />
+			<xs:attribute name="extension" form="unqualified" type="xs:string" />
+			<xs:attribute name="assigningAuthorityName" form="unqualified" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="device">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="id" minOccurs="1" maxOccurs="1" />
+				<xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				<xs:element ref="telecom" minOccurs="0" maxOccurs="1" />
+				<xs:element name="asAgent" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="representedOrganization" minOccurs="1" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="id" minOccurs="1" maxOccurs="1" />									
+									</xs:sequence>
+									<xs:attribute name="determinerCode" form="unqualified" type="xs:string" />
+									<xs:attribute name="classCode" form="unqualified" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="classCode" form="unqualified" type="xs:string" />
+					</xs:complexType>				
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="classCode" form="unqualified" type="xs:string" />
+			<xs:attribute name="determinerCode" form="unqualified"
+				type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="code">
+		<xs:complexType>
+			<xs:attribute name="code" form="unqualified" type="xs:string" />
+			<xs:attribute name="codeSystem" form="unqualified" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="telecom">
+		<xs:complexType>
+			<xs:attribute name="value" form="unqualified" type="xs:string" />
+			<xs:attribute name="use" form="unqualified" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="statusCode">
+		<xs:complexType>
+			<xs:attribute name="code" form="unqualified" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="acknowledgement">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="typeCode">
+					<xs:complexType>
+						<xs:attribute name="code" form="unqualified" type="xs:string" />
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="targetMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="id" minOccurs="1" maxOccurs="1" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="acknowledgementDetail">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="text" type="xs:string"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType name="PatientIdentityFeedRequestType">
+		<xs:sequence>
+			<xs:element ref="id" minOccurs="1" maxOccurs="1" />
+			<xs:element name="creationTime" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:attribute name="value" form="unqualified" type="xs:string" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="versionCode" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:attribute name="code" form="unqualified" type="xs:string" />
+				</xs:complexType>
+			</xs:element>			
+			<xs:element name="interactionId" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:attribute name="root" form="unqualified" type="xs:string" />
+					<xs:attribute name="extension" form="unqualified"
+						type="xs:string" />
+					<xs:attribute name="displayable" form="unqualified" type="xs:boolean" use="optional" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="processingCode" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:attribute name="code" form="unqualified" type="xs:string" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="processingModeCode" minOccurs="0"
+				maxOccurs="1">
+				<xs:complexType>
+					<xs:attribute name="code" form="unqualified" type="xs:string" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="acceptAckCode" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:attribute name="code" form="unqualified" type="xs:string" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="receiver" minOccurs="1" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="device" minOccurs="1" maxOccurs="1" />
+					</xs:sequence>
+					<xs:attribute name="typeCode" form="unqualified" type="xs:string" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="sender" minOccurs="1" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="device" minOccurs="1" maxOccurs="1" />
+					</xs:sequence>
+					<xs:attribute name="typeCode" form="unqualified" type="xs:string" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="controlActProcess" minOccurs="1"
+				maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="code" minOccurs="0" maxOccurs="1"/>
+						<xs:element name="subject" minOccurs="1" maxOccurs="1">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="registrationEvent" minOccurs="1"
+										maxOccurs="1">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element ref="id" minOccurs="0" maxOccurs="1" />
+												<xs:element ref="statusCode" minOccurs="0"
+													maxOccurs="1" />
+												<xs:element name="subject1" minOccurs="1"
+													maxOccurs="1">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="patient" minOccurs="1"
+																maxOccurs="1">
+																<xs:complexType>
+																	<xs:sequence>
+																		<xs:element ref="id" minOccurs="1"
+																			maxOccurs="1" />
+																		<xs:element ref="statusCode" minOccurs="0"
+																			maxOccurs="1" />
+																		<xs:element name="patientPerson" minOccurs="0"
+																			maxOccurs="1">
+																			<xs:complexType>
+																				<xs:sequence>
+																					<xs:element name="name" minOccurs="0"
+																						maxOccurs="1">
+																						<xs:complexType>
+																							<xs:sequence>
+																								<xs:element name="given" type="xs:string"
+																									minOccurs="0" />
+																								<xs:element name="family" type="xs:string"
+																									minOccurs="0" />
+																							</xs:sequence>
+																						</xs:complexType>
+																					</xs:element>
+																					<xs:element ref="telecom" minOccurs="0"
+																						maxOccurs="unbounded" />
+																					<xs:element name="administrativeGenderCode"
+																						minOccurs="0" maxOccurs="1">
+																						<xs:complexType>
+																							<xs:attribute name="code" form="unqualified"
+																								type="xs:string" />
+																						</xs:complexType>
+																					</xs:element>
+																					<xs:element name="birthTime" minOccurs="0"
+																						maxOccurs="1">
+																						<xs:complexType>
+																							<xs:attribute name="value" form="unqualified"
+																								type="xs:string" />
+																						</xs:complexType>
+																					</xs:element>
+																					<xs:element name="addr" minOccurs="0"
+																						maxOccurs="unbounded">
+																						<xs:complexType>
+																							<xs:sequence>
+																								<xs:element name="streetAddressLine"
+																									type="xs:string" minOccurs="0" />
+																								<xs:element name="city" type="xs:string"
+																									minOccurs="0" />
+																								<xs:element name="state" type="xs:string"
+																									minOccurs="0" />
+																							</xs:sequence>
+																						</xs:complexType>
+																					</xs:element>
+																				</xs:sequence>
+																				<xs:attribute name="determinerCode" form="unqualified" type="xs:string" />
+																			</xs:complexType>
+																		</xs:element>
+																		<xs:element name="providerOrganization"
+																			minOccurs="0" maxOccurs="1">
+																			<xs:complexType>
+																				<xs:sequence>
+																					<xs:element name="name" type="xs:string"
+																						minOccurs="0" />
+																					<xs:element ref="id" minOccurs="0"
+																						maxOccurs="1" />
+																					<xs:element name="contactParty"
+																						minOccurs="0" maxOccurs="unbounded">
+																						<xs:complexType>
+																							<xs:sequence>
+																								<xs:element ref="telecom" minOccurs="0"
+																									maxOccurs="unbounded" />
+																							</xs:sequence>
+																						</xs:complexType>
+																					</xs:element>
+																				</xs:sequence>
+																			</xs:complexType>
+																		</xs:element>
+																	</xs:sequence>
+																	<xs:attribute name="classCode" form="unqualified"
+																		type="xs:string" />
+																</xs:complexType>
+															</xs:element>
+														</xs:sequence>
+														<xs:attribute name="typeCode" form="unqualified" type="xs:string" />
+													</xs:complexType>
+												</xs:element>
+												<xs:element name="custodian" minOccurs="0" maxOccurs="1">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="assignedEntity" minOccurs="1" maxOccurs="1">
+																<xs:complexType>
+																	<xs:sequence>
+																		<xs:element ref="id" minOccurs="1" maxOccurs="1" />
+																		<xs:element name="assignedOrganization" minOccurs="0" maxOccurs="1">
+																			<xs:complexType>
+																				<xs:sequence>
+																					<xs:element name="name" type="xs:string"/>
+																				</xs:sequence>
+																			</xs:complexType>
+																		</xs:element>
+																	</xs:sequence>
+																	<xs:attribute name="classCode" form="unqualified" type="xs:string" />
+																</xs:complexType>																
+															</xs:element>
+														</xs:sequence>
+														<xs:attribute name="typeCode" form="unqualified" type="xs:string" />
+													</xs:complexType>													
+												</xs:element>
+												<xs:element name="replacementOf" minOccurs="0" maxOccurs="1">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="priorRegistration" minOccurs="1" maxOccurs="1">
+																<xs:complexType>
+																	<xs:sequence>
+																		<xs:element ref="statusCode" minOccurs="0" maxOccurs="1" />
+																		<xs:element name="subject1" minOccurs="1" maxOccurs="1">
+																			<xs:complexType>
+																				<xs:sequence>
+																					<xs:element name="priorRegisteredRole" minOccurs="1" maxOccurs="1">
+																						<xs:complexType>
+																							<xs:sequence>
+																								<xs:element ref="id" minOccurs="1" maxOccurs="1" />
+																							</xs:sequence>
+																							<xs:attribute name="classCode" form="unqualified" type="xs:string" />
+																						</xs:complexType>
+																					</xs:element>
+																				</xs:sequence>
+																				<xs:attribute name="typeCode" form="unqualified" type="xs:string" />
+																			</xs:complexType>
+																		</xs:element>																		
+																	</xs:sequence>
+																	<xs:attribute name="classCode" form="unqualified" type="xs:string" />
+																	<xs:attribute name="moodCode" form="unqualified" type="xs:string" />
+																</xs:complexType>
+															</xs:element>
+														</xs:sequence>
+														<xs:attribute name="typeCode" form="unqualified" type="xs:string" />
+													</xs:complexType>
+												</xs:element>												
+											</xs:sequence>
+											<xs:attribute name="classCode" form="unqualified" type="xs:string" />
+											<xs:attribute name="moodCode" form="unqualified" type="xs:string" />
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="typeCode" form="unqualified"
+									type="xs:string" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="moodCode" form="unqualified" type="xs:string" />
+					<xs:attribute name="classCode" form="unqualified" type="xs:string" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="ITSVersion" form="unqualified" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="PatientIdentityFeedResponseType">	
+		<xs:complexContent>
+			<xs:extension base="PatientIdentityFeedRequestType">
+				<xs:sequence>
+					<xs:element ref="acknowledgement" minOccurs="1" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="PRPA_IN201301UV02">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">An patient registry added
+				request
+				specifies a request to add a new patient.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="PatientIdentityFeedRequestType">
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="PRPA_IN201302UV02">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">An patient registry
+				revised request
+				specifies a request to revise an existing patient.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="PatientIdentityFeedRequestType">
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+		
+	<xs:element name="PRPA_IN201304UV02">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">An patient registry
+				merge request
+				specifies a request to merge a patient to another patient.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="PatientIdentityFeedRequestType">
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="MCCI_IN000002UV01">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">A response message to PatientIdentityFeed requests.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="PatientIdentityFeedResponseType">
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

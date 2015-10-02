@@ -1,0 +1,781 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="http://obhita.org/CDA.xsl" type="text/xsl"?><ClinicalDocument xmlns="urn:hl7-org:v3"
+                  xmlns:hl7="urn:hl7-org:v3"
+                  xmlns:sdtc="urn:hl7-org:sdtc"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="urn:hl7-org:v3 schema/cdar2c32/infrastructure/cda/C32_CDA.xsd">
+   <realmCode code="US"/>
+   <typeId root="2.16.840.1.113883.1.3" extension="POCD_HD000040"/>
+   <templateId root="2.16.840.1.113883.3.27.1776" assigningAuthorityName="CDA/R2"/>
+   <templateId root="2.16.840.1.113883.10.20.3"
+               assigningAuthorityName="HL7/CDT Header"/>
+   <templateId root="1.3.6.1.4.1.19376.1.5.3.1.1.1" assigningAuthorityName="IHE/PCC"/>
+   <templateId root="2.16.840.1.113883.3.88.11.32.1"
+               assigningAuthorityName="HITSP/C32"/>
+   <id root="2.16.840.1.113883.3.72" assigningAuthorityName="FEI Systems Inc."/>
+   <code code="34133-9"
+         displayName="Summarization of episode note"
+         codeSystem="2.16.840.1.113883.6.1"
+         codeSystemName="LOINC"/>
+   <title>Summarization of episode note</title>
+   <effectiveTime value="201402030904" xsi:type="IVL_TS"/>
+   <confidentialityCode code="N"/>
+   <languageCode code="en-US"/>
+   <recordTarget>
+      <patientRole>
+         <id root="00000000-0000-0000-0000-000000000000" extension="PUI100010060001"/>
+         <addr>
+            <streetAddressLine>7175 Columbia Gateway Drive</streetAddressLine>
+            <city>Columbia</city>
+            <state>Maryland</state>
+            <postalCode>21046</postalCode>
+         </addr>
+         <telecom value="555-255-5454"/>
+         <patient>
+            <name>
+               <family>Patientone</family>
+               <given>Asample</given>
+            </name>
+            <administrativeGenderCode code="M"
+                                      codeSystem="2.16.840.1.113883.5.1"
+                                      codeSystemName="HL7 AdministrativeGender"
+                                      displayName="Male"/>
+            <birthTime value="19710510"/>
+            <maritalStatusCode nullFlavor="UNK"/>
+            <religiousAffiliationCode nullFlavor="UNK"/>
+            <raceCode nullFlavor="UNK"/>
+            <ethnicGroupCode nullFlavor="UNK"/>
+            <birthplace nullFlavor="UNK">
+               <place>
+                  <addr>
+                     <streetAddressLine/>
+                     <city/>
+                     <state/>
+                     <postalCode/>
+                  </addr>
+               </place>
+            </birthplace>
+            <languageCommunication>
+               <templateId root="2.16.840.1.113883.3.88.11.83.2"
+                           assigningAuthorityName="HITSP/C83"/>
+               <templateId root="1.3.6.1.4.1.19376.1.5.3.1.2.1" assigningAuthorityName="IHE/PCC"/>
+               <languageCode code="en-US"/>
+            </languageCommunication>
+         </patient>
+      </patientRole>
+   </recordTarget>
+   <author>
+      <time value="20000407130000+0500"/>
+      <assignedAuthor>
+         <id nullFlavor="UNK"/>
+         <addr/>
+         <telecom/>
+         <assignedPerson>
+            <name>
+               <family>family</family>
+               <given>given</given>
+               <prefix>prefix</prefix>
+            </name>
+         </assignedPerson>
+      </assignedAuthor>
+   </author>
+   <custodian>
+      <assignedCustodian>
+         <representedCustodianOrganization>
+            <id root="00000000-0000-0000-0000-000000000000" extension="100010020002"/>
+            <name>Safe Harbor Enterprises</name>
+            <telecom nullFlavor="NI"/>
+            <addr nullFlavor="NI"/>
+         </representedCustodianOrganization>
+      </assignedCustodian>
+   </custodian>
+   <component>
+      <structuredBody>
+         <component>
+            <section>
+               <templateId root="2.16.840.1.113883.3.88.11.83.103"
+                           assigningAuthorityName="HITSP/C83"/>
+               <templateId root="1.3.6.1.4.1.19376.1.5.3.1.3.6" assigningAuthorityName="IHE PCC"/>
+               <templateId root="2.16.840.1.113883.10.20.1.11" assigningAuthorityName="HL7 CCD"/>
+               <code code="11450-4"
+                     codeSystem="2.16.840.1.113883.6.1"
+                     codeSystemName="LOINC"
+                     displayName="Problem list"/>
+               <title>Problems</title>
+               <text>
+                  <table width="100%" border="1">
+                     <thead>
+                        <tr>
+                           <th>Problem Name</th>
+                           <th>Problem Code</th>
+                           <th>Effective Dates</th>
+                           <th>Problem Status</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr ID="d17e240">
+                           <td>Diabetes mellitus type 2 (disorder)</td>
+                           <td>44054006</td>
+                           <td/>
+                           <td>Resolved</td>
+                        </tr>
+                        <tr ID="d17e263">
+                           <td>Asthma (disorder)</td>
+                           <td>195967001</td>
+                           <td/>
+                           <td>Inactive</td>
+                        </tr>
+                        <tr ID="d17e286">
+                           <td>Coronary artery atheroma (disorder)</td>
+                           <td>67682002</td>
+                           <td/>
+                           <td>Inactive</td>
+                        </tr>
+                        <tr ID="d17e309">
+                           <td>Hyperlipidemia (disorder)</td>
+                           <td>55822004</td>
+                           <td/>
+                           <td>Active</td>
+                        </tr>
+                        <tr ID="d17e332">
+                           <td>Hypertension associated with transplantation (disorder)</td>
+                           <td>427889009</td>
+                           <td/>
+                           <td>Active</td>
+                        </tr>
+                        <tr ID="d17e356">
+                           <td>Acute HIV</td>
+                           <td>111880001</td>
+                           <td/>
+                           <td>Active</td>
+                        </tr>
+                        <tr ID="d17e379">
+                           <td>Substance Abuse Disorder</td>
+                           <td>66214007</td>
+                           <td/>
+                           <td>Active</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </text>
+               <entry typeCode="DRIV">
+                  <act classCode="ACT" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.3.88.11.83.7"
+                                 assigningAuthorityName="HITSP C83"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.1" assigningAuthorityName="IHE PCC"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.2" assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e240"/>
+                     <code nullFlavor="NA"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                        <low nullFlavor="UNK"/>
+                        <high nullFlavor="UNK"/>
+                     </effectiveTime>
+                     <entryRelationship inversionInd="false" typeCode="SUBJ">
+                        <sequenceNumber value="1"/>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" assigningAuthorityName="IHE PCC"/>
+                           <id root="d17e240"/>
+                           <code code="55607006"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED-CT"
+                                 displayName="Problem"/>
+                           <text>
+                              <reference value="d17e240"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                              <low nullFlavor="UNK"/>
+                              <high nullFlavor="UNK"/>
+                           </effectiveTime>
+                           <value xsi:type="CD"
+                                  code="44054006"
+                                  codeSystem="2.16.840.1.113883.6.96"
+                                  codeSystemName="SNOMED"
+                                  displayName="Diabetes mellitus type 2 (disorder)"/>
+                           <entryRelationship typeCode="REFR">
+                              <observation classCode="OBS" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.50"/>
+                                 <code code="33999-4"
+                                       codeSystem="2.16.840.1.113883.6.1"
+                                       displayName="Status"/>
+                                 <value xsi:type="CD"
+                                        code="413322009"
+                                        codeSystem="2.16.840.1.113883.6.96"
+                                        codeSystemName="SNOMED-CT"
+                                        displayName="Resolved"/>
+                              </observation>
+                           </entryRelationship>
+                        </observation>
+                     </entryRelationship>
+                  </act>
+               </entry>
+               <entry typeCode="DRIV">
+                  <act classCode="ACT" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.3.88.11.83.7"
+                                 assigningAuthorityName="HITSP C83"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.1" assigningAuthorityName="IHE PCC"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.2" assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e263"/>
+                     <code nullFlavor="NA"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                        <low nullFlavor="UNK"/>
+                        <high nullFlavor="UNK"/>
+                     </effectiveTime>
+                     <entryRelationship inversionInd="false" typeCode="SUBJ">
+                        <sequenceNumber value="1"/>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" assigningAuthorityName="IHE PCC"/>
+                           <id root="d17e263"/>
+                           <code code="55607006"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED-CT"
+                                 displayName="Problem"/>
+                           <text>
+                              <reference value="d17e263"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                              <low nullFlavor="UNK"/>
+                              <high nullFlavor="UNK"/>
+                           </effectiveTime>
+                           <value xsi:type="CD"
+                                  code="195967001"
+                                  codeSystem="2.16.840.1.113883.6.96"
+                                  codeSystemName="SNOMED"
+                                  displayName="Asthma (disorder)"/>
+                           <entryRelationship typeCode="REFR">
+                              <observation classCode="OBS" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.50"/>
+                                 <code code="33999-4"
+                                       codeSystem="2.16.840.1.113883.6.1"
+                                       displayName="Status"/>
+                                 <value xsi:type="CD"
+                                        code="73425007"
+                                        codeSystem="2.16.840.1.113883.6.96"
+                                        codeSystemName="SNOMED-CT"
+                                        displayName="Inactive"/>
+                              </observation>
+                           </entryRelationship>
+                        </observation>
+                     </entryRelationship>
+                  </act>
+               </entry>
+               <entry typeCode="DRIV">
+                  <act classCode="ACT" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.3.88.11.83.7"
+                                 assigningAuthorityName="HITSP C83"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.1" assigningAuthorityName="IHE PCC"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.2" assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e286"/>
+                     <code nullFlavor="NA"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                        <low nullFlavor="UNK"/>
+                        <high nullFlavor="UNK"/>
+                     </effectiveTime>
+                     <entryRelationship inversionInd="false" typeCode="SUBJ">
+                        <sequenceNumber value="1"/>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" assigningAuthorityName="IHE PCC"/>
+                           <id root="d17e286"/>
+                           <code code="55607006"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED-CT"
+                                 displayName="Problem"/>
+                           <text>
+                              <reference value="d17e286"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                              <low nullFlavor="UNK"/>
+                              <high nullFlavor="UNK"/>
+                           </effectiveTime>
+                           <value xsi:type="CD"
+                                  code="67682002"
+                                  codeSystem="2.16.840.1.113883.6.96"
+                                  codeSystemName="SNOMED"
+                                  displayName="Coronary artery atheroma (disorder)"/>
+                           <entryRelationship typeCode="REFR">
+                              <observation classCode="OBS" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.50"/>
+                                 <code code="33999-4"
+                                       codeSystem="2.16.840.1.113883.6.1"
+                                       displayName="Status"/>
+                                 <value xsi:type="CD"
+                                        code="73425007"
+                                        codeSystem="2.16.840.1.113883.6.96"
+                                        codeSystemName="SNOMED-CT"
+                                        displayName="Inactive"/>
+                              </observation>
+                           </entryRelationship>
+                        </observation>
+                     </entryRelationship>
+                  </act>
+               </entry>
+               <entry typeCode="DRIV">
+                  <act classCode="ACT" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.3.88.11.83.7"
+                                 assigningAuthorityName="HITSP C83"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.1" assigningAuthorityName="IHE PCC"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.2" assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e309"/>
+                     <code nullFlavor="NA"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                        <low nullFlavor="UNK"/>
+                        <high nullFlavor="UNK"/>
+                     </effectiveTime>
+                     <entryRelationship inversionInd="false" typeCode="SUBJ">
+                        <sequenceNumber value="1"/>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" assigningAuthorityName="IHE PCC"/>
+                           <id root="d17e309"/>
+                           <code code="55607006"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED-CT"
+                                 displayName="Problem"/>
+                           <text>
+                              <reference value="d17e309"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                              <low nullFlavor="UNK"/>
+                              <high nullFlavor="UNK"/>
+                           </effectiveTime>
+                           <value xsi:type="CD"
+                                  code="55822004"
+                                  codeSystem="2.16.840.1.113883.6.96"
+                                  codeSystemName="SNOMED"
+                                  displayName="Hyperlipidemia (disorder)"/>
+                           <entryRelationship typeCode="REFR">
+                              <observation classCode="OBS" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.50"/>
+                                 <code code="33999-4"
+                                       codeSystem="2.16.840.1.113883.6.1"
+                                       displayName="Status"/>
+                                 <value xsi:type="CD"
+                                        code="55561003"
+                                        codeSystem="2.16.840.1.113883.6.96"
+                                        codeSystemName="SNOMED-CT"
+                                        displayName="Active"/>
+                              </observation>
+                           </entryRelationship>
+                        </observation>
+                     </entryRelationship>
+                  </act>
+               </entry>
+               <entry typeCode="DRIV">
+                  <act classCode="ACT" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.3.88.11.83.7"
+                                 assigningAuthorityName="HITSP C83"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.1" assigningAuthorityName="IHE PCC"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.2" assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e332"/>
+                     <code nullFlavor="NA"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                        <low nullFlavor="UNK"/>
+                        <high nullFlavor="UNK"/>
+                     </effectiveTime>
+                     <entryRelationship inversionInd="false" typeCode="SUBJ">
+                        <sequenceNumber value="1"/>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" assigningAuthorityName="IHE PCC"/>
+                           <id root="d17e332"/>
+                           <code code="55607006"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED-CT"
+                                 displayName="Problem"/>
+                           <text>
+                              <reference value="d17e332"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                              <low nullFlavor="UNK"/>
+                              <high nullFlavor="UNK"/>
+                           </effectiveTime>
+                           <value xsi:type="CD"
+                                  code="427889009"
+                                  codeSystem="2.16.840.1.113883.6.96"
+                                  codeSystemName="SNOMED"
+                                  displayName="Hypertension associated with transplantation (disorder)"/>
+                           <entryRelationship typeCode="REFR">
+                              <observation classCode="OBS" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.50"/>
+                                 <code code="33999-4"
+                                       codeSystem="2.16.840.1.113883.6.1"
+                                       displayName="Status"/>
+                                 <value xsi:type="CD"
+                                        code="55561003"
+                                        codeSystem="2.16.840.1.113883.6.96"
+                                        codeSystemName="SNOMED-CT"
+                                        displayName="Active"/>
+                              </observation>
+                           </entryRelationship>
+                        </observation>
+                     </entryRelationship>
+                  </act>
+               </entry>
+               <entry typeCode="DRIV">
+                  <act classCode="ACT" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.3.88.11.83.7"
+                                 assigningAuthorityName="HITSP C83"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.1" assigningAuthorityName="IHE PCC"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.2" assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e356"/>
+                     <code nullFlavor="NA"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                        <low nullFlavor="UNK"/>
+                        <high nullFlavor="UNK"/>
+                     </effectiveTime>
+                     <entryRelationship inversionInd="false" typeCode="SUBJ">
+                        <sequenceNumber value="1"/>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" assigningAuthorityName="IHE PCC"/>
+                           <id root="d17e356"/>
+                           <code code="55607006"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED-CT"
+                                 displayName="Problem"/>
+                           <text>
+                              <reference value="d17e356"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                              <low nullFlavor="UNK"/>
+                              <high nullFlavor="UNK"/>
+                           </effectiveTime>
+                           <value xsi:type="CD"
+                                  code="111880001"
+                                  codeSystem="2.16.840.1.113883.6.96"
+                                  codeSystemName="SNOMED"
+                                  displayName="Acute HIV"/>
+                           <entryRelationship typeCode="REFR">
+                              <observation classCode="OBS" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.50"/>
+                                 <code code="33999-4"
+                                       codeSystem="2.16.840.1.113883.6.1"
+                                       displayName="Status"/>
+                                 <value xsi:type="CD"
+                                        code="55561003"
+                                        codeSystem="2.16.840.1.113883.6.96"
+                                        codeSystemName="SNOMED-CT"
+                                        displayName="Active"/>
+                              </observation>
+                           </entryRelationship>
+                        </observation>
+                     </entryRelationship>
+                  </act>
+               </entry>
+               <entry typeCode="DRIV">
+                  <act classCode="ACT" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.3.88.11.83.7"
+                                 assigningAuthorityName="HITSP C83"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.1" assigningAuthorityName="IHE PCC"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.2" assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e379"/>
+                     <code nullFlavor="NA"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                        <low nullFlavor="UNK"/>
+                        <high nullFlavor="UNK"/>
+                     </effectiveTime>
+                     <entryRelationship inversionInd="false" typeCode="SUBJ">
+                        <sequenceNumber value="1"/>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" assigningAuthorityName="IHE PCC"/>
+                           <id root="d17e379"/>
+                           <code code="55607006"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED-CT"
+                                 displayName="Problem"/>
+                           <text>
+                              <reference value="d17e379"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                              <low nullFlavor="UNK"/>
+                              <high nullFlavor="UNK"/>
+                           </effectiveTime>
+                           <value xsi:type="CD"
+                                  code="66214007"
+                                  codeSystem="2.16.840.1.113883.6.96"
+                                  codeSystemName="SNOMED"
+                                  displayName="Substance Abuse Disorder"/>
+                           <entryRelationship typeCode="REFR">
+                              <observation classCode="OBS" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.50"/>
+                                 <code code="33999-4"
+                                       codeSystem="2.16.840.1.113883.6.1"
+                                       displayName="Status"/>
+                                 <value xsi:type="CD"
+                                        code="55561003"
+                                        codeSystem="2.16.840.1.113883.6.96"
+                                        codeSystemName="SNOMED-CT"
+                                        displayName="Active"/>
+                              </observation>
+                           </entryRelationship>
+                        </observation>
+                     </entryRelationship>
+                  </act>
+               </entry>
+            </section>
+         </component>
+         <component>
+            <section>
+               <templateId root="2.16.840.1.113883.3.88.11.83.112"
+                           assigningAuthorityName="HITSP/C83"/>
+               <templateId root="1.3.6.1.4.1.19376.1.5.3.1.3.19" assigningAuthorityName="IHE PCC"/>
+               <templateId root="2.16.840.1.113883.10.20.1.8" assigningAuthorityName="HL7 CCD"/>
+               <code code="10160-0"
+                     codeSystem="2.16.840.1.113883.6.1"
+                     codeSystemName="LOINC"
+                     displayName="History of medication use"/>
+               <title>Medications</title>
+               <text>
+                  <table width="100%" border="1">
+                     <thead>
+                        <tr>
+                           <th>RxNorm Code</th>
+                           <th>Product</th>
+                           <th>Generic Name</th>
+                           <th>Brand Name</th>
+                           <th>Dose</th>
+                           <th>Form</th>
+                           <th>Route</th>
+                           <th>Frequency</th>
+                           <th>Patient Instructions</th>
+                           <th>Status</th>
+                           <th>Date Started</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr ID="d17e143">
+                           <td>993536</td>
+                           <td>Medication</td>
+                           <td>bupropion hydrochloride 200 MG 12 HR Extended Release Tablet [993536]</td>
+                           <td/>
+                           <td/>
+                           <td/>
+                           <td/>
+                           <td>Two times a day</td>
+                           <td/>
+                           <td>Active</td>
+                           <td>September 14, 2011 </td>
+                        </tr>
+                        <tr ID="d17e190">
+                           <td>199663</td>
+                           <td>Medication</td>
+                           <td>Zidovudine 300 MG Oral Tablet [199663]</td>
+                           <td/>
+                           <td/>
+                           <td/>
+                           <td/>
+                           <td>Two times a day</td>
+                           <td/>
+                           <td>Active</td>
+                           <td>October 14, 2011 </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </text>
+               <entry typeCode="DRIV">
+                  <substanceAdministration classCode="SBADM" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.3.88.11.83.8"
+                                 assigningAuthorityName="HITSP C83"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.24" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.7" assigningAuthorityName="IHE PCC"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.7.1" assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e143"/>
+                     <code code="10160-0" codeSystem="2.16.840.1.113883.6.1"/>
+                     <text>
+                        <reference value="d17e143"/>
+                     </text>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS">
+                        <low value="20110914"/>
+                        <high nullFlavor="UNK"/>
+                     </effectiveTime>
+                     <routeCode nullFlavor="UNK"/>
+                     <doseQuantity nullFlavor="UNK"/>
+                     <administrationUnitCode nullFlavor="UNK"/>
+                     <consumable>
+                        <manufacturedProduct>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.8.2"
+                                       assigningAuthorityName="HITSP C83"/>
+                           <templateId root="2.16.840.1.113883.10.20.1.53" assigningAuthorityName="CCD"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.7.2" assigningAuthorityName="IHE PCC"/>
+                           <manufacturedMaterial>
+                              <code code="993536"
+                                    codeSystem="2.16.840.1.113883.6.88"
+                                    codeSystemName="RxNorm"
+                                    displayName="bupropion hydrochloride 200 MG 12 HR Extended Release Tablet [993536]">
+                                 <originalText>bupropion hydrochloride 200 MG 12 HR Extended Release Tablet [993536]<reference/>
+                                 </originalText>
+                              </code>
+                              <name/>
+                           </manufacturedMaterial>
+                        </manufacturedProduct>
+                     </consumable>
+                     <entryRelationship typeCode="SUBJ">
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.3.88.11.83.8.1"
+                                       assigningAuthorityName="HITSP C83"/>
+                           <code code="329505003"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"/>
+                        </observation>
+                     </entryRelationship>
+                     <entryRelationship typeCode="SUBJ">
+                        <act classCode="ACT" moodCode="INT">
+                           <templateId root="2.16.840.1.113883.10.20.1.49" assigningAuthorityName="CCD"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.3" assigningAuthorityName="IHE PCC"/>
+                           <code code="PINSTRUCT"
+                                 codeSystem="1.3.6.1.4.1.19376.1.5.3.2"
+                                 codeSystemName="IHEActCode"/>
+                           <text>
+                              <reference value="PntrtoSectionText"/>
+                           </text>
+                           <statusCode code="completed"/>
+                        </act>
+                     </entryRelationship>
+                     <entryRelationship typeCode="SUBJ">
+                        <act classCode="ACT" moodCode="INT">
+                           <templateId root="2.16.840.1.113883.10.20.1.43" assigningAuthorityName="CCD"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.3.1" assigningAuthorityName="IHE PCC"/>
+                           <code code="FINSTRUCT"
+                                 codeSystem="1.3.6.1.4.1.19376.1.5.3.2"
+                                 codeSystemName="IHEActCode"/>
+                           <text>
+                              <reference/>
+                           </text>
+                           <statusCode code="completed"/>
+                        </act>
+                     </entryRelationship>
+                     <entryRelationship typeCode="REFR">
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.47"/>
+                           <code code="33999-4"
+                                 displayName="Status"
+                                 codeSystem="2.16.840.1.113883.6.1"
+                                 codeSystemName="LOINC"/>
+                           <value xsi:type="CE"
+                                  code="55561003"
+                                  codeSystem="2.16.840.1.113883.6.96"
+                                  codeSystemName="SNOMED CT"
+                                  displayName="Active"/>
+                        </observation>
+                     </entryRelationship>
+                  </substanceAdministration>
+               </entry>
+               <entry typeCode="DRIV">
+                  <substanceAdministration classCode="SBADM" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.3.88.11.83.8"
+                                 assigningAuthorityName="HITSP C83"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.24" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.7" assigningAuthorityName="IHE PCC"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.7.1" assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e190"/>
+                     <code code="10160-0" codeSystem="2.16.840.1.113883.6.1"/>
+                     <text>
+                        <reference value="d17e190"/>
+                     </text>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS">
+                        <low value="20111014"/>
+                        <high nullFlavor="UNK"/>
+                     </effectiveTime>
+                     <routeCode nullFlavor="UNK"/>
+                     <doseQuantity nullFlavor="UNK"/>
+                     <administrationUnitCode nullFlavor="UNK"/>
+                     <consumable>
+                        <manufacturedProduct>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.8.2"
+                                       assigningAuthorityName="HITSP C83"/>
+                           <templateId root="2.16.840.1.113883.10.20.1.53" assigningAuthorityName="CCD"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.7.2" assigningAuthorityName="IHE PCC"/>
+                           <manufacturedMaterial>
+                              <code code="199663"
+                                    codeSystem="2.16.840.1.113883.6.88"
+                                    codeSystemName="RxNorm"
+                                    displayName="Zidovudine 300 MG Oral Tablet [199663]">
+                                 <originalText>Zidovudine 300 MG Oral Tablet [199663]<reference/>
+                                 </originalText>
+                              </code>
+                              <name/>
+                           </manufacturedMaterial>
+                        </manufacturedProduct>
+                     </consumable>
+                     <entryRelationship typeCode="SUBJ">
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.3.88.11.83.8.1"
+                                       assigningAuthorityName="HITSP C83"/>
+                           <code code="329505003"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"/>
+                        </observation>
+                     </entryRelationship>
+                     <entryRelationship typeCode="SUBJ">
+                        <act classCode="ACT" moodCode="INT">
+                           <templateId root="2.16.840.1.113883.10.20.1.49" assigningAuthorityName="CCD"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.3" assigningAuthorityName="IHE PCC"/>
+                           <code code="PINSTRUCT"
+                                 codeSystem="1.3.6.1.4.1.19376.1.5.3.2"
+                                 codeSystemName="IHEActCode"/>
+                           <text>
+                              <reference value="PntrtoSectionText"/>
+                           </text>
+                           <statusCode code="completed"/>
+                        </act>
+                     </entryRelationship>
+                     <entryRelationship typeCode="SUBJ">
+                        <act classCode="ACT" moodCode="INT">
+                           <templateId root="2.16.840.1.113883.10.20.1.43" assigningAuthorityName="CCD"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.3.1" assigningAuthorityName="IHE PCC"/>
+                           <code code="FINSTRUCT"
+                                 codeSystem="1.3.6.1.4.1.19376.1.5.3.2"
+                                 codeSystemName="IHEActCode"/>
+                           <text>
+                              <reference/>
+                           </text>
+                           <statusCode code="completed"/>
+                        </act>
+                     </entryRelationship>
+                     <entryRelationship typeCode="REFR">
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.47"/>
+                           <code code="33999-4"
+                                 displayName="Status"
+                                 codeSystem="2.16.840.1.113883.6.1"
+                                 codeSystemName="LOINC"/>
+                           <value xsi:type="CE"
+                                  code="55561003"
+                                  codeSystem="2.16.840.1.113883.6.96"
+                                  codeSystemName="SNOMED CT"
+                                  displayName="Active"/>
+                        </observation>
+                     </entryRelationship>
+                  </substanceAdministration>
+               </entry>
+            </section>
+         </component>
+      </structuredBody>
+   </component>
+</ClinicalDocument>

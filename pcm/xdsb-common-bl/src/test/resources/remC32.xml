@@ -1,0 +1,1529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="http://obhita.org/CDA.xsl" type="text/xsl"?><ClinicalDocument xmlns="urn:hl7-org:v3"
+                  xmlns:hl7="urn:hl7-org:v3"
+                  xmlns:sdtc="urn:hl7-org:sdtc"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="urn:hl7-org:v3 schema/cdar2c32/infrastructure/cda/C32_CDA.xsd">
+   <realmCode code="US"/>
+   <typeId root="2.16.840.1.113883.1.3" extension="POCD_HD000040"/>
+   <templateId root="2.16.840.1.113883.3.27.1776" assigningAuthorityName="CDA/R2"/>
+   <templateId root="2.16.840.1.113883.10.20.3"
+               assigningAuthorityName="HL7/CDT Header"/>
+   <templateId root="1.3.6.1.4.1.19376.1.5.3.1.1.1" assigningAuthorityName="IHE/PCC"/>
+   <templateId root="2.16.840.1.113883.3.88.11.32.1"
+               assigningAuthorityName="HITSP/C32"/>
+   <id root="2.16.840.1.113883.3.72" assigningAuthorityName="FEI Systems Inc."/>
+   <code code="34133-9"
+         displayName="Summarization of episode note"
+         codeSystem="2.16.840.1.113883.6.1"
+         codeSystemName="LOINC"/>
+   <title>Summarization of episode note</title>
+   <effectiveTime value="201212261200" xsi:type="IVL_TS"/>
+   <confidentialityCode code="N"/>
+   <languageCode code="en-US"/>
+   <recordTarget>
+      <patientRole>
+         <id root="00000000-0000-0000-0000-000000000000" extension="100010060006"/>
+         <addr>
+            <streetAddressLine>32047 Sunrise Path</streetAddressLine>
+            <city>Columbia</city>
+            <state>Maryland</state>
+            <postalCode>21046</postalCode>
+         </addr>
+         <telecom nullFlavor="UNK"/>
+         <patient>
+            <name>
+               <family>Young</family>
+               <given>Tad</given>
+            </name>
+            <administrativeGenderCode code="M"
+                                      codeSystem="2.16.840.1.113883.5.1"
+                                      codeSystemName="HL7 AdministrativeGender"
+                                      displayName="Male"/>
+            <birthTime value="19960315"/>
+            <maritalStatusCode nullFlavor="UNK"/>
+            <religiousAffiliationCode nullFlavor="UNK"/>
+            <raceCode nullFlavor="UNK"/>
+            <ethnicGroupCode nullFlavor="UNK"/>
+            <birthplace nullFlavor="UNK">
+               <place>
+                  <addr>
+                     <streetAddressLine/>
+                     <city/>
+                     <state/>
+                     <postalCode/>
+                  </addr>
+               </place>
+            </birthplace>
+            <languageCommunication>
+               <templateId root="2.16.840.1.113883.3.88.11.83.2"
+                           assigningAuthorityName="HITSP/C83"/>
+               <templateId root="1.3.6.1.4.1.19376.1.5.3.1.2.1" assigningAuthorityName="IHE/PCC"/>
+               <languageCode code="en-US"/>
+            </languageCommunication>
+         </patient>
+      </patientRole>
+   </recordTarget>
+   <author>
+      <time value="20000407130000+0500"/>
+      <assignedAuthor>
+         <id nullFlavor="UNK"/>
+         <addr/>
+         <telecom/>
+         <assignedPerson>
+            <name>
+               <family>family</family>
+               <given>given</given>
+               <prefix>prefix</prefix>
+            </name>
+         </assignedPerson>
+      </assignedAuthor>
+   </author>
+   <custodian>
+      <assignedCustodian>
+         <representedCustodianOrganization>
+            <id root="00000000-0000-0000-0000-000000000000" extension="100010020002"/>
+            <name>Safe Harbor Enterprises</name>
+            <telecom nullFlavor="NI"/>
+            <addr nullFlavor="NI"/>
+         </representedCustodianOrganization>
+      </assignedCustodian>
+   </custodian>
+   <component>
+      <structuredBody>
+         <component>
+            <section>
+               <templateId root="2.16.840.1.113883.3.88.11.83.103"
+                           assigningAuthorityName="HITSP/C83"/>
+               <templateId root="1.3.6.1.4.1.19376.1.5.3.1.3.6" assigningAuthorityName="IHE PCC"/>
+               <templateId root="2.16.840.1.113883.10.20.1.11" assigningAuthorityName="HL7 CCD"/>
+               <code code="11450-4"
+                     codeSystem="2.16.840.1.113883.6.1"
+                     codeSystemName="LOINC"
+                     displayName="Problem list"/>
+               <title>Problems</title>
+               <text>
+                  <table width="100%" border="1">
+                     <thead>
+                        <tr>
+                           <th>Problem Name</th>
+                           <th>Problem Code</th>
+                           <th>Effective Dates</th>
+                           <th>Problem Status</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr ID="d17e740">
+                           <td>Essential hypertension</td>
+                           <td>59621000</td>
+                           <td/>
+                           <td>Active</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </text>
+               <entry typeCode="DRIV">
+                  <act classCode="ACT" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.3.88.11.83.7"
+                                 assigningAuthorityName="HITSP C83"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.1" assigningAuthorityName="IHE PCC"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.2" assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e740"/>
+                     <code nullFlavor="NA"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                        <low nullFlavor="UNK"/>
+                        <high nullFlavor="UNK"/>
+                     </effectiveTime>
+                     <entryRelationship inversionInd="false" typeCode="SUBJ">
+                        <sequenceNumber value="1"/>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" assigningAuthorityName="IHE PCC"/>
+                           <id root="d17e740"/>
+                           <code code="64572001"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED-CT"
+                                 displayName="Disease"/>
+                           <text>
+                              <reference value="d17e740"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" nullFlavor="UNK">
+                              <low nullFlavor="UNK"/>
+                              <high nullFlavor="UNK"/>
+                          </effectiveTime>
+                           <value xsi:type="CD"
+                                  code="59621000"
+                                  codeSystem="2.16.840.1.113883.6.96"
+                                  codeSystemName="SNOMED CT"
+                                  displayName="Essential hypertension"/>
+                           <entryRelationship typeCode="REFR">
+                              <observation classCode="OBS" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.50"/>
+                                 <code code="33999-4"
+                                       codeSystem="2.16.840.1.113883.6.1"
+                                       displayName="Status"/>
+                                 <value xsi:type="CD"
+                                        code="55561003"
+                                        codeSystem="2.16.840.1.113883.6.96"
+                                        codeSystemName="SNOMED-CT"
+                                        displayName="Active"/>
+                              </observation>
+                           </entryRelationship>
+                        </observation>
+                     </entryRelationship>
+                  </act>
+               </entry>
+            </section>
+         </component>
+         <component>
+            <section>
+               <templateId root="2.16.840.1.113883.10.20.1.16" assigningAuthorityName="HL7 CCD"/>
+               <templateId root="2.16.840.1.113883.3.88.11.83.119"
+                           assigningAuthorityName="HITSP/C83"/>
+               <templateId root="1.3.6.1.4.1.19376.1.5.3.1.1.5.3.2"
+                           assigningAuthorityName="IHE PCC"/>
+               <templateId root="1.3.6.1.4.1.19376.1.5.3.1.3.25" assigningAuthorityName="IHE PCC"/>
+               <code code="8716-3"
+                     codeSystem="2.16.840.1.113883.6.1"
+                     codeSystemName="LOINC"
+                     displayName="Vital signs"/>
+               <title>Vital Signs</title>
+               <text>
+                  <table border="1" width="100%">
+                     <thead>
+                        <tr>
+                           <th>Vital Sign Type</th>
+                           <th>Date</th>
+                           <th>Value</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr ID="d17e251">
+                           <td>Body Height</td>
+                           <td>March 15, 2010 </td>
+                           <td>60 cm</td>
+                        </tr>
+                        <tr ID="d17e274">
+                           <td>Body Weight</td>
+                           <td>March 15, 2010 </td>
+                           <td>145.00 lbs</td>
+                        </tr>
+                        <tr ID="d17e297">
+                           <td>Body mass index</td>
+                           <td>March 15, 2010 </td>
+                           <td>28 kg/m2</td>
+                        </tr>
+                        <tr ID="d17e320">
+                           <td>BMI percentile</td>
+                           <td>March 15, 2010 </td>
+                           <td/>
+                        </tr>
+                        <tr ID="d17e343">
+                           <td>Systolic BP</td>
+                           <td>March 15, 2010 </td>
+                           <td>120 mm[Hg]</td>
+                        </tr>
+                        <tr ID="d17e367">
+                           <td>Diastolic BP</td>
+                           <td>March 15, 2010 </td>
+                           <td>70 mm[Hg]</td>
+                        </tr>
+                        <tr ID="d17e390">
+                           <td>Heart rate</td>
+                           <td>March 15, 2010 </td>
+                           <td>90 beats per minute</td>
+                        </tr>
+                        <tr ID="d17e413">
+                           <td>Body Height</td>
+                           <td>September 25, 2010 </td>
+                           <td>75 cm</td>
+                        </tr>
+                        <tr ID="d17e436">
+                           <td>Body Weight</td>
+                           <td>September 25, 2010 </td>
+                           <td>140.00 lbs</td>
+                        </tr>
+                        <tr ID="d17e459">
+                           <td>Body mass index</td>
+                           <td>September 25, 2010 </td>
+                           <td>23 kg/m2</td>
+                        </tr>
+                        <tr ID="d17e482">
+                           <td>BMI percentile</td>
+                           <td>September 25, 2010 </td>
+                           <td/>
+                        </tr>
+                        <tr ID="d17e506">
+                           <td>Systolic BP</td>
+                           <td>September 25, 2010 </td>
+                           <td>120 mm[Hg]</td>
+                        </tr>
+                        <tr ID="d17e529">
+                           <td>Diastolic BP</td>
+                           <td>September 25, 2010 </td>
+                           <td>70 mm[Hg]</td>
+                        </tr>
+                        <tr ID="d17e552">
+                           <td>Heart rate</td>
+                           <td>September 25, 2010 </td>
+                           <td>92 beats per minute</td>
+                        </tr>
+                        <tr ID="d17e575">
+                           <td>Body Height</td>
+                           <td>March 12, 2011 </td>
+                           <td>79 cm</td>
+                        </tr>
+                        <tr ID="d17e598">
+                           <td>Body Weight</td>
+                           <td>March 12, 2011 </td>
+                           <td>148.00 lbs</td>
+                        </tr>
+                        <tr ID="d17e621">
+                           <td>Body mass index</td>
+                           <td>March 12, 2011 </td>
+                           <td>23 kg/m2</td>
+                        </tr>
+                        <tr ID="d17e645">
+                           <td>BMI percentile</td>
+                           <td>March 12, 2011 </td>
+                           <td/>
+                        </tr>
+                        <tr ID="d17e668">
+                           <td>Systolic BP</td>
+                           <td>March 12, 2011 </td>
+                           <td>125 mm[Hg]</td>
+                        </tr>
+                        <tr ID="d17e691">
+                           <td>Diastolic BP</td>
+                           <td>March 12, 2011 </td>
+                           <td>60 mm[Hg]</td>
+                        </tr>
+                        <tr ID="d17e714">
+                           <td>Heart rate</td>
+                           <td>March 12, 2011 </td>
+                           <td>92 beats per minute</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </text>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e251"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20100315"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e251"/>
+                           <code code="50373000"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"
+                                 displayName="Body Height"/>
+                           <text>
+                              <reference value="d17e251"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20100315"/>
+                           <value value="60" unit="cm" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e274"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20100315"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e274"/>
+                           <code code="27113001"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"
+                                 displayName="Body Weight"/>
+                           <text>
+                              <reference value="d17e274"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20100315"/>
+                           <value value="145.00" unit="lbs" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e297"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20100315"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e297"/>
+                           <code code="225171007"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"
+                                 displayName="Body mass index"/>
+                           <text>
+                              <reference value="d17e297"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20100315"/>
+                           <value value="28" unit="kg/m2" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e320"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20100315"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e320"/>
+                           <code code="162860001"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"
+                                 displayName="BMI percentile"/>
+                           <text>
+                              <reference value="d17e320"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20100315"/>
+                           <value value="" unit="" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e343"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20100315"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e343"/>
+                           <code code="12929001"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"
+                                 displayName="Systolic BP"/>
+                           <text>
+                              <reference value="d17e343"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20100315"/>
+                           <value value="120" unit="mm[Hg]" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e367"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20100315"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e367"/>
+                           <code code="163031004"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED"
+                                 displayName="Diastolic BP"/>
+                           <text>
+                              <reference value="d17e367"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20100315"/>
+                           <value value="70" unit="mm[Hg]" xsi:type="PQ"/>
+                          <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                             </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e390"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20100315"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e390"/>
+                           <code code="364075005"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED"
+                                 displayName="Heart rate"/>
+                           <text>
+                              <reference value="d17e390"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20100315"/>
+                           <value value="90" unit="beats per minute" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e413"/>
+                    <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20100925"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e413"/>
+                           <code code="50373000"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"
+                                 displayName="Body Height"/>
+                           <text>
+                              <reference value="d17e413"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20100925"/>
+                           <value value="75" unit="cm" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e436"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20100925"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e436"/>
+                           <code code="27113001"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"
+                                 displayName="Body Weight"/>
+                           <text>
+                              <reference value="d17e436"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20100925"/>
+                           <value value="140.00" unit="lbs" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e459"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20100925"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e459"/>
+                           <code code="225171007"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"
+                                 displayName="Body mass index"/>
+                           <text>
+                              <reference value="d17e459"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20100925"/>
+                           <value value="23" unit="kg/m2" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e482"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20100925"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e482"/>
+                           <code code="162860001"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"
+                                 displayName="BMI percentile"/>
+                           <text>
+                              <reference value="d17e482"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20100925"/>
+                           <value value="" unit="" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e506"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20100925"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e506"/>
+                           <code code="12929001"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"
+                                 displayName="Systolic BP"/>
+                           <text>
+                              <reference value="d17e506"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20100925"/>
+                           <value value="120" unit="mm[Hg]" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e529"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20100925"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e529"/>
+                           <code code="163031004"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED"
+                                 displayName="Diastolic BP"/>
+                           <text>
+                              <reference value="d17e529"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20100925"/>
+                           <value value="70" unit="mm[Hg]" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e552"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20100925"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e552"/>
+                           <code code="364075005"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED"
+                                 displayName="Heart rate"/>
+                           <text>
+                              <reference value="d17e552"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20100925"/>
+                           <value value="92" unit="beats per minute" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e575"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20110312"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e575"/>
+                           <code code="50373000"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"
+                                 displayName="Body Height"/>
+                           <text>
+                              <reference value="d17e575"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20110312"/>
+                           <value value="79" unit="cm" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e598"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20110312"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e598"/>
+                           <code code="27113001"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"
+                                 displayName="Body Weight"/>
+                           <text>
+                              <reference value="d17e598"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20110312"/>
+                           <value value="148.00" unit="lbs" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e621"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20110312"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e621"/>
+                           <code code="225171007"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"
+                                 displayName="Body mass index"/>
+                           <text>
+                              <reference value="d17e621"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20110312"/>
+                           <value value="23" unit="kg/m2" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                             </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e645"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20110312"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e645"/>
+                           <code code="162860001"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"
+                                 displayName="BMI percentile"/>
+                           <text>
+                              <reference value="d17e645"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20110312"/>
+                           <value value="" unit="" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                      <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e668"/>
+                    <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20110312"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e668"/>
+                           <code code="12929001"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED CT"
+                                 displayName="Systolic BP"/>
+                           <text>
+                              <reference value="d17e668"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20110312"/>
+                           <value value="125" unit="mm[Hg]" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e691"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20110312"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e691"/>
+                           <code code="163031004"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED"
+                                 displayName="Diastolic BP"/>
+                           <text>
+                              <reference value="d17e691"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20110312"/>
+                           <value value="60" unit="mm[Hg]" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+               <entry typeCode="DRIV">
+                  <organizer classCode="CLUSTER" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.32" assigningAuthorityName="CCD"/>
+                     <templateId root="2.16.840.1.113883.10.20.1.35" assigningAuthorityName="CCD"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"
+                                 assigningAuthorityName="IHE PCC"/>
+                     <id root="d17e714"/>
+                     <code code="46680005"
+                           codeSystem="2.16.840.1.113883.6.96"
+                           displayName="Vital signs"
+                           codeSystemName="SNOMED CT"/>
+                     <statusCode code="completed"/>
+                     <effectiveTime xsi:type="IVL_TS" value="20110312"/>
+                     <component>
+                        <observation classCode="OBS" moodCode="EVN">
+                           <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                           <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                           <templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                           <id root="d17e714"/>
+                           <code code="364075005"
+                                 codeSystem="2.16.840.1.113883.6.96"
+                                 codeSystemName="SNOMED"
+                                 displayName="Heart rate"/>
+                           <text>
+                              <reference value="d17e714"/>
+                           </text>
+                           <statusCode code="completed"/>
+                           <effectiveTime xsi:type="IVL_TS" value="20110312"/>
+                           <value value="92" unit="beats per minute" xsi:type="PQ"/>
+                           <interpretationCode nullFlavor="UNK"/>
+                           <entryRelationship typeCode="RSON">
+                              <act classCode="ACT" moodCode="EVN">
+                                 <templateId root="2.16.840.1.113883.10.20.1.27" assigningAuthorityName="CCD"/>
+                                 <id/>
+                                 <code nullFlavor="NA"/>
+                                 <entryRelationship typeCode="SUBJ">
+                                    <observation classCode="OBS" moodCode="EVN">
+                                       <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+                                       <code nullFlavor="UNK"/>
+                                       <statusCode code="completed"/>
+                                       <effectiveTime nullFlavor="UNK"/>
+                                    </observation>
+                                 </entryRelationship>
+                              </act>
+                           </entryRelationship>
+                        </observation>
+                     </component>
+                  </organizer>
+               </entry>
+            </section>
+         </component>
+         <component>
+            <section>
+               <templateId root="2.16.840.1.113883.3.88.11.83.127"
+                           assigningAuthorityName="HITSP/C83"/>
+               <templateId root="1.3.6.1.4.1.19376.1.5.3.1.1.5.3.3"
+                           assigningAuthorityName="IHE PCC"/>
+               <templateId root="2.16.840.1.113883.10.20.1.3" assigningAuthorityName="HL7 CCD"/>
+               <code code="46240-8"
+                     codeSystem="2.16.840.1.113883.6.1"
+                     codeSystemName="LOINC"
+                     displayName="History of encounters"/>
+               <title>Encounters</title>
+               <text>
+                  <table border="1" width="100%">
+                     <thead>
+                        <tr>
+                           <th>Encounter</th>
+                           <th>Performer</th>
+                           <th>Location</th>
+                           <th>Date</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr ID="d17e143">
+                           <td/>
+                           <td> Leo Smith</td>
+                           <td>Safe Harbor Enterprises</td>
+                           <td>March 15, 2010 </td>
+                        </tr>
+                        <tr ID="d17e178">
+                           <td/>
+                           <td> Leo Smith</td>
+                           <td>Safe Harbor Enterprises</td>
+                           <td>September 25, 2010 </td>
+                        </tr>
+                        <tr ID="d17e213">
+                           <td/>
+                           <td> Leo Smith</td>
+                           <td>Safe Harbor Enterprises</td>
+                           <td>March 12, 2011 </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </text>
+               <entry typeCode="DRIV">
+                  <encounter classCode="ENC" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.21"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.14"/>
+                     <templateId root="2.16.840.1.113883.3.88.11.83.16"/>
+                     <id root="d17e143"/>
+                     <code code="99204"
+                           codeSystem="2.16.840.1.113883.6.12"
+                           codeSystemName="CPT">
+                        <originalText>
+                           <reference value="PointerToTextInSection"/>
+                        </originalText>
+                     </code>
+                     <text>IHE Requires reference to go here instead of originalText of code.<reference/>
+                     </text>
+                     <effectiveTime xsi:type="IVL_TS" value="20100315"/>
+                     <performer>
+                        <assignedEntity>
+                           <id/>
+                           <addr/>
+                           <telecom/>
+                           <assignedPerson>
+                              <name> Leo Smith</name>
+                           </assignedPerson>
+                        </assignedEntity>
+                     </performer>
+                     <participant typeCode="LOC">
+                        <templateId root="2.16.840.1.113883.10.20.1.45"/>
+                        <participantRole classCode="SDLOC">
+                           <id root="d17e143"/>
+                           <addr/>
+                           <telecom/>
+                           <playingEntity classCode="PLC">
+                              <name>Safe Harbor Enterprises</name>
+                           </playingEntity>
+                        </participantRole>
+                     </participant>
+                  </encounter>
+               </entry>
+               <entry typeCode="DRIV">
+                  <encounter classCode="ENC" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.21"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.14"/>
+                     <templateId root="2.16.840.1.113883.3.88.11.83.16"/>
+                     <id root="d17e178"/>
+                     <code code="99204"
+                           codeSystem="2.16.840.1.113883.6.12"
+                           codeSystemName="CPT">
+                        <originalText>
+                           <reference value="PointerToTextInSection"/>
+                        </originalText>
+                     </code>
+                     <text>IHE Requires reference to go here instead of originalText of code.<reference/>
+                     </text>
+                     <effectiveTime xsi:type="IVL_TS" value="20100925"/>
+                     <performer>
+                        <assignedEntity>
+                           <id/>
+                           <addr/>
+                           <telecom/>
+                           <assignedPerson>
+                              <name> Leo Smith</name>
+                           </assignedPerson>
+                        </assignedEntity>
+                     </performer>
+                     <participant typeCode="LOC">
+                        <templateId root="2.16.840.1.113883.10.20.1.45"/>
+                        <participantRole classCode="SDLOC">
+                           <id root="d17e178"/>
+                           <addr/>
+                           <telecom/>
+                           <playingEntity classCode="PLC">
+                              <name>Safe Harbor Enterprises</name>
+                           </playingEntity>
+                        </participantRole>
+                     </participant>
+                  </encounter>
+               </entry>
+               <entry typeCode="DRIV">
+                  <encounter classCode="ENC" moodCode="EVN">
+                     <templateId root="2.16.840.1.113883.10.20.1.21"/>
+                     <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.14"/>
+                     <templateId root="2.16.840.1.113883.3.88.11.83.16"/>
+                     <id root="d17e213"/>
+                     <code code="99204"
+                           codeSystem="2.16.840.1.113883.6.12"
+                           codeSystemName="CPT">
+                        <originalText>
+                           <reference value="PointerToTextInSection"/>
+                        </originalText>
+                     </code>
+                     <text>IHE Requires reference to go here instead of originalText of code.<reference/>
+                     </text>
+                     <effectiveTime xsi:type="IVL_TS" value="20110312"/>
+                     <performer>
+                        <assignedEntity>
+                           <id/>
+                           <addr/>
+                           <telecom/>
+                           <assignedPerson>
+                              <name> Leo Smith</name>
+                           </assignedPerson>
+                        </assignedEntity>
+                     </performer>
+                     <participant typeCode="LOC">
+                        <templateId root="2.16.840.1.113883.10.20.1.45"/>
+                        <participantRole classCode="SDLOC">
+                           <id root="d17e213"/>
+                           <addr/>
+                           <telecom/>
+                           <playingEntity classCode="PLC">
+                              <name>Safe Harbor Enterprises</name>
+                           </playingEntity>
+                        </participantRole>
+                     </participant>
+                  </encounter>
+               </entry>
+            </section>
+         </component>
+      </structuredBody>
+   </component>
+</ClinicalDocument>

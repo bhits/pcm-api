@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Policy xmlns="urn:oasis:names:tc:xacml:2.0:policy:schema:os"
+        PolicyId="REG.1DVRUZMRCA:&amp;2.16.840.1.113883.3.704.100.990.1&amp;ISO:1578821153:1427467752:092d4e2a-3508-4be5-bea6-6c3cdcf085bc"
+        RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:permit-overrides">
+	<Description>
+				This is a reference policy for
+				consent2share@outlook.com</Description>
+	<Target/>
+	<Rule Effect="Permit" RuleId="primary-group-rule">
+		<Target>
+			<Resources>
+				<Resource>
+					<ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+						<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">34133-9</AttributeValue>
+						<ResourceAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:resource:typeCode"
+                                               DataType="http://www.w3.org/2001/XMLSchema#string"/>
+					</ResourceMatch>
+					<ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+						<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">urn:oasis:names:tc:ebxml-regrep:StatusType:Approved</AttributeValue>
+						<ResourceAttributeDesignator AttributeId="xacml:status"
+                                               DataType="http://www.w3.org/2001/XMLSchema#string"/>
+					</ResourceMatch>
+				</Resource>
+			</Resources>
+			<Actions>
+				<Action>
+					<ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+						<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">xdsquery</AttributeValue>
+						<ActionAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                                             DataType="http://www.w3.org/2001/XMLSchema#string"/>
+					</ActionMatch>
+				</Action>
+				<Action>
+					<ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+						<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">xdsretrieve</AttributeValue>
+						<ActionAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                                             DataType="http://www.w3.org/2001/XMLSchema#string"/>
+					</ActionMatch>
+				</Action>
+			</Actions>
+		</Target>
+		<Condition>
+			<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
+
+				<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+					<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
+						<SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:subject-category:intermediary-subject" DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="false"/>
+					</Apply>
+					<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">1427467752</AttributeValue>
+				</Apply>
+
+
+				<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+					<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
+						<SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:subject-category:recipient-subject" DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="false"/>
+					</Apply>
+					<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">1578821153</AttributeValue>
+				</Apply>
+
+
+				<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:or">
+					<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+						<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
+							<SubjectAttributeDesignator MustBePresent="false"
+                                                 AttributeId="urn:oasis:names:tc:xspa:1.0:subject:purposeofuse"
+                                                 DataType="http://www.w3.org/2001/XMLSchema#string"/>
+						</Apply>
+						<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">PAYMENT</AttributeValue>
+					</Apply>
+					<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+						<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
+							<SubjectAttributeDesignator MustBePresent="false"
+                                                 AttributeId="urn:oasis:names:tc:xspa:1.0:subject:purposeofuse"
+                                                 DataType="http://www.w3.org/2001/XMLSchema#string"/>
+						</Apply>
+						<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">RESEARCH</AttributeValue>
+					</Apply>
+					<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+						<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
+							<SubjectAttributeDesignator MustBePresent="false"
+                                                 AttributeId="urn:oasis:names:tc:xspa:1.0:subject:purposeofuse"
+                                                 DataType="http://www.w3.org/2001/XMLSchema#string"/>
+						</Apply>
+						<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">TREATMENT</AttributeValue>
+					</Apply>
+				</Apply>
+
+				<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:dateTime-greater-than-or-equal">
+					<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:dateTime-one-and-only">
+						<EnvironmentAttributeDesignator MustBePresent="false"
+                                                  AttributeId="urn:oasis:names:tc:xacml:1.0:environment:current-dateTime"
+                                                  DataType="http://www.w3.org/2001/XMLSchema#dateTime"/>
+					</Apply>
+					<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#dateTime">2014-08-13T00:00:00-0400</AttributeValue>
+				</Apply>
+				<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:dateTime-less-than-or-equal">
+					<Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:dateTime-one-and-only">
+						<EnvironmentAttributeDesignator MustBePresent="false"
+                                                  AttributeId="urn:oasis:names:tc:xacml:1.0:environment:current-dateTime"
+                                                  DataType="http://www.w3.org/2001/XMLSchema#dateTime"/>
+					</Apply>
+					<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#dateTime">2015-08-12T23:59:59-0400</AttributeValue>
+				</Apply>
+			</Apply>
+		</Condition>
+	</Rule>
+	<Rule Effect="Deny" RuleId="deny-others"/>
+	<Obligations>
+		<Obligation ObligationId="urn:samhsa:names:tc:consent2share:1.0:obligation:redact-document-section-code"
+                  FulfillOn="Permit">
+			<AttributeAssignment AttributeId="urn:oasis:names:tc:xacml:3.0:example:attribute:text"
+                              DataType="http://www.w3.org/2001/XMLSchema#string">PSY</AttributeAssignment>
+		</Obligation>
+		<Obligation ObligationId="urn:samhsa:names:tc:consent2share:1.0:obligation:redact-document-section-code"
+                  FulfillOn="Permit">
+			<AttributeAssignment AttributeId="urn:oasis:names:tc:xacml:3.0:example:attribute:text"
+                              DataType="http://www.w3.org/2001/XMLSchema#string">ALC</AttributeAssignment>
+		</Obligation>
+		<Obligation ObligationId="urn:samhsa:names:tc:consent2share:1.0:obligation:redact-document-section-code"
+                  FulfillOn="Permit">
+			<AttributeAssignment AttributeId="urn:oasis:names:tc:xacml:3.0:example:attribute:text"
+                              DataType="http://www.w3.org/2001/XMLSchema#string">GDIS</AttributeAssignment>
+		</Obligation>
+		<Obligation ObligationId="urn:samhsa:names:tc:consent2share:1.0:obligation:redact-document-section-code"
+                  FulfillOn="Permit">
+			<AttributeAssignment AttributeId="urn:oasis:names:tc:xacml:3.0:example:attribute:text"
+                              DataType="http://www.w3.org/2001/XMLSchema#string">COM</AttributeAssignment>
+		</Obligation>
+		<Obligation ObligationId="urn:samhsa:names:tc:consent2share:1.0:obligation:redact-document-section-code"
+                  FulfillOn="Permit">
+			<AttributeAssignment AttributeId="urn:oasis:names:tc:xacml:3.0:example:attribute:text"
+                              DataType="http://www.w3.org/2001/XMLSchema#string">SEX</AttributeAssignment>
+		</Obligation>
+		<Obligation ObligationId="urn:samhsa:names:tc:consent2share:1.0:obligation:redact-document-section-code"
+                  FulfillOn="Permit">
+			<AttributeAssignment AttributeId="urn:oasis:names:tc:xacml:3.0:example:attribute:text"
+                              DataType="http://www.w3.org/2001/XMLSchema#string">ETH</AttributeAssignment>
+		</Obligation>
+		<Obligation ObligationId="urn:samhsa:names:tc:consent2share:1.0:obligation:redact-document-section-code"
+                  FulfillOn="Permit">
+			<AttributeAssignment AttributeId="urn:oasis:names:tc:xacml:3.0:example:attribute:text"
+                              DataType="http://www.w3.org/2001/XMLSchema#string">ADD</AttributeAssignment>
+		</Obligation>
+	</Obligations>
+</Policy>

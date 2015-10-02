@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="ISO-8859-1" />
+<title>Sign Consent</title>
+<link id="bootstrap-style" href="../../resources/css/modules/bootstrap.css"
+	rel="stylesheet" th:href="@{/resources/css/modules/bootstrap.css}" />
+
+<style type="text/css">
+	.navbar-text {
+			color: white !important; 
+			margin-left: 0; 
+			max-width: 75%;
+		}
+	.navbar-btn {
+			margin: 15px 0;
+		}
+	#body-content {
+			margin-bottom: 60px;
+		}
+	@media only screen and (max-width: 768px) {
+		#body-content {
+			margin-bottom: 80px;
+		}
+	}
+</style>
+
+</head>
+<body th:inline="text">
+	<div>
+		<div id="body-content">
+
+	   <div th:utext="${returned_javascript}"/>
+
+		</div>   	   
+	</div>
+	<div class="navbar navbar-inverse navbar-fixed-bottom">
+      <div class="container">
+		<p class="navbar-text pull-left">If you have finished signing this Consent or wish to cancel, please click the Close button to exit this window.</p>
+		<button class="navbar-btn btn btn-primary pull-right" onclick="javascript:window.close();">Close</button>
+      </div>
+    </div>
+
+
+<script src="../../../resources/js/bootstrap.min.js"
+			th:src="@{/resources/js/bootstrap.min.js}" type="text/javascript"></script>
+<script src="../../../resources/js/webpage-js/footerFragment.js"
+			th:src="@{/resources/js/webpage-js/footerFragment.js}"
+			type="text/javascript"></script>
+	    
+</body>
+</html>

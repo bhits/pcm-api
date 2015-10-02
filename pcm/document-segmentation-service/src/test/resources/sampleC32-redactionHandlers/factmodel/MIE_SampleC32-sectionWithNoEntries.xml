@@ -1,0 +1,1334 @@
+<FactModel>
+    <xacmlResult>
+        <pdpDecision>Permit</pdpDecision>
+        <purposeOfUse>TREAT</purposeOfUse>
+        <messageId>76aa1175-30af-494e-afe5-e34e91b14d6a</messageId>
+        <pdpObligation>HIV</pdpObligation>
+        <pdpObligation>10160-0</pdpObligation>
+        <patientId>d3bb3930-7241-11e3-b4f7-00155d3a2124</patientId>
+    </xacmlResult>
+    <ClinicalFacts>
+        <ClinicalFact>
+            <code>46680005</code>
+            <displayName>Vital signs</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Coded Vital Signs</c32SectionTitle>
+            <c32SectionLoincCode>8716-3</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e133</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>8867-4</code>
+            <displayName>HEART RATE</displayName>
+            <codeSystem>2.16.840.1.113883.6.1</codeSystem>
+            <codeSystemName>LOINC</codeSystemName>
+            <c32SectionTitle>Coded Vital Signs</c32SectionTitle>
+            <c32SectionLoincCode>8716-3</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924.4</observationId>
+            <entry>d1e133</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>9279-1</code>
+            <displayName>RESPIRATION RATE</displayName>
+            <codeSystem>2.16.840.1.113883.6.1</codeSystem>
+            <codeSystemName>LOINC</codeSystemName>
+            <c32SectionTitle>Coded Vital Signs</c32SectionTitle>
+            <c32SectionLoincCode>8716-3</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924.4</observationId>
+            <entry>d1e133</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>8310-5</code>
+            <displayName>BODY TEMPERATURE</displayName>
+            <codeSystem>2.16.840.1.113883.6.1</codeSystem>
+            <codeSystemName>LOINC</codeSystemName>
+            <c32SectionTitle>Coded Vital Signs</c32SectionTitle>
+            <c32SectionLoincCode>8716-3</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924.4</observationId>
+            <entry>d1e133</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>8480-6</code>
+            <displayName>Systolic BP</displayName>
+            <codeSystem>2.16.840.1.113883.6.1</codeSystem>
+            <codeSystemName>LOINC</codeSystemName>
+            <c32SectionTitle>Coded Vital Signs</c32SectionTitle>
+            <c32SectionLoincCode>8716-3</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924.4</observationId>
+            <entry>d1e133</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>8462-4</code>
+            <displayName>Diastolic BP</displayName>
+            <codeSystem>2.16.840.1.113883.6.1</codeSystem>
+            <codeSystemName>LOINC</codeSystemName>
+            <c32SectionTitle>Coded Vital Signs</c32SectionTitle>
+            <c32SectionLoincCode>8716-3</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924.4</observationId>
+            <entry>d1e133</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>29463-7</code>
+            <displayName>BODY WEIGHT</displayName>
+            <codeSystem>2.16.840.1.113883.6.1</codeSystem>
+            <codeSystemName>LOINC</codeSystemName>
+            <c32SectionTitle>Coded Vital Signs</c32SectionTitle>
+            <c32SectionLoincCode>8716-3</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924.4</observationId>
+            <entry>d1e133</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>8302-2</code>
+            <displayName>BODY HEIGHT</displayName>
+            <codeSystem>2.16.840.1.113883.6.1</codeSystem>
+            <codeSystemName>LOINC</codeSystemName>
+            <c32SectionTitle>Coded Vital Signs</c32SectionTitle>
+            <c32SectionLoincCode>8716-3</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924.4</observationId>
+            <entry>d1e133</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>55607006</code>
+            <displayName>Problem</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e282</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>38341003</code>
+            <displayName>Hypertensive disorder</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e282</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>401.9</code>
+            <displayName>Hypertension</displayName>
+            <codeSystem>2.16.840.1.113883.6.103</codeSystem>
+            <codeSystemName>ICD-9CM</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e282</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>55607006</code>
+            <displayName>Problem</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e310</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>74400008</code>
+            <displayName>Appendicitis</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e310</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>541</code>
+            <displayName>Appendicitis</displayName>
+            <codeSystem>2.16.840.1.113883.6.103</codeSystem>
+            <codeSystemName>ICD-9CM</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e310</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>55607006</code>
+            <displayName>Problem</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e338</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>58214004</code>
+            <displayName>Schizophrenia</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e338</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>295.90</code>
+            <displayName>Schizophrenia</displayName>
+            <codeSystem>2.16.840.1.113883.6.103</codeSystem>
+            <codeSystemName>ICD-9CM</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e338</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>55607006</code>
+            <displayName>Problem</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e366</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>13746004</code>
+            <displayName>Bipolar disorder</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e366</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>296.80</code>
+            <displayName>Bipolar disorder, NOS</displayName>
+            <codeSystem>2.16.840.1.113883.6.103</codeSystem>
+            <codeSystemName>ICD-9CM</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e366</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>55607006</code>
+            <displayName>Problem</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e394</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>75408008</code>
+            <displayName>Feeling angry</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e394</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>296.99</code>
+            <displayName>Anger</displayName>
+            <codeSystem>2.16.840.1.113883.6.103</codeSystem>
+            <codeSystemName>ICD-9CM</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e394</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>55607006</code>
+            <displayName>Problem</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e423</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>41006004</code>
+            <displayName>Depression</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e423</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>311</code>
+            <displayName>Depression</displayName>
+            <codeSystem>2.16.840.1.113883.6.103</codeSystem>
+            <codeSystemName>ICD-9CM</codeSystemName>
+            <c32SectionTitle>Conditions</c32SectionTitle>
+            <c32SectionLoincCode>11348-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e423</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>55607006</code>
+            <displayName>Problem</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e480</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>38341003</code>
+            <displayName>Hypertensive disorder</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e480</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>401.9</code>
+            <displayName>Hypertension</displayName>
+            <codeSystem>2.16.840.1.113883.6.103</codeSystem>
+            <codeSystemName>ICD-9CM</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e480</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>55607006</code>
+            <displayName>Problem</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e508</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>74400008</code>
+            <displayName>Appendicitis</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e508</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>541</code>
+            <displayName>Appendicitis</displayName>
+            <codeSystem>2.16.840.1.113883.6.103</codeSystem>
+            <codeSystemName>ICD-9CM</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e508</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>55607006</code>
+            <displayName>Problem</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e537</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>58214004</code>
+            <displayName>Schizophrenia</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e537</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>295.90</code>
+            <displayName>Schizophrenia</displayName>
+            <codeSystem>2.16.840.1.113883.6.103</codeSystem>
+            <codeSystemName>ICD-9CM</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e537</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>55607006</code>
+            <displayName>Problem</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e565</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>13746004</code>
+            <displayName>Bipolar disorder</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e565</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>296.80</code>
+            <displayName>Bipolar disorder, NOS</displayName>
+            <codeSystem>2.16.840.1.113883.6.103</codeSystem>
+            <codeSystemName>ICD-9CM</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e565</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>55607006</code>
+            <displayName>Problem</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e593</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>75408008</code>
+            <displayName>Feeling angry</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e593</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>296.99</code>
+            <displayName>Anger</displayName>
+            <codeSystem>2.16.840.1.113883.6.103</codeSystem>
+            <codeSystemName>ICD-9CM</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e593</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>55607006</code>
+            <displayName>Problem</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e621</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>41006004</code>
+            <displayName>Depression</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e621</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>311</code>
+            <displayName>Depression</displayName>
+            <codeSystem>2.16.840.1.113883.6.103</codeSystem>
+            <codeSystemName>ICD-9CM</codeSystemName>
+            <c32SectionTitle>Problems (cont)</c32SectionTitle>
+            <c32SectionLoincCode>11450-4</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e621</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>ASSERTION</code>
+            <displayName>Assertion</displayName>
+            <codeSystem>2.16.840.1.113883.5.4</codeSystem>
+            <codeSystemName>HL7ActCode</codeSystemName>
+            <c32SectionTitle>Social History</c32SectionTitle>
+            <c32SectionLoincCode>29762-2</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924.4</observationId>
+            <entry>d1e783</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>449868002</code>
+            <displayName>Current every day smoker</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Social History</c32SectionTitle>
+            <c32SectionLoincCode>29762-2</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924.4</observationId>
+            <entry>d1e783</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>11342-3</code>
+            <displayName>Drug Use</displayName>
+            <codeSystem>2.16.840.1.113883.6.1</codeSystem>
+            <codeSystemName>LOINC</codeSystemName>
+            <c32SectionTitle>Social History</c32SectionTitle>
+            <c32SectionLoincCode>29762-2</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e975</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>0</code>
+            <displayName>Grandparent</displayName>
+            <codeSystem>2.16.840.1.113883.5.111</codeSystem>
+            <codeSystemName>RoleCode</codeSystemName>
+            <c32SectionTitle>Family history</c32SectionTitle>
+            <c32SectionLoincCode>10157-6</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1098</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>0</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.5.111</codeSystem>
+            <codeSystemName>RoleCode</codeSystemName>
+            <c32SectionTitle>Family history</c32SectionTitle>
+            <c32SectionLoincCode>10157-6</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1098</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>0</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.5.111</codeSystem>
+            <codeSystemName>RoleCode</codeSystemName>
+            <c32SectionTitle>Family history</c32SectionTitle>
+            <c32SectionLoincCode>10157-6</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1098</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>199.1</code>
+            <displayName>Cancer</displayName>
+            <codeSystem>2.16.840.1.113883.6.103</codeSystem>
+            <codeSystemName>ICD-9CM</codeSystemName>
+            <c32SectionTitle>Family history</c32SectionTitle>
+            <c32SectionLoincCode>10157-6</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1098</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>ASSERTION</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.5.4</codeSystem>
+            <codeSystemName/>
+            <c32SectionTitle>Allergies and Adverse Reactions</c32SectionTitle>
+            <c32SectionLoincCode>48765-2</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1149</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>416098002</code>
+            <displayName>Drug Allergy</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Allergies and Adverse Reactions</c32SectionTitle>
+            <c32SectionLoincCode>48765-2</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1149</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>ASSERTION</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.5.4</codeSystem>
+            <codeSystemName/>
+            <c32SectionTitle>Allergies and Adverse Reactions</c32SectionTitle>
+            <c32SectionLoincCode>48765-2</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1149</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>SEV</code>
+            <displayName>2.16.840.1.113883.5.4</displayName>
+            <codeSystem>2.16.840.1.113883.5.4</codeSystem>
+            <codeSystemName>HL7ActCode</codeSystemName>
+            <c32SectionTitle>Allergies and Adverse Reactions</c32SectionTitle>
+            <c32SectionLoincCode>48765-2</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1149</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>ASSERTION</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.5.4</codeSystem>
+            <codeSystemName/>
+            <c32SectionTitle>Allergies and Adverse Reactions</c32SectionTitle>
+            <c32SectionLoincCode>48765-2</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1206</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>416098002</code>
+            <displayName>Drug Allergy</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Allergies and Adverse Reactions</c32SectionTitle>
+            <c32SectionLoincCode>48765-2</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1206</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>ASSERTION</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.5.4</codeSystem>
+            <codeSystemName/>
+            <c32SectionTitle>Allergies and Adverse Reactions</c32SectionTitle>
+            <c32SectionLoincCode>48765-2</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1206</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>SEV</code>
+            <displayName>2.16.840.1.113883.5.4</displayName>
+            <codeSystem>2.16.840.1.113883.5.4</codeSystem>
+            <codeSystemName>HL7ActCode</codeSystemName>
+            <c32SectionTitle>Allergies and Adverse Reactions</c32SectionTitle>
+            <c32SectionLoincCode>48765-2</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1206</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>ASSERTION</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.5.4</codeSystem>
+            <codeSystemName/>
+            <c32SectionTitle>Allergies and Adverse Reactions</c32SectionTitle>
+            <c32SectionLoincCode>48765-2</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1263</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>419199007</code>
+            <displayName>Allergy to Substance</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Allergies and Adverse Reactions</c32SectionTitle>
+            <c32SectionLoincCode>48765-2</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1263</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>1</code>
+            <displayName>LATEX</displayName>
+            <codeSystem>2.16.840.1.113883.6.88</codeSystem>
+            <codeSystemName>RxNORM</codeSystemName>
+            <c32SectionTitle>Allergies and Adverse Reactions</c32SectionTitle>
+            <c32SectionLoincCode>48765-2</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1263</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>ASSERTION</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.5.4</codeSystem>
+            <codeSystemName/>
+            <c32SectionTitle>Allergies and Adverse Reactions</c32SectionTitle>
+            <c32SectionLoincCode>48765-2</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1263</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>209387</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.6.88</codeSystem>
+            <codeSystemName>RxNORM</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1332</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>50580049660</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.6.69</codeSystem>
+            <codeSystemName>NDC</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1332</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>209387</code>
+            <displayName>Tylenol 325mg 2 tablets prn </displayName>
+            <codeSystem>2.16.840.1.113883.6.88</codeSystem>
+            <codeSystemName>RxNORM</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1332</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>50580049660</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.6.69</codeSystem>
+            <codeSystemName>NDC</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1332</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>329505003</code>
+            <displayName>Over the counter products</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1332</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>310798</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.6.88</codeSystem>
+            <codeSystemName>RxNORM</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1368</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>00172208380</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.6.69</codeSystem>
+            <codeSystemName>NDC</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1368</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>310798</code>
+            <displayName>hydrochlorothiazide 25mg 1 tablet qd </displayName>
+            <codeSystem>2.16.840.1.113883.6.88</codeSystem>
+            <codeSystemName>RxNORM</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1368</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>00172208380</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.6.69</codeSystem>
+            <codeSystemName>NDC</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1368</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>73639000</code>
+            <displayName>Prescription Drug</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1368</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>208416</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.6.88</codeSystem>
+            <codeSystemName>RxNORM</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1406</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>49708014501</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.6.69</codeSystem>
+            <codeSystemName>NDC</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1406</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>208416</code>
+            <displayName>Bactrim 400mg 2 tablets 1xwkly </displayName>
+            <codeSystem>2.16.840.1.113883.6.88</codeSystem>
+            <codeSystemName>RxNORM</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1406</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>49708014501</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.6.69</codeSystem>
+            <codeSystemName>NDC</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1406</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>73639000</code>
+            <displayName>Prescription Drug</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1406</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>208161</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.6.88</codeSystem>
+            <codeSystemName>RxNORM</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1442</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>00049490041</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.6.69</codeSystem>
+            <codeSystemName>NDC</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1442</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>208161</code>
+            <displayName>Zoloft 50mg 1 po qday </displayName>
+            <codeSystem>2.16.840.1.113883.6.88</codeSystem>
+            <codeSystemName>RxNORM</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1442</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>00049490041</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.6.69</codeSystem>
+            <codeSystemName>NDC</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1442</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>73639000</code>
+            <displayName>Prescription Drug</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1442</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>1310202</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.6.88</codeSystem>
+            <codeSystemName>RxNORM</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1480</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>00074304153</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.6.69</codeSystem>
+            <codeSystemName>NDC</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1480</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>1310202</code>
+            <displayName>Vicodin 5mg 2 po daily </displayName>
+            <codeSystem>2.16.840.1.113883.6.88</codeSystem>
+            <codeSystemName>RxNORM</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1480</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>00074304153</code>
+            <displayName/>
+            <codeSystem>2.16.840.1.113883.6.69</codeSystem>
+            <codeSystemName>NDC</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1480</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>73639000</code>
+            <displayName>Prescription Drug</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Medications</c32SectionTitle>
+            <c32SectionLoincCode>10160-0</c32SectionLoincCode>
+            <observationId/>
+            <entry>d1e1480</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>133864008</code>
+            <displayName>Lithotripsy</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Procedures</c32SectionTitle>
+            <c32SectionLoincCode>47519-4</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1533</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>275972003</code>
+            <displayName>Cholesterol Screening</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Procedures</c32SectionTitle>
+            <c32SectionLoincCode>47519-4</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1549</entry>
+        </ClinicalFact>
+        <ClinicalFact>
+            <code>390735007</code>
+            <displayName>Retinal Screening</displayName>
+            <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+            <codeSystemName>SNOMED CT</codeSystemName>
+            <c32SectionTitle>Procedures</c32SectionTitle>
+            <c32SectionLoincCode>47519-4</c32SectionLoincCode>
+            <observationId>1.2.840.114398.1.2924</observationId>
+            <entry>d1e1565</entry>
+        </ClinicalFact>
+    </ClinicalFacts>
+    <EntryReferences>
+        <EntryReference>
+            <entry>d1e133</entry>
+            <reference>Obs_2600206</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e133</entry>
+            <reference>Obs_2600204</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e133</entry>
+            <reference>Obs_2600205</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e133</entry>
+            <reference>Obs_2600200</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e133</entry>
+            <reference>Obs_2600201</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e133</entry>
+            <reference>Obs_2600198</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e133</entry>
+            <reference>Obs_2600197</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e282</entry>
+            <reference>CondRefId_0_9</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e310</entry>
+            <reference>CondRefId_1_9</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e338</entry>
+            <reference>CondRefId_2_9</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e366</entry>
+            <reference>CondRefId_3_9</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e394</entry>
+            <reference>CondRefId_4_9</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e423</entry>
+            <reference>CondRefId_5_9</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e480</entry>
+            <reference>CondRefId_0_5</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e508</entry>
+            <reference>CondRefId_1_5</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e537</entry>
+            <reference>CondRefId_2_5</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e565</entry>
+            <reference>CondRefId_3_5</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e593</entry>
+            <reference>CondRefId_4_5</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e621</entry>
+            <reference>CondRefId_5_5</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e661</entry>
+            <reference>Result_none</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e729</entry>
+            <reference>Obs_2600184</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e756</entry>
+            <reference>Obs_2600185</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e783</entry>
+            <reference>Obs_2600177</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e812</entry>
+            <reference>Obs_2600179</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e839</entry>
+            <reference>Obs_2600181</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e866</entry>
+            <reference>Obs_2600182</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e894</entry>
+            <reference>Obs_2600183</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e921</entry>
+            <reference>Obs_2600186</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e948</entry>
+            <reference>Obs_2600188</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e975</entry>
+            <reference>Obs_2600190</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1003</entry>
+            <reference>Obs_2600192</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1030</entry>
+            <reference>Obs_2600187</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1057</entry>
+            <reference>Obs_2600189</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1098</entry>
+            <reference>fhx_6927</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1098</entry>
+            <reference>fhx_6927</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1098</entry>
+            <reference>fhx_6927</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1149</entry>
+            <reference>AgyRefId7</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1149</entry>
+            <reference>AgyRefId7</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1206</entry>
+            <reference>AgyRefId8</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1206</entry>
+            <reference>AgyRefId8</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1263</entry>
+            <reference>AgyRefId9</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1263</entry>
+            <reference>AgyRefId9</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1332</entry>
+            <reference>pSig0</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1332</entry>
+            <reference>pSig0</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1368</entry>
+            <reference>pSig1</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1368</entry>
+            <reference>pSig1</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1406</entry>
+            <reference>pSig2</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1406</entry>
+            <reference>pSig2</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1442</entry>
+            <reference>pSig3</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1442</entry>
+            <reference>pSig3</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1480</entry>
+            <reference>pSig4</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1480</entry>
+            <reference>pSig4</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1533</entry>
+            <reference>Procedure_88265</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1533</entry>
+            <reference>Procedure_88265</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1549</entry>
+            <reference>Procedure_94166</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1549</entry>
+            <reference>Procedure_94166</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1565</entry>
+            <reference>Procedure_94167</reference>
+        </EntryReference>
+        <EntryReference>
+            <entry>d1e1565</entry>
+            <reference>Procedure_94167</reference>
+        </EntryReference>
+    </EntryReferences>
+    <EmbeddedClinicalDocument xmlns="urn:hl7-org:v3">
+        <ClinicalDocument xmlns:voc="urn:hl7-org:v3/voc" xmlns:sdtc="urn:hl7-org:sdtc"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="urn:hl7-org:v3 CDA.xsd">
+            <!-- CCDA:0 -->
+            <realmCode code="US"/>
+            <typeId extension="POCD_HD000040" root="2.16.840.1.113883.1.3"/>
+            <templateId root="1.3.6.1.4.1.19376.1.5.3.1.1.1"/>
+            <templateId root="2.16.840.1.113883.10.20.3"/>
+            <templateId root="2.16.840.1.113883.3.88.11.32.1"/>
+            <templateId root="2.16.840.1.113883.10.20.12"/>
+            <templateId root="2.16.840.1.113883.10.20.22.1.1"/>
+            <templateId root="2.16.840.1.113883.10.20.22.1.2"/>
+            <id extension="1" root="1.2.840.114398.1.2924.0.4.29392"/>
+            <code code="34133-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+                displayName="Summarization of episode note"/>
+            <title/>
+            <effectiveTime value="201407071450"/>
+            <confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25"/>
+            <languageCode code="en-US"/>
+            <recordTarget>
+                <patientRole>
+                    <id extension="18380" root="1.2.840.114398.1.2924.1"/>
+                    <addr use="H">
+                        <country>US</country>
+                    </addr>
+                    <telecom nullFlavor="UNK" use="HP"/>
+                    <patient>
+                        <name>
+                            <family>Duck</family>
+                            <given>Donald</given>
+                        </name>
+                        <administrativeGenderCode code="UN" codeSystem="2.16.840.1.113883.5.1"/>
+                        <birthTime value="19791001000000-0400"/>
+                        <maritalStatusCode code="M" codeSystem="2.16.840.1.113883.5.2"
+                            displayName="Married"/>
+                        <raceCode code="2106-3" codeSystem="2.16.840.1.113883.6.238"
+                            displayName="White"/>
+                        <languageCommunication>
+                            <templateId root="2.16.840.1.113883.3.88.11.83.2"/>
+                            <templateId root="1.3.6.1.4.1.19376.1.5.3.1.2.1"/>
+                            <languageCode code="eng"/>
+                        </languageCommunication>
+                    </patient>
+                </patientRole>
+            </recordTarget>
+            <author>
+                <time value="20140619113437-0400"/>
+                <assignedAuthor>
+                    <id extension="000000000" root="2.16.840.1.113883.4.6"/>
+                    <addr use="H">
+                        <streetAddressLine>1 A St.</streetAddressLine>
+                        <city>Chicago</city>
+                        <state>IL</state>
+                        <postalCode>60601</postalCode>
+                        <country>US</country>
+                    </addr>
+                    <telecom use="HP" value="tel:000-000-0000"/>
+                    <assignedPerson>
+                        <name>
+                            <family>Person</family>
+                            <given>Unknown</given>
+                        </name>
+                    </assignedPerson>
+                </assignedAuthor>
+            </author>
+            <custodian>
+                <assignedCustodian>
+                    <representedCustodianOrganization>
+                        <id root="1.2.840.114398.1.2924"/>
+                        <name> Prince George's County</name>
+                        <telecom use="PUB" value="tel:+13017802951"/>
+                        <addr use="PUB">
+                            <streetAddressLine>14741 Govenor Oden Bowie Drive</streetAddressLine>
+                            <city>Upper Marlboro</city>
+                            <state>MD</state>
+                            <postalCode>20772</postalCode>
+                            <country>US</country>
+                        </addr>
+                    </representedCustodianOrganization>
+                </assignedCustodian>
+            </custodian>
+            <legalAuthenticator>
+                <time value="20140619113437-0400"/>
+                <signatureCode code="S"/>
+                <assignedEntity>
+                    <id nullFlavor="NI"/>
+                    <addr nullFlavor="UNK"/>
+                    <telecom nullFlavor="UNK" use="HP"/>
+                    <assignedPerson>
+                        <name nullFlavor="UNK"/>
+                    </assignedPerson>
+                    <representedOrganization>
+                        <id root="1.2.840.114398.1.2924"/>
+                        <name> Prince George's County Health Department</name>
+                        <telecom nullFlavor="UNK" use="HP"/>
+                        <addr nullFlavor="UNK"/>
+                    </representedOrganization>
+                </assignedEntity>
+            </legalAuthenticator>
+            <documentationOf>
+                <serviceEvent classCode="PCPR">
+                    <code code="97804" codeSystem="2.16.840.1.113883.6.12" codeSystemName="C4"/>
+                    <effectiveTime>
+                        <low value="20080101000000-0500"/>
+                        <high value="20081231235959-0500"/>
+                    </effectiveTime>
+                </serviceEvent>
+            </documentationOf>
+            <component>
+                <structuredBody>
+                    <component>
+                        <section>
+                            <templateId root="2.16.840.1.113883.10.20.1.11"/>
+                            <templateId root="1.3.6.1.4.1.19376.1.5.3.1.3.6"/>
+                            <templateId root="2.16.840.1.113883.3.88.11.83.103"/>
+                            <templateId root="2.16.840.1.113883.10.20.22.2.5"/>
+                            <templateId root="2.16.840.1.113883.10.20.22.2.5.1"/>
+                            <id extension="2" root="1.2.840.114398.1.2924"/>
+                            <code code="11450-4" codeSystem="2.16.840.1.113883.6.1"
+                                codeSystemName="LOINC" displayName="PROBLEM LIST"/>
+                            <title>Problems (cont)</title>
+                            <text><content ID="CondRefId_0_5">Hypertension( began
+                                    05-27-2014)</content> , <content ID="CondRefId_1_5"
+                                    >Appendicitis( began 01-01-2000)</content> , <content
+                                    ID="CondRefId_2_5">Schizophrenia</content> , <content
+                                    ID="CondRefId_3_5">Bipolar disorder, NOS( began
+                                    06-19-2014)</content> , <content ID="CondRefId_4_5"
+                                    >Anger</content> , <content ID="CondRefId_5_5"
+                                    >Depression</content></text>
+                        </section>
+                    </component>
+                    <component>
+                        <section>
+                            <templateId root="2.16.840.1.113883.10.20.1.14"/>
+                            <templateId root="2.16.840.1.113883.3.88.11.83.122"/>
+                            <templateId root="1.3.6.1.4.1.19376.1.5.3.1.3.28"/>
+                            <id extension="3" root="1.2.840.114398.1.2924"/>
+                            <code code="30954-2" codeSystem="2.16.840.1.113883.6.1"
+                                codeSystemName="LOINC"
+                                displayName="Relevant diagnostic tests and/or laboratory data"/>
+                            <title>Results</title>
+                            <text>
+                                <content ID="Result_none"> No Results</content>
+                            </text>
+                            <entry>
+                                <organizer classCode="CLUSTER" moodCode="EVN">
+                                    <templateId root="2.16.840.1.113883.10.20.1.32"/>
+                                    <id extension="0" root="1.2.840.114398.1.2924"/>
+                                    <code nullFlavor="UNK"/>
+                                    <statusCode code="completed"/>
+                                    <component>
+                                        <observation classCode="OBS" moodCode="EVN"
+                                            negationInd="false">
+                                            <templateId root="2.16.840.1.113883.10.20.1.31"/>
+                                            <templateId root="2.16.840.1.113883.3.88.11.32.16"/>
+                                            <templateId root="2.16.840.1.113883.3.88.11.83.15.1"/>
+                                            <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                                            <id nullFlavor="NA"/>
+                                            <code nullFlavor="UNK"/>
+                                            <text>
+                                                <reference value="#Result_none"/>
+                                            </text>
+                                            <statusCode code="completed"/>
+                                            <effectiveTime nullFlavor="NA"/>
+                                            <value nullFlavor="NA" xsi:type="ED"/>
+                                        </observation>
+                                    </component>
+                                </organizer>
+                                <generatedEntryId>d1e661</generatedEntryId>
+                            </entry>
+                        </section>
+                    </component>
+                </structuredBody>
+            </component>
+        </ClinicalDocument>
+        <generatedEntryId>d1</generatedEntryId>
+    </EmbeddedClinicalDocument>
+</FactModel>

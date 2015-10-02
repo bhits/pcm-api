@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"	xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:include="fragment/common :: headerFragment">
+	<!-- title needs to be dynamic -->
+	<title>Page not found</title>
+	
+	<!-- START: Meta -->
+	<meta charset="utf-8" />
+	<meta name="description" content="Consent Management System" />
+	<meta name="author" content="FEiSystems" />
+	<!-- END: Meta -->
+	
+	<!-- START: Mobile Specific -->
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!-- END: Mobile Specific -->
+	
+	<!-- START: CSS -->
+	<link id="bootstrap-style" href="../../resources/css/bootstrap.css" rel="stylesheet"/>
+	<link href="../../resources/css/font-awesome.css" rel="stylesheet" type="text/css"/>
+	<link href="../../resources/css/themes-style.css" rel="stylesheet"/>
+	<link href="../../resources/css/c2s-core-style.css" rel="stylesheet"/>
+	<!-- END: CSS -->
+
+</head>
+
+<body>
+	
+<div id="connections-main" class="container outmost-holder">
+	
+	<!-- START: Page Header -->
+	<header class="navbar navbar-static-top" role="banner" th:with="currentPageTitle='Page Not Found'">
+		<div class="container">
+			<div class="navbar-header navbar-inner-header" role="navigation" th:substituteby="fragment/common :: navbarHeaderFragmentBasic">
+				<h1>
+					<span class="nav-title" th:text="${currentPageTitle}">Page Title</span>
+				</h1>
+			
+				<span th:substituteby="fragment/common :: logoFragment">
+					<div style="position: relative;">
+						<a id="logoFragment" class="navbar-brand brand logo-fragment" th:href="@{/index.html}"  href="index.html"><span id="brand-blue"></span><img src="../../resources/img/consent2share-04.svg" th:src="@{/resources/img/consent2share-04.svg}" /></a>
+						<span id="watermark" class="pg-watermark"><i><p>This site is for DEMONSTRATION PURPOSES only.</p></i></span>
+					</div>
+				</span>
+			</div>
+		</div>
+	</header>
+	<div id="under-header"></div>
+	<!-- END: Page Header -->
+	
+	<noscript th:substituteby="fragment/common :: noscriptFragment">
+		<div class="alert alert-warning col-md-10 col-sm-10">
+			<p id="h4-style" class="alert-heading">Warning!</p>
+			<p>You need to have <a href="https://en.wikipedia.org/wiki/JavaScript" th:href="@{https://en.wikipedia.org/wiki/JavaScript}"
+			target="_blank">JavaScript</a>enabled to use this site.</p>
+		</div>
+	</noscript>
+		
+	<!-- show side menu, msg and link for previous page if session is still valid, else show msg and link to login page -->
+	<div>
+		<div th:switch="${true}">
+		<span th:case="${true}">
+	
+			<div id="page-subcontent-holder" role="main" class="col-sm-10">			
+				<div class="row">
+					<div class="col-sm-8 col-sm-offset-2">
+						<section class="top-margin10">
+	        	            <fieldset class="row">
+							    <legend> Page not found. </legend> 
+							    <label> Please report this to the administrator if it happened constantly. </label>
+							    <br />
+							    <br />
+								<button class="btn btn-primary" onClick="javascript:history.back(-1);" style="margin: 0 10px 10px 0;">Back to previous Page</button>
+								<p th:if="${error}" th:text="${error}">No error</p>
+								<p th:if="${errorCode}" th:text="${errorCode}">No errorCode</p>
+					        	<p th:if="${errorMessage}" th:utext="${errorMessage}">No Error Message</p>
+					    	</fieldset>
+				    	</section>
+		    		</div>
+		    	</div>
+	    	</div>
+	    </span>
+	    
+	    <span th:case="*"> 
+			<div id="page-fullcontent-holder" role="main" class="col-sm-10">			
+				<div class="row">
+				<div class="col-sm-2">
+				</div>
+					<div class="col-sm-8 col-sm-offset-2">
+						<section class="top-margin10">
+	        	            <fieldset class="row">
+							    <legend> Page not found. </legend> 
+							    <label> Please report this to the administrator if it happened constantly. </label>
+								<p th:if="${error}" th:text="${error}">No error</p>
+								<p th:if="${errorCode}" th:text="${errorCode}">No errorCode</p>
+					        	<p th:if="${errorMessage}" th:utext="${errorMessage}">No Error Message</p>
+					    	</fieldset>
+				    	</section>
+		    		</div>
+		    	</div>
+	    	</div>
+		</span>
+		</div>
+		    
+	</div> 
+	
+	<!-- START: Footer Region -->
+		<footer class="bottom" th:include="fragment/common :: [//footer[@id='center-footer']]">
+			<!-- COMPONENT: Copyright Information -->
+			<p class="top-margin10 pull-left">&copy; <a class="footer-link" href="" target="_blank">A SAMHSA Public Service</a> 2013</p>
+		</footer>
+    <!-- END: Footer Region -->
+
+</div> <!-- end connections-main -->
+</body>
+</html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urn:PRPA_IN201301UV02 xmlns:urn="urn:hl7-org:v3"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="urn:hl7-org:v3 ../schema/HL7V3/NE2008/multicacheschemas/PRPA_IN201301UV02.xsd"
+ xmlns="urn:hl7-org:v3" ITSVersion="XML_1.0">
+	<urn:id root="21acf7be-007c-41e6-b176-d0969794983b"/>
+	<urn:creationTime value="20091112115139"/>
+	<urn:interactionId extension="PRPA_IN201301UV02" root="2.16.840.1.113883.1.6"/>
+	<urn:processingCode code="P"/>
+	<urn:processingModeCode code="T"/>
+	<urn:acceptAckCode code="AL"/>
+	<urn:receiver typeCode="RCV">
+		<urn:device classCode="DEV" determinerCode="INSTANCE">
+			<urn:id root="1.2.840.114350.1.13.99999.4567"/>
+			<urn:asAgent classCode="AGNT">
+				<urn:representedOrganization determinerCode="INSTANCE" classCode="ORG">
+					<urn:id root="1.2.840.114350.1.13.99999.1234"/>
+				</urn:representedOrganization>
+			</urn:asAgent>
+		</urn:device>
+	</urn:receiver>
+	<urn:sender typeCode="SND">
+		<urn:device classCode="DEV" determinerCode="INSTANCE">
+			<urn:id root="1.2.840.114350.1.13.99998.8734"/>
+			<urn:asAgent classCode="AGNT">
+				<urn:representedOrganization determinerCode="INSTANCE" classCode="ORG">
+					<urn:id root="1.2.840.114350.1.13.99998"/>
+				</urn:representedOrganization>
+			</urn:asAgent>
+		</urn:device>
+	</urn:sender>
+	<urn:controlActProcess classCode="CACT" moodCode="EVN">
+		<urn:code code="PRPA_TE201301UV02" codeSystem="2.16.840.1.113883.1.6"/>
+		<urn:subject typeCode="SUBJ">
+			<urn:registrationEvent classCode="REG" moodCode="EVN">
+				<urn:id nullFlavor="NA"/>
+				<urn:statusCode code="active"/>
+				<urn:subject1 typeCode="SBJ">
+					<urn:patient classCode="PAT">
+						<urn:id extension="JW-824-v3" assigningAuthorityName="NIST2010" root="2.16.840.1.113883.3.72.5.9.1"/>
+						<urn:statusCode code="active"/>
+						<urn:patientPerson>
+							<urn:name>
+								<urn:given>WILMA</urn:given>
+								<urn:family>JOYNER</urn:family>
+							</urn:name>
+							<urn:telecom use="H" value="tel:610-220-4354"/>
+							<urn:administrativeGenderCode code="F"/>
+							<urn:birthTime value="19350102"/>
+							<urn:addr>
+								<urn:streetAddressLine>1710 Tree Top Lane</urn:streetAddressLine>
+								<urn:city>PLYMOUTH MEETING</urn:city>
+								<urn:state>PA</urn:state>
+								<urn:postalCode>19462</urn:postalCode>
+							</urn:addr>
+							<urn:asOtherIDs classCode="CIT">
+								<urn:id root="2.16.840.1.113883.4.1" extension="197-18-9761"/>
+								<urn:scopingOrganization classCode="ORG" determinerCode="INSTANCE">
+									<urn:id root="2.16.840.1.113883.4.1"/>
+								</urn:scopingOrganization>
+							</urn:asOtherIDs>
+							<urn:personalRelationship classCode="PRS">
+								<urn:code codeSystem="2.16.840.1.113883.5.111" codeSystemName="PersonalRelationshipRoleType" code="MTH" displayName="Mother"/>
+								<urn:relationshipHolder1 classCode="PSN" determinerCode="INSTANCE">
+								</urn:relationshipHolder1>
+							</urn:personalRelationship>
+						</urn:patientPerson>
+						<urn:providerOrganization classCode="ORG" determinerCode="INSTANCE">
+							<urn:id root="1.2.840.114350.1.13.99998.8734"/>
+							<urn:contactParty classCode="CON"/>
+						</urn:providerOrganization>
+					</urn:patient>
+				</urn:subject1>
+				<urn:custodian typeCode="CST">
+					<urn:assignedEntity classCode="ASSIGNED">
+						<urn:id root="1.2.840.114350.1.13.99998.8734"/>
+					</urn:assignedEntity>
+				</urn:custodian>
+			</urn:registrationEvent>
+		</urn:subject>
+	</urn:controlActProcess>
+</urn:PRPA_IN201301UV02>

@@ -1,0 +1,130 @@
+package gov.samhsa.ds4ppilot.hcs.rules;
+
+import gov.samhsa.ds4ppilot.common.beans.XacmlResult;
+import gov.samhsa.ds4ppilot.hcs.beans.ClinicalFact;
+import gov.samhsa.ds4ppilot.hcs.beans.Confidentiality;
+import gov.va.ds4p.cas.RuleExecutionResponse;
+
+global gov.samhsa.ds4ppilot.common.beans.RuleExecutionContainer ruleExecutionContainer;
+
+rule "Clinical Rule Substance abuse (disorder) REDACT"
+dialect "mvel"
+when
+
+       $xacml : XacmlResult(subjectPurposeOfUse =="TREAT", eval(
+              pdpObligations.contains("urn:oasis:names:tc:xspa:2.0:resource:patient:redact:ETH")
+       ))
+       $cd : ClinicalFact(codeSystem == "2.16.840.1.113883.6.96", code == "66214007", c32SectionLoincCode == "11450-4")
+
+then
+
+       ruleExecutionContainer.addExecutionResponse(new RuleExecutionResponse("ETH", "REDACT", (String)Confidentiality.R, "42CFRPart2", "ENCRYPT", "NORDSLCD", $cd.c32SectionTitle, $cd.c32SectionLoincCode, $cd.observationId, $cd.code, $cd.displayName, "SNOMED CT"))
+
+end
+
+rule "Clinical Rule Screening for substance abuse (procedure) REDACT"
+dialect "mvel"
+when
+
+       $xacml : XacmlResult(subjectPurposeOfUse =="TREAT", eval(
+              pdpObligations.contains("urn:oasis:names:tc:xspa:2.0:resource:patient:redact:ETH")
+       ))
+       $cd : ClinicalFact(codeSystem == "2.16.840.1.113883.6.96", code == "370854007", c32SectionLoincCode == "11450-4")
+
+then
+
+       ruleExecutionContainer.addExecutionResponse(new RuleExecutionResponse("ETH", "REDACT", (String)Confidentiality.R, "42CFRPart2", "ENCRYPT", "NORDSLCD", $cd.c32SectionTitle, $cd.c32SectionLoincCode, $cd.observationId, $cd.code, $cd.displayName, "SNOMED CT"))
+
+end
+
+rule "Clinical Rule Drug abuse (disorder) REDACT"
+dialect "mvel"
+when
+
+       $xacml : XacmlResult(subjectPurposeOfUse =="TREAT", eval(
+              pdpObligations.contains("urn:oasis:names:tc:xspa:2.0:resource:patient:redact:ETH")
+       ))
+       $cd : ClinicalFact(codeSystem == "2.16.840.1.113883.6.96", code == "26416006", c32SectionLoincCode == "11450-4")
+
+then
+
+       ruleExecutionContainer.addExecutionResponse(new RuleExecutionResponse("ETH", "REDACT", (String)Confidentiality.R, "42CFRPart2", "ENCRYPT", "NORDSLCD", $cd.c32SectionTitle, $cd.c32SectionLoincCode, $cd.observationId, $cd.code, $cd.displayName, "SNOMED CT"))
+
+end
+
+rule "Clinical Rule Narcotic drug user (finding) REDACT"
+dialect "mvel"
+when
+
+       $xacml : XacmlResult(subjectPurposeOfUse =="TREAT", eval(
+              pdpObligations.contains("urn:oasis:names:tc:xspa:2.0:resource:patient:redact:ETH")
+       ))
+       $cd : ClinicalFact(codeSystem == "2.16.840.1.113883.6.96", code == "70545002", c32SectionLoincCode == "11450-4")
+
+then
+
+       ruleExecutionContainer.addExecutionResponse(new RuleExecutionResponse("ETH", "REDACT", (String)Confidentiality.R, "42CFRPart2", "ENCRYPT", "NORDSLCD", $cd.c32SectionTitle, $cd.c32SectionLoincCode, $cd.observationId, $cd.code, $cd.displayName, "SNOMED CT"))
+
+end
+
+rule "Clinical Rule Drug dependence (disorder) REDACT"
+dialect "mvel"
+when
+
+       $xacml : XacmlResult(subjectPurposeOfUse =="TREAT", eval(
+              pdpObligations.contains("urn:oasis:names:tc:xspa:2.0:resource:patient:redact:ETH")
+       ))
+       $cd : ClinicalFact(codeSystem == "2.16.840.1.113883.6.96", code == "191816009", c32SectionLoincCode == "11450-4")
+
+then
+
+       ruleExecutionContainer.addExecutionResponse(new RuleExecutionResponse("ETH", "REDACT", (String)Confidentiality.R, "42CFRPart2", "ENCRYPT", "NORDSLCD", $cd.c32SectionTitle, $cd.c32SectionLoincCode, $cd.observationId, $cd.code, $cd.displayName, "SNOMED CT"))
+
+end
+
+rule "Clinical Rule Mental health problem (finding) REDACT"
+dialect "mvel"
+when
+
+       $xacml : XacmlResult(subjectPurposeOfUse =="TREAT", eval(
+              pdpObligations.contains("urn:oasis:names:tc:xspa:2.0:resource:patient:redact:PSY")
+       ))
+       $cd : ClinicalFact(codeSystem == "2.16.840.1.113883.6.96", code == "413307004", c32SectionLoincCode == "11450-4")
+
+then
+
+       ruleExecutionContainer.addExecutionResponse(new RuleExecutionResponse("PSY", "REDACT", (String)Confidentiality.R, "42CFRPart2", "ENCRYPT", "NORDSLCD", $cd.c32SectionTitle, $cd.c32SectionLoincCode, $cd.observationId, $cd.code, $cd.displayName, "SNOMED CT"))
+
+end
+
+rule "Clinical Rule Human immunodeficiency virus infection (disorder) NO PATIENT CONSTRAINTS"
+dialect "mvel"
+when
+
+       $xacml : XacmlResult(subjectPurposeOfUse =="TREAT", eval(
+              !pdpObligations.contains("urn:oasis:names:tc:xspa:2.0:resource:patient:redact:HIV") &&
+              !pdpObligations.contains("urn:oasis:names:tc:xspa:2.0:resource:patient:mask:HIV")
+       ))
+       $cd : ClinicalFact(codeSystem == "2.16.840.1.113883.6.96", code == "86406008", c32SectionLoincCode == "11450-4")
+
+then
+
+       ruleExecutionContainer.addExecutionResponse(new RuleExecutionResponse("HIV", "None", (String)Confidentiality.R, "42CFRPart2", "ENCRYPT", "NORDSLCD", $cd.c32SectionTitle, $cd.c32SectionLoincCode, $cd.observationId, $cd.code, $cd.displayName, "SNOMED CT"))
+
+end
+
+rule "Clinical Rule Acute HIV NO PATIENT CONSTRAINTS"
+dialect "mvel"
+when
+
+       $xacml : XacmlResult(subjectPurposeOfUse =="TREAT", eval(
+              !pdpObligations.contains("urn:oasis:names:tc:xspa:2.0:resource:patient:redact:HIV") &&
+              !pdpObligations.contains("urn:oasis:names:tc:xspa:2.0:resource:patient:mask:HIV")
+       ))
+       $cd : ClinicalFact(codeSystem == "2.16.840.1.113883.6.96", code == "111880001", c32SectionLoincCode == "11450-4")
+
+then
+
+       ruleExecutionContainer.addExecutionResponse(new RuleExecutionResponse("HIV", "MASK", (String)Confidentiality.R, "42CFRPart2", "ENCRYPT", "NORDSLCD", $cd.c32SectionTitle, $cd.c32SectionLoincCode, $cd.observationId, $cd.code, $cd.displayName, "SNOMED CT"))
+
+end

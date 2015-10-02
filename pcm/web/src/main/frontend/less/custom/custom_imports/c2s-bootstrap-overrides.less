@@ -1,0 +1,102 @@
+/* !BOOTSTRAP RULE OVERRIDES */  
+/*============================================================
+Overrides for default bootstrap rules
+============================================================*/
+
+
+/* Override Bootstrap 3 default behavior for the following selector */
+header.navbar{
+	border: 0px;
+}
+
+/* Override Bootstrap 3 default behavior for the following selector (btn-default) */
+.btn.btn-default {
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6'); /* for IE */
+	background-image: linear-gradient(to bottom, #ffffff, #e6e6e6)
+}
+
+
+/* Override Bootstrap 3 default behavior for the following selector */
+div.row, fieldset.row {
+	margin-right: 0px;
+	margin-left: 0px;
+}
+	
+/* Override Bootstrap 3 default behavior for the following selector */
+.container > .navbar-header {
+	margin-right: 0px;
+	margin-left: 0px;
+}
+
+/* Override Bootstrap 3 default behavior for the following selector */
+header.navbar > .container {
+	/* Calls the force-pad mixin with 0px as the parameter */
+	&:extend(.no-pad);
+}
+
+/* Override Bootstrap 3 default background color for table-hover highlighted row */
+.table-hover > tbody > tr:hover > td, .table-hover > tbody > tr:hover > th {
+	background-color: #faf2c9;
+}
+
+
+/* Override Bootstrap 3 default behavior for the following selector */
+.modal {
+	z-index: 1600;
+	legend {
+		font-size: 16px;
+		padding: 0 0 10px;
+	}		
+	h1 {
+		float: none;
+		font-size: 22px;
+		color: @ux-blue;
+	}
+	h2 {
+		font-size: 18px;
+	}		
+	.inputform, form { 
+		label {
+			display: inline-block;
+			padding-left: 0;
+			input {
+				margin-left: -25px
+			}
+		}
+	} 	
+	.collapse.in {
+		overflow: initial;
+		}
+	.popover {
+		width: auto;
+		right: 5%;
+		left: 5%;
+		.arrow {
+			display: none;
+		}
+	}
+	.modal-body{
+		.search-loading{
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;				
+			background-image: url("../../img/ajax-loader.gif");
+			background-position: center;
+			background-repeat: no-repeat;
+		}	
+	}
+}
+	
+/* Override Bootstrap 3 default behavior for the following selector */
+.modal-body {
+	overflow-y: auto;
+}
+	
+/* Override Bootstrap 3 default behavior for the following selector */
+.modal-backdrop {
+	z-index: 1590;
+}
+
+

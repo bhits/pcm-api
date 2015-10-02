@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ClinicalDocument classCode="DOCCLIN" moodCode="EVN" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <realmCode code="US"/>
+    <typeId root="2.16.840.1.113883.1.3" extension="09230"/>
+    <templateId root="2.16.840.1.113883.10.20.3"/>
+    <templateId root="2.16.840.1.113883.3.445.1"/>
+    <id root="1.3.6.4.1.4.1.2835.888888" extension="221"/>
+    <code code="57016-8" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Privacy Policy Acknowledgement Document"/>
+    <title mediaType="text/plain" representation="TXT" nullFlavor="Privacy Consent Authorization"/>
+    <effectiveTime value="20130116063807"/>
+    <confidentialityCode code="R" codeSystem="2.16.840.1.113883.5.25" codeSystemName="Confidentiality" codeSystemVersion="3.0" displayName="R (restricted)"/>
+    <recordTarget>
+        <patientRole>
+            <id root="2.16.840.1.113883.3.933" extension="100010060006"/>
+            <addr>
+                <streetAddressLine xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">1100 Main Street</streetAddressLine>
+                <city xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">Somewhere</city>
+                <state xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">MT</state>
+                <postalCode xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">59801</postalCode>
+                <county xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">Missoula</county>
+                <country xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">U.S.A</country>
+            </addr>
+            <patient>
+                <name>
+                    <given xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">Sample</given>
+                    <family xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">Patientone</family>
+                </name>
+                <administrativeGenderCode code="M"/>
+                <birthTime value="19770505"/>
+            </patient>
+        </patientRole>
+    </recordTarget>
+    <author>
+        <typeId root="2.16.840.1.113883.3.445.2"/>
+        <time value="20130116063807"/>
+        <assignedAuthor classCode="PSN">
+            <typeId root="1.3.5.35.1.4436.7" extension="999999999^^^&amp;2.16.840.1.113883.3.467&amp;ISO" assigningAuthorityName="SAMHSA (FEiSystems)"/>
+            <assignedPerson>
+                <name>
+                    <given xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">Default</given>
+                    <family xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">Authority</family>
+                </name>
+            </assignedPerson>
+            <assignedAuthoringDevice>
+                <manufacturerModelName code="Mitre" displayName="Mitre Corporation"/>
+                <softwareName code="Kairon" displayName="Kairon Consent Management Systems"/>
+            </assignedAuthoringDevice>
+        </assignedAuthor>
+    </author>
+    <custodian>
+        <assignedCustodian>
+            <representedCustodianOrganization>
+                <name use="SAMHSA (FEiSystems)"/>
+                <telecom value=""/>
+            </representedCustodianOrganization>
+        </assignedCustodian>
+    </custodian>
+    <informationRecipient typeCode="PRCP">
+        <intendedRecipient>
+            <typeId root="Duane_Decouteau@direct.healthvault-stage.com" extension="7878"/>
+            <receivedOrganization classCode="ORG" determinerCode="INSTANCE">
+                <typeId root="2.16.840.1.113883.4.349"/>
+            </receivedOrganization>
+        </intendedRecipient>
+    </informationRecipient>
+    <legalAuthenticator>
+        <time value="20130116063807"/>
+        <signatureCode code="S"/>
+        <assignedEntity>
+            <addr>
+                <streetAddressLine xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">1100 Main Street</streetAddressLine>
+                <city xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">Somewhere</city>
+                <state xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">MT</state>
+                <postalCode xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">59801</postalCode>
+                <county xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">Missoula</county>
+                <country xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">U.S.A</country>
+            </addr>
+            <assignedPerson>
+                <name>
+                    <given xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">Sample</given>
+                    <family xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">Patientone</family>
+                </name>
+            </assignedPerson>
+        </assignedEntity>
+    </legalAuthenticator>
+    <documentationOf typeCode="DOC">
+        <serviceEvent moodCode="EVN">
+            <templateId root="2.16.840.1.113883.3.445.3"/>
+            <id root="2.16.840.1.113883.3.72.4.2.5"/>
+            <code code="57016-8" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Privacy Policy Acknowledgement Document"/>
+            <effectiveTime>
+                <low xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">20130116</low>
+                <high xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">20180116</high>
+            </effectiveTime>
+        </serviceEvent>
+    </documentationOf>
+    <component>
+        <structuredBody>
+            <component typeCode="COMP">
+                <section classCode="DOCSECT" moodCode="EVN">
+                    <templateId root="2.16.840.1.113883.3.445.17"/>
+                    <title nullFlavor="Consent Directive Detail"/>
+                    <confidentialityCode code="R" codeSystem="2.16.840.1.113883.5.25" codeSystemName="Confidentiality" codeSystemVersion="3.0" displayName="R (restricted)"/>
+                    <entry typeCode="COMP">
+                        <typeId root="2.16.840.1.113883.3.445.4"/>
+                        <act>
+                            <typeId root="2.16.840.1.113883.3.445.4"/>
+                            <code code="TREAT" codeSystem="2.16.840.1.113883.5.8" codeSystemName="ActReason" displayName="TREAT"/>
+                            <statusCode code="active"/>
+                            <participant typeCode="IRCP">
+                                <typeId root="2.16.840.1.113883.3.445.5"/>
+                            </participant>
+                            <entryRelationship typeCode="COMP" contextConductionInd="true">
+                                <act classCode="ACT" moodCode="DEF" negationInd="false">
+                                    <code code="DISCLOSE" codeSystem="2.16.840.1.113883.5.4" codeSystemName="ActConsentType" displayName="Disclose"/>
+                                </act>
+                            </entryRelationship>
+                            <entryRelationship typeCode="COMP" contextConductionInd="true">
+                                <templateId root="2.16.840.1.113883.3.445.13"/>
+                                <act classCode="CONS" moodCode="DEF">
+                                    <code code="42CFRPart2" codeSystem="2.16.840.1.113883.5.1138" codeSystemName="ActUSPrivacyLaw" displayName="42CFRPart2"/>
+                                    <precondition>
+                                        <templateId root="2.16.840.1.113883.3.445.14"/>
+                                        <criterion classCode="OBS" moodCode="EVN.CRT">
+                                            <code code="NORDSCLCD" codeSystem="2.16.840.1.113883.1.11.20446" codeSystemName="RefrainPolicy" displayName="NORDSCLCD"/>
+                                        </criterion>
+                                    </precondition>
+                                </act>
+                            </entryRelationship>
+                            <entryRelationship>
+                                <observationMedia classCode="OBS" moodCode="EVN">
+                                    <value mediaType="application/pdf" representation="B64" nullFlavor="VGVzdCBUZXh0"/>
+                                </observationMedia>
+                            </entryRelationship>
+                            <entryRelationship>
+                                <observationMedia classCode="OBS" moodCode="EVN">
+                                    <value mediaType="text/xml" representation="B64" nullFlavor="dGVzdCB4YWNtbA=="/>
+                                </observationMedia>
+                            </entryRelationship>
+                            <precondition>
+                                <typeId root="2.16.840.1.113883.3.445.12"/>
+                                <criterion classCode="COND" moodCode="EVN.CRT">
+                                    <code code="HIV" codeSystem="2.16.840.1.113883.1.11.20429" codeSystemName="ActInformationSensitivity" displayName="HIV"/>
+                                </criterion>
+                            </precondition>
+                            <precondition>
+                                <typeId root="2.16.840.1.113883.3.445.12"/>
+                                <criterion classCode="COND" moodCode="EVN.CRT">
+                                    <code code="ETH" codeSystem="2.16.840.1.113883.1.11.20429" codeSystemName="ActInformationSensitivity" displayName="ETH"/>
+                                </criterion>
+                            </precondition>
+                            <precondition>
+                                <typeId root="2.16.840.1.113883.3.445.12"/>
+                                <criterion classCode="COND" moodCode="EVN.CRT">
+                                    <code code="PSY" codeSystem="2.16.840.1.113883.1.11.20429" codeSystemName="ActInformationSensitivity" displayName="PSY"/>
+                                </criterion>
+                            </precondition>
+                        </act>
+                    </entry>
+                </section>
+            </component>
+        </structuredBody>
+    </component>
+</ClinicalDocument>

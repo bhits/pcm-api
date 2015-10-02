@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="C32Service"
+	targetNamespace="http://schemas.samhsa.gov/c32service" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsa10="http://www.w3.org/2005/08/addressing"
+	xmlns:tns="http://schemas.samhsa.gov/c32service" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy"
+	xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract"
+	xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+	xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://schemas.samhsa.gov/c32service/Imports">
+			<xsd:import schemaLocation="C32Service0.xsd"
+				namespace="http://schemas.samhsa.gov/c32service" />
+			<xsd:import schemaLocation="C32Service1.xsd"
+				namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="IC32Service_GetC32_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetC32" />
+	</wsdl:message>
+	<wsdl:message name="IC32Service_GetC32_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetC32Response" />
+	</wsdl:message>
+	<wsdl:portType name="IC32Service">
+		<wsdl:operation name="GetC32">
+			<wsdl:input wsaw:Action="http://schemas.samhsa.gov/c32service/IC32Service/GetC32"
+				message="tns:IC32Service_GetC32_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://schemas.samhsa.gov/c32service/IC32Service/GetC32Response"
+				message="tns:IC32Service_GetC32_OutputMessage" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="BasicHttpBinding_IC32Service" type="tns:IC32Service">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="GetC32">
+			<soap:operation
+				soapAction="http://schemas.samhsa.gov/c32service/IC32Service/GetC32"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="C32Service">
+		<wsdl:port name="BasicHttpBinding_IC32Service" binding="tns:BasicHttpBinding_IC32Service">
+			<!-- <soap:address location="http://taolinpc.fei.local/Rem.Web/C32Service.svc" /> -->
+			<soap:address location="http://localhost/Rem.Web/C32Service.svc" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

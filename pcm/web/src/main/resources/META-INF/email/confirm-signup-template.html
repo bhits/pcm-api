@@ -1,0 +1,49 @@
+
+
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:remove="all">Registration Confirmation Email</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                
+    </head>
+    <body style="padding:0 50px;">
+
+
+<table cellpadding="0" cellspacing="0" border="0" align="center" width="75%" bgcolor="#ffffff" style="padding-top:30px; font-family:Helvetica, Arial, sans-serif;">
+	<tr>
+		<td bgcolor="#fafafa" style="vertical-align:middle; border:1px #d2d2d2 solid; border-right:0; font-size:18px; line-height:30px; font-weight:600; color:#777777; padding:12px">Welcome <span th:text="${recipientName}">Asample</span></td>
+		<td bgcolor="#fafafa" style="vertical-align:middle; border:1px #d2d2d2 solid; border-left:0; font-size:18px; line-height:30px; font-weight:400; text-align:right; color:#999999; padding:12px">
+			Consent<span style="color:#13aaea; font-size:larger;">2</span>Share
+		</td>
+	</tr>
+</table>
+
+<table align="center" width="70%" border="0" cellspacing="0" cellpadding="0" style="padding-top:10px; font-family:Helvetica, Arial, sans-serif;">
+	<tr>
+		<td style="padding-top: 10px;">
+			<table style="color:#777777; padding-right:15px; padding-left:15px;">
+				<tr>
+					<td style="font-size:14px;">Congratulations!</td>
+				</tr>
+				<tr>
+					<td style="font-size:14px; padding-top:15px;">You have successfully registered as a <strong>Consent2Share</strong> new member.
+					</td>
+	            </tr>
+
+	            <!-- <tr>
+					<td style="font-size:14px; padding-top:15px; color:#0482d6;">By successfully creating a new Consent2Share account, you have been given a new <strong>Consent2Share.com</strong> email account. <em>(This is in addition to your personal email account used to register.)</em> Your new <strong>Consent2Share.com</strong> account is a secure email account used to protect all your personal information being transferred by this application, between all authorized parties. <span style="color:red;">You may only send <strong>Direct</strong> emails to other existing <strong>Direct</strong> email accounts.</span>
+					</td>
+	            </tr> -->
+	
+	            <tr>
+		            <td style="font-size:14px; padding-top:15px;">Thank you,</td>
+		        </tr>
+		        <tr>
+			        <td style="font-size: 16px; margin-top: -7px;"><strong><em>Consent2Share Team</em></strong></td>
+			    </tr>
+		</table></td>
+	</tr>
+</table>
+
+    </body>
+</html>

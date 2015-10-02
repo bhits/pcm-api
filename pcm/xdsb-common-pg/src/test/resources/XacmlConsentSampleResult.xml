@@ -1,0 +1,66 @@
+<ns2:sourceSubmissionClientDto xmlns:ns2="http://remoting.ws.ehr.spirit.com/"
+                               xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <documents>
+      <author>
+         <person>C2S Health</person>
+      </author>
+      <classCode>
+         <nodeRepresentation>Consent</nodeRepresentation>
+         <schema>Connect-a-thon classCodes</schema>
+         <value>Consent</value>
+      </classCode>
+      <confidentialityCode>
+         <nodeRepresentation>R</nodeRepresentation>
+         <schema>2.16.840.1.113883.5.25</schema>
+         <value>R</value>
+      </confidentialityCode>
+      <description>
+				This is a reference policy for
+				consent2share@outlook.com</description>
+      <serviceStartTime>20140804000000</serviceStartTime>
+      <serviceStopTime>20150803235959</serviceStopTime>
+      <creationTime>20141117160657</creationTime>
+      <patientId>REG.1DSQPGACKF^^^&amp;haha&amp;ISO</patientId>
+      <formatCode>
+         <nodeRepresentation>PDF</nodeRepresentation>
+         <schema>Connect-a-thon formatCodes</schema>
+         <value>PDF</value>
+      </formatCode>
+      <healthcareFacilityCode>
+         <nodeRepresentation>Home</nodeRepresentation>
+         <schema>Connect-a-thon healthcareFacilityTypeCodes</schema>
+         <value>Home</value>
+      </healthcareFacilityCode>
+      <languageCode>en-us</languageCode>
+      <legalAuthenticator>document.legalAuthenticator</legalAuthenticator>
+      <mimeType>application/pdf</mimeType>
+      <name>Signed Consent PDF: </name>
+      <practiceSettingCode>
+         <nodeRepresentation>Home</nodeRepresentation>
+         <schema>Connect-a-thon practiceSettingCodes</schema>
+         <value>Home</value>
+      </practiceSettingCode>
+      <typeCode>
+         <nodeRepresentation>28636-9</nodeRepresentation>
+         <schema>LOINC</schema>
+         <value>Initial Evaluation Note</value>
+      </typeCode>
+   </documents>
+   <submissionSet>
+      <author>
+         <person>REG.1DSQPGACKF^^^&amp;haha&amp;ISO</person>
+      </author>
+      <contentTypeCode>
+         <nodeRepresentation>Initial evaluation</nodeRepresentation>
+         <schema>Connect-a-thon contentTypeCodes</schema>
+         <value>Initial evaluation</value>
+      </contentTypeCode>
+      <description>
+				This is a reference policy for
+				consent2share@outlook.com</description>
+      <submissionTime>20141117160657</submissionTime>
+      <patientId>REG.1DSQPGACKF^^^&amp;haha&amp;ISO</patientId>
+      <sourceId>1.3.6.1.4.1.21367.13.2015</sourceId>
+   </submissionSet>
+</ns2:sourceSubmissionClientDto>
