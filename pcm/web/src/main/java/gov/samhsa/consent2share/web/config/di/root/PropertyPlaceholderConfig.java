@@ -16,7 +16,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 @Configuration
 public class PropertyPlaceholderConfig {
 
-	private static final String propertyFiles = "/pcm-pg-config.properties";
+	private static final String propertyFiles = "/pcm-config.properties";
 
 	/**
 	 * Use static method. Otherwise will get the following warning:
@@ -42,7 +42,7 @@ public class PropertyPlaceholderConfig {
 		configurer.setSearchSystemEnvironment(false);
 
 		// Use Environment.getProperty instead of System.getProperty to get more flexibility to locate the property
-		final String configBasePath = env.getProperty("C2S_PROPS");
+		final String configBasePath = env.getProperty("PCM_PROPS");
 
 		configurer.setLocations(new PathMatchingResourcePatternResolver()
 				.getResources("file:" + configBasePath + propertyFiles));

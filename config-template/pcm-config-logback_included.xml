@@ -3,7 +3,7 @@
 <included>
 
 	<property name="APP_LOG_FOLDER" value="C:\\java\\C2S_LOGS\\pcm" />
-	<property name="LOG_NAME" value="pcm-pg" />
+	<property name="LOG_NAME" value="pcm" />
 
 	<property name="gov.samhsa.consent2share_lOGGER.level" value="warn" />
 	<property name="gov.samhsa.acs_lOGGER.level" value="warn" />
