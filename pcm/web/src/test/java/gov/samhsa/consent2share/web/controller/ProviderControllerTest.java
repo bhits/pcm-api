@@ -142,8 +142,8 @@ public class ProviderControllerTest {
 	
 	@Test
 	public void testConnectionMain() throws Exception {
-		mockMvc.perform(get("/patients/connectionMain.html"))
-			.andExpect(view().name("views/patients/connectionMain"));
+		mockMvc.perform(get("/patients/connectionMain"))
+			.andExpect(status().isOk());
 	}
 	
 	@Test
