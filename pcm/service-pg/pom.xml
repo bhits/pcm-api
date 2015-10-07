@@ -17,7 +17,7 @@
 		<!-- Our own projects Start -->
 		<dependency>
 			<groupId>gov.samhsa.pcm</groupId>
-			<artifactId>spirit-client-pg</artifactId>
+			<artifactId>spirit-client</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>gov.samhsa.pcm</groupId>
