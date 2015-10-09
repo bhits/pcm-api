@@ -30,7 +30,6 @@ import org.springframework.security.access.annotation.Secured;
 /**
  * The Interface ProviderSearchLookupService.
  */
-@Secured({ "ROLE_USER", "ROLE_ADMIN" })
 public interface ProviderSearchLookupService {
 
 	/**
