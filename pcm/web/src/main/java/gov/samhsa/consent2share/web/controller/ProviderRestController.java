@@ -83,32 +83,25 @@ public class ProviderRestController extends AbstractController {
 	/** The Constant NPI_LENGTH. */
 	public static final int NPI_LENGTH = 10;
 
+
 	/**
-	 * Connection main.
+	 * List providers.
 	 *
-	 * @param model
-	 *            the model
-	 * @param request
-	 *            the request
-	 * @return the string
+	 * @return the sets the
 	 */
 	@RequestMapping(value = "providers", method = RequestMethod.GET)
-	public Set<ProviderDto> connectionMain() {
+	public Set<ProviderDto> listProviders() {
 		Set<ProviderDto> providerDtos = patientService.findProvidersByUsername("albert.smith");
 		return providerDtos;
 	}
 
 	/**
-	 * Delete individual provider.
-	 * 
-	 * @param individualProviderid
-	 *            the individual providerid
-	 * @param model
-	 *            the model
-	 * @return the string
+	 * Delete provider.
+	 *
+	 * @param npi the npi
 	 */
 	@RequestMapping(value = "providers/{npi}", method = RequestMethod.DELETE)
-	public String deleteProvider(@PathVariable("npi") String npi) {
+	public void deleteProvider(@PathVariable("npi") String npi) {
 
 		Set<ProviderDto> providerDtos = patientService.findProvidersByUsername("albert.smith");
 		try {
@@ -125,7 +118,6 @@ public class ProviderRestController extends AbstractController {
 				else
 					organizationalProviderService.deleteOrganizationalProviderByNpi(npi);
 			}
-			return "Success.";
 
 		} catch (Exception e) {
 			logger.error(
@@ -136,15 +128,13 @@ public class ProviderRestController extends AbstractController {
 
 	}
 
-	@RequestMapping(value = "providers/{npi}", method = RequestMethod.GET)
-	public String checkProvider(@PathVariable("npi") String npi) {
-
-		return npi;
-
-	}
-
+	/**
+	 * Adds the provider.
+	 *
+	 * @param npi the npi
+	 */
 	@RequestMapping(value = "providers/{npi}", method = RequestMethod.POST)
-	public String addProvider(@PathVariable("npi") String npi) {
+	public void addProvider(@PathVariable("npi") String npi) {
 
 		OrganizationalProvider organizationalProviderReturned = null;
 		IndividualProvider individualProviderReturned = null;
@@ -188,19 +178,13 @@ public class ProviderRestController extends AbstractController {
 			}
 
 			if (isOrgProvider == true) {
-				if (organizationalProviderReturned != null) {
-					return "Success";
-				} else {
+				if (organizationalProviderReturned == null) 
 					throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR,
 							"Unable to add this new provider because this provider already exists.");
-				}
 			} else {
-				if (individualProviderReturned != null) {
-					return "Success";
-				} else {
+				if (individualProviderReturned == null) 
 					throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR,
 							"Unable to add this new provider because this provider already exists.");
-				}
 			}
 		} else {
 			throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR,
