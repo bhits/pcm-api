@@ -112,7 +112,7 @@ public class ProviderRestController extends AbstractController {
 			else {
 				if (providerDto.isDeletable() == false)
 					throw new AjaxException(HttpStatus.CONFLICT,
-							"Unable to delete this provider because it is currently used in one or more of your consents.");
+							"Error: Unable to delete this provider because it is currently used in one or more of your consents.");
 				if (providerDto.isDeletable() == true && providerDto.getEntityType().equals("Individual"))
 					individualProviderService.deleteIndividualProviderByNpi(npi);
 				else
@@ -179,16 +179,16 @@ public class ProviderRestController extends AbstractController {
 
 			if (isOrgProvider == true) {
 				if (organizationalProviderReturned == null) 
-					throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR,
-							"Unable to add this new provider because this provider already exists.");
+					throw new AjaxException(HttpStatus.CONFLICT,
+							"Error: The provider could not be added because the provider already exists in the patient’s account.");
 			} else {
 				if (individualProviderReturned == null) 
-					throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR,
-							"Unable to add this new provider because this provider already exists.");
+					throw new AjaxException(HttpStatus.CONFLICT,
+							"Error: The provider could not be added because the provider already exists in the patient’s account.");
 			}
 		} else {
-			throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR,
-					"Unable to add this new provider because this provider npi is not existing.");
+			throw new AjaxException(HttpStatus.NOT_FOUND,
+					"Error:The provider could not be added because the specified NPI could not be found.");
 		}
 
 	}
