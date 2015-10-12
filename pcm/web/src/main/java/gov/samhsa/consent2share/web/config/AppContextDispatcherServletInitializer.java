@@ -59,7 +59,7 @@ public class AppContextDispatcherServletInitializer extends
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public static final String SERVLET_NAME = "consent2share";
+	public static final String SERVLET_NAME = "pcm";
 
 	// If returns NOT null, then means same thing as the following elements in
 	// web.xml:

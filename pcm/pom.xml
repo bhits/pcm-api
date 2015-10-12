@@ -1132,11 +1132,6 @@
 			</dependency>
 			<dependency>
 				<groupId>gov.samhsa.pcm</groupId>
-				<artifactId>spirit-client-pg</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>gov.samhsa.pcm</groupId>
 				<artifactId>consent-gen</artifactId>
 				<version>${project.version}</version>
 			</dependency>

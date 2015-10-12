@@ -2,6 +2,6 @@
 
 <configuration scan="${AUTO_SCAN}" scanPeriod="${SCAN_PERIOD}">
 
-	<include file="${C2S_PROPS}/pcm-pg-config-logback_included.xml"/>
+	<include file="${PP_PROPS}/pcm-api/config-template/pcm-config-logback_included.xml"/>
 
 </configuration>
