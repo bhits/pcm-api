@@ -388,7 +388,7 @@ public class UsersRepositoryImpl implements UsersRepository{
     }
 
     private int findGroupId(String group) {
-        return getJdbcTemplate().queryForInt(findGroupIdSql, group);
+        return getJdbcTemplate().queryForObject(findGroupIdSql,Integer.class, group);
     }
 
     /* (non-Javadoc)

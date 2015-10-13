@@ -311,6 +311,22 @@ public class IndividualProviderServiceImpl implements IndividualProviderService 
 			IndividualProvider individualProvider) {
 		return individualProviderRepository.save(individualProvider);
 	}
+	
+	@Override
+	public void deleteIndividualProviderByNpi(String npi) {
+
+		Patient patient = patientRepository.findByUsername("albert.smith");
+		Set<IndividualProvider> individualProviders = patient.getIndividualProviders();
+		for (IndividualProvider o : individualProviders) {
+			if (o.getNpi().equals(npi)) {
+				individualProviders.remove(o);
+				break;
+			}
+		}
+		patient.setIndividualProviders(individualProviders);
+		patientRepository.save(patient);
+
+	}
 
 	/*
 	 * (non-Javadoc)

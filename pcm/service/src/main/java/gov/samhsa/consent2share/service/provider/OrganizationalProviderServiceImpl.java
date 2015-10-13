@@ -234,6 +234,21 @@ public class OrganizationalProviderServiceImpl implements
 			OrganizationalProvider organizationalProvider) {
 		return organizationalProviderRepository.save(organizationalProvider);
 	}
+	
+	@Override
+	public void deleteOrganizationalProviderByNpi(String npi) {
+		Patient patient = patientRepository.findByUsername("albert.smith");
+		Set<OrganizationalProvider> organizationalProviders = patient.getOrganizationalProviders();
+		for (OrganizationalProvider o : organizationalProviders) {
+			if (o.getNpi().equals(npi)) {
+				organizationalProviders.remove(o);
+				break;
+			}
+		}
+		patient.setOrganizationalProviders(organizationalProviders);
+		patientRepository.save(patient);
+
+	}
 
 	/*
 	 * (non-Javadoc)
