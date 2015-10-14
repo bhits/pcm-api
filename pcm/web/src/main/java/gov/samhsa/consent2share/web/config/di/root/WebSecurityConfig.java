@@ -3,8 +3,7 @@ package gov.samhsa.consent2share.web.config.di.root;
 import gov.samhsa.consent2share.domain.account.UsersRepository;
 import gov.samhsa.consent2share.service.account.AccountUserDetailsService;
 import gov.samhsa.consent2share.web.AjaxTimeoutRedirectFilter;
-import gov.samhsa.consent2share.web.CrosFilter;
-import gov.samhsa.consent2share.web.CustomAccessDeniedHandler;
+import gov.samhsa.consent2share.web.CorsFilter;
 
 import java.util.HashMap;
 
@@ -91,7 +90,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.addFilterAfter(ajaxTimeoutRedirectFilter(),
 				ExceptionTranslationFilter.class);
-		http.addFilterBefore(crosFilter(), HeaderWriterFilter.class);
+		http.addFilterBefore(corsFilter(), HeaderWriterFilter.class);
 	}
 
 	// Configure Authentication mechanism
@@ -123,8 +122,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	@Bean
-	public CrosFilter crosFilter() {
-		return new CrosFilter();
+	public CorsFilter corsFilter() {
+		return new CorsFilter();
 	}
 
 	@Bean
