@@ -3,6 +3,7 @@
 :: ********************************Please pay attention for following configurations******************
 :: NOTE: DO NOT change variable names
 :: Jenkins will set PROPS_HOME environment variable if this batch is running in a Jenkins job
+:: SET INITIAL_APP_NAME=
 :: SET INITIAL_GIT_BRANCH=
 :: INITIAL_PROJECT_VERSION get from jenkins
 :: SET INITIAL_PROJECT_VERSION=
@@ -19,8 +20,8 @@ SET environment_name=dev,qa,prod
 SET property_name=pcm-config
 :: Set log name for Zuul downloading information
 SET log_file_name=%branch_name%_pcm_zuul_%date:~4,2%-%date:~7,2%-%date:~10,4%
-:: Set save path for all properties downloading from Zuul
-SET properties_save_path=%PROPS_HOME%\%branch_name%\%INITIAL_PROJECT_VERSION%
+:: Set save path for properties downloaded from Zuul
+SET properties_save_path=%PROPS_HOME%\%INITIAL_APP_NAME%\%branch_name%\%INITIAL_PROJECT_VERSION%
 
 SET log_file_save_path=%properties_save_path%\%log_file_name%
 :: Declare variables end
@@ -30,7 +31,6 @@ SET log_file_save_path=%properties_save_path%\%log_file_name%
 IF ERRORLEVEL 1 CALL :DEFAULT_CASE
 
 CALL :VERIFYZUUL
-ECHO Done.
 EXIT
 
 :: Declare methods start
@@ -51,17 +51,6 @@ EXIT
   IF NOT EXIST "%properties_save_path%" MKDIR %properties_save_path%
   GOTO END_CASE
 
-:CREATE_ALL_SAVE_PATH
-  SET dev_properties_save_path=%PROPS_HOME%\dev\%INITIAL_PROJECT_VERSION%
-  SET qa_properties_save_path=%PROPS_HOME%\qa\%INITIAL_PROJECT_VERSION%
-  SET prod_properties_save_path=%PROPS_HOME%\prod\%INITIAL_PROJECT_VERSION%
-  
-  FOR %%n IN (%dev_properties_save_path% %qa_properties_save_path% %prod_properties_save_path%) do (
-	IF NOT EXIST %%n (
-	MD %%n
-	)
-  )
-  GOTO END_CASE
 :: Download all dev properties from Zuul  
 :DOWNLOAD_Dev
   :: Create save path if it is not existing.
@@ -85,14 +74,6 @@ EXIT
   SET url=%zuul_url%/prod/{%property_name%}.properties
   curl -k --trace-ascii %log_file_save_path%.log -s -o %properties_save_path%\#1.properties %url%
   GOTO END_CASE
-:: Download all properties from Zuul   
-:DOWNLOAD_All
-  CALL :CREATE_ALL_SAVE_PATH
-  SET url=%zuul_url%/{%environment_name%}/{%property_name%}.properties
-  SET all_log_file_save_path=%PROPS_HOME%\%log_file_name%
-  curl -k --trace-ascii %all_log_file_save_path%.log -s -o %PROPS_HOME%\#1\%INITIAL_PROJECT_VERSION%\#2.properties %url%
-  CALL :VERIFYZUUL_All
-  GOTO END_CASE
   
 :VERIFYZUUL
   FOR /f %%f IN ('findstr /c:"Send header" "%log_file_save_path%.log"') DO SET/a totalDownloads+=1
@@ -100,19 +81,6 @@ EXIT
   (ECHO The number of download files is: %totalDownloads% && ECHO The number of successfully download is: %totalSuccess%) > %properties_save_path%\%branch_name%_pcm_verifyZuul.log
   IF (%totalDownloads%) NEQ (%totalSuccess%) (
       CALL :REMOVE-PROPERTIES-VERIFY-FAILED
-	  EXIT 2
-  )
-  IF %totalDownloads% EQU 0 (
-	  EXIT 3
-  )
-  GOTO END_CASE
-  
-:VERIFYZUUL_All
-  FOR /f %%f IN ('findstr /c:"Send header" "%all_log_file_save_path%.log"') DO SET/a totalDownloads+=1
-  FOR /f %%f IN ('findstr /c:"HTTP/1.1 200" "%all_log_file_save_path%.log"') DO SET/a totalSuccess+=1
-  (ECHO The number of download files is: %totalDownloads% && ECHO The number of successfully download is: %totalSuccess%) > %PROPS_HOME%\all_verifyZuul.log
-  IF (%totalDownloads%) NEQ (%totalSuccess%) (
-      DEL /F /S /Q %PROPS_HOME%\*.properties >NUL
 	  EXIT 2
   )
   IF %totalDownloads% EQU 0 (
