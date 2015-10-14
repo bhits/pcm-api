@@ -36,6 +36,13 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 			DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
 	}
+	
+	/*@Override
+	public void addCorsMappings(CorsRegistry registry) {
+			registry.addMapping("/**")
+				.allowedOrigins("*")
+				.allowCredentials(false).maxAge(3600);
+	}*/
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {

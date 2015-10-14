@@ -5,6 +5,7 @@
 :: PROPS_HOME and CONFIGS_DELIVERY_HOME get from environment variable
 :: Following value of variables will get from jenkins
 :: Jenkins will set variables if this batch is running in a Jenkins job
+:: SET INITIAL_APP_NAME=
 :: SET INITIAL_GIT_BRANCH=
 :: SET INITIAL_PROJECT_VERSION=
 :: SET CONFIG_NAME=
@@ -22,7 +23,7 @@ CALL :GETBRANCH_NAME
 
 :: Declare variables start
 :: Set configuration path for target config
-SET target_config_path=%PROPS_HOME%\%branch_name%\%INITIAL_PROJECT_VERSION%
+SET target_config_path=%PROPS_HOME%\%INITIAL_APP_NAME%\%branch_name%\%INITIAL_PROJECT_VERSION%
 :: Set configuration path for destination
 SET destination=%CONFIGS_DELIVERY_HOME%\%JOB_NAME%
 

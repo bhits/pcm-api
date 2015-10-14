@@ -37,6 +37,7 @@ import gov.samhsa.consent2share.service.dto.LegalRepresentativeDto;
 import gov.samhsa.consent2share.service.dto.LookupDto;
 import gov.samhsa.consent2share.service.dto.OrganizationalProviderDto;
 import gov.samhsa.consent2share.service.dto.PatientConnectionDto;
+import gov.samhsa.consent2share.service.dto.ProviderDto;
 import gov.samhsa.consent2share.service.notification.NotificationService;
 import gov.samhsa.consent2share.service.patient.PatientLegalRepresentativeAssociationService;
 import gov.samhsa.consent2share.service.patient.PatientService;
@@ -56,10 +57,7 @@ import gov.samhsa.consent2share.web.AjaxException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -69,6 +67,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -162,38 +161,11 @@ public class ProviderController extends AbstractController {
 	 *            the request
 	 * @return the string
 	 */
-	@RequestMapping(value = "connectionMain.html")
-	public String connectionMain(Model model, HttpServletRequest request) {
-
-		AuthenticatedUser currentUser = userContext.getCurrentUser();
-		String username = currentUser.getUsername();
-		String notify = request.getParameter("notify");
-		String notification = notificationService.notificationStage(username,
-				notify);
-		PatientConnectionDto patientConnectionDto = patientService
-				.findPatientConnectionByUsername(currentUser.getUsername());
-		accessReferenceMapper.setupAccessReferenceMap(patientConnectionDto
-				.getIndividualProviders());
-		accessReferenceMapper.setupAccessReferenceMap(patientConnectionDto
-				.getOrganizationalProviders());
-
-		List<LookupDto> legalRepresentativeTypeCodes = legalRepresentativeTypeCodeService
-				.findAllLegalRepresentativeTypeCodes();
-		List<LegalRepresentativeDto> legalRepresentativeDtos = patientLegalRepresentativeAssociationService
-				.getAllLegalRepresentativeDto();
-
-		model.addAttribute("patientConnectionDto", patientConnectionDto);
-		model.addAttribute("individualProviders",
-				patientConnectionDto.getIndividualProviders());
-		model.addAttribute("organizationalProviders",
-				patientConnectionDto.getOrganizationalProviders());
-		model.addAttribute("legalRepresentativeTypeCodes",
-				legalRepresentativeTypeCodes);
-		model.addAttribute("legalRepresentativeDtos", legalRepresentativeDtos);
-		model.addAttribute("notification", notification);
-		populateLookupCodes(model);
-
-		return "views/patients/connectionMain";
+	@RequestMapping(value = "connectionMain", method = RequestMethod.GET, produces="application/json")
+	public @ResponseBody  Set<ProviderDto> connectionMain() {
+		Set<ProviderDto> providerDtos = patientService
+				.findProvidersByUsername("albert.smith");
+		return providerDtos;
 	}
 
 	/**

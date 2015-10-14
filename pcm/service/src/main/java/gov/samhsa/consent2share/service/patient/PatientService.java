@@ -32,16 +32,17 @@ import gov.samhsa.consent2share.service.dto.AddConsentOrganizationalProviderDto;
 import gov.samhsa.consent2share.service.dto.PatientAdminDto;
 import gov.samhsa.consent2share.service.dto.PatientConnectionDto;
 import gov.samhsa.consent2share.service.dto.PatientProfileDto;
+import gov.samhsa.consent2share.service.dto.ProviderDto;
 import gov.samhsa.consent2share.service.dto.RecentPatientDto;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.access.annotation.Secured;
 
 /**
  * The Interface PatientService.
  */
-@Secured({ "ROLE_USER", "ROLE_ADMIN" })
 public interface PatientService {
 
 	/**
@@ -113,6 +114,25 @@ public interface PatientService {
 	 * @return the patient connection dto
 	 */
 	PatientConnectionDto findPatientConnectionByPatient(Patient patient);
+	
+
+	/**
+	 * Find patient connection by username.
+	 *
+	 * @param username
+	 *            the username
+	 * @return the patient connection dto
+	 */
+	Set<ProviderDto> findProvidersByUsername(String username);
+
+	/**
+	 * Find patient connection by patient.
+	 *
+	 * @param patient
+	 *            the patient
+	 * @return the patient connection dto
+	 */
+	Set<ProviderDto> findProvidersByPatient(Patient patient);
 
 	/**
 	 * Find patient connection by username.

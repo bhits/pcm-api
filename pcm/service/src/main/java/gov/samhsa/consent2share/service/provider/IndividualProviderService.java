@@ -35,7 +35,6 @@ import org.springframework.security.access.annotation.Secured;
 /**
  * The Interface IndividualProviderService.
  */
-@Secured({ "ROLE_USER", "ROLE_ADMIN" })
 public interface IndividualProviderService {
 
 	/**
@@ -71,6 +70,8 @@ public interface IndividualProviderService {
 	 */
 	public abstract void deleteIndividualProviderDtoByPatientId(
 			IndividualProviderDto individualProviderDto);
+	
+	public abstract void deleteIndividualProviderByNpi(String npi);
 
 	/**
 	 * Find individual provider.

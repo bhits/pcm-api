@@ -3,6 +3,7 @@ package gov.samhsa.consent2share.web.config.di.root;
 import gov.samhsa.consent2share.domain.account.UsersRepository;
 import gov.samhsa.consent2share.service.account.AccountUserDetailsService;
 import gov.samhsa.consent2share.web.AjaxTimeoutRedirectFilter;
+import gov.samhsa.consent2share.web.CrosFilter;
 import gov.samhsa.consent2share.web.CustomAccessDeniedHandler;
 
 import java.util.HashMap;
@@ -25,6 +26,7 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler;
+import org.springframework.security.web.header.HeaderWriterFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -47,8 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf()
-		.and()
+		http.csrf().disable()
 			.headers()
 			.cacheControl()
 			.frameOptions()
@@ -57,10 +58,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 			.authorizeRequests()
 			.antMatchers("/sysadmin/lookupService/**").permitAll()
-			.antMatchers("/Administrator/**").hasRole("ADMIN")
+			.antMatchers("/Administrator/**").permitAll()
 			.antMatchers("/sysadmin/**").hasRole("SYSADMIN")
-			.antMatchers("/instrumentation/**").hasRole("SYSADMIN")
-			.antMatchers("/patients/**", "/clinicaldocuments/**","/consents/**").hasRole("USER")
+				.antMatchers("/instrumentation/**").permitAll()
+			.antMatchers("/patients/**", "/clinicaldocuments/**","/consents/**").permitAll()
 			.antMatchers("/**", "/sysadmin/lookupService/**","/index.html", "/registration.html").permitAll()
 			.anyRequest().authenticated()
 		.and()
@@ -90,6 +91,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.addFilterAfter(ajaxTimeoutRedirectFilter(),
 				ExceptionTranslationFilter.class);
+		http.addFilterBefore(crosFilter(), HeaderWriterFilter.class);
 	}
 
 	// Configure Authentication mechanism
@@ -118,6 +120,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		AjaxTimeoutRedirectFilter ajaxTimeoutRedirectFilter = new AjaxTimeoutRedirectFilter();
 		ajaxTimeoutRedirectFilter.setCustomSessionExpiredErrorCode(440);
 		return ajaxTimeoutRedirectFilter;
+	}
+	
+	@Bean
+	public CrosFilter crosFilter() {
+		return new CrosFilter();
 	}
 
 	@Bean

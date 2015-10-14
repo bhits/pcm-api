@@ -35,7 +35,6 @@ import org.springframework.security.access.annotation.Secured;
 /**
  * The Interface OrganizationalProviderService.
  */
-@Secured({ "ROLE_USER", "ROLE_ADMIN" })
 public interface OrganizationalProviderService {
 
 	/**
@@ -99,6 +98,9 @@ public interface OrganizationalProviderService {
 	 */
 	public abstract void updateOrganizationalProvider(
 			OrganizationalProviderDto organizationalProviderDto);
+	
+	
+	public abstract void  deleteOrganizationalProviderByNpi(String npi);
 
 	/**
 	 * Add new organizational provider
