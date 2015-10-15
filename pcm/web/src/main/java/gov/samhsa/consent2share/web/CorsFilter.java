@@ -35,9 +35,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * The Class CrosFilter.
+ * The Class CorsFilter.
  */
-public class CrosFilter extends OncePerRequestFilter {
+public class CorsFilter extends OncePerRequestFilter {
 
 	/* (non-Javadoc)
 	 * @see org.springframework.web.filter.OncePerRequestFilter#doFilterInternal(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, javax.servlet.FilterChain)
