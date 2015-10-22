@@ -5,7 +5,7 @@ import gov.samhsa.acs.common.tool.SimpleMarshallerImpl;
 import gov.samhsa.acs.common.tool.exception.SimpleMarshallerException;
 import gov.samhsa.acs.dss.ws.schema.DSSRequest;
 import gov.samhsa.acs.dss.ws.schema.DSSResponse;
-import gov.samhsa.consent2share.commonunit.xml.XmlComparator;
+import gov.samhsa.pcm.commonunit.xml.XmlComparator;
 
 import java.io.IOException;
 import java.util.LinkedList;

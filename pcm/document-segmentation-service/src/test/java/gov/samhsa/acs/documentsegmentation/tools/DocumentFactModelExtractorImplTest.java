@@ -7,7 +7,7 @@ import gov.samhsa.acs.common.tool.FileReaderImpl;
 import gov.samhsa.acs.common.tool.SimpleMarshallerImpl;
 import gov.samhsa.acs.common.tool.XmlTransformer;
 import gov.samhsa.acs.common.tool.XmlTransformerImpl;
-import gov.samhsa.consent2share.commonunit.xml.XmlComparator;
+import gov.samhsa.pcm.commonunit.xml.XmlComparator;
 
 import java.io.IOException;
 import java.util.LinkedList;

@@ -33,6 +33,6 @@
 		
 	<!-- Here we use the Jaxb2 marshaller to marshall and unmarshall our Java objects -->	
 	<bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller"
-		p:contextPath="gov.samhsa.consent2share.pixclient.ws"/>
+		p:contextPath="gov.samhsa.pcm.pixclient.ws"/>
 		
 </beans>

@@ -85,7 +85,7 @@
                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
                   <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
                      <SubjectAttributeDesignator MustBePresent="false"
-                                                 AttributeId="gov.samhsa.consent2share.purpose-of-use-code"
+                                                 AttributeId="gov.samhsa.pcm.purpose-of-use-code"
                                                  DataType="http://www.w3.org/2001/XMLSchema#string"/>
                   </Apply>
                   <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">TREATMENT</AttributeValue>
@@ -93,7 +93,7 @@
                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
                   <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
                      <SubjectAttributeDesignator MustBePresent="false"
-                                                 AttributeId="gov.samhsa.consent2share.purpose-of-use-code"
+                                                 AttributeId="gov.samhsa.pcm.purpose-of-use-code"
                                                  DataType="http://www.w3.org/2001/XMLSchema#string"/>
                   </Apply>
                   <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">EMERGENCY</AttributeValue>
@@ -101,7 +101,7 @@
                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
                   <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
                      <SubjectAttributeDesignator MustBePresent="false"
-                                                 AttributeId="gov.samhsa.consent2share.purpose-of-use-code"
+                                                 AttributeId="gov.samhsa.pcm.purpose-of-use-code"
                                                  DataType="http://www.w3.org/2001/XMLSchema#string"/>
                   </Apply>
                   <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">RESEARCH</AttributeValue>
@@ -109,7 +109,7 @@
                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
                   <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
                      <SubjectAttributeDesignator MustBePresent="false"
-                                                 AttributeId="gov.samhsa.consent2share.purpose-of-use-code"
+                                                 AttributeId="gov.samhsa.pcm.purpose-of-use-code"
                                                  DataType="http://www.w3.org/2001/XMLSchema#string"/>
                   </Apply>
                   <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">PAYMENT</AttributeValue>

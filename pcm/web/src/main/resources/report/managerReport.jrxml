@@ -29,7 +29,7 @@
 			<style mode="Opaque" backcolor="#F3F3F4"/>
 		</conditionalStyle>
 	</style>
-	<scriptlet name="ManagerReportScriptlet" class="gov.samhsa.consent2share.service.report.ManagerReportCustomScriptlet">
+	<scriptlet name="ManagerReportScriptlet" class="gov.samhsa.pcm.service.report.ManagerReportCustomScriptlet">
 		<scriptletDescription><![CDATA[Manager Report Custom Scriptlet]]></scriptletDescription>
 	</scriptlet>
 	<parameter name="date" class="java.util.Date"/>
