@@ -45,7 +45,6 @@ import org.springframework.security.access.annotation.Secured;
 /**
  * The Interface ConsentService.
  */
-@Secured({ "ROLE_USER", "ROLE_ADMIN" })
 public interface ConsentService {
 
 	/**

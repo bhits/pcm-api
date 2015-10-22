@@ -612,7 +612,6 @@ public class ConsentServiceImpl implements ConsentService {
 	 * @return the list
 	 */
 	@Override
-	// @PreAuthorize("ROLE_USER")
 	@Transactional(readOnly = true)
 	public List<ConsentListDto> findAllConsentsDtoByPatient(Long patientId) {
 		final Patient patient = patientRepository.findOne(patientId);
