@@ -33,7 +33,6 @@ import org.springframework.security.access.annotation.Secured;
 /**
  * The Interface ConsentExportService.
  */
-@Secured({ "ROLE_USER", "ROLE_ADMIN" })
 public abstract interface ConsentExportService {
 
 	/**
