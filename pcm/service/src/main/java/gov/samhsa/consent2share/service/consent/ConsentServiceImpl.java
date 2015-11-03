@@ -632,7 +632,7 @@ public class ConsentServiceImpl implements ConsentService {
 	public  Map<String, Object> findAllConsentsDtoByPatientAndPage(Long patientId, String pageNumber) {
 		final Patient patient = patientRepository.findOne(patientId);
 		
-		PageRequest page = new PageRequest(Integer.parseInt(pageNumber), 10,
+		PageRequest page = new PageRequest(Integer.parseInt(pageNumber), 5,
 				Direction.DESC, "startDate");
 		
 		
