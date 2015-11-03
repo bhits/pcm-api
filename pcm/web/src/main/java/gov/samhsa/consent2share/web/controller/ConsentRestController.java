@@ -33,6 +33,7 @@ import gov.samhsa.consent2share.service.dto.AddConsentFieldsDto;
 import gov.samhsa.consent2share.service.dto.ConsentDto;
 import gov.samhsa.consent2share.service.dto.ConsentListDto;
 import gov.samhsa.consent2share.service.dto.ConsentValidationDto;
+import gov.samhsa.consent2share.service.dto.ConsentsListDto;
 import gov.samhsa.consent2share.service.dto.PatientProfileDto;
 import gov.samhsa.consent2share.service.dto.SpecificMedicalInfoDto;
 import gov.samhsa.consent2share.service.notification.NotificationService;
@@ -112,13 +113,14 @@ public class ConsentRestController extends AbstractController {
 	
 	
 	@RequestMapping(value = "consents/pageNumber/{pageNumber}")
-	public List<ConsentListDto> listConsents(@PathVariable("pageNumber") String pageNumber) {
+	public ConsentsListDto listConsents(@PathVariable("pageNumber") String pageNumber) {
+		
+		ConsentsListDto consentsListDto = new ConsentsListDto(consentService
+				.findAllConsentsDtoByPatientAndPage(patientService
+						.findIdByUsername(username), pageNumber));
 
-		List<ConsentListDto> consentListDtos = consentService
-				.findAllConsentsDtoByPatient(patientService
-						.findIdByUsername(username));
-		accessReferenceMapper.setupAccessReferenceMap(consentListDtos);
-		return consentListDtos;
+		accessReferenceMapper.setupAccessReferenceMap(consentsListDto.getConsentList());
+		return consentsListDto;
 	}
 	
 	@RequestMapping(value = "purposeOfUse")

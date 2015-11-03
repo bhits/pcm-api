@@ -93,6 +93,9 @@ import java.util.Set;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.w3c.dom.Document;
@@ -621,6 +624,32 @@ public class ConsentServiceImpl implements ConsentService {
 			consentListDtos = consentListToConsentListDtosConverter(consents);
 		}
 		return consentListDtos;
+	}
+	
+	
+	@Override
+	@Transactional(readOnly = true)
+	public  Map<String, Object> findAllConsentsDtoByPatientAndPage(Long patientId, String pageNumber) {
+		final Patient patient = patientRepository.findOne(patientId);
+		
+		PageRequest page = new PageRequest(Integer.parseInt(pageNumber), 10,
+				Direction.DESC, "startDate");
+		
+		
+		final Page<Consent> pages = consentRepository.findByPatient(patient, page);
+		List<ConsentListDto> consentListDtos = makeConsentListDtos();
+		if (pages != null) {
+			consentListDtos = consentListToConsentListDtosConverter(pages.getContent());
+		}
+		
+		Map<String, Object> pageResultsMap = new HashMap<String, Object>();
+		pageResultsMap.put("results", consentListDtos);
+		pageResultsMap.put("totalNumberOfProviders", pages.getTotalElements());
+		pageResultsMap.put("totalPages", pages.getTotalPages());
+		pageResultsMap.put("itemsPerPage", pages.getSize());
+		pageResultsMap.put("currentPage", pages.getNumber());
+		
+		return pageResultsMap;
 	}
 
 	/*

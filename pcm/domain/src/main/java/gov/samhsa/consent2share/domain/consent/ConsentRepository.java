@@ -31,6 +31,8 @@ import gov.samhsa.consent2share.domain.valueset.ValueSetCategory;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -50,6 +52,10 @@ public interface ConsentRepository extends JpaSpecificationExecutor<Consent>,
 	 * @return the list
 	 */
 	List<Consent> findByPatient(Patient patient);
+	
+	
+	
+	Page<Consent> findByPatient(Patient patient, Pageable pageable);
 
 	/**
 	 * Find by signed pdf consent document id.

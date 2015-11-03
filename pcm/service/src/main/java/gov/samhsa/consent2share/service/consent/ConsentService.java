@@ -38,6 +38,7 @@ import gov.samhsa.consent2share.service.dto.ConsentRevokationPdfDto;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.security.access.annotation.Secured;
@@ -346,4 +347,6 @@ public interface ConsentService {
 	 * @return the xacml ccd
 	 */
 	byte[] getXacmlCcd(Long consentId);
+
+	 Map<String, Object> findAllConsentsDtoByPatientAndPage(Long patientId, String pageNumber);
 }
