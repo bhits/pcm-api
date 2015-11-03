@@ -26,12 +26,10 @@
 package gov.samhsa.consent2share.web.controller;
 
 import gov.samhsa.consent.ConsentGenException;
-import gov.samhsa.consent2share.infrastructure.security.AccessReferenceMapper;
 import gov.samhsa.consent2share.service.consent.ConsentHelper;
 import gov.samhsa.consent2share.service.consent.ConsentService;
 import gov.samhsa.consent2share.service.dto.AddConsentFieldsDto;
 import gov.samhsa.consent2share.service.dto.ConsentDto;
-import gov.samhsa.consent2share.service.dto.ConsentListDto;
 import gov.samhsa.consent2share.service.dto.ConsentValidationDto;
 import gov.samhsa.consent2share.service.dto.ConsentsListDto;
 import gov.samhsa.consent2share.service.dto.PatientProfileDto;
@@ -71,9 +69,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ConsentRestController extends AbstractController {
 
 	public final static Long SAMPLE_C32_ID = new Long(-1);
-	
-	@Autowired
-	private AccessReferenceMapper accessReferenceMapper;
 	
 	@Autowired
 	private ConsentHelper consentHelper;
@@ -118,8 +113,8 @@ public class ConsentRestController extends AbstractController {
 		ConsentsListDto consentsListDto = new ConsentsListDto(consentService
 				.findAllConsentsDtoByPatientAndPage(patientService
 						.findIdByUsername(username), pageNumber));
-
-		accessReferenceMapper.setupAccessReferenceMap(consentsListDto.getConsentList());
+		//using directId
+		//accessReferenceMapper.setupAccessReferenceMap(consentsListDto.getConsentList());
 		return consentsListDto;
 	}
 	
@@ -150,13 +145,13 @@ public class ConsentRestController extends AbstractController {
 	}
 	
 
-	@RequestMapping(value = "/consents/{consentId}", method = RequestMethod.DELETE)
-	public void deleteConsent(@PathVariable("consentId") String consentId) {
+	@RequestMapping(value = "consents/{consentId}", method = RequestMethod.DELETE)
+	public void deleteConsent(@PathVariable("consentId") Long consentId) {
 		final Long patientId = patientService.findIdByUsername(username);
 
-		final Long directConsentId = accessReferenceMapper.getDirectReference(consentId);
-		if (consentService.isConsentBelongToThisUser(directConsentId, patientId)) {
-			if(consentService.deleteConsent(directConsentId)==false)
+		//final Long directConsentId = accessReferenceMapper.getDirectReference(consentId);
+		if (consentService.isConsentBelongToThisUser(consentId, patientId)) {
+			if(consentService.deleteConsent(consentId)==false)
 				throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR,
 						"Error: Unable to delete this consent.");
 
@@ -167,26 +162,26 @@ public class ConsentRestController extends AbstractController {
 
 	}
 	
-	@RequestMapping(value = "/consents/{consentId}", method = RequestMethod.GET)
+	@RequestMapping(value = "consents/{consentId}", method = RequestMethod.GET)
 	public ConsentDto getConsent(@PathVariable("consentId") String consentId) {
 		
-		Long directConsentId = accessReferenceMapper.getDirectReference(consentId);
-		ConsentDto consentDto = consentService.findConsentById(directConsentId);
+		//Long directConsentId = accessReferenceMapper.getDirectReference(consentId);
+		ConsentDto consentDto = consentService.findConsentById(Long.valueOf(consentId));
 		consentDto.setId(consentId);
 		return consentDto;
 	}
 	
-	@RequestMapping(value = "/consents", method = RequestMethod.POST)
+	@RequestMapping(value = "consents", method = RequestMethod.POST)
 	public void consentAddPost(@Valid ConsentDto consentDto,
 			@RequestParam(value = "ICD9", required = false) HashSet<String> icd9)
 			throws ConsentGenException, IOException, JSONException {
 		
 		consentDto.setUsername(username);
-		if (consentDto.getId() != null) {
+	/*	if (consentDto.getId() != null) {
 			final String directConsentId = String.valueOf(accessReferenceMapper
 					.getDirectReference(consentDto.getId()));
 			consentDto.setId(directConsentId);
-		}
+		}*/
 
 		final Set<String> isMadeTo = new HashSet<String>();
 		final Set<String> isMadeFrom = new HashSet<String>();
@@ -233,7 +228,7 @@ public class ConsentRestController extends AbstractController {
 				&& !isMadeFrom.isEmpty()
 				&& consentService.areThereDuplicatesInTwoSets(isMadeTo,
 						isMadeFrom) == false) {
-			if (consentDto.getSharedPurposeNames() == null) {
+			if (consentDto.getShareForPurposeOfUseCodes() == null) {
 				throw new AjaxException(HttpStatus.UNPROCESSABLE_ENTITY,
 						"At least one purpose of use needs to be selected.");
 			}
@@ -284,10 +279,10 @@ public class ConsentRestController extends AbstractController {
 				if (null != obj && obj instanceof ConsentValidationDto) {
 
 					final ConsentValidationDto conDto = (ConsentValidationDto) obj;
-					final String indirRef = accessReferenceMapper
+					/*final String indirRef = accessReferenceMapper
 							.getIndirectReference(conDto.getExistingConsentId());
 
-					conDto.setExistingConsentId(indirRef);
+					conDto.setExistingConsentId(indirRef);*/
 					// duplicate policy found
 					final ObjectMapper mapper = new ObjectMapper();
 					String errorMessage = null;
