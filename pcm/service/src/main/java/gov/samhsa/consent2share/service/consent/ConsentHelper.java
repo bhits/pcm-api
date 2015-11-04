@@ -156,10 +156,10 @@ public class ConsentHelper {
 		consentValidationDto.setExistingDiscloseToProviders(isMadeToName);
 		consentValidationDto.setExistingAuthorizedProviders(toDiscloseName);
 
-		consentValidationDto
+		/*consentValidationDto
 				.setSelectedDiscloseToProviders(getSelectedProviderIsMadeToName(consentDto));
 		consentValidationDto
-				.setSelectedAuthorizedProviders(getSelectedAuthorizedProviders(consentDto));
+				.setSelectedAuthorizedProviders(getSelectedAuthorizedProviders(consentDto));*/
 
 		// pou
 		Set<String> consentShareForPurposeOfUseCode = new HashSet<String>();
