@@ -56,6 +56,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -172,7 +173,7 @@ public class ConsentRestController extends AbstractController {
 	}
 	
 	@RequestMapping(value = "consents", method = RequestMethod.POST)
-	public void consentAddPost(@Valid ConsentDto consentDto,
+	public void consentAddPost(@RequestBody ConsentDto consentDto,
 			@RequestParam(value = "ICD9", required = false) HashSet<String> icd9)
 			throws ConsentGenException, IOException, JSONException {
 		
