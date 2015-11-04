@@ -35,7 +35,7 @@ public class ConsentsListDto {
 	
 	private List<ConsentListDto> consentList;
 	
-	private long totalNumberOfProviders;
+	private long totalItems;
 	
 	private int totalPages;
 	
@@ -56,7 +56,7 @@ public class ConsentsListDto {
 		this.currentPage = 	(int) pageResults.get("currentPage");
 		this.itemsPerPage = 	(int) pageResults.get("itemsPerPage");
 		this.totalPages = 	(int) pageResults.get("totalPages");
-		this.totalNumberOfProviders = 	(long) pageResults.get("totalNumberOfProviders");
+		this.totalItems = 	(long) pageResults.get("totalItems");
 	}
 	
 
@@ -68,12 +68,12 @@ public class ConsentsListDto {
 		this.consentList = consentList;
 	}
 
-	public long getTotalNumberOfProviders() {
-		return totalNumberOfProviders;
+	public long getTotalItems() {
+		return totalItems;
 	}
 
-	public void setTotalNumberOfProviders(long totalNumberOfProviders) {
-		this.totalNumberOfProviders = totalNumberOfProviders;
+	public void setTotalItems(long totalItems) {
+		this.totalItems = totalItems;
 	}
 
 	public int getTotalPages() {

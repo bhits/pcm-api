@@ -644,7 +644,7 @@ public class ConsentServiceImpl implements ConsentService {
 		
 		Map<String, Object> pageResultsMap = new HashMap<String, Object>();
 		pageResultsMap.put("results", consentListDtos);
-		pageResultsMap.put("totalNumberOfProviders", pages.getTotalElements());
+		pageResultsMap.put("totalItems", pages.getTotalElements());
 		pageResultsMap.put("totalPages", pages.getTotalPages());
 		pageResultsMap.put("itemsPerPage", pages.getSize());
 		pageResultsMap.put("currentPage", pages.getNumber());
