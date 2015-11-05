@@ -1280,10 +1280,10 @@ public class ConsentServiceImpl implements ConsentService {
 		consent.setConsentReferenceId(policyId);
 
 		// Set Providers
-		if (consentDto.getProvidersDisclosureIsMadeTo() != null) {
+		if (consentDto.getProvidersDisclosureIsMadeToNpi() != null) {
 			final Set<ConsentIndividualProviderDisclosureIsMadeTo> providersDisclosureIsMadeTo = new HashSet<ConsentIndividualProviderDisclosureIsMadeTo>();
 			for (final String item : consentDto
-					.getProvidersDisclosureIsMadeTo()) {
+					.getProvidersDisclosureIsMadeToNpi()) {
 				final IndividualProvider individualProvider = (IndividualProvider) providerMap
 						.get(item);
 				final ConsentIndividualProviderDisclosureIsMadeTo consentIndividualProviderPermittedToDisclose = new ConsentIndividualProviderDisclosureIsMadeTo(
@@ -1296,10 +1296,10 @@ public class ConsentServiceImpl implements ConsentService {
 			consent.setProvidersDisclosureIsMadeTo(new HashSet<ConsentIndividualProviderDisclosureIsMadeTo>());
 		}
 
-		if (consentDto.getProvidersPermittedToDisclose() != null) {
+		if (consentDto.getProvidersPermittedToDiscloseNpi() != null) {
 			final Set<ConsentIndividualProviderPermittedToDisclose> providersPermittedToDisclose = new HashSet<ConsentIndividualProviderPermittedToDisclose>();
 			for (final String item : consentDto
-					.getProvidersPermittedToDisclose()) {
+					.getProvidersPermittedToDiscloseNpi()) {
 				final IndividualProvider individualProvider = (IndividualProvider) providerMap
 						.get(item);
 				final ConsentIndividualProviderPermittedToDisclose consentIndividualProviderPermittedToDisclose = new ConsentIndividualProviderPermittedToDisclose(
@@ -1312,10 +1312,10 @@ public class ConsentServiceImpl implements ConsentService {
 			consent.setProvidersPermittedToDisclose(new HashSet<ConsentIndividualProviderPermittedToDisclose>());
 		}
 
-		if (consentDto.getOrganizationalProvidersDisclosureIsMadeTo() != null) {
+		if (consentDto.getOrganizationalProvidersDisclosureIsMadeToNpi() != null) {
 			final Set<ConsentOrganizationalProviderDisclosureIsMadeTo> organizationalProvidersDisclosureIsMadeTo = new HashSet<ConsentOrganizationalProviderDisclosureIsMadeTo>();
 			for (final String item : consentDto
-					.getOrganizationalProvidersDisclosureIsMadeTo()) {
+					.getOrganizationalProvidersDisclosureIsMadeToNpi()) {
 				final OrganizationalProvider organizationalProvider = (OrganizationalProvider) providerMap
 						.get(item);
 				final ConsentOrganizationalProviderDisclosureIsMadeTo consentOrganizationalProviderPermittedToDisclose = new ConsentOrganizationalProviderDisclosureIsMadeTo(
@@ -1328,10 +1328,10 @@ public class ConsentServiceImpl implements ConsentService {
 			consent.setOrganizationalProvidersDisclosureIsMadeTo(new HashSet<ConsentOrganizationalProviderDisclosureIsMadeTo>());
 		}
 
-		if (consentDto.getOrganizationalProvidersPermittedToDisclose() != null) {
+		if (consentDto.getOrganizationalProvidersPermittedToDiscloseNpi() != null) {
 			final Set<ConsentOrganizationalProviderPermittedToDisclose> organizationalProvidersPermittedToDisclose = new HashSet<ConsentOrganizationalProviderPermittedToDisclose>();
 			for (final String item : consentDto
-					.getOrganizationalProvidersPermittedToDisclose()) {
+					.getOrganizationalProvidersPermittedToDiscloseNpi()) {
 				final OrganizationalProvider organizationalProvider = (OrganizationalProvider) providerMap
 						.get(item);
 				final ConsentOrganizationalProviderPermittedToDisclose consentOrganizationalProviderPermittedToDisclose = new ConsentOrganizationalProviderPermittedToDisclose(

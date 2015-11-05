@@ -115,7 +115,7 @@ public class ConsentHelper {
 
 		Set<String> selToDiscloseNpiCopy = new HashSet<String>(selToDiscloseNpi);
 		Set<String> conToDiscloseNpiCopy = new HashSet<String>(conToDiscloseNpi);
-
+		
 		// check for common elements
 		selToDiscloseNpiCopy.retainAll(conToDiscloseNpiCopy);
 
@@ -125,7 +125,7 @@ public class ConsentHelper {
 			/** The providers disclosure is made to. */
 			Set<String> selIsMadeToNpi = getDtoProviderIsMadeToNpi(consentDto);
 			Set<String> conIsMadeToNpi = getProviderIsMadeToNpi(consent);
-
+			
 			Set<String> selIsMadeToNpiCopy = new HashSet<String>(selIsMadeToNpi);
 			Set<String> conIsMadeToNpiCopy = new HashSet<String>(conIsMadeToNpi);
 
@@ -136,8 +136,9 @@ public class ConsentHelper {
 				isContain = true;
 			}
 		}
-
 		return isContain;
+		
+		
 	}
 
 	protected ConsentValidationDto convertConsentToConsentListDto(
@@ -207,12 +208,12 @@ public class ConsentHelper {
 		Set<String> madeToSet = new HashSet<String>();
 		int sizeOfPMadeTo = 0;
 
-		if (consentDto.getProvidersDisclosureIsMadeTo() != null)
+		if (consentDto.getProvidersDisclosureIsMadeToNpi() != null)
 			sizeOfPMadeTo = sizeOfPMadeTo
-					+ consentDto.getProvidersDisclosureIsMadeTo().size();
-		if (consentDto.getOrganizationalProvidersDisclosureIsMadeTo() != null)
+					+ consentDto.getProvidersDisclosureIsMadeToNpi().size();
+		if (consentDto.getOrganizationalProvidersDisclosureIsMadeToNpi() != null)
 			sizeOfPMadeTo = sizeOfPMadeTo
-					+ consentDto.getOrganizationalProvidersDisclosureIsMadeTo()
+					+ consentDto.getOrganizationalProvidersDisclosureIsMadeToNpi()
 							.size();
 
 		if (consentDto.getMadeToNames().size() == 2 && sizeOfPMadeTo == 1) {
@@ -233,13 +234,13 @@ public class ConsentHelper {
 		Set<String> madeToSet = new HashSet<String>();
 		int sizeOfAuthorizedProviders = 0;
 
-		if (consentDto.getProvidersPermittedToDisclose() != null)
+		if (consentDto.getProvidersPermittedToDiscloseNpi() != null)
 			sizeOfAuthorizedProviders = sizeOfAuthorizedProviders
-					+ consentDto.getProvidersPermittedToDisclose().size();
-		if (consentDto.getOrganizationalProvidersPermittedToDisclose() != null)
+					+ consentDto.getProvidersPermittedToDiscloseNpi().size();
+		if (consentDto.getOrganizationalProvidersPermittedToDiscloseNpi() != null)
 			sizeOfAuthorizedProviders = sizeOfAuthorizedProviders
 					+ consentDto
-							.getOrganizationalProvidersPermittedToDisclose()
+							.getOrganizationalProvidersPermittedToDiscloseNpi()
 							.size();
 
 		if (consentDto.getAuthorizerNames().size() == 2
@@ -336,12 +337,12 @@ public class ConsentHelper {
 	protected Set<String> getDtoProviderIsMadeToNpi(ConsentDto consentDto) {
 
 		Set<String> selIsMadeToNpi = consentDto
-				.getProvidersDisclosureIsMadeTo();
+				.getProvidersDisclosureIsMadeToNpi();
 		selIsMadeToNpi = (null == selIsMadeToNpi) ? new HashSet<String>()
 				: selIsMadeToNpi;
 
 		Set<String> selIsMadeToOrgNpi = consentDto
-				.getOrganizationalProvidersDisclosureIsMadeTo();
+				.getOrganizationalProvidersDisclosureIsMadeToNpi();
 		selIsMadeToOrgNpi = (null == selIsMadeToOrgNpi) ? new HashSet<String>()
 				: selIsMadeToOrgNpi;
 
@@ -358,11 +359,11 @@ public class ConsentHelper {
 
 	protected Set<String> getDtoProviderToDiscloseToNpi(ConsentDto consentDto) {
 		Set<String> selToDiscloseNpi = consentDto
-				.getProvidersPermittedToDisclose();
+				.getProvidersPermittedToDiscloseNpi();
 		selToDiscloseNpi = (null == selToDiscloseNpi) ? new HashSet<String>()
 				: selToDiscloseNpi;
 		Set<String> selToDiscloseOrgNpi = consentDto
-				.getOrganizationalProvidersPermittedToDisclose();
+				.getOrganizationalProvidersPermittedToDiscloseNpi();
 		selToDiscloseOrgNpi = (null == selToDiscloseOrgNpi) ? new HashSet<String>()
 				: selToDiscloseOrgNpi;
 
