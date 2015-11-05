@@ -31,6 +31,10 @@ import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import gov.samhsa.consent2share.service.util.CustomJsonDateDeserializer;
+
 /**
  * The Class ConsentDto.
  */
@@ -66,10 +70,12 @@ public class ConsentDto {
 	// Consent Sharing date
 	/** The consent start. */
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
+	@JsonDeserialize(using = CustomJsonDateDeserializer.class)
 	private Date consentStart;
 
 	/** The consent end. */
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
+	@JsonDeserialize(using = CustomJsonDateDeserializer.class)
 	private Date consentEnd;
 
 	/** The username. */
