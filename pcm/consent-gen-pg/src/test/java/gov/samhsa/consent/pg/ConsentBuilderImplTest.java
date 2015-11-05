@@ -25,7 +25,7 @@
  ******************************************************************************/
 package gov.samhsa.consent.pg;
 
-import static gov.samhsa.consent2share.commonunit.matcher.ArgumentMatchers.matching;
+import static gov.samhsa.pcm.commonunit.matcher.ArgumentMatchers.matching;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.argThat;

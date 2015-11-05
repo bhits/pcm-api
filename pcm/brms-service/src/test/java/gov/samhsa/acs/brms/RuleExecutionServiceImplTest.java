@@ -15,7 +15,7 @@ import gov.samhsa.acs.brms.domain.XacmlResult;
 import gov.samhsa.acs.brms.guvnor.GuvnorService;
 import gov.samhsa.acs.common.tool.SimpleMarshaller;
 import gov.samhsa.acs.common.tool.exception.SimpleMarshallerException;
-import gov.samhsa.consent2share.commonunit.io.ResourceFileReader;
+import gov.samhsa.pcm.commonunit.io.ResourceFileReader;
 import gov.samhsa.consent2share.schema.ruleexecutionservice.AssertAndExecuteClinicalFactsResponse;
 
 import java.io.IOException;

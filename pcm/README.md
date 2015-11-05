@@ -1,22 +1,22 @@
 # 1. Externalizing and Encrypting 
 
 For bl details, please see the following reference.
-[https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/consent2share/bl/web-bl/README.md](https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/consent2share/bl/web-bl/README.md)
+[https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/pcm/bl/web-bl/README.md](https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/pcm/bl/web-bl/README.md)
 
 For pg details, please see the following reference.
-[https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/consent2share/pg/web-pg/README.md](https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/consent2share/pg/web-pg/README.md)
+[https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/pcm/pg/web-pg/README.md](https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/pcm/pg/web-pg/README.md)
 
 # 2. Logback Configuration Externalization
 
 For bl details, please see the following reference.
-[https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/consent2share/bl/web-bl/README.md](https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/consent2share/bl/web-bl/README.md)
+[https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/pcm/bl/web-bl/README.md](https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/pcm/bl/web-bl/README.md)
 
 For pg details, please see the following reference.
-[https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/consent2share/pg/web-pg/README.md](https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/consent2share/pg/web-pg/README.md)
+[https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/pcm/pg/web-pg/README.md](https://github.com/PilotDS4P/ds4p-prod/blob/dev/DS4P/pcm/pg/web-pg/README.md)
 
 # 3. C2S PCM Reports
 
-Consent2Share PCM application is using [JasperReports framework](http://community.jaspersoft.com/project/jasperreports-library) and utilizing [Spring Framework support](http://docs.spring.io/spring-framework/docs/3.2.0.BUILD-SNAPSHOT/reference/htmlsingle/#view-jasper-reports) to power application reports. In order to simplify the common report configuration and minimize the implementation overhead for future reports, several abstractions have been implemented in the infrastructure, service and presentation layers. If a certain coding convention is followed, these abstractions are able to auto-configure report back-end with minimum additional code. This section explains the coding convention to follow for C2S PCM report configurations.
+pcm PCM application is using [JasperReports framework](http://community.jaspersoft.com/project/jasperreports-library) and utilizing [Spring Framework support](http://docs.spring.io/spring-framework/docs/3.2.0.BUILD-SNAPSHOT/reference/htmlsingle/#view-jasper-reports) to power application reports. In order to simplify the common report configuration and minimize the implementation overhead for future reports, several abstractions have been implemented in the infrastructure, service and presentation layers. If a certain coding convention is followed, these abstractions are able to auto-configure report back-end with minimum additional code. This section explains the coding convention to follow for C2S PCM report configurations.
 
 ## 3.1. Abstractions used in PCM
 
@@ -35,13 +35,13 @@ These are the high level abstractions used in PCM to configure a single report:
 ### 3.2.1. Report Configuration (AbstractReportConfig class)
 
 
-This is the main configuration class for reports that contains the important report properties. At a minimum, **report name**, **report config name** and **report data provider name** need to be implemented. These are `String` values and need to be globally unique. It is also highly recommended to have these as `public static final` fields in the class, because they need to be referred by other classes as explained in the following topics. The concrete report configuration implementation should be placed in `gov.samhsa.consent2share.web.config.report` package in the web project. Additionally, it is recommended to follow a convention for naming the properties like *reportName*, *reportName*Config and *reportName*DataProvider. A sample implementation for this class can be seen as below:
+This is the main configuration class for reports that contains the important report properties. At a minimum, **report name**, **report config name** and **report data provider name** need to be implemented. These are `String` values and need to be globally unique. It is also highly recommended to have these as `public static final` fields in the class, because they need to be referred by other classes as explained in the following topics. The concrete report configuration implementation should be placed in `gov.samhsa.pcm.web.config.report` package in the web project. Additionally, it is recommended to follow a convention for naming the properties like *reportName*, *reportName*Config and *reportName*DataProvider. A sample implementation for this class can be seen as below:
 
 
-	package gov.samhsa.consent2share.web.config.report;
+	package gov.samhsa.pcm.web.config.report;
 	
-	import gov.samhsa.consent2share.infrastructure.report.AbstractReportConfig;
-	import gov.samhsa.consent2share.infrastructure.report.ReportParameterConfigurerTask;
+	import gov.samhsa.pcm.infrastructure.report.AbstractReportConfig;
+	import gov.samhsa.pcm.infrastructure.report.ReportParameterConfigurerTask;
 	
 	import java.util.List;
 	import java.util.Map;
@@ -97,7 +97,7 @@ This is the main configuration class for reports that contains the important rep
 
 This is the main interface to provide the report data (`Collection<T>`). In PCM, it is decided to use Spring `JdbcTemplate` to query the database and get the report data, although this is not really enforced by the `ReportDataProvider` interface. For convenience, `JdbcTemplateReportDataProvider` has been implemented in the infrastructure layer. This implementation depends on `JdbcTemplate`, `SqlScriptProvider` and `Optional<RowMapper>`. If `Optional<RowMapper>` is passed as `Optional.empty()`, Spring's `BeanPropertyRowMapper` is used as the default implementation. 
 
-The `SqlScriptProvider` interface only has one abstract method `String getSqlScript()` and there is also a `ClasspathSqlScriptProvider` implementation in the service layer that can read the sql script files from `consent2share-service` classpath resources. In order to utilize `ClasspathSqlScriptProvider`, the sql script for the report data can be saved as a sql file in `service/src/main/resources/report/sql` default location (this location can be configured by overriding `AbstractReportConfig.getBaseClasspathForSqlScriptResources()` and `AbstractReportConfig.getSqlScriptFileName()`). When the convention is followed, the default name for the sql file will be same as the report name (`AbstractReportConfig.getReportName()`).
+The `SqlScriptProvider` interface only has one abstract method `String getSqlScript()` and there is also a `ClasspathSqlScriptProvider` implementation in the service layer that can read the sql script files from `pcm-service` classpath resources. In order to utilize `ClasspathSqlScriptProvider`, the sql script for the report data can be saved as a sql file in `service/src/main/resources/report/sql` default location (this location can be configured by overriding `AbstractReportConfig.getBaseClasspathForSqlScriptResources()` and `AbstractReportConfig.getSqlScriptFileName()`). When the convention is followed, the default name for the sql file will be same as the report name (`AbstractReportConfig.getReportName()`).
 
 There is no need to implement a new concrete class if `JdbcTemplateReportDataProvider` and `ClasspathSqlScriptProvider` are used. The required configuration will be done in report dependency injection implementation (`ReportDIConfig` interface).
 
@@ -113,27 +113,27 @@ In the report template (.jrxml) the location of image resources should be parame
 
 ### 3.2.5. Report Dependency Injection Configuration (ReportDIConfig interface)
 
-An implementation of `ReportDIConfig` interface is required to manage the report dependencies. The proper place for this implementation is `gov.samhsa.consent2share.web.config.di.root.report` package in the web project. The methods of this interface can be seen as a list of beans that will be required to configure a report. A sample implementation of it can be as below. Please pay attention to the beans that has explicit names. These names are important, because they will be referred by the report controller.
+An implementation of `ReportDIConfig` interface is required to manage the report dependencies. The proper place for this implementation is `gov.samhsa.pcm.web.config.di.root.report` package in the web project. The methods of this interface can be seen as a list of beans that will be required to configure a report. A sample implementation of it can be as below. Please pay attention to the beans that has explicit names. These names are important, because they will be referred by the report controller.
 
 
 
-	package gov.samhsa.consent2share.web.config.di.root.report;
+	package gov.samhsa.pcm.web.config.di.root.report;
 	
-	import gov.samhsa.consent2share.infrastructure.report.AbstractReportConfig;
-	import gov.samhsa.consent2share.infrastructure.report.JdbcTemplateReportDataProvider;
-	import gov.samhsa.consent2share.infrastructure.report.ReportDIConfig;
-	import gov.samhsa.consent2share.infrastructure.report.ReportDataProvider;
-	import gov.samhsa.consent2share.infrastructure.report.ReportParameterConfigurerChainBuilder;
-	import gov.samhsa.consent2share.infrastructure.report.ReportParameterConfigurerTask;
-	import gov.samhsa.consent2share.infrastructure.report.ReportViewFactory;
-	import gov.samhsa.consent2share.infrastructure.report.SqlScriptProvider;
-	import gov.samhsa.consent2share.infrastructure.report.configurer.OnlyPaginatePdfTask;
-	import gov.samhsa.consent2share.infrastructure.report.configurer.SetDatasourceKeyTask;
-	import gov.samhsa.consent2share.infrastructure.report.configurer.SetExportFormatTask;
-	import gov.samhsa.consent2share.infrastructure.report.configurer.SetImageMappingsTask;
-	import gov.samhsa.consent2share.service.report.ClasspathSqlScriptProvider;
-	import gov.samhsa.consent2share.service.report.TestReportRowMapper;
-	import gov.samhsa.consent2share.web.config.report.TestReportConfig;
+	import gov.samhsa.pcm.infrastructure.report.AbstractReportConfig;
+	import gov.samhsa.pcm.infrastructure.report.JdbcTemplateReportDataProvider;
+	import gov.samhsa.pcm.infrastructure.report.ReportDIConfig;
+	import gov.samhsa.pcm.infrastructure.report.ReportDataProvider;
+	import gov.samhsa.pcm.infrastructure.report.ReportParameterConfigurerChainBuilder;
+	import gov.samhsa.pcm.infrastructure.report.ReportParameterConfigurerTask;
+	import gov.samhsa.pcm.infrastructure.report.ReportViewFactory;
+	import gov.samhsa.pcm.infrastructure.report.SqlScriptProvider;
+	import gov.samhsa.pcm.infrastructure.report.configurer.OnlyPaginatePdfTask;
+	import gov.samhsa.pcm.infrastructure.report.configurer.SetDatasourceKeyTask;
+	import gov.samhsa.pcm.infrastructure.report.configurer.SetExportFormatTask;
+	import gov.samhsa.pcm.infrastructure.report.configurer.SetImageMappingsTask;
+	import gov.samhsa.pcm.service.report.ClasspathSqlScriptProvider;
+	import gov.samhsa.pcm.service.report.TestReportRowMapper;
+	import gov.samhsa.pcm.web.config.report.TestReportConfig;
 	
 	import java.util.List;
 	import java.util.Optional;
@@ -227,20 +227,20 @@ An implementation of `ReportDIConfig` interface is required to manage the report
 
 ### 3.2.6. Report Controller (AbstractReportController class)
 
-The `AbstractReportController` is provided in the infrastructure layer. It contains `ReportDataProvider` and `AbstractReportConfig` fields with a single constructor to initialize them. It also has a `reportModelAndView` method to conveniently construct and return a `ModelAndView` using the class fields. This method builds the `ModelAndView` with `viewName=reportName` value, therefore `ReportDIConfig.reportView()` bean must exactly have the same name for Spring's `BeanNameViewResolver` to forward the `ModelAndView` to this particular report's view. The proper place to implement a concrete report controller is `gov.samhsa.consent2share.web.controller.report` package in the web project. A sample implementation for admin reports can be seen below. As it can be seen, Spring's `@Qualifier` annotation is used to explicitly wire the certain beans defined in the `TestReportDIConfig`. This is the main reason that these beans must have particular names that can be explicitly wired by the controller.
+The `AbstractReportController` is provided in the infrastructure layer. It contains `ReportDataProvider` and `AbstractReportConfig` fields with a single constructor to initialize them. It also has a `reportModelAndView` method to conveniently construct and return a `ModelAndView` using the class fields. This method builds the `ModelAndView` with `viewName=reportName` value, therefore `ReportDIConfig.reportView()` bean must exactly have the same name for Spring's `BeanNameViewResolver` to forward the `ModelAndView` to this particular report's view. The proper place to implement a concrete report controller is `gov.samhsa.pcm.web.controller.report` package in the web project. A sample implementation for admin reports can be seen below. As it can be seen, Spring's `@Qualifier` annotation is used to explicitly wire the certain beans defined in the `TestReportDIConfig`. This is the main reason that these beans must have particular names that can be explicitly wired by the controller.
 
 
-	package gov.samhsa.consent2share.web.controller.report;
+	package gov.samhsa.pcm.web.controller.report;
 	
-	import static gov.samhsa.consent2share.infrastructure.report.ReportFormat.HTML;
+	import static gov.samhsa.pcm.infrastructure.report.ReportFormat.HTML;
 	import static org.springframework.web.bind.annotation.RequestMethod.GET;
-	import gov.samhsa.consent2share.infrastructure.report.AbstractReportConfig;
-	import gov.samhsa.consent2share.infrastructure.report.AbstractReportController;
-	import gov.samhsa.consent2share.infrastructure.report.ReportDataProvider;
-	import gov.samhsa.consent2share.infrastructure.report.ReportFormat;
-	import gov.samhsa.consent2share.web.config.report.ManagerReportConfig;
-	import gov.samhsa.consent2share.web.config.report.ReportPath;
-	import gov.samhsa.consent2share.web.config.report.TestReportConfig;
+	import gov.samhsa.pcm.infrastructure.report.AbstractReportConfig;
+	import gov.samhsa.pcm.infrastructure.report.AbstractReportController;
+	import gov.samhsa.pcm.infrastructure.report.ReportDataProvider;
+	import gov.samhsa.pcm.infrastructure.report.ReportFormat;
+	import gov.samhsa.pcm.web.config.report.ManagerReportConfig;
+	import gov.samhsa.pcm.web.config.report.ReportPath;
+	import gov.samhsa.pcm.web.config.report.TestReportConfig;
 	
 	import java.util.Optional;
 	

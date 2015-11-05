@@ -150,7 +150,7 @@
 									<Apply
 										FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
 										<SubjectAttributeDesignator
-											MustBePresent="false" AttributeId="gov.samhsa.consent2share.purpose-of-use-code"
+											MustBePresent="false" AttributeId="gov.samhsa.pcm.purpose-of-use-code"
 											DataType="http://www.w3.org/2001/XMLSchema#string"></SubjectAttributeDesignator>
 									</Apply>
 									<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">

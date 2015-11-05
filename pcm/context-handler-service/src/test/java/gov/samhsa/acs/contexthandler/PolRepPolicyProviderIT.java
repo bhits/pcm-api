@@ -9,12 +9,12 @@ import gov.samhsa.acs.common.tool.XmlTransformerImpl;
 import gov.samhsa.acs.contexthandler.exception.NoPolicyFoundException;
 import gov.samhsa.acs.contexthandler.exception.PolicyProviderException;
 import gov.samhsa.acs.polrep.client.PolRepRestClient;
-import gov.samhsa.consent2share.hl7.Hl7v3Transformer;
-import gov.samhsa.consent2share.hl7.Hl7v3TransformerImpl;
-import gov.samhsa.consent2share.pixclient.service.PixManagerService;
-import gov.samhsa.consent2share.pixclient.service.PixManagerServiceImpl;
-import gov.samhsa.consent2share.pixclient.util.PixManagerMessageHelper;
-import gov.samhsa.consent2share.pixclient.util.PixManagerRequestXMLToJava;
+import gov.samhsa.pcm.hl7.Hl7v3Transformer;
+import gov.samhsa.pcm.hl7.Hl7v3TransformerImpl;
+import gov.samhsa.pcm.pixclient.service.PixManagerService;
+import gov.samhsa.pcm.pixclient.service.PixManagerServiceImpl;
+import gov.samhsa.pcm.pixclient.util.PixManagerMessageHelper;
+import gov.samhsa.pcm.pixclient.util.PixManagerRequestXMLToJava;
 
 import java.io.IOException;
 import java.io.StringWriter;

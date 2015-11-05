@@ -1,6 +1,6 @@
 package gov.samhsa.acs.trypolicy;
 
-import static gov.samhsa.consent2share.commonunit.matcher.ArgumentMatchers.matching;
+import static gov.samhsa.pcm.commonunit.matcher.ArgumentMatchers.matching;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.isA;
