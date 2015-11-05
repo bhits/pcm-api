@@ -205,22 +205,22 @@ public class ConsentRestController extends AbstractController {
 					"Invalid value(s) passed in for one or more date fields.");
 		}
 
-		if (consentDto.getOrganizationalProvidersDisclosureIsMadeTo() != null) {
+		if (consentDto.getOrganizationalProvidersDisclosureIsMadeToNpi() != null) {
 			isMadeTo.addAll(consentDto
-					.getOrganizationalProvidersDisclosureIsMadeTo());
+					.getOrganizationalProvidersDisclosureIsMadeToNpi());
 		}
 
-		if (consentDto.getProvidersDisclosureIsMadeTo() != null) {
-			isMadeTo.addAll(consentDto.getProvidersDisclosureIsMadeTo());
+		if (consentDto.getProvidersDisclosureIsMadeToNpi() != null) {
+			isMadeTo.addAll(consentDto.getProvidersDisclosureIsMadeToNpi());
 		}
 
-		if (consentDto.getOrganizationalProvidersPermittedToDisclose() != null) {
+		if (consentDto.getOrganizationalProvidersPermittedToDiscloseNpi() != null) {
 			isMadeFrom.addAll(consentDto
-					.getOrganizationalProvidersPermittedToDisclose());
+					.getOrganizationalProvidersPermittedToDiscloseNpi());
 		}
 
-		if (consentDto.getProvidersPermittedToDisclose() != null) {
-			isMadeFrom.addAll(consentDto.getProvidersPermittedToDisclose());
+		if (consentDto.getProvidersPermittedToDiscloseNpi() != null) {
+			isMadeFrom.addAll(consentDto.getProvidersPermittedToDiscloseNpi());
 		}
 
 		consentService.areThereDuplicatesInTwoSets(isMadeTo, isMadeFrom);

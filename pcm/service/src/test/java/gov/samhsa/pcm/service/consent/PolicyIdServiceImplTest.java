@@ -51,9 +51,9 @@ public class PolicyIdServiceImplTest {
 		Set<String> providersPermittedToDisclose = new HashSet<String>();
 		providersPermittedToDisclose.add("222");
 		consentDto
-				.setOrganizationalProvidersDisclosureIsMadeTo(organizationalProvidersDisclosureIsMadeTo);
+				.setOrganizationalProvidersDisclosureIsMadeToNpi(organizationalProvidersDisclosureIsMadeTo);
 		consentDto
-				.setProvidersPermittedToDisclose(providersPermittedToDisclose);
+				.setProvidersPermittedToDiscloseNpi(providersPermittedToDisclose);
 
 		// Act
 		String policyId = sut.generatePolicyId(consentDto, MRNMOCK);
@@ -76,9 +76,9 @@ public class PolicyIdServiceImplTest {
 		Set<String> providersPermittedToDisclose = new HashSet<String>();
 		providersPermittedToDisclose.add("222");
 		consentDto
-				.setOrganizationalProvidersDisclosureIsMadeTo(organizationalProvidersDisclosureIsMadeTo);
+				.setOrganizationalProvidersDisclosureIsMadeToNpi(organizationalProvidersDisclosureIsMadeTo);
 		consentDto
-				.setProvidersPermittedToDisclose(providersPermittedToDisclose);
+				.setProvidersPermittedToDiscloseNpi(providersPermittedToDisclose);
 		thrown.expect(UniqueValueGeneratorException.class);
 
 		// Act

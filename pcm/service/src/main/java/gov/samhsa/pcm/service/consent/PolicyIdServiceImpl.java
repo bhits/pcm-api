@@ -81,24 +81,24 @@ public class PolicyIdServiceImpl implements PolicyIdService {
 		consentReferenceIdBuilder.append(this.pidDomainType);
 
 		consentReferenceIdBuilder.append(":");
-		if (consentDto.getOrganizationalProvidersDisclosureIsMadeTo() != null) {
+		if (consentDto.getOrganizationalProvidersDisclosureIsMadeToNpi() != null) {
 			consentReferenceIdBuilder
 					.append(consentDto
-							.getOrganizationalProvidersDisclosureIsMadeTo()
+							.getOrganizationalProvidersDisclosureIsMadeToNpi()
 							.toArray()[0]);
 		} else {
 			consentReferenceIdBuilder.append(consentDto
-					.getProvidersDisclosureIsMadeTo().toArray()[0]);
+					.getProvidersDisclosureIsMadeToNpi().toArray()[0]);
 		}
 		consentReferenceIdBuilder.append(":");
-		if (consentDto.getOrganizationalProvidersPermittedToDisclose() != null) {
+		if (consentDto.getOrganizationalProvidersPermittedToDiscloseNpi() != null) {
 			consentReferenceIdBuilder
 					.append(consentDto
-							.getOrganizationalProvidersPermittedToDisclose()
+							.getOrganizationalProvidersPermittedToDiscloseNpi()
 							.toArray()[0]);
 		} else {
 			consentReferenceIdBuilder.append(consentDto
-					.getProvidersPermittedToDisclose().toArray()[0]);
+					.getProvidersPermittedToDiscloseNpi().toArray()[0]);
 		}
 		consentReferenceIdBuilder.append(":");
 		consentReferenceIdBuilder.append(RandomStringUtils
