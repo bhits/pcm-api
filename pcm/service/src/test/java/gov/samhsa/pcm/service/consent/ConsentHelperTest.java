@@ -437,7 +437,7 @@ public class ConsentHelperTest {
 		
 		selIsMadeToNpi.addAll(selIsMadeToOrgNpi);
 		
-		consentDto.setProvidersPermittedToDisclose(selIsMadeToNpi);
+		consentDto.setProvidersPermittedToDiscloseNpi(selIsMadeToNpi);
 		
 		// providers to disclose
 		Set<String> selToDiscloseNpi = new HashSet<String>();
@@ -448,7 +448,7 @@ public class ConsentHelperTest {
 		
 		selToDiscloseNpi.addAll(selToDiscloseOrgNpi);
 		
-		consentDto.setProvidersDisclosureIsMadeTo(selToDiscloseNpi);
+		consentDto.setProvidersDisclosureIsMadeToNpi(selToDiscloseNpi);
 			
 	}	
 	
@@ -481,7 +481,7 @@ public class ConsentHelperTest {
 		
 		setDtoProvidersMatchData(consentDto);
 		
-		consentDto.setProvidersDisclosureIsMadeTo(consentDto.getProvidersPermittedToDisclose());
+		consentDto.setProvidersDisclosureIsMadeToNpi(consentDto.getProvidersPermittedToDiscloseNpi());
 
 		//Act
 		boolean isProviderComboMatch = cst.isProviderComboMatch(consent, consentDto);
@@ -501,7 +501,7 @@ public class ConsentHelperTest {
 		
 		setDtoProvidersMatchData(consentDto);
 		
-		consentDto.setProvidersPermittedToDisclose(consentDto.getProvidersDisclosureIsMadeTo());
+		consentDto.setProvidersPermittedToDiscloseNpi(consentDto.getProvidersDisclosureIsMadeToNpi());
 
 		//Act
 		boolean isProviderComboMatch = cst.isProviderComboMatch(consent, consentDto);
@@ -529,7 +529,7 @@ public class ConsentHelperTest {
 		
 		selIsMadeToNpi.addAll(selIsMadeToOrgNpi);
 		
-		consentDto.setProvidersPermittedToDisclose(selIsMadeToNpi);
+		consentDto.setProvidersPermittedToDiscloseNpi(selIsMadeToNpi);
 		
 		// providers to disclose
 		Set<String> selToDiscloseNpi = new HashSet<String>();
@@ -540,7 +540,7 @@ public class ConsentHelperTest {
 		
 		selToDiscloseNpi.addAll(selToDiscloseOrgNpi);
 		
-		consentDto.setProvidersDisclosureIsMadeTo(selToDiscloseNpi);
+		consentDto.setProvidersDisclosureIsMadeToNpi(selToDiscloseNpi);
 
 		//Act
 		boolean isProviderComboMatch = cst.isProviderComboMatch(consent, consentDto);
@@ -567,7 +567,7 @@ public class ConsentHelperTest {
 		
 		selIsMadeToNpi.addAll(selIsMadeToOrgNpi);
 		
-		consentDto.setProvidersPermittedToDisclose(selIsMadeToNpi);
+		consentDto.setProvidersPermittedToDiscloseNpi(selIsMadeToNpi);
 		
 		// providers to disclose
 		Set<String> selToDiscloseNpi = new HashSet<String>();
@@ -578,7 +578,7 @@ public class ConsentHelperTest {
 		
 		selToDiscloseNpi.addAll(selToDiscloseOrgNpi);
 		
-		consentDto.setProvidersDisclosureIsMadeTo(selToDiscloseNpi);
+		consentDto.setProvidersDisclosureIsMadeToNpi(selToDiscloseNpi);
 
 		//Act
 		boolean isProviderComboMatch = cst.isProviderComboMatch(consent, consentDto);
