@@ -31,41 +31,19 @@ import gov.samhsa.consent2share.domain.account.Users;
 import gov.samhsa.consent2share.domain.account.UsersRepository;
 import gov.samhsa.consent2share.domain.commondomainservices.EmailSender;
 import gov.samhsa.consent2share.domain.commondomainservices.EmailType;
-import gov.samhsa.consent2share.domain.consent.Consent;
-import gov.samhsa.consent2share.domain.consent.ConsentIndividualProviderDisclosureIsMadeTo;
-import gov.samhsa.consent2share.domain.consent.ConsentIndividualProviderPermittedToDisclose;
-import gov.samhsa.consent2share.domain.consent.ConsentOrganizationalProviderDisclosureIsMadeTo;
-import gov.samhsa.consent2share.domain.consent.ConsentOrganizationalProviderPermittedToDisclose;
+import gov.samhsa.consent2share.domain.consent.*;
 import gov.samhsa.consent2share.domain.patient.Patient;
 import gov.samhsa.consent2share.domain.patient.PatientLegalRepresentativeAssociation;
 import gov.samhsa.consent2share.domain.patient.PatientLegalRepresentativeAssociationRepository;
 import gov.samhsa.consent2share.domain.patient.PatientRepository;
 import gov.samhsa.consent2share.domain.provider.IndividualProvider;
 import gov.samhsa.consent2share.domain.provider.OrganizationalProvider;
-import gov.samhsa.consent2share.domain.reference.EntityType;
 import gov.samhsa.consent2share.infrastructure.DtoToDomainEntityMapper;
 import gov.samhsa.consent2share.infrastructure.PixService;
 import gov.samhsa.consent2share.infrastructure.security.AuthenticationFailedException;
 import gov.samhsa.consent2share.pixclient.util.PixManagerBean;
-import gov.samhsa.consent2share.service.dto.AddConsentIndividualProviderDto;
-import gov.samhsa.consent2share.service.dto.AddConsentOrganizationalProviderDto;
-import gov.samhsa.consent2share.service.dto.IndividualProviderDto;
-import gov.samhsa.consent2share.service.dto.OrganizationalProviderDto;
-import gov.samhsa.consent2share.service.dto.PatientAdminDto;
-import gov.samhsa.consent2share.service.dto.PatientConnectionDto;
-import gov.samhsa.consent2share.service.dto.PatientProfileDto;
-import gov.samhsa.consent2share.service.dto.ProviderDto;
-import gov.samhsa.consent2share.service.dto.RecentPatientDto;
+import gov.samhsa.consent2share.service.dto.*;
 import gov.samhsa.consent2share.service.util.TypeConverter;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.mail.MessagingException;
-
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +52,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+
+import javax.mail.MessagingException;
+import java.util.*;
 
 /**
  * The Class PatientServiceImpl.
@@ -164,6 +145,7 @@ public class PatientServiceImpl implements PatientService {
 	 * ()
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public long countAllPatients() {
 		return patientRepository.count();
 	}
@@ -176,6 +158,7 @@ public class PatientServiceImpl implements PatientService {
 	 * .lang.Long)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public PatientProfileDto findPatient(Long id) {
 		Patient patient = patientRepository.findOne(id);
 		PatientProfileDto patientDto = modelMapper.map(patient,
@@ -190,6 +173,7 @@ public class PatientServiceImpl implements PatientService {
 	 * findAllPatientByFirstNameAndLastName(java.lang.String[])
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<PatientAdminDto> findAllPatientByFirstNameAndLastName(
 			String[] tokens) {
 		List<Patient> patients;
@@ -216,6 +200,7 @@ public class PatientServiceImpl implements PatientService {
 	 * (java.lang.String)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public PatientProfileDto findByUsername(String username) {
 		Patient patient = patientRepository.findByUsername(username);
 		PatientProfileDto patientDto = modelMapper.map(patient,
@@ -231,6 +216,7 @@ public class PatientServiceImpl implements PatientService {
 	 * (java.lang.String)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public Long findIdByUsername(String username) {
 		return patientRepository.findByUsername(username).getId();
 	}
@@ -243,6 +229,7 @@ public class PatientServiceImpl implements PatientService {
 	 * (java.lang.Long)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public String findUsernameById(long id) {
 		return patientRepository.findOne(id).getUsername();
 	}
@@ -254,6 +241,7 @@ public class PatientServiceImpl implements PatientService {
 	 * findPatientEmailByUsername(java.lang.String)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public String findPatientEmailByUsername(String username) {
 		return patientRepository.findByUsername(username).getEmail();
 	}
@@ -265,6 +253,7 @@ public class PatientServiceImpl implements PatientService {
 	 * findPatientProfileByUsername(java.lang.String)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public PatientProfileDto findPatientProfileByUsername(String username) {
 		Patient patient = patientRepository.findByUsername(username);
 		PatientProfileDto patientDto = modelMapper.map(patient,
@@ -280,6 +269,7 @@ public class PatientServiceImpl implements PatientService {
 	 * findPatientConnectionByUsername(java.lang.String)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public PatientConnectionDto findPatientConnectionByUsername(String username) {
 		Patient patient = patientRepository.findByUsername(username);
 		return findPatientConnectionByPatient(patient);
@@ -293,6 +283,7 @@ public class PatientServiceImpl implements PatientService {
 	 * (gov.samhsa.consent2share.domain.patient.Patient)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public PatientConnectionDto findPatientConnectionByPatient(Patient patient) {
 		PatientConnectionDto patientConnectionDto = modelMapper.map(patient,
 				PatientConnectionDto.class);
@@ -378,6 +369,7 @@ public class PatientServiceImpl implements PatientService {
 	 * findPatientConnectionByUsername(java.lang.String)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public Set<ProviderDto> findProvidersByUsername(String username) {
 		Patient patient = patientRepository.findByUsername(username);
 		return findProvidersByPatient(patient);
@@ -391,6 +383,7 @@ public class PatientServiceImpl implements PatientService {
 	 * (gov.samhsa.consent2share.domain.patient.Patient)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public Set<ProviderDto> findProvidersByPatient(Patient patient) {
 		PatientConnectionDto patientConnectionDto = modelMapper.map(patient,
 				PatientConnectionDto.class);
@@ -484,6 +477,7 @@ public class PatientServiceImpl implements PatientService {
 	 * findPatientConnectionById(long)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public PatientConnectionDto findPatientConnectionById(long id) {
 		Patient patient = patientRepository.findOne(id);
 		return findPatientConnectionByPatient(patient);
@@ -497,6 +491,7 @@ public class PatientServiceImpl implements PatientService {
 	 * (int, int)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<PatientProfileDto> findPatientEntries(int pageNumber,
 			int pageSize) {
 		List<Patient> patientList = patientRepository.findAll(
@@ -619,6 +614,7 @@ public class PatientServiceImpl implements PatientService {
 	 * findAddConsentIndividualProviderDtoByUsername(java.lang.String)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<AddConsentIndividualProviderDto> findAddConsentIndividualProviderDtoByUsername(
 			String username) {
 		Patient patient = patientRepository.findByUsername(username);
@@ -642,6 +638,7 @@ public class PatientServiceImpl implements PatientService {
 	 * findAddConsentOrganizationalProviderDtoByUsername(java.lang.String)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<AddConsentOrganizationalProviderDto> findAddConsentOrganizationalProviderDtoByPatientId(
 			long pateintId) {
 		Patient patient = patientRepository.findOne(pateintId);
@@ -665,6 +662,7 @@ public class PatientServiceImpl implements PatientService {
 	 * findAddConsentIndividualProviderDtoByPatientId(long)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<AddConsentIndividualProviderDto> findAddConsentIndividualProviderDtoByPatientId(
 			long pateintId) {
 		Patient patient = patientRepository.findOne(pateintId);
@@ -688,6 +686,7 @@ public class PatientServiceImpl implements PatientService {
 	 * findAddConsentOrganizationalProviderDtoByUsername(java.lang.String)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<AddConsentOrganizationalProviderDto> findAddConsentOrganizationalProviderDtoByUsername(
 			String username) {
 		Patient patient = patientRepository.findByUsername(username);
@@ -711,6 +710,7 @@ public class PatientServiceImpl implements PatientService {
 	 * isLegalRepForCurrentUser(java.lang.Long)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public boolean isLegalRepForCurrentUser(Long legalRepId) {
 
 		String username = userContext.getCurrentUser().getUsername();
@@ -734,6 +734,7 @@ public class PatientServiceImpl implements PatientService {
 	 * findRecentPatientDtosById(java.util.List)
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<RecentPatientDto> findRecentPatientDtosById(List<String> ids) {
 		List<RecentPatientDto> patients = new ArrayList<RecentPatientDto>();
 		for (String id : ids) {
