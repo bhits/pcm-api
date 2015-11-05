@@ -81,21 +81,30 @@ public class PolicyIdServiceImpl implements PolicyIdService {
 		consentReferenceIdBuilder.append(this.pidDomainType);
 
 		consentReferenceIdBuilder.append(":");
-		if (consentDto.getOrganizationalProvidersDisclosureIsMadeToNpi() != null) {
+		if (consentDto.getOrganizationalProvidersDisclosureIsMadeToNpi()!=null) {
+			if(!consentDto.getOrganizationalProvidersDisclosureIsMadeToNpi().isEmpty())
 			consentReferenceIdBuilder
 					.append(consentDto
 							.getOrganizationalProvidersDisclosureIsMadeToNpi()
 							.toArray()[0]);
+			else{consentReferenceIdBuilder.append(consentDto
+					.getProvidersDisclosureIsMadeToNpi().toArray()[0]);}
 		} else {
 			consentReferenceIdBuilder.append(consentDto
 					.getProvidersDisclosureIsMadeToNpi().toArray()[0]);
 		}
 		consentReferenceIdBuilder.append(":");
-		if (consentDto.getOrganizationalProvidersPermittedToDiscloseNpi() != null) {
+		if (consentDto.getOrganizationalProvidersPermittedToDiscloseNpi()!=null) {
+			if(!consentDto.getOrganizationalProvidersPermittedToDiscloseNpi().isEmpty()){
 			consentReferenceIdBuilder
 					.append(consentDto
 							.getOrganizationalProvidersPermittedToDiscloseNpi()
 							.toArray()[0]);
+			}
+			else {
+				consentReferenceIdBuilder.append(consentDto
+						.getProvidersPermittedToDiscloseNpi().toArray()[0]);
+			}
 		} else {
 			consentReferenceIdBuilder.append(consentDto
 					.getProvidersPermittedToDiscloseNpi().toArray()[0]);
