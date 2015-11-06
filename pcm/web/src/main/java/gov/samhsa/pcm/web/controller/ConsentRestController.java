@@ -172,8 +172,151 @@ public class ConsentRestController extends AbstractController {
 		return consentDto;
 	}
 	
-	@RequestMapping(value = "consents", method = {RequestMethod.POST, RequestMethod.PUT})
+	@RequestMapping(value = "consents", method = RequestMethod.POST)
 	public void consentAddPost(@RequestBody ConsentDto consentDto,
+			@RequestParam(value = "ICD9", required = false) HashSet<String> icd9)
+			throws ConsentGenException, IOException, JSONException {
+		
+		consentDto.setUsername(username);
+	/*	if (consentDto.getId() != null) {
+			final String directConsentId = String.valueOf(accessReferenceMapper
+					.getDirectReference(consentDto.getId()));
+			consentDto.setId(directConsentId);
+		}*/
+
+		final Set<String> isMadeTo = new HashSet<String>();
+		final Set<String> isMadeFrom = new HashSet<String>();
+
+		// validate consent start date and end date
+		if (consentService.validateConsentDate(consentDto.getConsentStart(),
+				consentDto.getConsentEnd()) == false) {
+			throw new AjaxException(HttpStatus.BAD_REQUEST,
+					"Invalid value(s) passed in for one or more date fields.");
+		}
+
+		try {
+			consentDto.setConsentEnd(consentHelper.setDateAsEndOfDay(consentDto
+					.getConsentEnd()));
+		} catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+			logger.warn("Exception thrown & caught in consentAddPost() method of ConsentController when calling consentHelper.setDateAsEndOfDay()");
+			logger.warn("    Stack Trace: " + e);
+
+			throw new AjaxException(HttpStatus.BAD_REQUEST,
+					"Invalid value(s) passed in for one or more date fields.");
+		}
+
+		if (consentDto.getOrganizationalProvidersDisclosureIsMadeToNpi() != null) {
+			isMadeTo.addAll(consentDto
+					.getOrganizationalProvidersDisclosureIsMadeToNpi());
+		}
+
+		if (consentDto.getProvidersDisclosureIsMadeToNpi() != null) {
+			isMadeTo.addAll(consentDto.getProvidersDisclosureIsMadeToNpi());
+		}
+
+		if (consentDto.getOrganizationalProvidersPermittedToDiscloseNpi() != null) {
+			isMadeFrom.addAll(consentDto
+					.getOrganizationalProvidersPermittedToDiscloseNpi());
+		}
+
+		if (consentDto.getProvidersPermittedToDiscloseNpi() != null) {
+			isMadeFrom.addAll(consentDto.getProvidersPermittedToDiscloseNpi());
+		}
+
+		consentService.areThereDuplicatesInTwoSets(isMadeTo, isMadeFrom);
+
+		if (!isMadeTo.isEmpty()
+				&& !isMadeFrom.isEmpty()
+				&& consentService.areThereDuplicatesInTwoSets(isMadeTo,
+						isMadeFrom) == false) {
+			if (consentDto.getShareForPurposeOfUseCodes() == null) {
+				throw new AjaxException(HttpStatus.UNPROCESSABLE_ENTITY,
+						"At least one purpose of use needs to be selected.");
+			}
+			// one to one policy validation
+			if (isMadeTo.size() != 1 || isMadeFrom.size() != 1) {
+				throw new AjaxException(HttpStatus.UNPROCESSABLE_ENTITY,
+						"Only one provider can be selected from the list");
+			}
+
+			// Make sure username from consentDto matches a valid patient
+			// username
+
+			PatientProfileDto checkMatch = null;
+
+			try {
+				checkMatch = patientService
+						.findPatientProfileByUsername(consentDto.getUsername());
+			} catch (final IllegalArgumentException e) {
+				logger.warn("Username from consentDto does not match any valid patient usernames");
+				logger.warn("Stack trace: ", e);
+				throw new AjaxException(HttpStatus.UNPROCESSABLE_ENTITY,
+						"Username from consentDto does not match any valid patient usernames");
+			}
+
+			if (checkMatch == null) {
+				logger.warn("Username from consentDto does not match any valid patient usernames");
+				throw new AjaxException(HttpStatus.UNPROCESSABLE_ENTITY,
+						"Username from consentDto does not match any valid patient usernames");
+			} else {
+				Set<SpecificMedicalInfoDto> doNotShareClinicalConceptCodes = new HashSet<SpecificMedicalInfoDto>();
+				if (icd9 != null) {
+					doNotShareClinicalConceptCodes = consentHelper
+							.getDoNotShareClinicalConceptCodes(icd9);
+				}
+
+				consentDto
+						.setDoNotShareClinicalConceptCodes(doNotShareClinicalConceptCodes);
+
+				Object obj = null;
+				try {
+					obj = consentService.saveConsent(consentDto, 0);
+				} catch (final Exception e) {
+					logger.error(e.getMessage(), e);
+					throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR,
+							"Failed to save the consent, please try again later.");
+				}
+
+				if (null != obj && obj instanceof ConsentValidationDto) {
+
+					final ConsentValidationDto conDto = (ConsentValidationDto) obj;
+					/*final String indirRef = accessReferenceMapper
+							.getIndirectReference(conDto.getExistingConsentId());
+
+					conDto.setExistingConsentId(indirRef);*/
+					// duplicate policy found
+					final ObjectMapper mapper = new ObjectMapper();
+					String errorMessage = null;
+
+					errorMessage = mapper.writeValueAsString(conDto);
+
+					throw new AjaxException(HttpStatus.CONFLICT, errorMessage);
+				}
+
+				final JSONObject succObj = new JSONObject();
+
+				succObj.put("isSuccess", true);
+				succObj.put("isAdmin", false);
+
+				final String str_succObj = succObj.toString();
+
+				if (str_succObj == null) {
+					logger.warn("An unknown error has occured consentAddPost() method of ConsentController. Call to succObj.toString() returned null value.");
+					throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR,
+							"An unknown error has occured.");
+				}
+
+			}
+		} else {
+			throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Resource Not Found");
+		}
+
+	}
+	
+	@RequestMapping(value = "consents/{consentId}", method = RequestMethod.PUT)
+	public void updateConsents(@RequestBody ConsentDto consentDto, 
+			@PathVariable("consentId") Long consentId,
 			@RequestParam(value = "ICD9", required = false) HashSet<String> icd9)
 			throws ConsentGenException, IOException, JSONException {
 		
