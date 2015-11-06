@@ -172,7 +172,7 @@ public class ConsentRestController extends AbstractController {
 		return consentDto;
 	}
 	
-	@RequestMapping(value = "consents", method = RequestMethod.POST)
+	@RequestMapping(value = "consents", method = {RequestMethod.POST, RequestMethod.PUT})
 	public void consentAddPost(@RequestBody ConsentDto consentDto,
 			@RequestParam(value = "ICD9", required = false) HashSet<String> icd9)
 			throws ConsentGenException, IOException, JSONException {
