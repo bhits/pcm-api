@@ -2,7 +2,7 @@ package gov.samhsa.acs.common.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import gov.samhsa.consent2share.commonunit.xml.XmlComparator;
+import gov.samhsa.pcm.commonunit.xml.XmlComparator;
 
 import java.io.IOException;
 import java.util.LinkedList;

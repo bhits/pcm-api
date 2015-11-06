@@ -2,12 +2,8 @@ package gov.samhsa.acs.documentsegmentation.brms;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import gov.samhsa.acs.brms.RuleExecutionServiceImpl;
-import gov.samhsa.acs.brms.guvnor.GuvnorService;
-import gov.samhsa.acs.brms.guvnor.GuvnorServiceImpl;
-import gov.samhsa.acs.common.tool.SimpleMarshaller;
 import gov.samhsa.consent2share.schema.ruleexecutionservice.AssertAndExecuteClinicalFactsRequest;
 import gov.samhsa.consent2share.schema.ruleexecutionservice.AssertAndExecuteClinicalFactsResponse;
 

@@ -11,7 +11,7 @@
 			DataType="http://www.w3.org/2001/XMLSchema#string">
 			<AttributeValue>1285969170</AttributeValue>
 		</Attribute>
-		<Attribute AttributeId="gov.samhsa.consent2share.purpose-of-use-code"
+		<Attribute AttributeId="gov.samhsa.pcm.purpose-of-use-code"
 			DataType="http://www.w3.org/2001/XMLSchema#string">
 			<AttributeValue>TREAT</AttributeValue>
 		</Attribute>

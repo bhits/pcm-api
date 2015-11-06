@@ -15,7 +15,7 @@ import gov.samhsa.acs.common.exception.DS4PException;
 import gov.samhsa.acs.common.tool.DocumentXmlConverterImpl;
 import gov.samhsa.acs.common.tool.FileReaderImpl;
 import gov.samhsa.acs.common.util.EncryptTool;
-import gov.samhsa.consent2share.commonunit.xml.XmlComparator;
+import gov.samhsa.pcm.commonunit.xml.XmlComparator;
 
 import java.io.IOException;
 import java.security.Key;

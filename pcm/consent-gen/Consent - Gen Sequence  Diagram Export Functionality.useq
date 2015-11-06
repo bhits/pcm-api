@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sequence-diagram version="1.1.4" icons="true" automaticImage="PNG">  
-  <object id="1" language="java" name="gov.samhsa.consent2share.web.ConsentController" project="consent2share-web" 
-    file="/consent2share-web/src/main/java/gov/samhsa/consent2share/web/ConsentController.java" binary="false" 
+  <object id="1" language="java" name="gov.samhsa.pcm.web.ConsentController" project="consent2share-web"
+    file="/consent2share-web/src/main/java/gov/samhsa/pcm/web/ConsentController.java" binary="false"
     label="consentController" type="class" autoSize="true">    
     <position height="-1" width="-1" x="105" y="0"/>    
     <execution id="2">      
@@ -14,9 +14,9 @@
       <position height="583" width="141" x="5" y="1353"/>    
     </execution>  
   </object>  
-  <object id="11" language="java" name="gov.samhsa.consent2share.service.consentexport.ConsentExportService" 
+  <object id="11" language="java" name="gov.samhsa.pcm.service.consentexport.ConsentExportService"
     project="consent2share-core" 
-    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/service/consentexport/ConsentExportService.java" 
+    file="/consent2share-core/src/main/java/gov/samhsa/pcm/service/consentexport/ConsentExportService.java"
     binary="false" label="consentExportService" type="interface" autoSize="true">    
     <position height="-1" width="-1" x="254" y="0"/>    
     <execution id="4">      
@@ -29,9 +29,9 @@
       <position height="541" width="218" x="150" y="1374"/>    
     </execution>  
   </object>  
-  <object id="18" language="java" name="gov.samhsa.consent2share.service.consentexport.ConsentExportServiceImpl" 
+  <object id="18" language="java" name="gov.samhsa.pcm.service.consentexport.ConsentExportServiceImpl"
     project="consent2share-core" 
-    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/service/consentexport/ConsentExportServiceImpl.java" 
+    file="/consent2share-core/src/main/java/gov/samhsa/pcm/service/consentexport/ConsentExportServiceImpl.java"
     binary="false" label="consentExportServiceImpl" type="class" autoSize="true">    
     <position height="-1" width="-1" x="520" y="0"/>    
     <execution id="13">      
@@ -86,9 +86,9 @@
       <position height="147" width="131" x="846" y="1458"/>    
     </execution>  
   </object>  
-  <object id="52" language="java" name="gov.samhsa.consent2share.service.consentexport.ConsentDtoFactoryImpl" 
+  <object id="52" language="java" name="gov.samhsa.pcm.service.consentexport.ConsentDtoFactoryImpl"
     project="consent2share-core" 
-    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/service/consentexport/ConsentDtoFactoryImpl.java" 
+    file="/consent2share-core/src/main/java/gov/samhsa/pcm/service/consentexport/ConsentDtoFactoryImpl.java"
     binary="false" label="consentDtoFactoryImpl" type="class" autoSize="true">    
     <position height="-1" width="-1" x="1120" y="0"/>    
     <execution id="47">      
@@ -101,9 +101,9 @@
       <position height="105" width="218" x="981" y="1479"/>    
     </execution>  
   </object>  
-  <object id="63" language="java" name="gov.samhsa.consent2share.domain.consent.ConsentRepository" 
+  <object id="63" language="java" name="gov.samhsa.pcm.domain.consent.ConsentRepository"
     project="consent2share-core" 
-    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/domain/consent/ConsentRepository.java" 
+    file="/consent2share-core/src/main/java/gov/samhsa/pcm/domain/consent/ConsentRepository.java"
     binary="false" label="consentRepository" type="interface" autoSize="true">    
     <position height="-1" width="-1" x="1245" y="0"/>    
     <execution id="54">      
@@ -159,9 +159,9 @@
       <position height="21" width="165" x="1543" y="1768"/>    
     </execution>  
   </object>  
-  <object id="84" language="java" name="gov.samhsa.consent2share.service.consentexport.ConsentExportMapper" 
+  <object id="84" language="java" name="gov.samhsa.pcm.service.consentexport.ConsentExportMapper"
     project="consent2share-core" 
-    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/service/consentexport/ConsentExportMapper.java" 
+    file="/consent2share-core/src/main/java/gov/samhsa/pcm/service/consentexport/ConsentExportMapper.java"
     binary="false" label="consentExportMapper" type="interface" autoSize="true">    
     <position height="-1" width="-1" x="1311" y="0"/>    
     <execution id="56">      
@@ -174,9 +174,9 @@
       <position height="63" width="218" x="1712" y="1500"/>    
     </execution>  
   </object>  
-  <object id="91" language="java" name="gov.samhsa.consent2share.service.consentexport.ConsentExportMapperImpl" 
+  <object id="91" language="java" name="gov.samhsa.pcm.service.consentexport.ConsentExportMapperImpl"
     project="consent2share-core" 
-    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/service/consentexport/ConsentExportMapperImpl.java" 
+    file="/consent2share-core/src/main/java/gov/samhsa/pcm/service/consentexport/ConsentExportMapperImpl.java"
     binary="false" label="consentExportMapperImpl" type="class" autoSize="true">    
     <position height="-1" width="-1" x="892" y="0"/>    
     <execution id="86">      
@@ -197,7 +197,7 @@
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="7"/>  
   </message>  
-  <message id="9" operation="exportConsent2XACML(gov.samhsa.consent2share.domain.consent.Consent):java.lang.String">    
+  <message id="9" operation="exportConsent2XACML(gov.samhsa.pcm.domain.consent.Consent):java.lang.String">
     <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="10"/>  
   </message>  
@@ -209,7 +209,7 @@
     <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="15"/>  
   </message>  
-  <message id="16" operation="exportConsent2XACML(gov.samhsa.consent2share.domain.consent.Consent):java.lang.String">    
+  <message id="16" operation="exportConsent2XACML(gov.samhsa.pcm.domain.consent.Consent):java.lang.String">
     <end type="SOURCE" refId="10"/>    
     <end type="TARGET" refId="17"/>  
   </message>  
@@ -279,7 +279,7 @@
     <end type="SOURCE" refId="47"/>    
     <end type="TARGET" refId="54"/>  
   </message>  
-  <message id="55" operation="map(gov.samhsa.consent2share.domain.consent.Consent):gov.samhsa.consent.ConsentDto">    
+  <message id="55" operation="map(gov.samhsa.pcm.domain.consent.Consent):gov.samhsa.consent.ConsentDto">
     <end type="SOURCE" refId="47"/>    
     <end type="TARGET" refId="56"/>  
   </message>  
@@ -287,11 +287,11 @@
     <end type="SOURCE" refId="49"/>    
     <end type="TARGET" refId="58"/>  
   </message>  
-  <message id="59" operation="map(gov.samhsa.consent2share.domain.consent.Consent):gov.samhsa.consent.ConsentDto">    
+  <message id="59" operation="map(gov.samhsa.pcm.domain.consent.Consent):gov.samhsa.consent.ConsentDto">
     <end type="SOURCE" refId="49"/>    
     <end type="TARGET" refId="60"/>  
   </message>  
-  <message id="61" operation="map(gov.samhsa.consent2share.domain.consent.Consent):gov.samhsa.consent.ConsentDto">    
+  <message id="61" operation="map(gov.samhsa.pcm.domain.consent.Consent):gov.samhsa.consent.ConsentDto">
     <end type="SOURCE" refId="51"/>    
     <end type="TARGET" refId="62"/>  
   </message>  
@@ -334,15 +334,15 @@
     <end type="SOURCE" refId="70"/>    
     <end type="TARGET" refId="83"/>  
   </message>  
-  <message id="85" operation="map(gov.samhsa.consent2share.domain.consent.Consent):gov.samhsa.consent.ConsentDto">    
+  <message id="85" operation="map(gov.samhsa.pcm.domain.consent.Consent):gov.samhsa.consent.ConsentDto">
     <end type="SOURCE" refId="56"/>    
     <end type="TARGET" refId="86"/>  
   </message>  
-  <message id="87" operation="map(gov.samhsa.consent2share.domain.consent.Consent):gov.samhsa.consent.ConsentDto">    
+  <message id="87" operation="map(gov.samhsa.pcm.domain.consent.Consent):gov.samhsa.consent.ConsentDto">
     <end type="SOURCE" refId="60"/>    
     <end type="TARGET" refId="88"/>  
   </message>  
-  <message id="89" operation="map(gov.samhsa.consent2share.domain.consent.Consent):gov.samhsa.consent.ConsentDto">    
+  <message id="89" operation="map(gov.samhsa.pcm.domain.consent.Consent):gov.samhsa.consent.ConsentDto">
     <end type="SOURCE" refId="62"/>    
     <end type="TARGET" refId="90"/>  
   </message>

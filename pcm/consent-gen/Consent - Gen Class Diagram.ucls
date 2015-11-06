@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.4" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true">  
-  <class id="1" language="java" name="gov.samhsa.consent2share.web.ConsentController" project="consent2share-web" 
-    file="/consent2share-web/src/main/java/gov/samhsa/consent2share/web/ConsentController.java" binary="false" 
+  <class id="1" language="java" name="gov.samhsa.pcm.web.ConsentController" project="consent2share-web"
+    file="/consent2share-web/src/main/java/gov/samhsa/pcm/web/ConsentController.java" binary="false"
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="141" y="166"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" accessors="true" 
@@ -11,9 +11,9 @@
       <operations public="true" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <interface id="2" language="java" name="gov.samhsa.consent2share.service.consentexport.ConsentExportService" 
+  <interface id="2" language="java" name="gov.samhsa.pcm.service.consentexport.ConsentExportService"
     project="consent2share-core" 
-    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/service/consentexport/ConsentExportService.java" 
+    file="/consent2share-core/src/main/java/gov/samhsa/pcm/service/consentexport/ConsentExportService.java"
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="432" y="69"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
@@ -22,9 +22,9 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="3" language="java" name="gov.samhsa.consent2share.service.consentexport.ConsentExportServiceImpl" 
+  <class id="3" language="java" name="gov.samhsa.pcm.service.consentexport.ConsentExportServiceImpl"
     project="consent2share-core" 
-    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/service/consentexport/ConsentExportServiceImpl.java" 
+    file="/consent2share-core/src/main/java/gov/samhsa/pcm/service/consentexport/ConsentExportServiceImpl.java"
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="761" y="78"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
@@ -79,9 +79,9 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="9" language="java" name="gov.samhsa.consent2share.service.consentexport.ConsentDtoFactoryImpl" 
+  <class id="9" language="java" name="gov.samhsa.pcm.service.consentexport.ConsentDtoFactoryImpl"
     project="consent2share-core" 
-    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/service/consentexport/ConsentDtoFactoryImpl.java" 
+    file="/consent2share-core/src/main/java/gov/samhsa/pcm/service/consentexport/ConsentDtoFactoryImpl.java"
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="166" y="586"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
@@ -99,9 +99,9 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <interface id="11" language="java" name="gov.samhsa.consent2share.domain.consent.ConsentRepository" 
+  <interface id="11" language="java" name="gov.samhsa.pcm.domain.consent.ConsentRepository"
     project="consent2share-core" 
-    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/domain/consent/ConsentRepository.java" 
+    file="/consent2share-core/src/main/java/gov/samhsa/pcm/domain/consent/ConsentRepository.java"
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="137" y="780"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
@@ -110,9 +110,9 @@
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </interface>  
-  <interface id="12" language="java" name="gov.samhsa.consent2share.service.consentexport.ConsentExportMapper" 
+  <interface id="12" language="java" name="gov.samhsa.pcm.service.consentexport.ConsentExportMapper"
     project="consent2share-core" 
-    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/service/consentexport/ConsentExportMapper.java" 
+    file="/consent2share-core/src/main/java/gov/samhsa/pcm/service/consentexport/ConsentExportMapper.java"
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="421" y="854"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
@@ -121,9 +121,9 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="13" language="java" name="gov.samhsa.consent2share.service.consentexport.ConsentExportMapperImpl" 
+  <class id="13" language="java" name="gov.samhsa.pcm.service.consentexport.ConsentExportMapperImpl"
     project="consent2share-core" 
-    file="/consent2share-core/src/main/java/gov/samhsa/consent2share/service/consentexport/ConsentExportMapperImpl.java" 
+    file="/consent2share-core/src/main/java/gov/samhsa/pcm/service/consentexport/ConsentExportMapperImpl.java"
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="746" y="860"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 

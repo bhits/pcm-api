@@ -1,9 +1,9 @@
 package gov.samhsa.acs.trypolicy.wsclient;
 
 import static org.junit.Assert.*;
-import gov.samhsa.acs.trypolicy.wsclient.TryPolicyWebServiceClient;
-import gov.samhsa.consent2share.commonunit.io.SpringBasedResourceFileReader;
-import gov.samhsa.consent2share.commonunit.xml.XmlComparator;
+
+import gov.samhsa.pcm.commonunit.io.SpringBasedResourceFileReader;
+import gov.samhsa.pcm.commonunit.xml.XmlComparator;
 
 import java.util.ArrayList;
 import java.util.List;

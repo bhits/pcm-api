@@ -1,6 +1,6 @@
 package gov.samhsa.acs.common.tool;
 
-import static gov.samhsa.consent2share.commonunit.xml.XmlComparator.compareXMLs;
+import static gov.samhsa.pcm.commonunit.xml.XmlComparator.compareXMLs;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

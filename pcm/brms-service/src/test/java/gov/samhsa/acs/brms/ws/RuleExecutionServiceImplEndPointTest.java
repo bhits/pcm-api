@@ -2,7 +2,7 @@ package gov.samhsa.acs.brms.ws;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
-import gov.samhsa.acs.brms.ws.RuleExecutionServiceWsImpl;
+
 import gov.samhsa.consent2share.contract.ruleexecutionservice.RuleExecutionService;
 import gov.samhsa.consent2share.contract.ruleexecutionservice.RuleExecutionServicePortType;
 import gov.samhsa.consent2share.schema.ruleexecutionservice.AssertAndExecuteClinicalFactsRequest;

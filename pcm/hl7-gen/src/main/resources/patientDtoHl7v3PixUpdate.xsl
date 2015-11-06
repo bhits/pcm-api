@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs c2s"
-	xmlns:hl7="urn:hl7-org:v3" xmlns:c2s="gov.samhsa.consent2share.hl7.dto" version="2.0">
+	xmlns:hl7="urn:hl7-org:v3" xmlns:c2s="gov.samhsa.pcm.hl7.dto" version="2.0">
 
 	<xsl:output method="xml" version="1.0" indent="no" encoding="UTF-8"/>
 
