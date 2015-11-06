@@ -744,28 +744,28 @@ public class ConsentServiceImpl implements ConsentService {
 			for (final ConsentDoNotShareClinicalDocumentTypeCode item : consent
 					.getDoNotShareClinicalDocumentTypeCodes()) {
 				consentDoNotShareClinicalDocumentTypeCode.add(item
-						.getClinicalDocumentTypeCode().getDisplayName());
+						.getClinicalDocumentTypeCode().getCode());
 			}
 
 			final Set<String> consentDoNotShareClinicalDocumentSectionTypeCode = new HashSet<String>();
 			for (final ConsentDoNotShareClinicalDocumentSectionTypeCode item : consent
 					.getDoNotShareClinicalDocumentSectionTypeCodes()) {
 				consentDoNotShareClinicalDocumentSectionTypeCode.add(item
-						.getMedicalSection().getName());
+						.getMedicalSection().getCode());
 			}
 
 			final Set<String> consentDoNotShareSensitivityPolicyCode = new HashSet<String>();
 			for (final ConsentDoNotShareSensitivityPolicyCode item : consent
 					.getDoNotShareSensitivityPolicyCodes()) {
 				consentDoNotShareSensitivityPolicyCode.add(item
-						.getValueSetCategory().getName());
+						.getValueSetCategory().getCode());
 			}
 
 			final Set<String> consentShareForPurposeOfUseCode = new HashSet<String>();
 			for (final ConsentShareForPurposeOfUseCode item : consent
 					.getShareForPurposeOfUseCodes()) {
 				consentShareForPurposeOfUseCode.add(item.getPurposeOfUseCode()
-						.getDisplayName());
+						.getCode());
 			}
 
 			final Set<SpecificMedicalInfoDto> consentDoNotShareClinicalConceptCodes = new HashSet<SpecificMedicalInfoDto>();
