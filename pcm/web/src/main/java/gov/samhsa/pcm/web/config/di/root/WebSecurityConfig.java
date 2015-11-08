@@ -56,40 +56,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.httpStrictTransportSecurity()
 		.and()
 			.authorizeRequests()
-			.antMatchers("/sysadmin/lookupService/**").permitAll()
-			.antMatchers("/Administrator/**").permitAll()
-			.antMatchers("/sysadmin/**").hasRole("SYSADMIN")
-				.antMatchers("/instrumentation/**").permitAll()
-			.antMatchers("/patients/**", "/clinicaldocuments/**","/consents/**").permitAll()
-			.antMatchers("/**", "/sysadmin/lookupService/**","/index.html", "/registration.html").permitAll()
+			.antMatchers("/**").permitAll()
 			.anyRequest().authenticated()
-		.and()
-			.formLogin()
-			.loginPage("/")
-			.usernameParameter("j_username")
-			.passwordParameter("j_password")
-			.loginProcessingUrl("/resources/j_spring_security_check")
-			.permitAll()
-			.defaultSuccessUrl("/defaultLoginPage.html")
-			.failureHandler(loginMappingFailureHandler())
-		.and()
-			.logout()
-			.logoutUrl("/resources/j_spring_security_logout")
-			.logoutSuccessUrl("/")
-			.invalidateHttpSession(true)
-			.deleteCookies("JSESSIONID")
-		.and()
-			.exceptionHandling().accessDeniedPage("/views/dataAccessFailure.html")
 		.and()
 			.sessionManagement()
 			.sessionFixation()
-			.migrateSession()
-			.maximumSessions(1)
+			.migrateSession();
+			/*.maximumSessions(1)
 			.expiredUrl("/index.html?expired=true")
-			.maxSessionsPreventsLogin(false);
-
-		http.addFilterAfter(ajaxTimeoutRedirectFilter(),
-				ExceptionTranslationFilter.class);
+			.maxSessionsPreventsLogin(false);*/
+	
 		http.addFilterBefore(corsFilter(), HeaderWriterFilter.class);
 	}
 
