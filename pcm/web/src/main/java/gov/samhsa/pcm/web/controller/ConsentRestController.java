@@ -229,10 +229,11 @@ public class ConsentRestController extends AbstractController {
 				&& !isMadeFrom.isEmpty()
 				&& consentService.areThereDuplicatesInTwoSets(isMadeTo,
 						isMadeFrom) == false) {
-			if (consentDto.getShareForPurposeOfUseCodes() == null) {
+			if ((consentDto.getShareForPurposeOfUseCodes() == null)||(consentDto.getShareForPurposeOfUseCodes().isEmpty())) {
 				throw new AjaxException(HttpStatus.UNPROCESSABLE_ENTITY,
 						"At least one purpose of use needs to be selected.");
 			}
+			
 			// one to one policy validation
 			if (isMadeTo.size() != 1 || isMadeFrom.size() != 1) {
 				throw new AjaxException(HttpStatus.UNPROCESSABLE_ENTITY,
@@ -372,10 +373,14 @@ public class ConsentRestController extends AbstractController {
 				&& !isMadeFrom.isEmpty()
 				&& consentService.areThereDuplicatesInTwoSets(isMadeTo,
 						isMadeFrom) == false) {
-			if (consentDto.getShareForPurposeOfUseCodes() == null) {
+			if ((consentDto.getShareForPurposeOfUseCodes() == null)||(consentDto.getShareForPurposeOfUseCodes().isEmpty())) {
 				throw new AjaxException(HttpStatus.UNPROCESSABLE_ENTITY,
 						"At least one purpose of use needs to be selected.");
 			}
+			else {if(consentDto.getShareForPurposeOfUseCodes().isEmpty()){
+				throw new AjaxException(HttpStatus.UNPROCESSABLE_ENTITY,
+						"At least one purpose of use needs to be selected.");
+			}}
 			// one to one policy validation
 			if (isMadeTo.size() != 1 || isMadeFrom.size() != 1) {
 				throw new AjaxException(HttpStatus.UNPROCESSABLE_ENTITY,
