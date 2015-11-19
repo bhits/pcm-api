@@ -44,8 +44,10 @@ import gov.samhsa.pcm.service.valueset.ValueSetCategoryService;
 import gov.samhsa.pcm.web.AjaxException;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -55,12 +57,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * The Class ConsentRestController.
@@ -440,27 +444,43 @@ public class ConsentRestController extends AbstractController {
 	}
 
 	@RequestMapping(value = "consents/signConsent/{consentId}", method = RequestMethod.GET)
-	public String signConsent(@PathVariable("consentId") Long consentId) {
+	public Map<String, String> signConsent(@PathVariable("consentId") Long consentId) {
 		final Long patientId = patientService.findIdByUsername(username);
 		if (consentService.isConsentBelongToThisUser(consentId, patientId)
 				&& consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
 			final ConsentPdfDto consentPdfDto = consentService.findConsentPdfDto(consentId);
-			final String javascriptCode = consentService.createConsentEmbeddedWidget(consentPdfDto);
-			return javascriptCode;
+			final String javascriptWidgetCode = consentService.createConsentEmbeddedWidget(consentPdfDto);
+			
+			String[] rt=javascriptWidgetCode.split("'");
+			
+			RestTemplate restTemplate = new RestTemplate();
+			String javaScript = restTemplate.getForObject(rt[5], String.class);
+						
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("javascriptCode", javaScript.substring(javaScript.indexOf("(") + 2, javaScript.indexOf(")")-1));
+			return map;
 		} else
 			throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR, "Resource Not Found");
 	}
 
 	@RequestMapping(value = "consents/revokeConsent/{consentId}", method = RequestMethod.GET)
-	public String signConsentRevokation(@PathVariable("consentId") Long consentId) {
+	public Map<String, String> signConsentRevokation(@PathVariable("consentId") Long consentId) {
 		final Long patientId = patientService.findIdByUsername(username);
 		consentService.addUnsignedConsentRevokationPdf(consentId, revokationType);
 		if (consentService.isConsentBelongToThisUser(consentId, patientId)) {
 			final ConsentRevokationPdfDto consentRevokationPdfDto = consentService
 					.findConsentRevokationPdfDto(consentId);
 			consentRevokationPdfDto.setRevokationType(revokationType);
-			final String javascriptCode = consentService.createRevocationEmbeddedWidget(consentRevokationPdfDto);
-			return javascriptCode;
+			final String javascriptWidgetCode = consentService.createRevocationEmbeddedWidget(consentRevokationPdfDto);
+
+			String[] rt=javascriptWidgetCode.split("'");
+			
+			RestTemplate restTemplate = new RestTemplate();
+			String javaScript = restTemplate.getForObject(rt[5], String.class);
+						
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("javascriptCode", javaScript.substring(javaScript.indexOf("(") + 2, javaScript.indexOf(")")-1));
+			return map;
 		} else
 			throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR, "Resource Not Found");
 	}
