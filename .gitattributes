@@ -46,6 +46,7 @@
 *.bmp binary
 *.tiff binary
 *.pdf binary
+*.ogg binary
 *.ppt binary
 *.pptx binary
 *.doc binary
