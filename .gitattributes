@@ -43,6 +43,7 @@
 *.svg binary
 *.gif binary
 *.bmp binary
+*.tiff binary
 *.pdf binary
 *.ppt binary
 *.pptx binary
