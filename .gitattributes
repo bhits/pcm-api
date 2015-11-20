@@ -50,6 +50,8 @@
 *.docx binary
 *.xls binary
 *.xlsx binary
+*.vsd binary
+*.vsdx binary
 *.jar binary
 *.war binary
 *.ear binary
