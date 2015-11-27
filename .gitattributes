@@ -39,17 +39,22 @@
 # Denote all files that are truly binary and should not be modified.
 *.png binary
 *.jpg binary
+*.jpeg binary
 *.bmp binary
 *.svg binary
 *.gif binary
 *.bmp binary
+*.tiff binary
 *.pdf binary
+*.ogg binary
 *.ppt binary
 *.pptx binary
 *.doc binary
 *.docx binary
 *.xls binary
 *.xlsx binary
+*.vsd binary
+*.vsdx binary
 *.jar binary
 *.war binary
 *.ear binary
