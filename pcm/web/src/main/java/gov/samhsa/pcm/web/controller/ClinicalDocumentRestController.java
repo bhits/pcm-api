@@ -138,18 +138,17 @@ public class ClinicalDocumentRestController implements InitializingBean {
             if (scanMultipartFile(file) == "false") {
                 eventService.raiseSecurityEvent(new MaliciousFileDetectedEvent(request.getRemoteAddr(),
                         username, documentName));
-                throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR, "An unknown error has occured.");
+                throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR, "Virus detected");
             }
         }
         if (clinicalDocumentService.isDocumentOversized(file))
-            throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR, "An unknown error has occured.");
-        if (clinicalDocumentService.isDocumentExtensionPermitted(file) == false)
-            throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR, "An unknown error has occured.");
+            throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR, "Size over limits");
+        if (!clinicalDocumentService.isDocumentExtensionPermitted(file))
+            throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR, "Extension not permitted");
         try {
             xmlValidator.validate(file.getInputStream());
         } catch (Exception e) {
-            throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR, "An unknown error has occured.");
-           // return "redirect:/patients/clinicaldocuments.html?notify=invalid_c32";
+            throw new AjaxException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid C32");
         }
 
         ClinicalDocumentDto clinicalDocumentDto = new ClinicalDocumentDto();
