@@ -32,13 +32,11 @@ import gov.samhsa.pcm.service.dto.PatientProfileDto;
 
 import java.util.List;
 
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * The Interface ClinicalDocumentService.
  */
-@Secured("ROLE_USER")
 public interface ClinicalDocumentService {
 
 	/**
