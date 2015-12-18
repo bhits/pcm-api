@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Open Behavioral Health Information Technology Architecture (OBHITA.org)
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above copyright
@@ -11,7 +11,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,7 +25,6 @@
  ******************************************************************************/
 package gov.samhsa.pcm.service.clinicaldata;
 
-import gov.samhsa.pcm.common.AuthenticatedUser;
 import gov.samhsa.pcm.common.UserContext;
 import gov.samhsa.pcm.domain.clinicaldata.ClinicalDocument;
 import gov.samhsa.pcm.domain.clinicaldata.ClinicalDocumentRepository;
@@ -58,31 +57,33 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Transactional
 public class ClinicalDocumentServiceImpl implements ClinicalDocumentService,
-		InitializingBean {
+        InitializingBean {
 
-	/** The logger. */
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    /** The logger. */
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	/** The max file size. */
-	private Long maxFileSize;
+    /** The max file size. */
+    private Long maxFileSize;
 
-	/** The permitted extensions. */
-	private String permittedExtensions;
+    /** The permitted extensions. */
+    private String permittedExtensions;
 
-	/** The permitted extensions array. */
-	private String[] permittedExtensionsArray;
+    /** The permitted extensions array. */
+    private String[] permittedExtensionsArray;
 
-	/** The clinical document repository. */
-	ClinicalDocumentRepository clinicalDocumentRepository;
+    private String username = "albert.smith";
 
-	/** The clinical document type code repository. */
-	ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository;
+    /** The clinical document repository. */
+    ClinicalDocumentRepository clinicalDocumentRepository;
 
-	/** The model mapper. */
-	ModelMapper modelMapper;
+    /** The clinical document type code repository. */
+    ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository;
 
-	/** The patient repository. */
-	PatientRepository patientRepository;
+    /** The model mapper. */
+    ModelMapper modelMapper;
+
+    /** The patient repository. */
+    PatientRepository patientRepository;
 
 	/** The user context. */
 	UserContext userContext;
@@ -128,342 +129,338 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService,
 		this.validator = validator;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
-	 */
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		permittedExtensionsArray = permittedExtensions.split(",");
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
+     */
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        permittedExtensionsArray = permittedExtensions.split(",");
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
-	 * #countAllClinicalDocuments()
-	 */
-	@Override
-	public long countAllClinicalDocuments() {
-		return clinicalDocumentRepository.count();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
+     * #countAllClinicalDocuments()
+     */
+    @Override
+    public long countAllClinicalDocuments() {
+        return clinicalDocumentRepository.count();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
-	 * #deleteClinicalDocument
-	 * (gov.samhsa.consent2share.service.dto.ClinicalDocumentDto)
-	 */
-	@Override
-	public void deleteClinicalDocument(ClinicalDocumentDto clinicalDocumentDto) {
-		ClinicalDocument clinicalDocument = getClinicalDocumenFromDto(clinicalDocumentDto);
-		clinicalDocumentRepository.delete(clinicalDocument);
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
+     * #deleteClinicalDocument
+     * (gov.samhsa.consent2share.service.dto.ClinicalDocumentDto)
+     */
+    @Override
+    public void deleteClinicalDocument(ClinicalDocumentDto clinicalDocumentDto) {
+        ClinicalDocument clinicalDocument = getClinicalDocumenFromDto(clinicalDocumentDto);
+        clinicalDocumentRepository.delete(clinicalDocument);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
-	 * #findClinicalDocument(java.lang.Long)
-	 */
-	@Override
-	public ClinicalDocument findClinicalDocument(Long id) {
-		return clinicalDocumentRepository.findOne(id);
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
+     * #findClinicalDocument(java.lang.Long)
+     */
+    @Override
+    public ClinicalDocument findClinicalDocument(Long id) {
+        return clinicalDocumentRepository.findOne(id);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
-	 * #findAllClinicalDocuments()
-	 */
-	@Override
-	public List<ClinicalDocument> findAllClinicalDocuments() {
-		return clinicalDocumentRepository.findAll();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
+     * #findAllClinicalDocuments()
+     */
+    @Override
+    public List<ClinicalDocument> findAllClinicalDocuments() {
+        return clinicalDocumentRepository.findAll();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
-	 * #findClinicalDocumentEntries(int, int)
-	 */
-	@Override
-	public List<ClinicalDocument> findClinicalDocumentEntries(int firstResult,
-			int maxResults) {
-		return clinicalDocumentRepository.findAll(
-				new org.springframework.data.domain.PageRequest(firstResult
-						/ maxResults, maxResults)).getContent();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
+     * #findClinicalDocumentEntries(int, int)
+     */
+    @Override
+    public List<ClinicalDocument> findClinicalDocumentEntries(int firstResult,
+                                                              int maxResults) {
+        return clinicalDocumentRepository.findAll(
+                new org.springframework.data.domain.PageRequest(firstResult
+                        / maxResults, maxResults)).getContent();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
-	 * #saveClinicalDocument
-	 * (gov.samhsa.consent2share.service.dto.ClinicalDocumentDto)
-	 */
-	@Override
-	public void saveClinicalDocument(ClinicalDocumentDto clinicalDocumentDto) {
-		if (validateClinicalDocumentDtoFields(clinicalDocumentDto) == true) {
-			ClinicalDocument clinicalDocument = getClinicalDocumenFromDto(clinicalDocumentDto);
-			clinicalDocumentRepository.save(clinicalDocument);
-		}
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
+     * #saveClinicalDocument
+     * (gov.samhsa.consent2share.service.dto.ClinicalDocumentDto)
+     */
+    @Override
+    public void saveClinicalDocument(ClinicalDocumentDto clinicalDocumentDto) {
+        if (validateClinicalDocumentDtoFields(clinicalDocumentDto) == true) {
+            ClinicalDocument clinicalDocument = getClinicalDocumenFromDto(clinicalDocumentDto);
+            clinicalDocumentRepository.save(clinicalDocument);
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
-	 * #updateClinicalDocument
-	 * (gov.samhsa.consent2share.domain.clinicaldata.ClinicalDocument)
-	 */
-	@Override
-	public ClinicalDocument updateClinicalDocument(
-			ClinicalDocument clinicalDocument) {
-		return clinicalDocumentRepository.save(clinicalDocument);
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
+     * #updateClinicalDocument
+     * (gov.samhsa.consent2share.domain.clinicaldata.ClinicalDocument)
+     */
+    @Override
+    public ClinicalDocument updateClinicalDocument(
+            ClinicalDocument clinicalDocument) {
+        return clinicalDocumentRepository.save(clinicalDocument);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
-	 * #findClinicalDocumentDto(long)
-	 */
-	@Override
-	public ClinicalDocumentDto findClinicalDocumentDto(long documentId) {
-		ClinicalDocument clinicalDocument = findClinicalDocument(documentId);
-		ClinicalDocumentDto clinicalDocumentDto = modelMapper.map(
-				clinicalDocument, ClinicalDocumentDto.class);
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
+     * #findClinicalDocumentDto(long)
+     */
+    @Override
+    public ClinicalDocumentDto findClinicalDocumentDto(long documentId) {
+        ClinicalDocument clinicalDocument = findClinicalDocument(documentId);
+        ClinicalDocumentDto clinicalDocumentDto = modelMapper.map(
+                clinicalDocument, ClinicalDocumentDto.class);
 
-		// manual mapping without using model mapper
-		AuthenticatedUser currentUser = userContext.getCurrentUser();
-		String username = currentUser.getUsername();
-		clinicalDocumentDto.setPatientId(patientRepository.findByUsername(
-				username).getId());
-		return clinicalDocumentDto;
-	}
+        // manual mapping without using model mapper
+        clinicalDocumentDto.setPatientId(patientRepository.findByUsername(
+                username).getId());
+        return clinicalDocumentDto;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
-	 * #findByPatient(gov.samhsa.consent2share.domain.patient.Patient)
-	 */
-	@Override
-	public List<ClinicalDocument> findByPatient(Patient patient) {
-		return clinicalDocumentRepository.findByPatientId(patient.getId());
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
+     * #findByPatient(gov.samhsa.consent2share.domain.patient.Patient)
+     */
+    @Override
+    public List<ClinicalDocument> findByPatient(Patient patient) {
+        return clinicalDocumentRepository.findByPatientId(patient.getId());
+    }
 
-	/**
-	 * Find clinical documents by patient Id.
-	 *
-	 * @param patientId
-	 *            the patient id
-	 * @return the list
-	 */
-	@Override
-	public List<ClinicalDocument> findByPatientId(long patientId) {
-		return clinicalDocumentRepository.findByPatientId(patientId);
-	}
+    /**
+     * Find clinical documents by patient Id.
+     *
+     * @param patientId
+     *            the patient id
+     * @return the list
+     */
+    @Override
+    public List<ClinicalDocument> findByPatientId(long patientId) {
+        return clinicalDocumentRepository.findByPatientId(patientId);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
-	 * #findDtoByPatientDto
-	 * (gov.samhsa.consent2share.service.dto.PatientProfileDto)
-	 */
-	@Override
-	public List<ClinicalDocumentDto> findDtoByPatientDto(
-			PatientProfileDto patientDto) {
-		Patient patient = patientRepository.findByUsername(patientDto
-				.getUsername());
-		List<ClinicalDocumentDto> dtos = findDtoByPatient(patient);
-		for (ClinicalDocumentDto dto : dtos) {
-			if (dto.getClinicalDocumentTypeCode() == null) {
-				LookupDto typeCode = new LookupDto();
-				typeCode.setDisplayName("Not Specified");
-				dto.setClinicalDocumentTypeCode(typeCode);
-			}
-		}
-		return dtos;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
+     * #findDtoByPatientDto
+     * (gov.samhsa.consent2share.service.dto.PatientProfileDto)
+     */
+    @Override
+    public List<ClinicalDocumentDto> findDtoByPatientDto(
+            PatientProfileDto patientDto) {
+        Patient patient = patientRepository.findByUsername(patientDto
+                .getUsername());
+        List<ClinicalDocumentDto> dtos = findDtoByPatient(patient);
+        for (ClinicalDocumentDto dto : dtos) {
+            if (dto.getClinicalDocumentTypeCode() == null) {
+                LookupDto typeCode = new LookupDto();
+                typeCode.setDisplayName("Not Specified");
+                dto.setClinicalDocumentTypeCode(typeCode);
+            }
+        }
+        return dtos;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
-	 * #isDocumentBelongsToThisUser
-	 * (gov.samhsa.consent2share.service.dto.ClinicalDocumentDto)
-	 */
-	@Override
-	public boolean isDocumentBelongsToThisUser(
-			ClinicalDocumentDto clinicalDocumentDto) {
-		AuthenticatedUser currentUser = userContext.getCurrentUser();
-		String username = currentUser.getUsername();
-		Patient patient = patientRepository.findByUsername(username);
-		List<ClinicalDocumentDto> clinicaldocumentDtos = findDtoByPatient(patient);
-		for (ClinicalDocumentDto documentDto : clinicaldocumentDtos) {
-			if (documentDto.getId().equals(clinicalDocumentDto.getId())) {
-				return true;
-			}
-		}
-		return false;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
+     * #isDocumentBelongsToThisUser
+     * (gov.samhsa.consent2share.service.dto.ClinicalDocumentDto)
+     */
+    @Override
+    public boolean isDocumentBelongsToThisUser(
+            ClinicalDocumentDto clinicalDocumentDto) {
+        Patient patient = patientRepository.findByUsername(username);
+        List<ClinicalDocumentDto> clinicaldocumentDtos = findDtoByPatient(patient);
+        for (ClinicalDocumentDto documentDto : clinicaldocumentDtos) {
+            if (documentDto.getId().equals(clinicalDocumentDto.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
-	 * #isDocumentOversized(org.springframework.web.multipart.MultipartFile)
-	 */
-	@Override
-	public boolean isDocumentOversized(MultipartFile file) {
-		if (file.getSize() > maxFileSize)
-			return true;
-		return false;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
+     * #isDocumentOversized(org.springframework.web.multipart.MultipartFile)
+     */
+    @Override
+    public boolean isDocumentOversized(MultipartFile file) {
+        if (file.getSize() > maxFileSize)
+            return true;
+        return false;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
-	 * #isDocumentExtensionPermitted
-	 * (org.springframework.web.multipart.MultipartFile)
-	 */
-	@Override
-	public boolean isDocumentExtensionPermitted(MultipartFile file) {
-		boolean result = false;
-		int indexOfDot = file.getOriginalFilename().indexOf(".");
-		if (indexOfDot >= 0) {
-			String extension = file.getOriginalFilename().substring(
-					indexOfDot + 1);
-			for (String permittedExtension : permittedExtensionsArray) {
-				if (extension.equals(permittedExtension)) {
-					result = true;
-					break;
-				}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
+     * #isDocumentExtensionPermitted
+     * (org.springframework.web.multipart.MultipartFile)
+     */
+    @Override
+    public boolean isDocumentExtensionPermitted(MultipartFile file) {
+        boolean result = false;
+        int indexOfDot = file.getOriginalFilename().indexOf(".");
+        if (indexOfDot >= 0) {
+            String extension = file.getOriginalFilename().substring(
+                    indexOfDot + 1);
+            for (String permittedExtension : permittedExtensionsArray) {
+                if (extension.equals(permittedExtension)) {
+                    result = true;
+                    break;
+                }
 
-			}
+            }
 
-		}
-		return result;
-	}
+        }
+        return result;
+    }
 
-	/**
-	 * Validate clinical document dto fields.
-	 *
-	 * @param clinicalDocumentDto
-	 *            the clinical document dto
-	 * @return true, if successful
-	 */
-	boolean validateClinicalDocumentDtoFields(
-			ClinicalDocumentDto clinicalDocumentDto) {
-		Set<ConstraintViolation<ClinicalDocumentDto>> violations = validator
-				.validate(clinicalDocumentDto);
-		if (violations.isEmpty() == true)
-			return true;
-		throw new ConstraintViolationException("Field validation error.",
-				new HashSet<ConstraintViolation<?>>(violations));
-	}
+    /**
+     * Validate clinical document dto fields.
+     *
+     * @param clinicalDocumentDto
+     *            the clinical document dto
+     * @return true, if successful
+     */
+    boolean validateClinicalDocumentDtoFields(
+            ClinicalDocumentDto clinicalDocumentDto) {
+        Set<ConstraintViolation<ClinicalDocumentDto>> violations = validator
+                .validate(clinicalDocumentDto);
+        if (violations.isEmpty() == true)
+            return true;
+        throw new ConstraintViolationException("Field validation error.",
+                new HashSet<ConstraintViolation<?>>(violations));
+    }
 
-	/**
-	 * Find dto by patient.
-	 *
-	 * @param patient
-	 *            the patient
-	 * @return the list
-	 */
-	List<ClinicalDocumentDto> findDtoByPatient(Patient patient) {
-		List<ClinicalDocument> documents = clinicalDocumentRepository
-				.findByPatientId(patient.getId());
-		List<ClinicalDocumentDto> dtos = new ArrayList<ClinicalDocumentDto>();
-		for (ClinicalDocument doc : documents) {
-			ClinicalDocumentDto clinicalDocumentDto = modelMapper.map(doc,
-					ClinicalDocumentDto.class);
+    /**
+     * Find dto by patient.
+     *
+     * @param patient
+     *            the patient
+     * @return the list
+     */
+    List<ClinicalDocumentDto> findDtoByPatient(Patient patient) {
+        List<ClinicalDocument> documents = clinicalDocumentRepository
+                .findByPatientId(patient.getId());
+        List<ClinicalDocumentDto> dtos = new ArrayList<ClinicalDocumentDto>();
+        for (ClinicalDocument doc : documents) {
+            ClinicalDocumentDto clinicalDocumentDto = modelMapper.map(doc,
+                    ClinicalDocumentDto.class);
 
-			// manual mapping without using model mapper
-			clinicalDocumentDto.setPatientId(patient.getId());
-			dtos.add(clinicalDocumentDto);
-		}
+            // manual mapping without using model mapper
+            clinicalDocumentDto.setPatientId(patient.getId());
+            dtos.add(clinicalDocumentDto);
+        }
 
-		return dtos;
-	}
+        return dtos;
+    }
 
-	/**
-	 * Gets the clinical document from dto.
-	 *
-	 * @param clinicalDocumentDto
-	 *            the clinical document dto
-	 * @return the clinical document from dto
-	 */
-	private ClinicalDocument getClinicalDocumenFromDto(
-			ClinicalDocumentDto clinicalDocumentDto) {
+    /**
+     * Gets the clinical document from dto.
+     *
+     * @param clinicalDocumentDto
+     *            the clinical document dto
+     * @return the clinical document from dto
+     */
+    private ClinicalDocument getClinicalDocumenFromDto(
+            ClinicalDocumentDto clinicalDocumentDto) {
 
-		// required fields
-		ClinicalDocument clinicalDocument = new ClinicalDocument();
-		if (clinicalDocumentDto.getId() != null)
-			clinicalDocument.setId(Long.parseLong(clinicalDocumentDto.getId()));
-		clinicalDocument.setName(clinicalDocumentDto.getName());
-		clinicalDocument.setFilename(clinicalDocumentDto.getFilename());
-		clinicalDocument.setContent(clinicalDocumentDto.getContent());
-		clinicalDocument.setContentType(clinicalDocumentDto.getContentType());
-		clinicalDocument.setDocumentSize(clinicalDocumentDto.getDocumentSize());
+        // required fields
+        ClinicalDocument clinicalDocument = new ClinicalDocument();
+        if (clinicalDocumentDto.getId() != null)
+            clinicalDocument.setId(Long.parseLong(clinicalDocumentDto.getId()));
+        clinicalDocument.setName(clinicalDocumentDto.getName());
+        clinicalDocument.setFilename(clinicalDocumentDto.getFilename());
+        clinicalDocument.setContent(clinicalDocumentDto.getContent());
+        clinicalDocument.setContentType(clinicalDocumentDto.getContentType());
+        clinicalDocument.setDocumentSize(clinicalDocumentDto.getDocumentSize());
 
-		// optional fields
-		if (clinicalDocumentDto.getClinicalDocumentTypeCode() != null) {
-			clinicalDocument
-					.setClinicalDocumentTypeCode(clinicalDocumentTypeCodeRepository
-							.findByCode(clinicalDocumentDto
-									.getClinicalDocumentTypeCode().getCode()));
-		} else {
-			clinicalDocument.setClinicalDocumentTypeCode(null);
-		}
+        // optional fields
+        if (clinicalDocumentDto.getClinicalDocumentTypeCode() != null) {
+            clinicalDocument
+                    .setClinicalDocumentTypeCode(clinicalDocumentTypeCodeRepository
+                            .findByCode(clinicalDocumentDto
+                                    .getClinicalDocumentTypeCode().getCode()));
+        } else {
+            clinicalDocument.setClinicalDocumentTypeCode(null);
+        }
 
-		if (StringUtils.hasText(clinicalDocumentDto.getDescription())) {
-			clinicalDocument.setDescription(clinicalDocumentDto
-					.getDescription());
-		} else {
-			clinicalDocument.setDescription(null);
-		}
+        if (StringUtils.hasText(clinicalDocumentDto.getDescription())) {
+            clinicalDocument.setDescription(clinicalDocumentDto
+                    .getDescription());
+        } else {
+            clinicalDocument.setDescription(null);
+        }
 
-		if (StringUtils.hasText(clinicalDocumentDto.getDocumentUrl())) {
-			clinicalDocument.setDocumentUrl(clinicalDocumentDto
-					.getDocumentUrl());
-		} else {
-			clinicalDocument.setDocumentUrl(null);
-		}
+        if (StringUtils.hasText(clinicalDocumentDto.getDocumentUrl())) {
+            clinicalDocument.setDocumentUrl(clinicalDocumentDto
+                    .getDocumentUrl());
+        } else {
+            clinicalDocument.setDocumentUrl(null);
+        }
 
-		if (patientRepository.findOne(clinicalDocumentDto.getPatientId()) != null) {
-			clinicalDocument.setPatient(patientRepository
-					.findOne(clinicalDocumentDto.getPatientId()));
-		} else {
-			clinicalDocument.setPatient(null);
-		}
+        if (patientRepository.findOne(clinicalDocumentDto.getPatientId()) != null) {
+            clinicalDocument.setPatient(patientRepository
+                    .findOne(clinicalDocumentDto.getPatientId()));
+        } else {
+            clinicalDocument.setPatient(null);
+        }
 
-		if (clinicalDocumentDto.getVersion() != null) {
-			clinicalDocument.setVersion(clinicalDocumentDto.getVersion());
-		} else {
-			clinicalDocument.setVersion(null);
-		}
+        if (clinicalDocumentDto.getVersion() != null) {
+            clinicalDocument.setVersion(clinicalDocumentDto.getVersion());
+        } else {
+            clinicalDocument.setVersion(null);
+        }
 
-		return clinicalDocument;
-	}
+        return clinicalDocument;
+    }
 }
