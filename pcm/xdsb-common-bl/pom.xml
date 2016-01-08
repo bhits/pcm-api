@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>gov.samhsa.pcm</groupId>
 		<artifactId>pcm</artifactId>
-		<version>1.3.0-SNAPSHOT</version>
+		<version>1.4.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>xdsb-common-bl</artifactId>
 	<name>XDS.b Common base</name>
