@@ -24,6 +24,7 @@
 		<javax.mail.version>1.4.1</javax.mail.version>
 		<adobe-echosign.version>20</adobe-echosign.version>
 		<apache.commons.version>3.3.2</apache.commons.version>
+		<modelmapper.version>0.7.5</modelmapper.version>
 	</properties>
 
 	<dependencies>
@@ -75,6 +76,11 @@
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>${javax.mail.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>${modelmapper.version}</version>
 		</dependency>
 
 		<dependency>
