@@ -16,7 +16,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         hbm2ddl:
-          auto: create
+          auto: validate
     hibernate:
       ddl-auto: none
-      naming-strategy: org.hibernate.cfg.DefaultNamingStrategy
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy

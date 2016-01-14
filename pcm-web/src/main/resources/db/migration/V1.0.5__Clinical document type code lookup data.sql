@@ -1,0 +1,8 @@
+-- insert into clinical_document_type_code (id, code, display_name, code_system_name, code_system) values (1, '34133-9', 'Summarization of Episode Note', 'LOINC', '2.16.840.1.113883.6.1');
+-- insert into clinical_document_type_code (id, code, display_name, code_system_name, code_system) values (2, '11488-4', 'Consultation Note', 'LOINC', '2.16.840.1.113883.6.1');
+-- insert into clinical_document_type_code (id, code, display_name, code_system_name, code_system) values (3, '18748-4', 'Diagnostic Imaging Report', 'LOINC', '2.16.840.1.113883.6.1');
+-- insert into clinical_document_type_code (id, code, display_name, code_system_name, code_system) values (4, '18842-5', 'Discharge Summary', 'LOINC', '2.16.840.1.113883.6.1');
+-- insert into clinical_document_type_code (id, code, display_name, code_system_name, code_system) values (5, '34117-2', 'History and Physical Note', 'LOINC', '2.16.840.1.113883.6.1');
+-- insert into clinical_document_type_code (id, code, display_name, code_system_name, code_system) values (6, '11504-8', 'Surgical Operation Note', 'LOINC', '2.16.840.1.113883.6.1');
+-- insert into clinical_document_type_code (id, code, display_name, code_system_name, code_system) values (7, '28570-0', 'Procedure Note', 'LOINC', '2.16.840.1.113883.6.1');
+-- insert into clinical_document_type_code (id, code, display_name, code_system_name, code_system) values (8, '11506-3', 'Progress Note', 'LOINC', '2.16.840.1.113883.6.1');

@@ -1,0 +1,4 @@
+insert into target_site_code (id, code, display_name, code_system_name, code_system) values (1, '361316009', 'entire embryonic artery', 'SNOMED CT', '2.16.840.1.113883.6.96');
+insert into target_site_code (id, code, display_name, code_system_name, code_system) values (2, '38033009', 'amputation stump', 'SNOMED CT', '2.16.840.1.113883.6.96');
+insert into target_site_code (id, code, display_name, code_system_name, code_system) values (3, '9550003', 'bronchogenic cyst', 'SNOMED CT', '2.16.840.1.113883.6.96');
+insert into target_site_code (id, code, display_name, code_system_name, code_system) values (4, '302509004', 'heart', 'SNOMED CT', '2.16.840.1.113883.6.96');
