@@ -32,7 +32,7 @@ import gov.samhsa.bhits.pcm.domain.reference.EntityType;
 import gov.samhsa.bhits.pcm.service.dto.IndividualProviderDto;
 import gov.samhsa.bhits.pcm.service.dto.OrganizationalProviderDto;
 import gov.samhsa.bhits.pcm.service.dto.ProviderDto;
-import gov.samhsa.bhits.pcm.service.exception.AlreadyInUseProviderException;
+import gov.samhsa.bhits.pcm.service.exception.ProviderAlreadyInUseException;
 import gov.samhsa.bhits.pcm.service.exception.CannotDeleteProviderException;
 import gov.samhsa.bhits.pcm.service.exception.CannotDeserializeProviderResultException;
 import gov.samhsa.bhits.pcm.service.exception.ProviderNotFoundException;
@@ -130,7 +130,7 @@ public class ProviderRestController {
                 new CannotDeleteProviderException("ERROR: Unable to delete this provider.");
             else {
                 if (providerDto.isDeletable() == false)
-                    throw new AlreadyInUseProviderException("Error: Unable to delete this provider because it is currently used in one or more of your consents.");
+                    throw new ProviderAlreadyInUseException("Error: Unable to delete this provider because it is currently used in one or more of your consents.");
                 if (providerDto.isDeletable() == true && providerDto.getEntityType().equals("Individual"))
                     individualProviderService.deleteIndividualProviderByNpi(npi);
                 else
@@ -197,10 +197,10 @@ public class ProviderRestController {
 
             if (isOrgProvider == true) {
                 if (organizationalProviderReturned == null)
-                    throw new AlreadyInUseProviderException("Error: The provider could not be added because the provider already exists in the patient’s account.");
+                    throw new ProviderAlreadyInUseException("Error: The provider could not be added because the provider already exists in the patient’s account.");
             } else {
                 if (individualProviderReturned == null)
-                    throw new AlreadyInUseProviderException("Error: The provider could not be added because the provider already exists in the patient’s account.");
+                    throw new ProviderAlreadyInUseException("Error: The provider could not be added because the provider already exists in the patient’s account.");
             }
         } else {
             throw new ProviderNotFoundException("Error:The provider could not be added because the specified NPI could not be found.");
