@@ -31,6 +31,13 @@ spring:
       mail.smtp.starttls.enable: true
   messages:
     basename: i18n/messages
+security:
+  basic:
+    enabled: false
+  oauth2:
+    resource:
+      jwt:
+        key-uri: http://localhost:8080/uaa/token_key
 bhits:
   pcm:
     config:
