@@ -5,182 +5,166 @@ import net.taldius.clamav.ClamAVScannerFactory;
 import net.taldius.clamav.ScannerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 
+import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
 /**
  * The Class ClamAVService.
  */
-public class ClamAVService implements InitializingBean {
+public class ClamAVService {
 
-	/** Host where 'clamd' process is running. */
-	private String clamdHost;
+    final Logger logger = LoggerFactory.getLogger(this.getClass());
+    /**
+     * Host where 'clamd' process is running.
+     */
+    private String clamdHost;
+    /**
+     * Port on which 'clamd' process is listening.
+     */
+    private int clamdPort;
+    /**
+     * Connection time out to connect 'clamd' process.
+     */
+    private int connTimeOut;
+    /**
+     * The scanner.
+     */
+    private ClamAVScanner scanner;
 
-	/** Port on which 'clamd' process is listening. */
-	private String clamdPort;
+    /**
+     * Instantiates a new clam av service.
+     *
+     * @param clamdHost   the clamd host
+     * @param clamdPort   the clamd port
+     * @param connTimeOut the conn time out
+     */
+    public ClamAVService(String clamdHost, int clamdPort, int connTimeOut) {
+        super();
+        this.clamdHost = clamdHost;
+        this.clamdPort = clamdPort;
+        this.connTimeOut = connTimeOut;
+    }
 
-	/** Connection time out to connect 'clamd' process. */
-	private String connTimeOut;
+    /**
+     * Gets the clamd host.
+     *
+     * @return the clamd host
+     */
+    public String getClamdHost() {
+        return this.clamdHost;
+    }
 
-	/** The scanner. */
-	private ClamAVScanner scanner;
-	
-	final Logger logger = LoggerFactory.getLogger(this.getClass());
+    /**
+     * Sets the clamd host.
+     *
+     * @param clamdHost the new clamd host
+     */
+    public void setClamdHost(String clamdHost) {
+        this.clamdHost = clamdHost;
+    }
 
-	/**
-	 * Instantiates a new clam av service.
-	 *
-	 * @param clamdHost
-	 *            the clamd host
-	 * @param clamdPort
-	 *            the clamd port
-	 * @param connTimeOut
-	 *            the conn time out
-	 */
-	public ClamAVService(String clamdHost, String clamdPort, String connTimeOut) {
-		super();
-		this.clamdHost = clamdHost;
-		this.clamdPort = clamdPort;
-		this.connTimeOut = connTimeOut;
-	}
+    /**
+     * Gets the clamd port.
+     *
+     * @return the clamd port
+     */
+    public int getClamdPort() {
+        return this.clamdPort;
+    }
 
-	/**
-	 * Sets the clamd host.
-	 *
-	 * @param clamdHost
-	 *            the new clamd host
-	 */
-	public void setClamdHost(String clamdHost) {
-		this.clamdHost = clamdHost;
-	}
+    /**
+     * Sets the clamd port.
+     *
+     * @param clamdPort the new clamd port
+     */
+    public void setClamdPort(int clamdPort) {
+        this.clamdPort = clamdPort;
+    }
 
-	/**
-	 * Gets the clamd host.
-	 *
-	 * @return the clamd host
-	 */
-	public String getClamdHost() {
-		return this.clamdHost;
-	}
+    /**
+     * Gets the conn time out.
+     *
+     * @return the conn time out
+     */
+    public int getConnTimeOut() {
+        return this.connTimeOut;
+    }
 
-	/**
-	 * Sets the clamd port.
-	 *
-	 * @param clamdPort
-	 *            the new clamd port
-	 */
-	public void setClamdPort(String clamdPort) {
-		this.clamdPort = clamdPort;
-	}
+    /**
+     * Sets the conn time out.
+     *
+     * @param connTimeOut the new conn time out
+     */
+    public void setConnTimeOut(int connTimeOut) {
+        this.connTimeOut = connTimeOut;
+    }
 
-	/**
-	 * Gets the clamd port.
-	 *
-	 * @return the clamd port
-	 */
-	public String getClamdPort() {
-		return this.clamdPort;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
+     */
+    @PostConstruct
+    public void afterPropertiesSet() throws Exception {
+        ClamAVScannerFactory.setClamdHost(clamdHost);
 
-	/**
-	 * Sets the conn time out.
-	 *
-	 * @param connTimeOut
-	 *            the new conn time out
-	 */
-	public void setConnTimeOut(String connTimeOut) {
-		this.connTimeOut = connTimeOut;
-	}
+        ClamAVScannerFactory.setClamdPort(clamdPort);
 
-	/**
-	 * Gets the conn time out.
-	 *
-	 * @return the conn time out
-	 */
-	public String getConnTimeOut() {
-		return this.connTimeOut;
-	}
+        if (connTimeOut > 0) {
+            ClamAVScannerFactory.setConnectionTimeout(connTimeOut);
+        }
+        this.scanner = ClamAVScannerFactory.getScanner();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
-	 */
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		initScanner();
-	}
+    /**
+     * Gets the clam av scanner.
+     *
+     * @return the clam av scanner
+     */
+    public ClamAVScanner getClamAVScanner() {
+        return scanner;
+    }
 
-	/**
-	 * Method to initialize clamAV scanner.
-	 */
-	public void initScanner() {
+    /**
+     * Method scans files to check whether file is virus infected.
+     *
+     * @param destFilePath file path
+     * @return true, if successful
+     * @throws Exception the exception
+     */
+    public boolean fileScanner(String destFilePath) throws Exception {
 
-		ClamAVScannerFactory.setClamdHost(clamdHost);
+        return fileScanner(new FileInputStream(destFilePath));
+    }
 
-		ClamAVScannerFactory.setClamdPort(Integer.parseInt(clamdPort));
+    /**
+     * Method scans files to check whether file is virus infected.
+     *
+     * @param fileInputStream the file input stream
+     * @return true, if successful
+     * @throws Exception the exception
+     */
+    public boolean fileScanner(InputStream fileInputStream) throws ClamAVClientNotAvailableException, Exception {
 
-		int connectionTimeOut = Integer.parseInt(connTimeOut);
+        boolean resScan = false;
+        afterPropertiesSet();
 
-		if (connectionTimeOut > 0) {
-			ClamAVScannerFactory.setConnectionTimeout(connectionTimeOut);
-		}
-		this.scanner = ClamAVScannerFactory.getScanner();
-	}
+        if (fileInputStream != null) {
+            try {
+                resScan = scanner.performScan(fileInputStream);
+            } catch (ScannerException e) {
+                logger.error(e.getMessage(), e);
+                throw new ClamAVClientNotAvailableException(
+                        "ClamAV service not available.");
+            }
 
-	/**
-	 * Gets the clam av scanner.
-	 *
-	 * @return the clam av scanner
-	 */
-	public ClamAVScanner getClamAVScanner() {
-		return scanner;
-	}
+        } else {
 
-	/**
-	 * Method scans files to check whether file is virus infected.
-	 *
-	 * @param destFilePath
-	 *            file path
-	 * @return true, if successful
-	 * @throws Exception
-	 *             the exception
-	 */
-	public boolean fileScanner(String destFilePath) throws Exception {
-
-		return fileScanner(new FileInputStream(destFilePath));
-	}
-
-	/**
-	 * Method scans files to check whether file is virus infected.
-	 *
-	 * @param fileInputStream
-	 *            the file input stream
-	 * @return true, if successful
-	 * @throws Exception
-	 *             the exception
-	 */
-	public boolean fileScanner(InputStream fileInputStream) throws ClamAVClientNotAvailableException, Exception {
-
-		boolean resScan = false;
-		initScanner();
-
-		if (fileInputStream != null) {
-			try {
-				resScan = scanner.performScan(fileInputStream);
-			} catch (ScannerException e) {
-				logger.error(e.getMessage(),e);
-				throw new ClamAVClientNotAvailableException(
-						"ClamAV service not available.");
-			}
-
-		} else {
-
-			throw new Exception();
-		}
-		return resScan;
-	}
+            throw new Exception();
+        }
+        return resScan;
+    }
 }

@@ -1,0 +1,49 @@
+
+
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:remove="all">Registration Verification Email</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                
+    </head>
+    <body style="padding:0 50px;">
+
+
+<table cellpadding="0" cellspacing="0" border="0" align="center" width="75%" bgcolor="#ffffff" style="padding-top:30px; font-family:Helvetica, Arial, sans-serif;">
+	<tr>
+		<td bgcolor="#fafafa" style="vertical-align:middle; border:1px #d2d2d2 solid; border-right:0; font-size:18px; line-height:30px; font-weight:600; color:#777777; padding:12px">Thank you, <span th:text="${recipientName}">Asample</span></td>
+		<td bgcolor="#fafafa" style="vertical-align:middle; border:1px #d2d2d2 solid; border-left:0; font-size:18px; line-height:30px; font-weight:400; text-align:right; color:#999999; padding:12px">
+			Consent<span style="color:#13aaea; font-size:larger;">2</span>Share
+		</td>
+	</tr>
+</table>
+
+<table align="center" width="70%" border="0" cellspacing="0" cellpadding="0" style="padding-top:10px; font-family:Helvetica, Arial, sans-serif;">
+	<tr>
+		<td style="padding-top: 10px;">
+			<table style="color:#777777; padding-right:15px; padding-left:15px;">
+				<tr>
+					<td style="font-size:14px;">Dear <span th:text="${recipientName}">Asample Patientone</span>,</td>
+				</tr>
+				<tr>
+					<td style="font-size:14px; padding-top:15px;">Welcome to <b>Consent2Share</b>, and thank you for creating an account. With the full suite of education resources and electronic tools in Consent2Share, you'll be able to manage sharing of health records in a safe and secure manner.
+					</td>
+	            </tr>
+	            <tr>
+		            <td style="font-size:14px; padding-top:10px;">You're almost done! Please click on this <a href="../../../webapp/WEB-INF/views/index.html"  th:href="${linkUrl}" style="color: red;"><strong>link</strong></a> to complete the registration process.</td>
+	            </tr>
+	            <tr>
+	            	<td style="font-size:14px; padding-top:10px;">You will be receiving another email from us, confirming your successful registration.</td>
+	            </tr>
+	            <tr>
+		            <td style="font-size:14px; padding-top:15px;">Sincerely,</td>
+		        </tr>
+		        <tr>
+			        <td style="font-size: 16px; margin-top: -7px;"><strong><em>Consent2Share Team</em></strong></td>
+			    </tr>
+		</table></td>
+	</tr>
+</table>
+
+    </body>
+</html>

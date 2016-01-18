@@ -1,17 +1,17 @@
 /*******************************************************************************
  * Open Behavioral Health Information Technology Architecture (OBHITA.org)
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the <organization> nor the
- *       names of its contributors may be used to endorse or promote products
- *       derived from this software without specific prior written permission.
- * 
+ * * Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ * * Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
+ * * Neither the name of the <organization> nor the
+ * names of its contributors may be used to endorse or promote products
+ * derived from this software without specific prior written permission.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,7 +25,6 @@
  ******************************************************************************/
 package gov.samhsa.bhits.pcm.service.patient;
 
-import gov.samhsa.bhits.pcm.domain.account.UsersRepository;
 import gov.samhsa.bhits.pcm.domain.commondomainservices.EmailSender;
 import gov.samhsa.bhits.pcm.domain.commondomainservices.EmailType;
 import gov.samhsa.bhits.pcm.domain.consent.*;
@@ -52,635 +51,627 @@ import java.util.*;
 @Transactional
 public class PatientServiceImpl implements PatientService {
 
-	/** The logger. */
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    /** The Constant LAST_N_DIGITS_OF_SSN. */
+    public static final Integer LAST_N_DIGITS_OF_SSN = 4;
+    /** The logger. */
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    /** The patient repository. */
+    protected PatientRepository patientRepository;
 
-	/** The Constant LAST_N_DIGITS_OF_SSN. */
-	public static final Integer LAST_N_DIGITS_OF_SSN = 4;
+    /** The patient legal representative association repository. */
+    protected PatientLegalRepresentativeAssociationRepository patientLegalRepresentativeAssociationRepository;
 
-	/** The patient repository. */
-	protected PatientRepository patientRepository;
+    /** The model mapper. */
+    protected ModelMapper modelMapper;
 
-	/** The patient legal representative association repository. */
-	protected PatientLegalRepresentativeAssociationRepository patientLegalRepresentativeAssociationRepository;
+    /** The password encoder. */
+    protected PasswordEncoder passwordEncoder;
 
-	/** The model mapper. */
-	protected ModelMapper modelMapper;
+    /** The email sender. */
+    protected EmailSender emailSender;
 
-	/** The users repository. */
-	protected UsersRepository usersRepository;
+    /**
+     * Instantiates a new patient service impl.
+     *
+     * @param patientRepository
+     *            the patient repository
+     * @param patientLegalRepresentativeAssociationRepository
+     *            the patient legal representative association repository
+     * @param modelMapper
+     *            the model mapper
+     * @param passwordEncoder
+     *            the password encoder
+     * @param emailSender
+     *            the email sender
+     */
+    public PatientServiceImpl(
+            PatientRepository patientRepository,
+            PatientLegalRepresentativeAssociationRepository patientLegalRepresentativeAssociationRepository,
+            ModelMapper modelMapper,
+            PasswordEncoder passwordEncoder,
+            EmailSender emailSender) {
+        super();
+        this.patientRepository = patientRepository;
+        this.patientLegalRepresentativeAssociationRepository = patientLegalRepresentativeAssociationRepository;
+        this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.emailSender = emailSender;
+    }
 
-	/** The password encoder. */
-	protected PasswordEncoder passwordEncoder;
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.patient.PatientService#countAllPatients
+     * ()
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public long countAllPatients() {
+        return patientRepository.count();
+    }
 
-	/** The email sender. */
-	protected EmailSender emailSender;
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.patient.PatientService#findPatient(java
+     * .lang.Long)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public PatientProfileDto findPatient(Long id) {
+        Patient patient = patientRepository.findOne(id);
+        PatientProfileDto patientDto = modelMapper.map(patient,
+                PatientProfileDto.class);
+        return patientDto;
+    }
 
-	/**
-	 * Instantiates a new patient service impl.
-	 *
-	 * @param patientRepository
-	 *            the patient repository
-	 * @param patientLegalRepresentativeAssociationRepository
-	 *            the patient legal representative association repository
-	 * @param modelMapper
-	 *            the model mapper
-	 * @param usersRepository
-	 *            the users repository
-	 * @param passwordEncoder
-	 *            the password encoder
-	 * @param emailSender
-	 *            the email sender
-	 */
-	public PatientServiceImpl(
-			PatientRepository patientRepository,
-			PatientLegalRepresentativeAssociationRepository patientLegalRepresentativeAssociationRepository,
-			ModelMapper modelMapper,
-			UsersRepository usersRepository, PasswordEncoder passwordEncoder,
-			EmailSender emailSender) {
-		super();
-		this.patientRepository = patientRepository;
-		this.patientLegalRepresentativeAssociationRepository = patientLegalRepresentativeAssociationRepository;
-		this.modelMapper = modelMapper;
-		this.usersRepository = usersRepository;
-		this.passwordEncoder = passwordEncoder;
-		this.emailSender = emailSender;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see gov.samhsa.consent2share.service.patient.PatientService#
+     * findAllPatientByFirstNameAndLastName(java.lang.String[])
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<PatientAdminDto> findAllPatientByFirstNameAndLastName(
+            String[] tokens) {
+        List<Patient> patients;
+        if (tokens.length == 1) {
+            patients = patientRepository
+                    .findAllByFirstNameLikesAndLastNameLikes("%" + tokens[0]
+                            + "%");
+        } else if (tokens.length >= 2) {
+            patients = patientRepository
+                    .findAllByFirstNameLikesAndLastNameLikes("%" + tokens[0]
+                            + "%", "%" + tokens[1] + "%");
+        } else {
+            patients = new ArrayList<Patient>();
+        }
+        List<PatientAdminDto> PatientAdminDtoList = mapPatientListToPatientAdminDtoList(patients);
+        return PatientAdminDtoList;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.patient.PatientService#countAllPatients
-	 * ()
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public long countAllPatients() {
-		return patientRepository.count();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.patient.PatientService#findByUsername
+     * (java.lang.String)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public PatientProfileDto findByUsername(String username) {
+        Patient patient = patientRepository.findByUsername(username);
+        PatientProfileDto patientDto = modelMapper.map(patient,
+                PatientProfileDto.class);
+        return patientDto;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.patient.PatientService#findPatient(java
-	 * .lang.Long)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public PatientProfileDto findPatient(Long id) {
-		Patient patient = patientRepository.findOne(id);
-		PatientProfileDto patientDto = modelMapper.map(patient,
-				PatientProfileDto.class);
-		return patientDto;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.patient.PatientService#findIdByUsername
+     * (java.lang.String)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Long findIdByUsername(String username) {
+        return patientRepository.findByUsername(username).getId();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.samhsa.consent2share.service.patient.PatientService#
-	 * findAllPatientByFirstNameAndLastName(java.lang.String[])
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public List<PatientAdminDto> findAllPatientByFirstNameAndLastName(
-			String[] tokens) {
-		List<Patient> patients;
-		if (tokens.length == 1) {
-			patients = patientRepository
-					.findAllByFirstNameLikesAndLastNameLikes("%" + tokens[0]
-							+ "%");
-		} else if (tokens.length >= 2) {
-			patients = patientRepository
-					.findAllByFirstNameLikesAndLastNameLikes("%" + tokens[0]
-							+ "%", "%" + tokens[1] + "%");
-		} else {
-			patients = new ArrayList<Patient>();
-		}
-		List<PatientAdminDto> PatientAdminDtoList = mapPatientListToPatientAdminDtoList(patients);
-		return PatientAdminDtoList;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.patient.PatientService#findUsernameById
+     * (java.lang.Long)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public String findUsernameById(long id) {
+        return patientRepository.findOne(id).getUsername();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.patient.PatientService#findByUsername
-	 * (java.lang.String)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public PatientProfileDto findByUsername(String username) {
-		Patient patient = patientRepository.findByUsername(username);
-		PatientProfileDto patientDto = modelMapper.map(patient,
-				PatientProfileDto.class);
-		return patientDto;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see gov.samhsa.consent2share.service.patient.PatientService#
+     * findPatientEmailByUsername(java.lang.String)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public String findPatientEmailByUsername(String username) {
+        return patientRepository.findByUsername(username).getEmail();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.patient.PatientService#findIdByUsername
-	 * (java.lang.String)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public Long findIdByUsername(String username) {
-		return patientRepository.findByUsername(username).getId();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see gov.samhsa.consent2share.service.patient.PatientService#
+     * findPatientProfileByUsername(java.lang.String)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public PatientProfileDto findPatientProfileByUsername(String username) {
+        Patient patient = patientRepository.findByUsername(username);
+        PatientProfileDto patientDto = modelMapper.map(patient,
+                PatientProfileDto.class);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.patient.PatientService#findUsernameById
-	 * (java.lang.Long)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public String findUsernameById(long id) {
-		return patientRepository.findOne(id).getUsername();
-	}
+        return patientDto;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.samhsa.consent2share.service.patient.PatientService#
-	 * findPatientEmailByUsername(java.lang.String)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public String findPatientEmailByUsername(String username) {
-		return patientRepository.findByUsername(username).getEmail();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see gov.samhsa.consent2share.service.patient.PatientService#
+     * findPatientConnectionByUsername(java.lang.String)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public PatientConnectionDto findPatientConnectionByUsername(String username) {
+        Patient patient = patientRepository.findByUsername(username);
+        return findPatientConnectionByPatient(patient);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.samhsa.consent2share.service.patient.PatientService#
-	 * findPatientProfileByUsername(java.lang.String)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public PatientProfileDto findPatientProfileByUsername(String username) {
-		Patient patient = patientRepository.findByUsername(username);
-		PatientProfileDto patientDto = modelMapper.map(patient,
-				PatientProfileDto.class);
+    /*
+     * (non-Javadoc)
+     *
+     * @see gov.samhsa.consent2share.service.patient.PatientService#
+     * findPatientConnectionByPatient
+     * (gov.samhsa.consent2share.domain.patient.Patient)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public PatientConnectionDto findPatientConnectionByPatient(Patient patient) {
+        PatientConnectionDto patientConnectionDto = modelMapper.map(patient,
+                PatientConnectionDto.class);
 
-		return patientDto;
-	}
+        Set<IndividualProvider> consentIndividualProviders = new HashSet<IndividualProvider>();
+        Set<OrganizationalProvider> consentOrganizationalProviders = new HashSet<OrganizationalProvider>();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.samhsa.consent2share.service.patient.PatientService#
-	 * findPatientConnectionByUsername(java.lang.String)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public PatientConnectionDto findPatientConnectionByUsername(String username) {
-		Patient patient = patientRepository.findByUsername(username);
-		return findPatientConnectionByPatient(patient);
-	}
+        if (patient.getConsents() != null) {
+            Set<Consent> consents = patient.getConsents();
+            for (Consent consent : consents) {
+                Set<ConsentOrganizationalProviderDisclosureIsMadeTo> consentOrganizationalProviderDisclosureIsMadeTos = consent
+                        .getOrganizationalProvidersDisclosureIsMadeTo();
+                if (consentOrganizationalProviderDisclosureIsMadeTos.size() != 0)
+                    for (ConsentOrganizationalProviderDisclosureIsMadeTo cop : consentOrganizationalProviderDisclosureIsMadeTos) {
+                        consentOrganizationalProviders.add(cop
+                                .getOrganizationalProvider());
+                    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.samhsa.consent2share.service.patient.PatientService#
-	 * findPatientConnectionByPatient
-	 * (gov.samhsa.consent2share.domain.patient.Patient)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public PatientConnectionDto findPatientConnectionByPatient(Patient patient) {
-		PatientConnectionDto patientConnectionDto = modelMapper.map(patient,
-				PatientConnectionDto.class);
+                Set<ConsentOrganizationalProviderPermittedToDisclose> consentOrganizationalProviderPermittedToDiscloses = consent
+                        .getOrganizationalProvidersPermittedToDisclose();
+                if (consentOrganizationalProviderPermittedToDiscloses.size() != 0)
+                    for (ConsentOrganizationalProviderPermittedToDisclose copp : consentOrganizationalProviderPermittedToDiscloses) {
+                        consentOrganizationalProviders.add(copp
+                                .getOrganizationalProvider());
+                    }
 
-		Set<IndividualProvider> consentIndividualProviders = new HashSet<IndividualProvider>();
-		Set<OrganizationalProvider> consentOrganizationalProviders = new HashSet<OrganizationalProvider>();
+                Set<ConsentIndividualProviderDisclosureIsMadeTo> consentIndividualProviderDisclosureIsMadeTos = consent
+                        .getProvidersDisclosureIsMadeTo();
+                if (consentIndividualProviderDisclosureIsMadeTos.size() != 0)
+                    for (ConsentIndividualProviderDisclosureIsMadeTo cip : consentIndividualProviderDisclosureIsMadeTos) {
+                        consentIndividualProviders.add(cip
+                                .getIndividualProvider());
+                    }
 
-		if (patient.getConsents() != null) {
-			Set<Consent> consents = patient.getConsents();
-			for (Consent consent : consents) {
-				Set<ConsentOrganizationalProviderDisclosureIsMadeTo> consentOrganizationalProviderDisclosureIsMadeTos = consent
-						.getOrganizationalProvidersDisclosureIsMadeTo();
-				if (consentOrganizationalProviderDisclosureIsMadeTos.size() != 0)
-					for (ConsentOrganizationalProviderDisclosureIsMadeTo cop : consentOrganizationalProviderDisclosureIsMadeTos) {
-						consentOrganizationalProviders.add(cop
-								.getOrganizationalProvider());
-					}
+                Set<ConsentIndividualProviderPermittedToDisclose> consentIndividualProviderPermittedToDiscloses = consent
+                        .getProvidersPermittedToDisclose();
+                if (consentIndividualProviderPermittedToDiscloses.size() != 0)
+                    for (ConsentIndividualProviderPermittedToDisclose cipp : consentIndividualProviderPermittedToDiscloses) {
+                        consentIndividualProviders.add(cipp
+                                .getIndividualProvider());
+                    }
+            }
+        }
 
-				Set<ConsentOrganizationalProviderPermittedToDisclose> consentOrganizationalProviderPermittedToDiscloses = consent
-						.getOrganizationalProvidersPermittedToDisclose();
-				if (consentOrganizationalProviderPermittedToDiscloses.size() != 0)
-					for (ConsentOrganizationalProviderPermittedToDisclose copp : consentOrganizationalProviderPermittedToDiscloses) {
-						consentOrganizationalProviders.add(copp
-								.getOrganizationalProvider());
-					}
+        // check whether the providers in the consent provider list
 
-				Set<ConsentIndividualProviderDisclosureIsMadeTo> consentIndividualProviderDisclosureIsMadeTos = consent
-						.getProvidersDisclosureIsMadeTo();
-				if (consentIndividualProviderDisclosureIsMadeTos.size() != 0)
-					for (ConsentIndividualProviderDisclosureIsMadeTo cip : consentIndividualProviderDisclosureIsMadeTos) {
-						consentIndividualProviders.add(cip
-								.getIndividualProvider());
-					}
+        Set<IndividualProviderDto> individualProviderDtos = patientConnectionDto
+                .getIndividualProviders();
+        Set<OrganizationalProviderDto> organizationalProviderDtos = patientConnectionDto
+                .getOrganizationalProviders();
+        if (individualProviderDtos.size() != 0)
+            for (IndividualProviderDto individualProviderDto : individualProviderDtos) {
+                individualProviderDto.setDeletable(true);
+                for (IndividualProvider individualProvider : consentIndividualProviders) {
+                    if (Long.parseLong(individualProviderDto.getId()) == individualProvider
+                            .getId()
+                            && individualProviderDto.getNpi().equals(
+                            individualProvider.getNpi()))
+                        individualProviderDto.setDeletable(false);
+                }
+            }
 
-				Set<ConsentIndividualProviderPermittedToDisclose> consentIndividualProviderPermittedToDiscloses = consent
-						.getProvidersPermittedToDisclose();
-				if (consentIndividualProviderPermittedToDiscloses.size() != 0)
-					for (ConsentIndividualProviderPermittedToDisclose cipp : consentIndividualProviderPermittedToDiscloses) {
-						consentIndividualProviders.add(cipp
-								.getIndividualProvider());
-					}
-			}
-		}
+        if (organizationalProviderDtos.size() != 0)
+            for (OrganizationalProviderDto organizationalProviderDto : organizationalProviderDtos) {
+                organizationalProviderDto.setDeletable(true);
+                for (OrganizationalProvider organizationalProvider : consentOrganizationalProviders) {
+                    if (Long.parseLong(organizationalProviderDto.getId()) == organizationalProvider
+                            .getId()
+                            && organizationalProviderDto.getNpi().equals(
+                            organizationalProvider.getNpi()))
+                        organizationalProviderDto.setDeletable(false);
+                }
+            }
 
-		// check whether the providers in the consent provider list
-
-		Set<IndividualProviderDto> individualProviderDtos = patientConnectionDto
-				.getIndividualProviders();
-		Set<OrganizationalProviderDto> organizationalProviderDtos = patientConnectionDto
-				.getOrganizationalProviders();
-		if (individualProviderDtos.size() != 0)
-			for (IndividualProviderDto individualProviderDto : individualProviderDtos) {
-				individualProviderDto.setDeletable(true);
-				for (IndividualProvider individualProvider : consentIndividualProviders) {
-					if (Long.parseLong(individualProviderDto.getId()) == individualProvider
-							.getId()
-							&& individualProviderDto.getNpi().equals(
-									individualProvider.getNpi()))
-						individualProviderDto.setDeletable(false);
-				}
-			}
-
-		if (organizationalProviderDtos.size() != 0)
-			for (OrganizationalProviderDto organizationalProviderDto : organizationalProviderDtos) {
-				organizationalProviderDto.setDeletable(true);
-				for (OrganizationalProvider organizationalProvider : consentOrganizationalProviders) {
-					if (Long.parseLong(organizationalProviderDto.getId()) == organizationalProvider
-							.getId()
-							&& organizationalProviderDto.getNpi().equals(
-									organizationalProvider.getNpi()))
-						organizationalProviderDto.setDeletable(false);
-				}
-			}
-
-		return patientConnectionDto;
-	}
-	
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.samhsa.consent2share.service.patient.PatientService#
-	 * findPatientConnectionByUsername(java.lang.String)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public Set<ProviderDto> findProvidersByUsername(String username) {
-		Patient patient = patientRepository.findByUsername(username);
-		return findProvidersByPatient(patient);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.samhsa.consent2share.service.patient.PatientService#
-	 * findPatientConnectionByPatient
-	 * (gov.samhsa.consent2share.domain.patient.Patient)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public Set<ProviderDto> findProvidersByPatient(Patient patient) {
-		PatientConnectionDto patientConnectionDto = modelMapper.map(patient,
-				PatientConnectionDto.class);
-
-		Set<IndividualProvider> consentIndividualProviders = new HashSet<IndividualProvider>();
-		Set<OrganizationalProvider> consentOrganizationalProviders = new HashSet<OrganizationalProvider>();
-
-		if (patient.getConsents() != null) {
-			Set<Consent> consents = patient.getConsents();
-			for (Consent consent : consents) {
-				Set<ConsentOrganizationalProviderDisclosureIsMadeTo> consentOrganizationalProviderDisclosureIsMadeTos = consent
-						.getOrganizationalProvidersDisclosureIsMadeTo();
-				if (consentOrganizationalProviderDisclosureIsMadeTos.size() != 0)
-					for (ConsentOrganizationalProviderDisclosureIsMadeTo cop : consentOrganizationalProviderDisclosureIsMadeTos) {
-						consentOrganizationalProviders.add(cop
-								.getOrganizationalProvider());
-					}
-
-				Set<ConsentOrganizationalProviderPermittedToDisclose> consentOrganizationalProviderPermittedToDiscloses = consent
-						.getOrganizationalProvidersPermittedToDisclose();
-				if (consentOrganizationalProviderPermittedToDiscloses.size() != 0)
-					for (ConsentOrganizationalProviderPermittedToDisclose copp : consentOrganizationalProviderPermittedToDiscloses) {
-						consentOrganizationalProviders.add(copp
-								.getOrganizationalProvider());
-					}
-
-				Set<ConsentIndividualProviderDisclosureIsMadeTo> consentIndividualProviderDisclosureIsMadeTos = consent
-						.getProvidersDisclosureIsMadeTo();
-				if (consentIndividualProviderDisclosureIsMadeTos.size() != 0)
-					for (ConsentIndividualProviderDisclosureIsMadeTo cip : consentIndividualProviderDisclosureIsMadeTos) {
-						consentIndividualProviders.add(cip
-								.getIndividualProvider());
-					}
-
-				Set<ConsentIndividualProviderPermittedToDisclose> consentIndividualProviderPermittedToDiscloses = consent
-						.getProvidersPermittedToDisclose();
-				if (consentIndividualProviderPermittedToDiscloses.size() != 0)
-					for (ConsentIndividualProviderPermittedToDisclose cipp : consentIndividualProviderPermittedToDiscloses) {
-						consentIndividualProviders.add(cipp
-								.getIndividualProvider());
-					}
-			}
-		}
-
-		// check whether the providers in the consent provider list
-
-		Set<IndividualProviderDto> individualProviderDtos = patientConnectionDto
-				.getIndividualProviders();
-		Set<OrganizationalProviderDto> organizationalProviderDtos = patientConnectionDto
-				.getOrganizationalProviders();
-		
-		Set<ProviderDto> providerDtos = new HashSet<ProviderDto>();
-		if (individualProviderDtos.size() != 0)
-			for (IndividualProviderDto individualProviderDto : individualProviderDtos) {
-				individualProviderDto.setDeletable(true);
-				for (IndividualProvider individualProvider : consentIndividualProviders) {
-					if (Long.parseLong(individualProviderDto.getId()) == individualProvider
-							.getId()
-							&& individualProviderDto.getNpi().equals(
-									individualProvider.getNpi()))
-						individualProviderDto.setDeletable(false);
-				}
-			   ProviderDto providerDto =  modelMapper.map(individualProviderDto, ProviderDto.class);
-			   providerDto.setEntityType("Individual");
-			   providerDtos.add(providerDto);
-				
-			}
-
-		if (organizationalProviderDtos.size() != 0)
-			for (OrganizationalProviderDto organizationalProviderDto : organizationalProviderDtos) {
-				organizationalProviderDto.setDeletable(true);
-				for (OrganizationalProvider organizationalProvider : consentOrganizationalProviders) {
-					if (Long.parseLong(organizationalProviderDto.getId()) == organizationalProvider
-							.getId()
-							&& organizationalProviderDto.getNpi().equals(
-									organizationalProvider.getNpi()))
-						organizationalProviderDto.setDeletable(false);
-				}
-				 ProviderDto providerDto =  modelMapper.map(organizationalProviderDto, ProviderDto.class);
-				   providerDto.setEntityType("Organization");
-				   providerDtos.add(providerDto);
-			}
-
-		return providerDtos;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.samhsa.consent2share.service.patient.PatientService#
-	 * findPatientConnectionById(long)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public PatientConnectionDto findPatientConnectionById(long id) {
-		Patient patient = patientRepository.findOne(id);
-		return findPatientConnectionByPatient(patient);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.patient.PatientService#findPatientEntries
-	 * (int, int)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public List<PatientProfileDto> findPatientEntries(int pageNumber,
-			int pageSize) {
-		List<Patient> patientList = patientRepository.findAll(
-				new PageRequest(pageNumber, pageSize)).getContent();
-
-		List<PatientProfileDto> patientDtoList = new ArrayList<PatientProfileDto>();
-
-		for (Patient patient : patientList) {
-			PatientProfileDto patientProfileDto = modelMapper.map(patient,
-					PatientProfileDto.class);
-			patientDtoList.add(patientProfileDto);
-		}
-
-		return patientDtoList;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.patient.PatientService#savePatient(gov
-	 * .samhsa.consent2share.service.dto.PatientProfileDto)
-	 */
-	@Override
-	@Transactional
-	public PatientProfileDto savePatient(PatientProfileDto patientDto) {
-		Patient patient = modelMapper.map(patientDto, Patient.class);
-		patientRepository.save(patient);
-		PatientProfileDto patientProfileDto = modelMapper.map(patient,
-				PatientProfileDto.class);
-
-		return patientProfileDto;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.patient.PatientService#updatePatient
-	 * (gov.samhsa.consent2share.service.dto.PatientProfileDto)
-	 */
-	@Override
-	@Transactional
-	public void updatePatient(PatientProfileDto patientDto) {
-		logger.info("{} being run...", "updatePatient");
-		Patient patient = modelMapper.map(patientDto, Patient.class);
-
-		// Save
-		patientRepository.save(patient);
-		try {
-			emailSender.sendMessage(patientDto.getFirstName() + " "
-					+ patientDto.getLastName(), patientDto.getEmail(),
-					EmailType.USER_PROFILE_CHANGE, null, null);
-		} catch (MessagingException e) {
-			logger.warn("Error when sending the email message.");
-		}
-	}
+        return patientConnectionDto;
+    }
 
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.samhsa.consent2share.service.patient.PatientService#
-	 * findAddConsentIndividualProviderDtoByUsername(java.lang.String)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public List<AddConsentIndividualProviderDto> findAddConsentIndividualProviderDtoByUsername(
-			String username) {
-		Patient patient = patientRepository.findByUsername(username);
-		List<AddConsentIndividualProviderDto> individualProvidersDto = new ArrayList<AddConsentIndividualProviderDto>();
-		Set<IndividualProvider> individualProviders = patient
-				.getIndividualProviders();
-		Iterator<IndividualProvider> individualProvidersIterator = individualProviders
-				.iterator();
-		while (individualProvidersIterator.hasNext()) {
-			individualProvidersDto.add(modelMapper.map(
-					individualProvidersIterator.next(),
-					AddConsentIndividualProviderDto.class));
-		}
-		return individualProvidersDto;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see gov.samhsa.consent2share.service.patient.PatientService#
+     * findPatientConnectionByUsername(java.lang.String)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Set<ProviderDto> findProvidersByUsername(String username) {
+        Patient patient = patientRepository.findByUsername(username);
+        return findProvidersByPatient(patient);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.samhsa.consent2share.service.patient.PatientService#
-	 * findAddConsentOrganizationalProviderDtoByUsername(java.lang.String)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public List<AddConsentOrganizationalProviderDto> findAddConsentOrganizationalProviderDtoByPatientId(
-			long pateintId) {
-		Patient patient = patientRepository.findOne(pateintId);
-		List<AddConsentOrganizationalProviderDto> organizationalProvidersDto = new ArrayList<AddConsentOrganizationalProviderDto>();
-		Set<OrganizationalProvider> organizationalProviders = patient
-				.getOrganizationalProviders();
-		Iterator<OrganizationalProvider> organizationalProvidersIterator = organizationalProviders
-				.iterator();
-		while (organizationalProvidersIterator.hasNext()) {
-			organizationalProvidersDto.add(modelMapper.map(
-					organizationalProvidersIterator.next(),
-					AddConsentOrganizationalProviderDto.class));
-		}
-		return organizationalProvidersDto;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see gov.samhsa.consent2share.service.patient.PatientService#
+     * findPatientConnectionByPatient
+     * (gov.samhsa.consent2share.domain.patient.Patient)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Set<ProviderDto> findProvidersByPatient(Patient patient) {
+        PatientConnectionDto patientConnectionDto = modelMapper.map(patient,
+                PatientConnectionDto.class);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.samhsa.consent2share.service.patient.PatientService#
-	 * findAddConsentIndividualProviderDtoByPatientId(long)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public List<AddConsentIndividualProviderDto> findAddConsentIndividualProviderDtoByPatientId(
-			long pateintId) {
-		Patient patient = patientRepository.findOne(pateintId);
-		List<AddConsentIndividualProviderDto> individualProvidersDto = new ArrayList<AddConsentIndividualProviderDto>();
-		Set<IndividualProvider> individualProviders = patient
-				.getIndividualProviders();
-		Iterator<IndividualProvider> individualProvidersIterator = individualProviders
-				.iterator();
-		while (individualProvidersIterator.hasNext()) {
-			individualProvidersDto.add(modelMapper.map(
-					individualProvidersIterator.next(),
-					AddConsentIndividualProviderDto.class));
-		}
-		return individualProvidersDto;
-	}
+        Set<IndividualProvider> consentIndividualProviders = new HashSet<IndividualProvider>();
+        Set<OrganizationalProvider> consentOrganizationalProviders = new HashSet<OrganizationalProvider>();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.samhsa.consent2share.service.patient.PatientService#
-	 * findAddConsentOrganizationalProviderDtoByUsername(java.lang.String)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public List<AddConsentOrganizationalProviderDto> findAddConsentOrganizationalProviderDtoByUsername(
-			String username) {
-		Patient patient = patientRepository.findByUsername(username);
-		List<AddConsentOrganizationalProviderDto> organizationalProvidersDto = new ArrayList<AddConsentOrganizationalProviderDto>();
-		Set<OrganizationalProvider> organizationalProviders = patient
-				.getOrganizationalProviders();
-		Iterator<OrganizationalProvider> organizationalProvidersIterator = organizationalProviders
-				.iterator();
-		while (organizationalProvidersIterator.hasNext()) {
-			organizationalProvidersDto.add(modelMapper.map(
-					organizationalProvidersIterator.next(),
-					AddConsentOrganizationalProviderDto.class));
-		}
-		return organizationalProvidersDto;
-	}
+        if (patient.getConsents() != null) {
+            Set<Consent> consents = patient.getConsents();
+            for (Consent consent : consents) {
+                Set<ConsentOrganizationalProviderDisclosureIsMadeTo> consentOrganizationalProviderDisclosureIsMadeTos = consent
+                        .getOrganizationalProvidersDisclosureIsMadeTo();
+                if (consentOrganizationalProviderDisclosureIsMadeTos.size() != 0)
+                    for (ConsentOrganizationalProviderDisclosureIsMadeTo cop : consentOrganizationalProviderDisclosureIsMadeTos) {
+                        consentOrganizationalProviders.add(cop
+                                .getOrganizationalProvider());
+                    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.samhsa.consent2share.service.patient.PatientService#
-	 * isLegalRepForCurrentUser(java.lang.Long)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public boolean isLegalRepForCurrentUser(String username, Long legalRepId) {
+                Set<ConsentOrganizationalProviderPermittedToDisclose> consentOrganizationalProviderPermittedToDiscloses = consent
+                        .getOrganizationalProvidersPermittedToDisclose();
+                if (consentOrganizationalProviderPermittedToDiscloses.size() != 0)
+                    for (ConsentOrganizationalProviderPermittedToDisclose copp : consentOrganizationalProviderPermittedToDiscloses) {
+                        consentOrganizationalProviders.add(copp
+                                .getOrganizationalProvider());
+                    }
 
-		Patient patient = patientRepository.findByUsername(username);
-		List<PatientLegalRepresentativeAssociation> associations = patientLegalRepresentativeAssociationRepository
-				.findByPatientLegalRepresentativeAssociationPkLegalRepresentativeId(legalRepId);
-		for (PatientLegalRepresentativeAssociation association : associations) {
-			if (association.getPatientLegalRepresentativeAssociationPk()
-					.getPatient().getId().longValue() == patient.getId()
-					.longValue()) {
-				return true;
-			}
-		}
-		return false;
-	}
+                Set<ConsentIndividualProviderDisclosureIsMadeTo> consentIndividualProviderDisclosureIsMadeTos = consent
+                        .getProvidersDisclosureIsMadeTo();
+                if (consentIndividualProviderDisclosureIsMadeTos.size() != 0)
+                    for (ConsentIndividualProviderDisclosureIsMadeTo cip : consentIndividualProviderDisclosureIsMadeTos) {
+                        consentIndividualProviders.add(cip
+                                .getIndividualProvider());
+                    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.samhsa.consent2share.service.patient.PatientService#
-	 * findRecentPatientDtosById(java.util.List)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public List<RecentPatientDto> findRecentPatientDtosById(List<String> ids) {
-		List<RecentPatientDto> patients = new ArrayList<RecentPatientDto>();
-		for (String id : ids) {
-			patients.add(modelMapper.map(
-					patientRepository.findOne(Long.parseLong(id)),
-					RecentPatientDto.class));
-		}
+                Set<ConsentIndividualProviderPermittedToDisclose> consentIndividualProviderPermittedToDiscloses = consent
+                        .getProvidersPermittedToDisclose();
+                if (consentIndividualProviderPermittedToDiscloses.size() != 0)
+                    for (ConsentIndividualProviderPermittedToDisclose cipp : consentIndividualProviderPermittedToDiscloses) {
+                        consentIndividualProviders.add(cipp
+                                .getIndividualProvider());
+                    }
+            }
+        }
 
-		return patients;
-	}
+        // check whether the providers in the consent provider list
 
-	/**
-	 * Map patient list to patient admin dto list.
-	 *
-	 * @param patients
-	 *            the patients
-	 * @return the list
-	 */
-	private List<PatientAdminDto> mapPatientListToPatientAdminDtoList(
-			List<Patient> patients) {
-		List<PatientAdminDto> patientAdminDtoList = new ArrayList<PatientAdminDto>();
-		for (Patient patient : patients) {
-			PatientAdminDto patientAdminDto = modelMapper.map(patient,
-					PatientAdminDto.class);
-			String fullSSN = patientAdminDto.getSocialSecurityNumber();
-			if (fullSSN != null)
-				patientAdminDto
-						.setSocialSecurityNumber(fullSSN.length() > LAST_N_DIGITS_OF_SSN ? fullSSN
-								.substring(fullSSN.length()
-										- LAST_N_DIGITS_OF_SSN) : fullSSN);
-			patientAdminDtoList.add(patientAdminDto);
-		}
-		return patientAdminDtoList;
-	}
+        Set<IndividualProviderDto> individualProviderDtos = patientConnectionDto
+                .getIndividualProviders();
+        Set<OrganizationalProviderDto> organizationalProviderDtos = patientConnectionDto
+                .getOrganizationalProviders();
+
+        Set<ProviderDto> providerDtos = new HashSet<ProviderDto>();
+        if (individualProviderDtos.size() != 0)
+            for (IndividualProviderDto individualProviderDto : individualProviderDtos) {
+                individualProviderDto.setDeletable(true);
+                for (IndividualProvider individualProvider : consentIndividualProviders) {
+                    if (Long.parseLong(individualProviderDto.getId()) == individualProvider
+                            .getId()
+                            && individualProviderDto.getNpi().equals(
+                            individualProvider.getNpi()))
+                        individualProviderDto.setDeletable(false);
+                }
+                ProviderDto providerDto = modelMapper.map(individualProviderDto, ProviderDto.class);
+                providerDto.setEntityType("Individual");
+                providerDtos.add(providerDto);
+
+            }
+
+        if (organizationalProviderDtos.size() != 0)
+            for (OrganizationalProviderDto organizationalProviderDto : organizationalProviderDtos) {
+                organizationalProviderDto.setDeletable(true);
+                for (OrganizationalProvider organizationalProvider : consentOrganizationalProviders) {
+                    if (Long.parseLong(organizationalProviderDto.getId()) == organizationalProvider
+                            .getId()
+                            && organizationalProviderDto.getNpi().equals(
+                            organizationalProvider.getNpi()))
+                        organizationalProviderDto.setDeletable(false);
+                }
+                ProviderDto providerDto = modelMapper.map(organizationalProviderDto, ProviderDto.class);
+                providerDto.setEntityType("Organization");
+                providerDtos.add(providerDto);
+            }
+
+        return providerDtos;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see gov.samhsa.consent2share.service.patient.PatientService#
+     * findPatientConnectionById(long)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public PatientConnectionDto findPatientConnectionById(long id) {
+        Patient patient = patientRepository.findOne(id);
+        return findPatientConnectionByPatient(patient);
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.patient.PatientService#findPatientEntries
+     * (int, int)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<PatientProfileDto> findPatientEntries(int pageNumber,
+                                                      int pageSize) {
+        List<Patient> patientList = patientRepository.findAll(
+                new PageRequest(pageNumber, pageSize)).getContent();
+
+        List<PatientProfileDto> patientDtoList = new ArrayList<PatientProfileDto>();
+
+        for (Patient patient : patientList) {
+            PatientProfileDto patientProfileDto = modelMapper.map(patient,
+                    PatientProfileDto.class);
+            patientDtoList.add(patientProfileDto);
+        }
+
+        return patientDtoList;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.patient.PatientService#savePatient(gov
+     * .samhsa.consent2share.service.dto.PatientProfileDto)
+     */
+    @Override
+    @Transactional
+    public PatientProfileDto savePatient(PatientProfileDto patientDto) {
+        Patient patient = modelMapper.map(patientDto, Patient.class);
+        patientRepository.save(patient);
+        PatientProfileDto patientProfileDto = modelMapper.map(patient,
+                PatientProfileDto.class);
+
+        return patientProfileDto;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.patient.PatientService#updatePatient
+     * (gov.samhsa.consent2share.service.dto.PatientProfileDto)
+     */
+    @Override
+    @Transactional
+    public void updatePatient(PatientProfileDto patientDto) {
+        logger.info("{} being run...", "updatePatient");
+        Patient patient = modelMapper.map(patientDto, Patient.class);
+
+        // Save
+        patientRepository.save(patient);
+        try {
+            emailSender.sendMessage(patientDto.getFirstName() + " "
+                            + patientDto.getLastName(), patientDto.getEmail(),
+                    EmailType.USER_PROFILE_CHANGE, null, null);
+        } catch (MessagingException e) {
+            logger.warn("Error when sending the email message.");
+        }
+    }
+
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see gov.samhsa.consent2share.service.patient.PatientService#
+     * findAddConsentIndividualProviderDtoByUsername(java.lang.String)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<AddConsentIndividualProviderDto> findAddConsentIndividualProviderDtoByUsername(
+            String username) {
+        Patient patient = patientRepository.findByUsername(username);
+        List<AddConsentIndividualProviderDto> individualProvidersDto = new ArrayList<AddConsentIndividualProviderDto>();
+        Set<IndividualProvider> individualProviders = patient
+                .getIndividualProviders();
+        Iterator<IndividualProvider> individualProvidersIterator = individualProviders
+                .iterator();
+        while (individualProvidersIterator.hasNext()) {
+            individualProvidersDto.add(modelMapper.map(
+                    individualProvidersIterator.next(),
+                    AddConsentIndividualProviderDto.class));
+        }
+        return individualProvidersDto;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see gov.samhsa.consent2share.service.patient.PatientService#
+     * findAddConsentOrganizationalProviderDtoByUsername(java.lang.String)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<AddConsentOrganizationalProviderDto> findAddConsentOrganizationalProviderDtoByPatientId(
+            long pateintId) {
+        Patient patient = patientRepository.findOne(pateintId);
+        List<AddConsentOrganizationalProviderDto> organizationalProvidersDto = new ArrayList<AddConsentOrganizationalProviderDto>();
+        Set<OrganizationalProvider> organizationalProviders = patient
+                .getOrganizationalProviders();
+        Iterator<OrganizationalProvider> organizationalProvidersIterator = organizationalProviders
+                .iterator();
+        while (organizationalProvidersIterator.hasNext()) {
+            organizationalProvidersDto.add(modelMapper.map(
+                    organizationalProvidersIterator.next(),
+                    AddConsentOrganizationalProviderDto.class));
+        }
+        return organizationalProvidersDto;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see gov.samhsa.consent2share.service.patient.PatientService#
+     * findAddConsentIndividualProviderDtoByPatientId(long)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<AddConsentIndividualProviderDto> findAddConsentIndividualProviderDtoByPatientId(
+            long pateintId) {
+        Patient patient = patientRepository.findOne(pateintId);
+        List<AddConsentIndividualProviderDto> individualProvidersDto = new ArrayList<AddConsentIndividualProviderDto>();
+        Set<IndividualProvider> individualProviders = patient
+                .getIndividualProviders();
+        Iterator<IndividualProvider> individualProvidersIterator = individualProviders
+                .iterator();
+        while (individualProvidersIterator.hasNext()) {
+            individualProvidersDto.add(modelMapper.map(
+                    individualProvidersIterator.next(),
+                    AddConsentIndividualProviderDto.class));
+        }
+        return individualProvidersDto;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see gov.samhsa.consent2share.service.patient.PatientService#
+     * findAddConsentOrganizationalProviderDtoByUsername(java.lang.String)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<AddConsentOrganizationalProviderDto> findAddConsentOrganizationalProviderDtoByUsername(
+            String username) {
+        Patient patient = patientRepository.findByUsername(username);
+        List<AddConsentOrganizationalProviderDto> organizationalProvidersDto = new ArrayList<AddConsentOrganizationalProviderDto>();
+        Set<OrganizationalProvider> organizationalProviders = patient
+                .getOrganizationalProviders();
+        Iterator<OrganizationalProvider> organizationalProvidersIterator = organizationalProviders
+                .iterator();
+        while (organizationalProvidersIterator.hasNext()) {
+            organizationalProvidersDto.add(modelMapper.map(
+                    organizationalProvidersIterator.next(),
+                    AddConsentOrganizationalProviderDto.class));
+        }
+        return organizationalProvidersDto;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see gov.samhsa.consent2share.service.patient.PatientService#
+     * isLegalRepForCurrentUser(java.lang.Long)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isLegalRepForCurrentUser(String username, Long legalRepId) {
+
+        Patient patient = patientRepository.findByUsername(username);
+        List<PatientLegalRepresentativeAssociation> associations = patientLegalRepresentativeAssociationRepository
+                .findByPatientLegalRepresentativeAssociationPkLegalRepresentativeId(legalRepId);
+        for (PatientLegalRepresentativeAssociation association : associations) {
+            if (association.getPatientLegalRepresentativeAssociationPk()
+                    .getPatient().getId().longValue() == patient.getId()
+                    .longValue()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see gov.samhsa.consent2share.service.patient.PatientService#
+     * findRecentPatientDtosById(java.util.List)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<RecentPatientDto> findRecentPatientDtosById(List<String> ids) {
+        List<RecentPatientDto> patients = new ArrayList<RecentPatientDto>();
+        for (String id : ids) {
+            patients.add(modelMapper.map(
+                    patientRepository.findOne(Long.parseLong(id)),
+                    RecentPatientDto.class));
+        }
+
+        return patients;
+    }
+
+    /**
+     * Map patient list to patient admin dto list.
+     *
+     * @param patients
+     *            the patients
+     * @return the list
+     */
+    private List<PatientAdminDto> mapPatientListToPatientAdminDtoList(
+            List<Patient> patients) {
+        List<PatientAdminDto> patientAdminDtoList = new ArrayList<PatientAdminDto>();
+        for (Patient patient : patients) {
+            PatientAdminDto patientAdminDto = modelMapper.map(patient,
+                    PatientAdminDto.class);
+            String fullSSN = patientAdminDto.getSocialSecurityNumber();
+            if (fullSSN != null)
+                patientAdminDto
+                        .setSocialSecurityNumber(fullSSN.length() > LAST_N_DIGITS_OF_SSN ? fullSSN
+                                .substring(fullSSN.length()
+                                        - LAST_N_DIGITS_OF_SSN) : fullSSN);
+            patientAdminDtoList.add(patientAdminDto);
+        }
+        return patientAdminDtoList;
+    }
 
 }

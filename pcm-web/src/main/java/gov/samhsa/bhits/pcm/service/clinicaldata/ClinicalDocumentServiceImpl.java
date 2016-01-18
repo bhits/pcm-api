@@ -114,13 +114,13 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
      * @param validator                          the validator
      */
     public ClinicalDocumentServiceImpl(
-            String maxFileSize,
+            long maxFileSize,
             String permittedExtensions,
             ClinicalDocumentRepository clinicalDocumentRepository,
             ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository,
             ModelMapper modelMapper, PatientRepository patientRepository, Validator validator) {
         super();
-        this.maxFileSize = Long.parseLong(maxFileSize);
+        this.maxFileSize = maxFileSize;
         this.permittedExtensions = permittedExtensions;
         this.clinicalDocumentRepository = clinicalDocumentRepository;
         this.clinicalDocumentTypeCodeRepository = clinicalDocumentTypeCodeRepository;
