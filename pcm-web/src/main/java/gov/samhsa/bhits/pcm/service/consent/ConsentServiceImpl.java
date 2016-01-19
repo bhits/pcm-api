@@ -61,6 +61,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 /**
@@ -1575,7 +1577,7 @@ public class ConsentServiceImpl implements ConsentService {
         if (startDate != null && endDate != null) {
             final Instant startInstant = startDate.toInstant();
             final Instant endInstant = endDate.toInstant();
-            final Instant currentInstant = Instant.now();
+            final Instant currentInstant = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant();
             if (startInstant.compareTo(endInstant) <= 0
                     && startInstant.compareTo(currentInstant) >= 0) {
                 return true;

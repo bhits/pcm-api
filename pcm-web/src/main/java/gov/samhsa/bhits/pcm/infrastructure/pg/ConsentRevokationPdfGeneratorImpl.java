@@ -23,11 +23,12 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-package gov.samhsa.bhits.pcm.infrastructure;
+package gov.samhsa.bhits.pcm.infrastructure.pg;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import gov.samhsa.bhits.pcm.domain.consent.Consent;
+import gov.samhsa.bhits.pcm.infrastructure.ConsentPdfGenerationException;
 import org.springframework.util.Assert;
 
 import java.io.ByteArrayOutputStream;
@@ -35,8 +36,8 @@ import java.io.ByteArrayOutputStream;
 /**
  * The Class ConsentRevokationPdfGeneratorImpl.
  */
-public class ConsentRevokationPdfGeneratorImplPg
-        extends ConsentRevokationPdfGeneratorImpl {
+public class ConsentRevokationPdfGeneratorImpl
+        extends gov.samhsa.bhits.pcm.infrastructure.ConsentRevokationPdfGeneratorImpl {
 
     /*
      * (non-Javadoc)

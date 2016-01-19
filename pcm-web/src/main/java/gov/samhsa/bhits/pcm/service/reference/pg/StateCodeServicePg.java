@@ -23,53 +23,22 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-package gov.samhsa.bhits.pcm.service.reference;
+package gov.samhsa.bhits.pcm.service.reference.pg;
 
-import gov.samhsa.bhits.pcm.domain.reference.StateCode;
-import gov.samhsa.bhits.pcm.domain.reference.StateCodeRepository;
 import gov.samhsa.bhits.pcm.service.dto.LookupDto;
-import org.modelmapper.ModelMapper;
-import org.springframework.transaction.annotation.Transactional;
+import gov.samhsa.bhits.pcm.service.reference.StateCodeService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The Class StateCodeServicePgImpl.
+ * The Interface StateCodeServicePg.
  */
-@Transactional
-public class StateCodeServicePgImpl extends StateCodeServiceImpl implements
-        StateCodeServicePg {
+public interface StateCodeServicePg extends StateCodeService {
 
     /**
-     * Instantiates a new state code service pg impl.
+     * Find by md and dc and va states.
      *
-     * @param stateCodeRepository
-     *            the state code repository
-     * @param modelMapper
-     *            the model mapper
+     * @return the list
      */
-    public StateCodeServicePgImpl(StateCodeRepository stateCodeRepository,
-                                  ModelMapper modelMapper) {
-        super(stateCodeRepository, modelMapper);
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see gov.samhsa.consent2share.service.reference.StateCodeServicePg#
-     * findByMDAndDCAndVAStates()
-     */
-    @Override
-    public List<LookupDto> findByMDAndDCAndVAStates() {
-        List<LookupDto> lookups = new ArrayList<LookupDto>();
-
-        List<StateCode> stateCodeList = stateCodeRepository
-                .findByCodeOrCodeOrCode("MD", "DC", "VA");
-
-        for (StateCode entity : stateCodeList) {
-            lookups.add(modelMapper.map(entity, LookupDto.class));
-        }
-        return lookups;
-    }
+    List<LookupDto> findByMDAndDCAndVAStates();
 }

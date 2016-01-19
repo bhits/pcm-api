@@ -23,21 +23,54 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-package gov.samhsa.bhits.pcm.service.reference;
+package gov.samhsa.bhits.pcm.service.reference.pg;
 
+import gov.samhsa.bhits.pcm.domain.reference.StateCode;
+import gov.samhsa.bhits.pcm.domain.reference.StateCodeRepository;
 import gov.samhsa.bhits.pcm.service.dto.LookupDto;
+import gov.samhsa.bhits.pcm.service.reference.StateCodeServiceImpl;
+import org.modelmapper.ModelMapper;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The Interface StateCodeServicePg.
+ * The Class StateCodeServicePgImpl.
  */
-public interface StateCodeServicePg extends StateCodeService {
+@Transactional
+public class StateCodeServicePgImpl extends StateCodeServiceImpl implements
+        StateCodeServicePg {
 
     /**
-     * Find by md and dc and va states.
+     * Instantiates a new state code service pg impl.
      *
-     * @return the list
+     * @param stateCodeRepository
+     *            the state code repository
+     * @param modelMapper
+     *            the model mapper
      */
-    List<LookupDto> findByMDAndDCAndVAStates();
+    public StateCodeServicePgImpl(StateCodeRepository stateCodeRepository,
+                                  ModelMapper modelMapper) {
+        super(stateCodeRepository, modelMapper);
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see gov.samhsa.consent2share.service.reference.StateCodeServicePg#
+     * findByMDAndDCAndVAStates()
+     */
+    @Override
+    public List<LookupDto> findByMDAndDCAndVAStates() {
+        List<LookupDto> lookups = new ArrayList<LookupDto>();
+
+        List<StateCode> stateCodeList = stateCodeRepository
+                .findByCodeOrCodeOrCode("MD", "DC", "VA");
+
+        for (StateCode entity : stateCodeList) {
+            lookups.add(modelMapper.map(entity, LookupDto.class));
+        }
+        return lookups;
+    }
 }

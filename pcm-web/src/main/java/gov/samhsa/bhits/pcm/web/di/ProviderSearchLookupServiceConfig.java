@@ -2,8 +2,9 @@ package gov.samhsa.bhits.pcm.web.di;
 
 import gov.samhsa.bhits.pcm.domain.reference.StateCodeRepository;
 import gov.samhsa.bhits.pcm.service.provider.*;
-import gov.samhsa.bhits.pcm.service.reference.StateCodeServicePg;
-import gov.samhsa.bhits.pcm.service.reference.StateCodeServicePgImpl;
+import gov.samhsa.bhits.pcm.service.provider.pg.ProviderSearchLookupServiceImpl;
+import gov.samhsa.bhits.pcm.service.reference.pg.StateCodeServicePg;
+import gov.samhsa.bhits.pcm.service.reference.pg.StateCodeServicePgImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +26,7 @@ public class ProviderSearchLookupServiceConfig {
     @Bean
     public ProviderSearchLookupService providerSearchLookupService(IndividualProviderService individualProviderService,
                                                                    OrganizationalProviderService organizationalProviderService) {
-        return new ProviderSearchLookupServiceImplPg(providerSearchURL,
+        return new ProviderSearchLookupServiceImpl(providerSearchURL,
                 stateCodeService(),
                 individualProviderService,
                 organizationalProviderService,

@@ -1,3 +1,6 @@
+logging:
+  level:
+    org.hibernate: warn
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/pcm-web?autoReconnect=true
@@ -54,8 +57,9 @@ bhits:
           type: ISO
         org: C2S Health
       echosign:
-        echoSignDocumentService15EndpointAddress: https://secure.echosign.com/services/EchoSignDocumentService15
+        echoSignDocumentServiceEndpointAddress: https://secure.echosign.com/services/EchoSignDocumentService20
         echoSignApiKey: SBC5B7XK5A7Y5V
+        esignaturePollingServicePollTaskFixedDelayInMilliseconds: 2000
       pls:
         api: http://localhost:8080/pls/providers
   vss:

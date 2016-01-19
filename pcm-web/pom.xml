@@ -31,6 +31,7 @@
         <libclamav.version>1.0</libclamav.version>
         <logback.version>1.0.11</logback.version>
         <logback-audit.version>0.6</logback-audit.version>
+        <Saxon-HE.version>9.6.0-3</Saxon-HE.version>
     </properties>
 
     <dependencies>
@@ -125,6 +126,11 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>audit-client</artifactId>
             <version>${logback-audit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>${Saxon-HE.version}</version>
         </dependency>
 
         <dependency>

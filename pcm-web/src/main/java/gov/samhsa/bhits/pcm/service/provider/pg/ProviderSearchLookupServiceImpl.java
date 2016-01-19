@@ -23,9 +23,12 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-package gov.samhsa.bhits.pcm.service.provider;
+package gov.samhsa.bhits.pcm.service.provider.pg;
 
 import gov.samhsa.bhits.pcm.service.dto.LookupDto;
+import gov.samhsa.bhits.pcm.service.provider.HashMapResultToProviderDtoConverter;
+import gov.samhsa.bhits.pcm.service.provider.IndividualProviderService;
+import gov.samhsa.bhits.pcm.service.provider.OrganizationalProviderService;
 import gov.samhsa.bhits.pcm.service.reference.StateCodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,37 +40,40 @@ import java.util.List;
  * The Class ProviderSearchLookupServiceImpl.
  */
 @Transactional
-public class ProviderSearchLookupServiceImplPg
+public class ProviderSearchLookupServiceImpl
         extends
-        ProviderSearchLookupServiceImpl {
+        gov.samhsa.bhits.pcm.service.provider.ProviderSearchLookupServiceImpl {
 
-    /** The logger. */
+    /**
+     * The logger.
+     */
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    /** The individual provider service. */
+    /**
+     * The individual provider service.
+     */
     IndividualProviderService individualProviderService;
 
-    /** The organizational provider service. */
+    /**
+     * The organizational provider service.
+     */
     OrganizationalProviderService organizationalProviderService;
 
-    /** The hash map result to provider dto converter. */
+    /**
+     * The hash map result to provider dto converter.
+     */
     HashMapResultToProviderDtoConverter hashMapResultToProviderDtoConverter;
 
     /**
      * Instantiates a new provider search lookup service impl.
      *
-     * @param providerSearchURL
-     *            the provider search url
-     * @param stateCodeService
-     *            the state code service
-     * @param individualProviderService
-     *            the individual provider service
-     * @param organizationalProviderService
-     *            the organizational provider service
-     * @param hashMapResultToProviderDtoConverter
-     *            the hash map result to provider dto converter
+     * @param providerSearchURL                   the provider search url
+     * @param stateCodeService                    the state code service
+     * @param individualProviderService           the individual provider service
+     * @param organizationalProviderService       the organizational provider service
+     * @param hashMapResultToProviderDtoConverter the hash map result to provider dto converter
      */
-    public ProviderSearchLookupServiceImplPg(
+    public ProviderSearchLookupServiceImpl(
             String providerSearchURL,
             StateCodeService stateCodeService,
             IndividualProviderService individualProviderService,
