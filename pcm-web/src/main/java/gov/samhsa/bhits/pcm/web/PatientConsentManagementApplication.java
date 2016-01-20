@@ -1,6 +1,6 @@
 package gov.samhsa.bhits.pcm.web;
 
-import gov.samhsa.bhits.pcm.domain.PcmDomainMarkerInterface;
+import gov.samhsa.bhits.pcm.domain.PcmDomainBasePackageMarkerInterface;
 import gov.samhsa.bhits.vss.VssBasePackageMarkerInterface;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 @SpringBootApplication
-@EntityScan(basePackageClasses = PcmDomainMarkerInterface.class)
-@EnableJpaRepositories(basePackageClasses = PcmDomainMarkerInterface.class)
+@EntityScan(basePackageClasses = PcmDomainBasePackageMarkerInterface.class)
+@EnableJpaRepositories(basePackageClasses = PcmDomainBasePackageMarkerInterface.class)
 @EnableResourceServer
 @ComponentScan(basePackageClasses = VssBasePackageMarkerInterface.class)
 public class PatientConsentManagementApplication {
