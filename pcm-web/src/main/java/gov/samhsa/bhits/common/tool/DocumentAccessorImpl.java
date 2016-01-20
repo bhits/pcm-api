@@ -50,6 +50,10 @@ public class DocumentAccessorImpl implements DocumentAccessor {
 
     private Optional<NamespaceContext> namespaceContext;
 
+    public DocumentAccessorImpl() {
+        this.namespaceContext = Optional.empty();
+    }
+
     @Override
     public void setNamespaceContext(NamespaceContext namespaceContext) {
         this.namespaceContext = Optional.of(namespaceContext);
