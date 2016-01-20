@@ -1,8 +1,7 @@
-package gov.samhsa.bhits.pcm.web.di;
+package gov.samhsa.bhits.vss.web.di;
 
 import gov.samhsa.bhits.pcm.domain.consent.ConsentRepository;
-import gov.samhsa.bhits.pcm.domain.valueset.MedicalSectionRepository;
-import gov.samhsa.bhits.pcm.domain.valueset.ValueSetCategoryRepository;
+import gov.samhsa.bhits.pcm.domain.valueset.*;
 import gov.samhsa.bhits.vss.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,5 +38,19 @@ public class ValueSetServiceConfig {
     @Bean
     public ValueSetCategoryService valueSetCategoryService() {
         return new ValueSetCategoryServiceImpl(valueSetCategoryRepository, consentRepository, valueSetMgmtHelper());
+    }
+
+    @Bean
+    public ValueSetLookupService valueSetLookupService(ConceptCodeRepository conceptCodeRepository,
+                                                       ValueSetRepository valueSetRepository,
+                                                       CodeSystemRepository codeSystemRepository,
+                                                       CodeSystemVersionRepository codeSystemVersionRepository,
+                                                       ConceptCodeValueSetRepository conceptCodeValueSetRepository) {
+        return new ValueSetLookupServiceImpl(conceptCodeRepository,
+                valueSetRepository,
+                codeSystemRepository,
+                codeSystemVersionRepository,
+                conceptCodeValueSetRepository,
+                valueSetMgmtHelper());
     }
 }

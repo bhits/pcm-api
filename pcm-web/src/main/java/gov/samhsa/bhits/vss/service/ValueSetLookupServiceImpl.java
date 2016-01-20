@@ -85,7 +85,7 @@ public class ValueSetLookupServiceImpl implements ValueSetLookupService {
         ValueSetLookUpDto valueSetLookUpDto = new ValueSetLookUpDto();
         valueSetLookUpDto.setCodeSystemOid(codeSystemOid);
         valueSetLookUpDto.setConceptCode(code);
-        valueSetLookUpDto.setVsCategoryCodes(ValueSetCategoriesInSet(code,
+        valueSetLookUpDto.setVsCategoryCodes(valueSetCategoriesInSet(code,
                 codeSystemOid));
 
         return valueSetLookUpDto;
@@ -95,17 +95,17 @@ public class ValueSetLookupServiceImpl implements ValueSetLookupService {
      * (non-Javadoc)
      *
      * @see gov.samhsa.consent2share.service.valueset.ValueSetLookupService#
-     * RestfulValueSetCategories(java.lang.String, java.lang.String)
+     * restfulValueSetCategories(java.lang.String, java.lang.String)
      */
     @Override
-    public ValueSetQueryDto RestfulValueSetCategories(String code,
+    public ValueSetQueryDto restfulValueSetCategories(String code,
                                                       String codeSystemOid) throws CodeSystemVersionNotFoundException,
             ConceptCodeNotFoundException, ValueSetNotFoundException {
 
         ValueSetQueryDto valueSetQueryDto = new ValueSetQueryDto();
         valueSetQueryDto.setCodeSystemOid(codeSystemOid);
         valueSetQueryDto.setConceptCode(code);
-        valueSetQueryDto.setVsCategoryCodes(ValueSetCategoriesInSet(code,
+        valueSetQueryDto.setVsCategoryCodes(valueSetCategoriesInSet(code,
                 codeSystemOid));
 
         return valueSetQueryDto;
@@ -115,11 +115,11 @@ public class ValueSetLookupServiceImpl implements ValueSetLookupService {
      * (non-Javadoc)
      *
      * @see gov.samhsa.consent2share.service.valueset.ValueSetLookupService#
-     * RestfulValueSetCategories
+     * restfulValueSetCategories
      * (gov.samhsa.consent2share.service.dto.ValueSetQueryListDto)
      */
     @Override
-    public ValueSetQueryListDto RestfulValueSetCategories(
+    public ValueSetQueryListDto restfulValueSetCategories(
             ValueSetQueryListDto valueSetQueryListDtos)
             throws CodeSystemVersionNotFoundException,
             ConceptCodeNotFoundException, ValueSetNotFoundException {
@@ -127,7 +127,7 @@ public class ValueSetLookupServiceImpl implements ValueSetLookupService {
                 .getValueSetQueryDtos();
 
         for (ValueSetQueryDto valueSetQueryDto : valueSetQueryDtos) {
-            valueSetQueryDto.setVsCategoryCodes(ValueSetCategoriesInSet(
+            valueSetQueryDto.setVsCategoryCodes(valueSetCategoriesInSet(
                     valueSetQueryDto.getConceptCode(),
                     valueSetQueryDto.getCodeSystemOid()));
             logger.debug("ValueSetQueryDto : " + valueSetQueryDto);
@@ -146,7 +146,7 @@ public class ValueSetLookupServiceImpl implements ValueSetLookupService {
      * @throws ConceptCodeNotFoundException       the concept code not found exception
      * @throws ValueSetNotFoundException          the value set not found exception
      */
-    private Set<String> ValueSetCategoriesInSet(String code,
+    private Set<String> valueSetCategoriesInSet(String code,
                                                 String codeSystemOid) throws CodeSystemVersionNotFoundException,
             ConceptCodeNotFoundException, ValueSetNotFoundException {
 
