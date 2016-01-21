@@ -26,7 +26,7 @@
 package gov.samhsa.bhits.pcm.service.consent;
 
 import echosign.api.clientv20.dto16.EmbeddedWidgetCreationResult;
-import gov.samhsa.bhits.common.tool.DocumentAccessor;
+import gov.samhsa.bhits.common.document.accessor.DocumentAccessor;
 import gov.samhsa.bhits.common.tool.DocumentXmlConverter;
 import gov.samhsa.bhits.common.tool.UniqueValueGeneratorException;
 import gov.samhsa.bhits.common.tool.XmlTransformer;

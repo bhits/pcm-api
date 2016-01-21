@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-package gov.samhsa.bhits.common.tool;
+package gov.samhsa.bhits.common.document.accessor;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -163,7 +163,7 @@ public class DocumentAccessorImpl implements DocumentAccessor {
                                             String xPathExpr, String... arguments)
             throws DocumentAccessorException {
         final NodeList nodeList = getNodeList(xmlDocument, xPathExpr, arguments);
-        return DocumentAccessor.toNodeStream(nodeList);
+        return toNodeStream(nodeList);
     }
 
     /*

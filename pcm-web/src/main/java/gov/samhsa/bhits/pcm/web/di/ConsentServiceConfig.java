@@ -1,6 +1,6 @@
 package gov.samhsa.bhits.pcm.web.di;
 
-import gov.samhsa.bhits.common.tool.DocumentAccessor;
+import gov.samhsa.bhits.common.document.accessor.DocumentAccessor;
 import gov.samhsa.bhits.common.tool.DocumentXmlConverter;
 import gov.samhsa.bhits.common.tool.XmlTransformer;
 import gov.samhsa.bhits.consentgen.ConsentBuilder;
