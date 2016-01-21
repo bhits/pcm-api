@@ -29,7 +29,7 @@ import echosign.api.clientv20.dto16.EmbeddedWidgetCreationResult;
 import gov.samhsa.bhits.common.document.accessor.DocumentAccessor;
 import gov.samhsa.bhits.common.document.converter.DocumentXmlConverter;
 import gov.samhsa.bhits.common.tool.UniqueValueGeneratorException;
-import gov.samhsa.bhits.common.tool.XmlTransformer;
+import gov.samhsa.bhits.common.document.transformer.XmlTransformer;
 import gov.samhsa.bhits.consentgen.ConsentBuilder;
 import gov.samhsa.bhits.consentgen.ConsentGenException;
 import gov.samhsa.bhits.pcm.domain.consent.*;

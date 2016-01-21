@@ -1,6 +1,6 @@
 package gov.samhsa.bhits.pcm.web.di;
 
-import gov.samhsa.bhits.common.tool.XmlTransformer;
+import gov.samhsa.bhits.common.document.transformer.XmlTransformer;
 import gov.samhsa.bhits.consentgen.ConsentBuilder;
 import gov.samhsa.bhits.consentgen.ConsentBuilderImpl;
 import gov.samhsa.bhits.consentgen.ConsentDtoFactory;

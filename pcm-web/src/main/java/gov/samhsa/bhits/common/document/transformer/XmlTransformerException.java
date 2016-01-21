@@ -1,4 +1,4 @@
-package gov.samhsa.bhits.common.tool;
+package gov.samhsa.bhits.common.document.transformer;
 
 public class XmlTransformerException extends RuntimeException {
     public XmlTransformerException(String message) {

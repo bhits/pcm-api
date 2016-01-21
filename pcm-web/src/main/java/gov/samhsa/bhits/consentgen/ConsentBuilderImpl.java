@@ -29,7 +29,7 @@ package gov.samhsa.bhits.consentgen;
 import java.util.Optional;
 
 import gov.samhsa.bhits.common.param.ParamsBuilder;
-import gov.samhsa.bhits.common.tool.XmlTransformer;
+import gov.samhsa.bhits.common.document.transformer.XmlTransformer;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 

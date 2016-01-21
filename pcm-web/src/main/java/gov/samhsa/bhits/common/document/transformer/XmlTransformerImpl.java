@@ -1,4 +1,4 @@
-package gov.samhsa.bhits.common.tool;
+package gov.samhsa.bhits.common.document.transformer;
 
 import gov.samhsa.bhits.common.marshaller.SimpleMarshaller;
 import gov.samhsa.bhits.common.marshaller.SimpleMarshallerException;
