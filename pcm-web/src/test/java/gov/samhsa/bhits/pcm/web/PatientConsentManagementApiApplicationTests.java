@@ -1,5 +1,6 @@
 package gov.samhsa.bhits.pcm.web;
 
+import gov.samhsa.bhits.pcm.PatientConsentManagementApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.web.WebAppConfiguration;

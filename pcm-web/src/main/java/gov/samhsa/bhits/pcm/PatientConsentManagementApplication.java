@@ -1,4 +1,4 @@
-package gov.samhsa.bhits.pcm.web;
+package gov.samhsa.bhits.pcm;
 
 import gov.samhsa.bhits.pcm.domain.PcmDomainBasePackageMarkerInterface;
 import gov.samhsa.bhits.vss.VssBasePackageMarkerInterface;
@@ -13,7 +13,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @EntityScan(basePackageClasses = PcmDomainBasePackageMarkerInterface.class)
 @EnableJpaRepositories(basePackageClasses = PcmDomainBasePackageMarkerInterface.class)
 @EnableResourceServer
-@ComponentScan(basePackageClasses = VssBasePackageMarkerInterface.class)
+// TODO (BU): remove component scan when VSS is separated from PCM
+@ComponentScan(basePackageClasses = {PatientConsentManagementApplication.class, VssBasePackageMarkerInterface.class})
 public class PatientConsentManagementApplication {
 
     public static void main(String[] args) {
