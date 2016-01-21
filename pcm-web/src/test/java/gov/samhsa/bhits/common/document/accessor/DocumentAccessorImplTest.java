@@ -1,4 +1,4 @@
-package gov.samhsa.bhits.common.tool;
+package gov.samhsa.bhits.common.document.accessor;
 
 import gov.samhsa.bhits.common.document.accessor.DocumentAccessorImpl;
 import gov.samhsa.bhits.common.document.converter.DocumentXmlConverterImpl;
