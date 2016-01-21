@@ -1,6 +1,6 @@
 package gov.samhsa.bhits.common.tool;
 
-import gov.samhsa.bhits.common.Params;
+import gov.samhsa.bhits.common.param.Params;
 import gov.samhsa.bhits.common.log.Logger;
 import gov.samhsa.bhits.common.log.LoggerFactory;
 import org.w3c.dom.Document;

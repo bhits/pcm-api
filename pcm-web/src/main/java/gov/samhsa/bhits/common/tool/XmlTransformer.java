@@ -5,7 +5,7 @@ import java.util.Optional;
 import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
 
-import gov.samhsa.bhits.common.Params;
+import gov.samhsa.bhits.common.param.Params;
 import org.w3c.dom.Document;
 
 /**

@@ -1,4 +1,4 @@
-package gov.samhsa.bhits.common;
+package gov.samhsa.bhits.common.param;
 
 import java.util.HashMap;
 import java.util.Map;
