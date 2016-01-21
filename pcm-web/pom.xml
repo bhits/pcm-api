@@ -33,6 +33,7 @@
         <logback-audit.version>0.6</logback-audit.version>
         <Saxon-HE.version>9.6.0-3</Saxon-HE.version>
         <powermock.version>1.6.4</powermock.version>
+        <xmlunit.version>1.5</xmlunit.version>
     </properties>
 
     <dependencies>
@@ -132,6 +133,27 @@
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
             <version>${Saxon-HE.version}</version>
+        </dependency>
+        <!-- common-unit dependencies -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>xmlunit</groupId>
+            <artifactId>xmlunit</artifactId>
+            <version>${xmlunit.version}</version>
         </dependency>
 
         <!-- Test -->
