@@ -1,4 +1,4 @@
-package gov.samhsa.bhits.common.tool;
+package gov.samhsa.bhits.common.document.converter;
 
 public class DocumentXmlConverterException extends RuntimeException {
 

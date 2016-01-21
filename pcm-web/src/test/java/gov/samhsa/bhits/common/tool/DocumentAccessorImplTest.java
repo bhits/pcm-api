@@ -1,6 +1,7 @@
 package gov.samhsa.bhits.common.tool;
 
 import gov.samhsa.bhits.common.document.accessor.DocumentAccessorImpl;
+import gov.samhsa.bhits.common.document.converter.DocumentXmlConverterImpl;
 import gov.samhsa.bhits.common.filereader.FileReaderImpl;
 import org.junit.Before;
 import org.junit.Test;
