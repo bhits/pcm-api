@@ -1,6 +1,6 @@
 package gov.samhsa.bhits.pcm.service.consent;
 
-import gov.samhsa.bhits.common.tool.UniqueValueGenerator;
+import gov.samhsa.bhits.common.util.UniqueValueGenerator;
 import gov.samhsa.bhits.pcm.domain.consent.ConsentRepository;
 import gov.samhsa.bhits.pcm.service.dto.ConsentDto;
 import org.apache.commons.lang3.RandomStringUtils;

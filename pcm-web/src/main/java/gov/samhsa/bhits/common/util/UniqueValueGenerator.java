@@ -23,7 +23,7 @@
  *   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-package gov.samhsa.bhits.common.tool;
+package gov.samhsa.bhits.common.util;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -34,6 +34,8 @@ import org.springframework.util.StringUtils;
  * The Class UniqueValueGenerator.
  */
 public class UniqueValueGenerator {
+
+	private UniqueValueGenerator(){}
 
 	/**
 	 * Generate unique value.
@@ -52,7 +54,7 @@ public class UniqueValueGenerator {
 	 * @return the s unique value or null if cannot be generated with given
 	 *         limited iterations
 	 */
-	public static <S> S generateUniqueValue(Supplier<S> uniqueValueSupplier,
+	public static final <S> S generateUniqueValue(Supplier<S> uniqueValueSupplier,
 			Predicate<S> valueTest, short limit) {
 		S uniqueValue = null;
 		short iterationCounter = 0;
