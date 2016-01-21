@@ -1,4 +1,4 @@
-package gov.samhsa.bhits.common;
+package gov.samhsa.bhits.common.url;
 
 import java.net.URL;
 
@@ -10,7 +10,7 @@ public interface ResourceUrlProvider {
 		final String resourceFile = packageName.replace(".", "/") + "/"
 				+ fileName;
 		final URL resourceUrl = classLoader.getResource(resourceFile);
-		final String xacmlXslFilePath = resourceUrl.toString();
-		return xacmlXslFilePath;
+		final String resourceUrlString = resourceUrl.toString();
+		return resourceUrlString;
 	}
 }
