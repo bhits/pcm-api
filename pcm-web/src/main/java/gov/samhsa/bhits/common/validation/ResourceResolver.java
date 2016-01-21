@@ -27,8 +27,8 @@ package gov.samhsa.bhits.common.validation;
 
 import gov.samhsa.bhits.common.log.Logger;
 import gov.samhsa.bhits.common.log.LoggerFactory;
-import gov.samhsa.bhits.common.tool.FileReader;
-import gov.samhsa.bhits.common.tool.FileReaderImpl;
+import gov.samhsa.bhits.common.tool.filereader.FileReader;
+import gov.samhsa.bhits.common.tool.filereader.FileReaderImpl;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
 

@@ -26,7 +26,7 @@
 package gov.samhsa.bhits.common.validation;
 
 
-import gov.samhsa.bhits.common.tool.FileReader;
+import gov.samhsa.bhits.common.tool.filereader.FileReader;
 import org.w3c.dom.ls.LSInput;
 
 import java.io.BufferedInputStream;
