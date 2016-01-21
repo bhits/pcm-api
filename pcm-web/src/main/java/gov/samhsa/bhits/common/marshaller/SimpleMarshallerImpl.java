@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-package gov.samhsa.bhits.common.tool;
+package gov.samhsa.bhits.common.marshaller;
 
 import javax.xml.bind.*;
 import javax.xml.namespace.QName;

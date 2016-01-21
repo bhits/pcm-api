@@ -1,6 +1,6 @@
 package gov.samhsa.bhits.pcm.web.di;
 
-import gov.samhsa.bhits.common.tool.SimpleMarshaller;
+import gov.samhsa.bhits.common.marshaller.SimpleMarshaller;
 import gov.samhsa.bhits.common.tool.XmlTransformer;
 import gov.samhsa.bhits.common.tool.XmlTransformerImpl;
 import org.springframework.context.annotation.Bean;

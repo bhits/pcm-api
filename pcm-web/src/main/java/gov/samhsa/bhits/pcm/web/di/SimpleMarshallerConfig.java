@@ -1,7 +1,7 @@
 package gov.samhsa.bhits.pcm.web.di;
 
-import gov.samhsa.bhits.common.tool.SimpleMarshaller;
-import gov.samhsa.bhits.common.tool.SimpleMarshallerImpl;
+import gov.samhsa.bhits.common.marshaller.SimpleMarshaller;
+import gov.samhsa.bhits.common.marshaller.SimpleMarshallerImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
