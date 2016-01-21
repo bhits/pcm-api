@@ -163,7 +163,7 @@ public class DocumentAccessorImpl implements DocumentAccessor {
                                             String xPathExpr, String... arguments)
             throws DocumentAccessorException {
         final NodeList nodeList = getNodeList(xmlDocument, xPathExpr, arguments);
-        return toNodeStream(nodeList);
+        return DocumentAccessor.toNodeStream(nodeList);
     }
 
     /*
