@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-package gov.samhsa.bhits.common.tool.filereader;
+package gov.samhsa.bhits.common.filereader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
