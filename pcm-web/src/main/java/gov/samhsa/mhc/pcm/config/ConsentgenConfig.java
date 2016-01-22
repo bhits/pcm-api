@@ -6,12 +6,16 @@ import gov.samhsa.mhc.consentgen.ConsentBuilderImpl;
 import gov.samhsa.mhc.consentgen.ConsentDtoFactory;
 import gov.samhsa.mhc.consentgen.XacmlXslUrlProvider;
 import gov.samhsa.mhc.consentgen.pg.XacmlXslUrlProviderImpl;
+import gov.samhsa.mhc.pcm.domain.consent.ConsentRepository;
+import gov.samhsa.mhc.pcm.service.consentexport.ConsentDtoFactoryImpl;
+import gov.samhsa.mhc.pcm.service.consentexport.ConsentExportMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ConsentBuilderConfig {
+public class ConsentgenConfig {
 
     @Value("${mhc.pcm.config.pid.org}")
     private String pcmOrg;
@@ -28,5 +32,12 @@ public class ConsentBuilderConfig {
     @Bean
     public XacmlXslUrlProvider xacmlXslUrlProvider() {
         return new XacmlXslUrlProviderImpl();
+    }
+
+    @Bean
+    public ConsentDtoFactory consentDtoFactory(ConsentRepository consentRepository,
+                                               ModelMapper modelMapper,
+                                               ConsentExportMapper consentExportMapper) {
+        return new ConsentDtoFactoryImpl(consentRepository, modelMapper, consentExportMapper);
     }
 }
