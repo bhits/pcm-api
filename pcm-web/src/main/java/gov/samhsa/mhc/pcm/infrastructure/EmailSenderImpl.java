@@ -34,42 +34,31 @@ import javax.mail.internet.MimeMessage;
 
 import gov.samhsa.mhc.pcm.domain.commondomainservices.EmailSender;
 import gov.samhsa.mhc.pcm.domain.commondomainservices.EmailType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 /**
  * The Class EmailSenderImpl.
  */
+@Service
 public class EmailSenderImpl implements EmailSender {
 
 	/** The mail sender. */
+	@Autowired
 	private JavaMailSender mailSender;
 
 	/** The template engine. */
+	@Autowired
 	private TemplateEngine templateEngine;
 
 	/** The message properties. */
+	@Autowired
 	private MessageSource messageProperties;
-
-	/**
-	 * Instantiates a new email sender impl.
-	 *
-	 * @param mailSender
-	 *            the mail sender
-	 * @param templateEngine
-	 *            the template engine
-	 * @param messageProperties
-	 *            the message properties
-	 */
-	public EmailSenderImpl(JavaMailSender mailSender,
-			TemplateEngine templateEngine, MessageSource messageProperties) {
-		this.mailSender = mailSender;
-		this.templateEngine = templateEngine;
-		this.messageProperties = messageProperties;
-	}
 
 	/*
 	 * (non-Javadoc)
