@@ -167,6 +167,8 @@ public interface ConsentService {
      */
     ConsentDto findConsentById(Long consentId);
 
+    XacmlDto findXACMLForCCDByConsentId(Long consentId);
+
     /**
      * Sign consent.
      *

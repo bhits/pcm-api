@@ -45,6 +45,7 @@ import gov.samhsa.bhits.pcm.infrastructure.AbstractConsentRevokationPdfGenerator
 import gov.samhsa.bhits.pcm.infrastructure.EchoSignSignatureService;
 import gov.samhsa.bhits.pcm.service.consentexport.ConsentExportService;
 import gov.samhsa.bhits.pcm.service.dto.*;
+import gov.samhsa.bhits.pcm.service.exception.XacmlNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -1609,6 +1610,15 @@ public class ConsentServiceImpl implements ConsentService {
 
         }
         return xacmlFile;
+    }
+
+    @Override
+    public XacmlDto findXACMLForCCDByConsentId(Long consentId) {
+        Assert.notNull(consentId, "Consent ID is required to find XACML");
+        byte[] xacmlForCCD = Optional.ofNullable(consentRepository.findOne(consentId))
+                .map(Consent::getXacmlCcd)
+                .orElseThrow(() -> new XacmlNotFoundException("XACML for CCD not found with consent id: " + consentId));
+        return new XacmlDto(xacmlForCCD);
     }
 
     /**
