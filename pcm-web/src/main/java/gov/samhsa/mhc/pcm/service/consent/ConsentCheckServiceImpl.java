@@ -10,41 +10,29 @@ import gov.samhsa.mhc.pcm.service.dto.ConsentDto;
 import gov.samhsa.mhc.pcm.service.dto.ConsentValidationDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * The Class ConsentCheckServiceImpl.
  */
+@Service
 public class ConsentCheckServiceImpl implements ConsentCheckService {
 
 	/** The logger. */
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/** The consent repository. */
+	@Autowired
 	private ConsentRepository consentRepository;
 
 	/** The patient repository. */
+	@Autowired
 	private PatientRepository patientRepository;
 
 	/** The consent helper. */
-	ConsentHelper consentHelper;
-
-	/**
-	 * Instantiates a new consent check service impl.
-	 *
-	 * @param consentRepository
-	 *            the consent repository
-	 * @param patientRepository
-	 *            the patient repository
-	 * @param consentHelper
-	 *            the consent helper
-	 */
-	public ConsentCheckServiceImpl(ConsentRepository consentRepository,
-			PatientRepository patientRepository, ConsentHelper consentHelper) {
-		super();
-		this.consentRepository = consentRepository;
-		this.patientRepository = patientRepository;
-		this.consentHelper = consentHelper;
-	}
+	@Autowired
+	private ConsentHelper consentHelper;
 
 	/*
 	 * (non-Javadoc)
