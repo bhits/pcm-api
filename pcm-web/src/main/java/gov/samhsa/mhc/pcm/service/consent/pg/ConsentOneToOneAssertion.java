@@ -27,6 +27,7 @@ package gov.samhsa.mhc.pcm.service.consent.pg;
 
 import gov.samhsa.mhc.pcm.service.consent.ConsentAssertion;
 import gov.samhsa.mhc.pcm.service.dto.ConsentDto;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.Optional;
@@ -36,6 +37,7 @@ import java.util.function.Function;
 /**
  * The Class ConsentOneToOneAssertion.
  */
+@Component
 public class ConsentOneToOneAssertion implements ConsentAssertion {
 
     /*
