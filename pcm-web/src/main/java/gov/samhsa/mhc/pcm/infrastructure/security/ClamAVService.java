@@ -5,6 +5,8 @@ import net.taldius.clamav.ClamAVScannerFactory;
 import net.taldius.clamav.ScannerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
@@ -13,39 +15,31 @@ import java.io.InputStream;
 /**
  * The Class ClamAVService.
  */
+@Service
 public class ClamAVService {
 
     final Logger logger = LoggerFactory.getLogger(this.getClass());
     /**
      * Host where 'clamd' process is running.
      */
+    @Value("${mhc.pcm.config.clamd.host}")
     private String clamdHost;
+
     /**
      * Port on which 'clamd' process is listening.
      */
+    @Value("${mhc.pcm.config.clamd.port}")
     private int clamdPort;
+
     /**
      * Connection time out to connect 'clamd' process.
      */
+    @Value("${mhc.pcm.config.clamd.connTimeOut}")
     private int connTimeOut;
     /**
      * The scanner.
      */
     private ClamAVScanner scanner;
-
-    /**
-     * Instantiates a new clam av service.
-     *
-     * @param clamdHost   the clamd host
-     * @param clamdPort   the clamd port
-     * @param connTimeOut the conn time out
-     */
-    public ClamAVService(String clamdHost, int clamdPort, int connTimeOut) {
-        super();
-        this.clamdHost = clamdHost;
-        this.clamdPort = clamdPort;
-        this.connTimeOut = connTimeOut;
-    }
 
     /**
      * Gets the clamd host.
