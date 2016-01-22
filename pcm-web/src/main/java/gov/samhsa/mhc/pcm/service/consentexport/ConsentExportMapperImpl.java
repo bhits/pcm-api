@@ -6,6 +6,8 @@ import gov.samhsa.mhc.pcm.domain.reference.ClinicalConceptCode;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +15,7 @@ import java.util.Set;
 /**
  * The Class ConsentExportMapperImpl.
  */
+@Service
 public class ConsentExportMapperImpl implements ConsentExportMapper {
 
     /**
@@ -23,17 +26,8 @@ public class ConsentExportMapperImpl implements ConsentExportMapper {
     /**
      * The model mapper.
      */
-    ModelMapper modelMapper;
-
-    /**
-     * Instantiates a new consent export mapper impl.
-     *
-     * @param modelMapper the model mapper
-     */
-    public ConsentExportMapperImpl(ModelMapper modelMapper) {
-        super();
-        this.modelMapper = modelMapper;
-    }
+    @Autowired
+    private ModelMapper modelMapper;
 
     /*
      * (non-Javadoc)
