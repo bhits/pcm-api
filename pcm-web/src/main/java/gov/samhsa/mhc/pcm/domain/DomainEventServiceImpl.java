@@ -26,7 +26,7 @@
 package gov.samhsa.mhc.pcm.domain;
 
 
-import gov.samhsa.mhc.pcm.web.SpringContext;
+import gov.samhsa.mhc.pcm.config.SpringContext;
 import org.springframework.context.ApplicationContext;
 
 import java.util.HashSet;
