@@ -2,6 +2,7 @@ package gov.samhsa.mhc.pcm.infrastructure.eventlistener;
 
 import gov.samhsa.mhc.pcm.domain.SecurityEvent;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,13 +10,14 @@ import java.util.List;
 /**
  * The Class EventService.
  */
+@Service
 public class EventService implements
         org.springframework.context.ApplicationListener {
 
     /**
      * The listeners.
      */
-    List<EventListener> listeners = new ArrayList<EventListener>();
+    private List<EventListener> listeners = new ArrayList<EventListener>();
 
     /**
      * Method that allows registering of an Event Listener.

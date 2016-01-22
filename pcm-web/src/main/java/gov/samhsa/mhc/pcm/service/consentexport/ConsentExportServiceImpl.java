@@ -32,30 +32,23 @@ import gov.samhsa.mhc.consentgen.ConsentGenException;
 import gov.samhsa.mhc.pcm.domain.consent.Consent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The Class ConsentExportServiceImpl.
  */
 @Transactional(readOnly = true)
+@Service
 public class ConsentExportServiceImpl implements ConsentExportService {
 
 	/** The logger. */
-	final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/** The consent builder. */
-	ConsentBuilder consentBuilder;
-
-	/**
-	 * Instantiates a new consent export service impl.
-	 *
-	 * @param consentBuilder
-	 *            the consent builder
-	 */
-	public ConsentExportServiceImpl(ConsentBuilder consentBuilder) {
-		super();
-		this.consentBuilder = consentBuilder;
-	}
+	@Autowired
+	private ConsentBuilder consentBuilder;
 
 	/*
 	 * (non-Javadoc)

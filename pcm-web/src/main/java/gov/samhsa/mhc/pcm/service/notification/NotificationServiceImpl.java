@@ -28,6 +28,8 @@ package gov.samhsa.mhc.pcm.service.notification;
 import gov.samhsa.mhc.pcm.domain.consent.Consent;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.domain.patient.PatientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
@@ -36,21 +38,12 @@ import java.util.Set;
  * The Class NotificationServiceImpl.
  */
 @Transactional
+@Service
 public class NotificationServiceImpl implements NotificationService {
 
     /** The patient repository. */
+    @Autowired
     private PatientRepository patientRepository;
-
-    /**
-     * Instantiates a new notification service impl.
-     *
-     * @param patientRepository
-     *            the patient repository
-     */
-    public NotificationServiceImpl(PatientRepository patientRepository) {
-        super();
-        this.patientRepository = patientRepository;
-    }
 
     /*
      * (non-Javadoc)

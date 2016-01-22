@@ -4,12 +4,15 @@ package gov.samhsa.mhc.pcm.service.provider;
 
 import gov.samhsa.mhc.pcm.domain.reference.EntityType;
 import gov.samhsa.mhc.pcm.service.dto.AbstractProviderDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
 /**
  * The Class HashMapResultToProviderDtoConverter.
  */
+@Service
 public class HashMapResultToProviderDtoConverter {
 
 	// This code is originally in ProviderController and is moved to this
