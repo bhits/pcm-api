@@ -27,25 +27,18 @@ package gov.samhsa.mhc.pcm.domain.consent;
 
 import gov.samhsa.mhc.pcm.domain.DomainEventManager;
 import gov.samhsa.mhc.pcm.domain.consent.event.ConsentSubmittedEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * A factory for creating Consent objects.
  */
+@Service
 public class ConsentFactory {
 
 	/** The consent repository. */
+	@Autowired
 	private ConsentRepository consentRepository;
-
-	/**
-	 * Instantiates a new consent factory.
-	 *
-	 * @param consentRepository
-	 *            the consent repository
-	 */
-	public ConsentFactory(ConsentRepository consentRepository) {
-		super();
-		this.consentRepository = consentRepository;
-	}
 
 	/**
 	 * Creates a new Consent object.
