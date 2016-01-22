@@ -30,6 +30,8 @@ import gov.samhsa.mhc.pcm.domain.reference.StateCodeRepository;
 import gov.samhsa.mhc.pcm.service.dto.LookupDto;
 import gov.samhsa.mhc.pcm.service.reference.StateCodeServiceImpl;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ import java.util.List;
  * The Class StateCodeServicePgImpl.
  */
 @Transactional
+@Service
 public class StateCodeServicePgImpl extends StateCodeServiceImpl implements
         StateCodeServicePg {
 
@@ -50,6 +53,7 @@ public class StateCodeServicePgImpl extends StateCodeServiceImpl implements
      * @param modelMapper
      *            the model mapper
      */
+    @Autowired
     public StateCodeServicePgImpl(StateCodeRepository stateCodeRepository,
                                   ModelMapper modelMapper) {
         super(stateCodeRepository, modelMapper);

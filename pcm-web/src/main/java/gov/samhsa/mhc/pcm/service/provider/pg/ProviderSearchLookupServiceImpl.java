@@ -32,6 +32,9 @@ import gov.samhsa.mhc.pcm.service.provider.OrganizationalProviderService;
 import gov.samhsa.mhc.pcm.service.reference.StateCodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -40,6 +43,7 @@ import java.util.List;
  * The Class ProviderSearchLookupServiceImpl.
  */
 @Transactional
+@Service
 public class ProviderSearchLookupServiceImpl
         extends
         gov.samhsa.mhc.pcm.service.provider.ProviderSearchLookupServiceImpl {
@@ -52,17 +56,17 @@ public class ProviderSearchLookupServiceImpl
     /**
      * The individual provider service.
      */
-    IndividualProviderService individualProviderService;
+    private IndividualProviderService individualProviderService;
 
     /**
      * The organizational provider service.
      */
-    OrganizationalProviderService organizationalProviderService;
+    private OrganizationalProviderService organizationalProviderService;
 
     /**
      * The hash map result to provider dto converter.
      */
-    HashMapResultToProviderDtoConverter hashMapResultToProviderDtoConverter;
+    private HashMapResultToProviderDtoConverter hashMapResultToProviderDtoConverter;
 
     /**
      * Instantiates a new provider search lookup service impl.
@@ -73,8 +77,9 @@ public class ProviderSearchLookupServiceImpl
      * @param organizationalProviderService       the organizational provider service
      * @param hashMapResultToProviderDtoConverter the hash map result to provider dto converter
      */
+    @Autowired
     public ProviderSearchLookupServiceImpl(
-            String providerSearchURL,
+            @Value("${mhc.pcm.config.pls.api}") String providerSearchURL,
             StateCodeService stateCodeService,
             IndividualProviderService individualProviderService,
             OrganizationalProviderService organizationalProviderService,
