@@ -1,4 +1,4 @@
-package gov.samhsa.mhc.vss.web.rest;
+package gov.samhsa.mhc.vss.web;
 
 import gov.samhsa.mhc.vss.service.CodeSystemVersionNotFoundException;
 import gov.samhsa.mhc.vss.service.ConceptCodeNotFoundException;
