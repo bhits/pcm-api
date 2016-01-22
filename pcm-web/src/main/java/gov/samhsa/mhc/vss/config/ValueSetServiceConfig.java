@@ -1,4 +1,4 @@
-package gov.samhsa.mhc.vss.web.di;
+package gov.samhsa.mhc.vss.config;
 
 import gov.samhsa.mhc.pcm.domain.consent.ConsentRepository;
 import gov.samhsa.mhc.pcm.domain.valueset.*;
