@@ -30,6 +30,8 @@ import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
 import gov.samhsa.mhc.pcm.service.dto.LookupDto;
 import gov.samhsa.mhc.vss.service.dto.AddConsentFieldsDto;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -39,30 +41,17 @@ import java.util.List;
  * The Class ClinicalDocumentTypeCodeServiceImpl.
  */
 @Transactional
+@Service
 public class ClinicalDocumentTypeCodeServiceImpl implements
         ClinicalDocumentTypeCodeService {
 
     /** The clinical document type code repository. */
+    @Autowired
     private ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository;
 
     /** The model mapper. */
+    @Autowired
     private ModelMapper modelMapper;
-
-    /**
-     * Instantiates a new clinical document type code service impl.
-     *
-     * @param clinicalDocumentTypeCodeRepository
-     *            the clinical document type code repository
-     * @param modelMapper
-     *            the model mapper
-     */
-    public ClinicalDocumentTypeCodeServiceImpl(
-            ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository,
-            ModelMapper modelMapper) {
-        super();
-        this.clinicalDocumentTypeCodeRepository = clinicalDocumentTypeCodeRepository;
-        this.modelMapper = modelMapper;
-    }
 
     /*
      * (non-Javadoc)
