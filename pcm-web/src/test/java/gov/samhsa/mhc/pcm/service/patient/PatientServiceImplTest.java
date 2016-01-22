@@ -54,9 +54,7 @@ public class PatientServiceImplTest {
     private EmailSender emailSender;
 
     @InjectMocks
-    private PatientServiceImpl sut = new PatientServiceImpl(patientRepository,
-            patientLegalRepresentativeAssociationRepository, modelMapper,
-            passwordEncoder, emailSender);
+    private PatientServiceImpl sut;
 
     @Test
     public void testCountAllPatients() {

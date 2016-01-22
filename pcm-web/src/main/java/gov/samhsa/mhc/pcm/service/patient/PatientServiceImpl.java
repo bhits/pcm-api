@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Open Behavioral Health Information Technology Architecture (OBHITA.org)
- * <p>
+ * <p/>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * * Redistributions of source code must retain the above copyright
@@ -11,7 +11,7 @@
  * * Neither the name of the <organization> nor the
  * names of its contributors may be used to endorse or promote products
  * derived from this software without specific prior written permission.
- * <p>
+ * <p/>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -38,8 +38,10 @@ import gov.samhsa.mhc.pcm.service.dto.*;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
@@ -49,54 +51,48 @@ import java.util.*;
  * The Class PatientServiceImpl.
  */
 @Transactional
+@Service
 public class PatientServiceImpl implements PatientService {
 
-    /** The Constant LAST_N_DIGITS_OF_SSN. */
+    /**
+     * The Constant LAST_N_DIGITS_OF_SSN.
+     */
     public static final Integer LAST_N_DIGITS_OF_SSN = 4;
-    /** The logger. */
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    /** The patient repository. */
-    protected PatientRepository patientRepository;
-
-    /** The patient legal representative association repository. */
-    protected PatientLegalRepresentativeAssociationRepository patientLegalRepresentativeAssociationRepository;
-
-    /** The model mapper. */
-    protected ModelMapper modelMapper;
-
-    /** The password encoder. */
-    protected PasswordEncoder passwordEncoder;
-
-    /** The email sender. */
-    protected EmailSender emailSender;
 
     /**
-     * Instantiates a new patient service impl.
-     *
-     * @param patientRepository
-     *            the patient repository
-     * @param patientLegalRepresentativeAssociationRepository
-     *            the patient legal representative association repository
-     * @param modelMapper
-     *            the model mapper
-     * @param passwordEncoder
-     *            the password encoder
-     * @param emailSender
-     *            the email sender
+     * The logger.
      */
-    public PatientServiceImpl(
-            PatientRepository patientRepository,
-            PatientLegalRepresentativeAssociationRepository patientLegalRepresentativeAssociationRepository,
-            ModelMapper modelMapper,
-            PasswordEncoder passwordEncoder,
-            EmailSender emailSender) {
-        super();
-        this.patientRepository = patientRepository;
-        this.patientLegalRepresentativeAssociationRepository = patientLegalRepresentativeAssociationRepository;
-        this.modelMapper = modelMapper;
-        this.passwordEncoder = passwordEncoder;
-        this.emailSender = emailSender;
-    }
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    /**
+     * The patient repository.
+     */
+    @Autowired
+    private PatientRepository patientRepository;
+
+    /**
+     * The patient legal representative association repository.
+     */
+    @Autowired
+    private PatientLegalRepresentativeAssociationRepository patientLegalRepresentativeAssociationRepository;
+
+    /**
+     * The model mapper.
+     */
+    @Autowired
+    private ModelMapper modelMapper;
+
+    /**
+     * The password encoder.
+     */
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    /**
+     * The email sender.
+     */
+    @Autowired
+    private EmailSender emailSender;
 
     /*
      * (non-Javadoc)
@@ -653,8 +649,7 @@ public class PatientServiceImpl implements PatientService {
     /**
      * Map patient list to patient admin dto list.
      *
-     * @param patients
-     *            the patients
+     * @param patients the patients
      * @return the list
      */
     private List<PatientAdminDto> mapPatientListToPatientAdminDtoList(
