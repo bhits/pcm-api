@@ -4,46 +4,31 @@ import gov.samhsa.mhc.common.util.UniqueValueGenerator;
 import gov.samhsa.mhc.pcm.domain.consent.ConsentRepository;
 import gov.samhsa.mhc.pcm.service.dto.ConsentDto;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 /**
  * The Class PolicyIdServiceImpl.
  */
+@Service
 public class PolicyIdServiceImpl implements PolicyIdService {
 
 	/** The Constant RANDOM_STRING_LENGTH. */
 	private static final int RANDOM_STRING_LENGTH = 6;
 
 	/** The pid domain id. */
+	@Value("${mhc.pcm.config.pid.domain.id}")
 	private String pidDomainId;
 
 	/** The pid domain type. */
+	@Value("${mhc.pcm.config.pid.domain.type}")
 	private String pidDomainType;
 
 	/** The consent repository. */
+	@Autowired
 	private ConsentRepository consentRepository;
-
-	/**
-	 * Instantiates a new policy id service impl.
-	 *
-	 * @param pidDomainId
-	 *            the pid domain id
-	 * @param pidDomainType
-	 *            the pid domain type
-	 * @param consentRepository
-	 *            the consent repository
-	 */
-	public PolicyIdServiceImpl(String pidDomainId, String pidDomainType,
-			ConsentRepository consentRepository) {
-		super();
-		this.pidDomainId = pidDomainId;
-		this.pidDomainType = pidDomainType;
-		this.consentRepository = consentRepository;
-		Assert.hasText(this.pidDomainId,
-				"PolicyIdServiceImpl cannot be initialized without 'pidDomainId'!");
-		Assert.hasText(this.pidDomainType,
-				"PolicyIdServiceImpl cannot be initialized without 'pidDomainType'!");
-	}
 
 	/*
 	 * (non-Javadoc)

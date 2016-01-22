@@ -1,18 +1,10 @@
 package gov.samhsa.mhc.pcm.service.consent;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import gov.samhsa.mhc.common.util.UniqueValueGeneratorException;
 import gov.samhsa.mhc.pcm.domain.consent.Consent;
 import gov.samhsa.mhc.pcm.domain.consent.ConsentRepository;
 import gov.samhsa.mhc.pcm.service.dto.ConsentDto;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -20,7 +12,17 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PolicyIdServiceImplTest {
@@ -36,8 +38,13 @@ public class PolicyIdServiceImplTest {
     private ConsentRepository consentRepository;
 
     @InjectMocks
-    private PolicyIdServiceImpl sut = new PolicyIdServiceImpl(PIDDOMAINIDMOCK,
-            PIDDOMAINTYPEMOCK, consentRepository);
+    private PolicyIdServiceImpl sut;
+
+    @Before
+    public void setUp() throws Exception {
+        ReflectionTestUtils.setField(sut, "pidDomainId", PIDDOMAINIDMOCK);
+        ReflectionTestUtils.setField(sut, "pidDomainType", PIDDOMAINTYPEMOCK);
+    }
 
     @Test
     public void testGeneratePolicyId() {

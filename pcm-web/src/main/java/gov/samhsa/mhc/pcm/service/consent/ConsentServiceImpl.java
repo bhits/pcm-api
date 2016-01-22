@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Open Behavioral Health Information Technology Architecture (OBHITA.org)
- * <p>
+ * <p/>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * * Redistributions of source code must retain the above copyright
@@ -11,7 +11,7 @@
  * * Neither the name of the <organization> nor the
  * names of its contributors may be used to endorse or promote products
  * derived from this software without specific prior written permission.
- * <p>
+ * <p/>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -28,8 +28,8 @@ package gov.samhsa.mhc.pcm.service.consent;
 import echosign.api.clientv20.dto16.EmbeddedWidgetCreationResult;
 import gov.samhsa.mhc.common.document.accessor.DocumentAccessor;
 import gov.samhsa.mhc.common.document.converter.DocumentXmlConverter;
-import gov.samhsa.mhc.common.util.UniqueValueGeneratorException;
 import gov.samhsa.mhc.common.document.transformer.XmlTransformer;
+import gov.samhsa.mhc.common.util.UniqueValueGeneratorException;
 import gov.samhsa.mhc.consentgen.ConsentBuilder;
 import gov.samhsa.mhc.consentgen.ConsentGenException;
 import gov.samhsa.mhc.pcm.domain.consent.*;
@@ -48,9 +48,12 @@ import gov.samhsa.mhc.pcm.service.dto.*;
 import gov.samhsa.mhc.pcm.service.exception.XacmlNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.w3c.dom.Element;
@@ -70,6 +73,7 @@ import java.util.*;
  * The Class ConsentServiceImpl.
  */
 @Transactional
+@Service
 public class ConsentServiceImpl implements ConsentService {
 
     /**
@@ -78,186 +82,136 @@ public class ConsentServiceImpl implements ConsentService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
-     * The consent repository.
-     */
-    private final ConsentRepository consentRepository;
-
-    /**
-     * The consent pdf generator.
-     */
-    private final ConsentPdfGenerator consentPdfGenerator;
-
-    /**
-     * The patient repository.
-     */
-    private final PatientRepository patientRepository;
-
-    /**
-     * The individual provider repository.
-     */
-    private final IndividualProviderRepository individualProviderRepository;
-
-    /**
-     * The organizational provider repository.
-     */
-    private final OrganizationalProviderRepository organizationalProviderRepository;
-
-    /**
-     * The clinical document type code repository.
-     */
-    private final ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository;
-
-    /**
-     * The clinical document section type code repository.
-     */
-    private final MedicalSectionRepository medicalSectionRepository;
-
-    /**
-     * The value set category repository.
-     */
-    private final ValueSetCategoryRepository valueSetCategoryRepository;
-
-    /**
-     * The purpose of use code repository.
-     */
-    private final PurposeOfUseCodeRepository purposeOfUseCodeRepository;
-
-    /**
-     * The echo sign signature service.
-     */
-    private final EchoSignSignatureService echoSignSignatureService;
-
-    /**
-     * The consent revokation pdf generator.
-     */
-    private final AbstractConsentRevokationPdfGenerator consentRevokationPdfGenerator;
-
-    /**
-     * The consent export service.
-     */
-    private final ConsentExportService consentExportService;
-
-    /**
-     * The consent builder.
-     */
-    private final ConsentBuilder consentBuilder;
-
-    /**
-     * The consent factory.
-     */
-    private final ConsentFactory consentFactory;
-
-    /**
-     * The consent check service.
-     */
-    ConsentCheckService consentCheckService;
-
-    /**
-     * The consent assertions.
-     */
-    private final Set<ConsentAssertion> consentAssertions;
-
-    /**
-     * The policy id service.
-     */
-    private final PolicyIdService policyIdService;
-
-    /**
      * The c2s domain id.
      */
-    private final String c2sDomainId;
+    @Value("${mhc.pcm.config.pid.domain.id}")
+    private String pidDomainId;
 
     /**
      * The c2s domain type.
      */
-    private final String c2sDomainType;
+    @Value("${mhc.pcm.config.pid.domain.type}")
+    private String pidDomainType;
+
+    /**
+     * The consent repository.
+     */
+    @Autowired
+    private ConsentRepository consentRepository;
+
+    /**
+     * The consent pdf generator.
+     */
+    @Autowired
+    private ConsentPdfGenerator consentPdfGenerator;
+
+    /**
+     * The patient repository.
+     */
+    @Autowired
+    private PatientRepository patientRepository;
+
+    /**
+     * The individual provider repository.
+     */
+    @Autowired
+    private IndividualProviderRepository individualProviderRepository;
+
+    /**
+     * The organizational provider repository.
+     */
+    @Autowired
+    private OrganizationalProviderRepository organizationalProviderRepository;
+
+    /**
+     * The clinical document type code repository.
+     */
+    @Autowired
+    private ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository;
+
+    /**
+     * The clinical document section type code repository.
+     */
+    @Autowired
+    private MedicalSectionRepository medicalSectionRepository;
+
+    /**
+     * The value set category repository.
+     */
+    @Autowired
+    private ValueSetCategoryRepository valueSetCategoryRepository;
+
+    /**
+     * The purpose of use code repository.
+     */
+    @Autowired
+    private PurposeOfUseCodeRepository purposeOfUseCodeRepository;
+
+    /**
+     * The echo sign signature service.
+     */
+    @Autowired
+    private EchoSignSignatureService echoSignSignatureService;
+
+    /**
+     * The consent revokation pdf generator.
+     */
+    @Autowired
+    private AbstractConsentRevokationPdfGenerator consentRevokationPdfGenerator;
+
+    /**
+     * The consent export service.
+     */
+    @Autowired
+    private ConsentExportService consentExportService;
+
+    /**
+     * The consent builder.
+     */
+    @Autowired
+    private ConsentBuilder consentBuilder;
+
+    /**
+     * The consent factory.
+     */
+    @Autowired
+    private ConsentFactory consentFactory;
+
+    /**
+     * The consent check service.
+     */
+    @Autowired
+    private ConsentCheckService consentCheckService;
+
+    /**
+     * The consent assertions.
+     */
+    @Autowired
+    private Set<ConsentAssertion> consentAssertions;
+
+    /**
+     * The policy id service.
+     */
+    @Autowired
+    private PolicyIdService policyIdService;
 
     /**
      * The xml transformer.
      */
-    private final XmlTransformer xmlTransformer;
+    @Autowired
+    private XmlTransformer xmlTransformer;
 
     /**
      * The document xml converter.
      */
-    private final DocumentXmlConverter documentXmlConverter;
+    @Autowired
+    private DocumentXmlConverter documentXmlConverter;
 
     /**
      * The document accessor.
      */
-    private final DocumentAccessor documentAccessor;
-
-    /**
-     * Instantiates a new consent service impl.
-     *
-     * @param c2sDomainId                        the c2s domain id
-     * @param c2sDomainType                      the c2s domain type
-     * @param consentRepository                  the consent repository
-     * @param consentPdfGenerator                the consent pdf generator
-     * @param patientRepository                  the patient repository
-     * @param individualProviderRepository       the individual provider repository
-     * @param organizationalProviderRepository   the organizational provider repository
-     * @param clinicalDocumentTypeCodeRepository the clinical document type code repository
-     * @param medicalSectionRepository           the medical section repository
-     * @param valueSetCategoryRepository         the value set category repository
-     * @param purposeOfUseCodeRepository         the purpose of use code repository
-     * @param echoSignSignatureService           the echo sign signature service
-     * @param consentRevokationPdfGenerator      the consent revokation pdf generator
-     * @param consentExportService               the consent export service
-     * @param consentBuilder                     the consent builder
-     * @param consentFactory                     the consent factory
-     * @param consentCheckService                the consent check service
-     * @param consentAssertions                  the consent assertions
-     * @param policyIdService                    the policy id service
-     * @param xmlTransformer                     the xml transformer
-     * @param documentXmlConverter               the document xml converter
-     * @param documentAccessor                   the document accessor
-     */
-    public ConsentServiceImpl(
-            String c2sDomainId,
-            String c2sDomainType,
-            ConsentRepository consentRepository,
-            ConsentPdfGenerator consentPdfGenerator,
-            PatientRepository patientRepository,
-            IndividualProviderRepository individualProviderRepository,
-            OrganizationalProviderRepository organizationalProviderRepository,
-            ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository,
-            MedicalSectionRepository medicalSectionRepository,
-            ValueSetCategoryRepository valueSetCategoryRepository,
-            PurposeOfUseCodeRepository purposeOfUseCodeRepository,
-            EchoSignSignatureService echoSignSignatureService,
-            AbstractConsentRevokationPdfGenerator consentRevokationPdfGenerator,
-            ConsentExportService consentExportService, ConsentBuilder consentBuilder,
-            ConsentFactory consentFactory,
-            ConsentCheckService consentCheckService,
-            Set<ConsentAssertion> consentAssertions,
-            PolicyIdService policyIdService, XmlTransformer xmlTransformer,
-            DocumentXmlConverter documentXmlConverter,
-            DocumentAccessor documentAccessor) {
-        super();
-        this.c2sDomainId = c2sDomainId;
-        this.c2sDomainType = c2sDomainType;
-        this.consentRepository = consentRepository;
-        this.consentPdfGenerator = consentPdfGenerator;
-        this.patientRepository = patientRepository;
-        this.individualProviderRepository = individualProviderRepository;
-        this.organizationalProviderRepository = organizationalProviderRepository;
-        this.clinicalDocumentTypeCodeRepository = clinicalDocumentTypeCodeRepository;
-        this.medicalSectionRepository = medicalSectionRepository;
-        this.valueSetCategoryRepository = valueSetCategoryRepository;
-        this.purposeOfUseCodeRepository = purposeOfUseCodeRepository;
-        this.echoSignSignatureService = echoSignSignatureService;
-        this.consentRevokationPdfGenerator = consentRevokationPdfGenerator;
-        this.consentExportService = consentExportService;
-        this.consentBuilder = consentBuilder;
-        this.consentFactory = consentFactory;
-        this.consentCheckService = consentCheckService;
-        this.consentAssertions = consentAssertions;
-        this.policyIdService = policyIdService;
-        this.xmlTransformer = xmlTransformer;
-        this.documentXmlConverter = documentXmlConverter;
-        this.documentAccessor = documentAccessor;
-    }
+    @Autowired
+    private DocumentAccessor documentAccessor;
 
     /*
      * (non-Javadoc)
