@@ -36,6 +36,9 @@ import gov.samhsa.mhc.pcm.service.dto.PatientProfileDto;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,6 +56,7 @@ import java.util.Set;
  * The Class ClinicalDocumentServiceImpl.
  */
 @Transactional
+@Service
 public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
 
     /**
@@ -63,11 +67,13 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
     /**
      * The max file size.
      */
+    @Value("${mhc.pcm.config.clinicaldata.maximumUploadFileSize}")
     private Long maxFileSize;
 
     /**
      * The permitted extensions.
      */
+    @Value("${mhc.pcm.config.clinicaldata.extensionsPermittedToUpload}")
     private String permittedExtensions;
 
     /**
@@ -80,27 +86,35 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
     /**
      * The clinical document repository.
      */
+    @Autowired
     private ClinicalDocumentRepository clinicalDocumentRepository;
 
     /**
      * The clinical document type code repository.
      */
+    @Autowired
     private ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository;
 
     /**
      * The model mapper.
      */
+    @Autowired
     private ModelMapper modelMapper;
 
     /**
      * The patient repository.
      */
+    @Autowired
     private PatientRepository patientRepository;
 
     /**
      * The validator.
      */
+    @Autowired
     private Validator validator;
+
+    public ClinicalDocumentServiceImpl() {
+    }
 
     /**
      * Instantiates a new clinical document service impl.
