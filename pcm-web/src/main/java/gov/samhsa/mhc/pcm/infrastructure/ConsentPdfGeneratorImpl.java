@@ -37,6 +37,8 @@ import gov.samhsa.mhc.pcm.domain.valueset.MedicalSection;
 import gov.samhsa.mhc.pcm.domain.valueset.MedicalSectionRepository;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.io.ByteArrayOutputStream;
@@ -46,36 +48,20 @@ import java.util.List;
 /**
  * The Class ConsentPdfGeneratorImpl.
  */
+@Service
 public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
     /** The value set category repository. */
+    @Autowired
     private ValueSetCategoryRepository valueSetCategoryRepository;
 
     /** The clinical document type code repository. */
+    @Autowired
     private ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository;
 
     /** The medical section repository. */
+    @Autowired
     private MedicalSectionRepository medicalSectionRepository;
-
-    /**
-     * Instantiates a new consent pdf generator impl.
-     *
-     * @param valueSetCategoryRepository
-     *            the value set category repository
-     * @param clinicalDocumentTypeCodeRepository
-     *            the clinical document type code repository
-     * @param medicalSectionRepository
-     *            the medical section repository
-     */
-    public ConsentPdfGeneratorImpl(
-            ValueSetCategoryRepository valueSetCategoryRepository,
-            ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository,
-            MedicalSectionRepository medicalSectionRepository) {
-        super();
-        this.valueSetCategoryRepository = valueSetCategoryRepository;
-        this.clinicalDocumentTypeCodeRepository = clinicalDocumentTypeCodeRepository;
-        this.medicalSectionRepository = medicalSectionRepository;
-    }
 
     /*
      * (non-Javadoc)
