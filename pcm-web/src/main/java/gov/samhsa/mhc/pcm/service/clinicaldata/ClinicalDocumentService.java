@@ -27,10 +27,11 @@ package gov.samhsa.mhc.pcm.service.clinicaldata;
 
 import gov.samhsa.mhc.pcm.domain.clinicaldata.ClinicalDocument;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
+import gov.samhsa.mhc.pcm.service.dto.CCDDto;
 import gov.samhsa.mhc.pcm.service.dto.ClinicalDocumentDto;
 import gov.samhsa.mhc.pcm.service.dto.PatientProfileDto;
 import org.springframework.web.multipart.MultipartFile;
-import gov.samhsa.bhits.pcm.service.dto.CCDDto;
+
 import java.util.List;
 
 /**
@@ -142,6 +143,7 @@ public interface ClinicalDocumentService {
      */
     public abstract boolean isDocumentBelongsToThisUser(ClinicalDocumentDto clinicalDocumentDto);
 
+    public abstract CCDDto findCCDDto(long documentId);
 
     boolean isDocumentOversized(MultipartFile file);
 

@@ -30,7 +30,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-import gov.samhsa.bhits.pcm.domain.reference.PurposeOfUseCode;
+import gov.samhsa.mhc.pcm.domain.reference.PurposeOfUseCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**

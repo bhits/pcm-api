@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-package gov.samhsa.bhits.pcm.web.rest;
+package gov.samhsa.mhc.pcm.web;
 
 import gov.samhsa.mhc.common.validation.XmlValidation;
 import gov.samhsa.mhc.pcm.infrastructure.eventlistener.EventService;
@@ -40,7 +40,7 @@ import gov.samhsa.mhc.pcm.service.dto.PatientProfileDto;
 import gov.samhsa.mhc.pcm.service.exception.*;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import gov.samhsa.mhc.pcm.service.reference.ClinicalDocumentTypeCodeService;
-import gov.samhsa.bhits.pcm.service.dto.CCDDto;
+import gov.samhsa.mhc.pcm.service.dto.CCDDto;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

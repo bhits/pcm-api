@@ -23,13 +23,15 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-package gov.samhsa.bhits.pcm.service.clinicaldata;
+package gov.samhsa.mhc.pcm.service.clinicaldata;
 
 import gov.samhsa.mhc.pcm.domain.clinicaldata.ClinicalDocument;
 import gov.samhsa.mhc.pcm.domain.clinicaldata.ClinicalDocumentRepository;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.domain.patient.PatientRepository;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
+import gov.samhsa.mhc.pcm.service.clinicaldata.ClinicalDocumentService;
+import gov.samhsa.mhc.pcm.service.dto.CCDDto;
 import gov.samhsa.mhc.pcm.service.dto.ClinicalDocumentDto;
 import gov.samhsa.mhc.pcm.service.dto.LookupDto;
 import gov.samhsa.mhc.pcm.service.dto.PatientProfileDto;

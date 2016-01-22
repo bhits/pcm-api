@@ -1,4 +1,4 @@
-package gov.samhsa.bhits.pcm.service.dto;
+package gov.samhsa.mhc.pcm.service.dto;
 
 import java.nio.charset.StandardCharsets;
 
