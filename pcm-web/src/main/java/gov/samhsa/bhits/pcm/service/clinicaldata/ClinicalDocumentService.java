@@ -27,6 +27,7 @@ package gov.samhsa.bhits.pcm.service.clinicaldata;
 
 import gov.samhsa.bhits.pcm.domain.clinicaldata.ClinicalDocument;
 import gov.samhsa.bhits.pcm.domain.patient.Patient;
+import gov.samhsa.bhits.pcm.service.dto.CCDDto;
 import gov.samhsa.bhits.pcm.service.dto.ClinicalDocumentDto;
 import gov.samhsa.bhits.pcm.service.dto.PatientProfileDto;
 import org.springframework.web.multipart.MultipartFile;
@@ -106,6 +107,14 @@ public interface ClinicalDocumentService {
      * @return the clinical document dto
      */
     public abstract ClinicalDocumentDto findClinicalDocumentDto(long documentId);
+
+    /**
+     * Find clinical document dto.
+     *
+     * @param documentId the document id
+     * @return the CCD dto
+     */
+    public abstract CCDDto findCCDDto(long documentId);
 
 
     /**

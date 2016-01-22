@@ -34,6 +34,7 @@ import gov.samhsa.bhits.pcm.infrastructure.securityevent.FileDownloadedEvent;
 import gov.samhsa.bhits.pcm.infrastructure.securityevent.FileUploadedEvent;
 import gov.samhsa.bhits.pcm.infrastructure.securityevent.MaliciousFileDetectedEvent;
 import gov.samhsa.bhits.pcm.service.clinicaldata.ClinicalDocumentService;
+import gov.samhsa.bhits.pcm.service.dto.CCDDto;
 import gov.samhsa.bhits.pcm.service.dto.ClinicalDocumentDto;
 import gov.samhsa.bhits.pcm.service.dto.LookupDto;
 import gov.samhsa.bhits.pcm.service.dto.PatientProfileDto;
@@ -235,6 +236,11 @@ public class ClinicalDocumentRestController {
                 e.printStackTrace();
             }
         }
+    }
+
+    @RequestMapping(value = "clinicaldocuments/ccd/{documentId}", method = RequestMethod.GET)
+    public CCDDto getClinicalDocument(@PathVariable("documentId") Long documentId) {
+        return clinicalDocumentService.findCCDDto(documentId);
     }
 
     String scanMultipartFile(MultipartFile file) {

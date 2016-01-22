@@ -30,6 +30,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import gov.samhsa.bhits.pcm.domain.reference.PurposeOfUseCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -63,6 +64,8 @@ public class ConsentListDto implements HasId, Serializable {
 
 	/** The do not share clinical concept codes. */
 	private Set<String> doNotShareClinicalConceptCodes;
+
+	private Set<PurposeOfUseCode> shareForPurposeOfUse;
 
 	/** The consent stage. */
 	private String consentStage;
@@ -375,4 +378,11 @@ public class ConsentListDto implements HasId, Serializable {
 		return medicalInformationNotDisclosed;
 	}
 
+	public Set<PurposeOfUseCode> getShareForPurposeOfUse() {
+		return shareForPurposeOfUse;
+	}
+
+	public void setShareForPurposeOfUse(Set<PurposeOfUseCode> shareForPurposeOfUse) {
+		this.shareForPurposeOfUse = shareForPurposeOfUse;
+	}
 }
