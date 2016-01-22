@@ -33,7 +33,9 @@ import gov.samhsa.mhc.pcm.domain.consent.ConsentRepository;
 import gov.samhsa.mhc.pcm.infrastructure.EchoSignSignatureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -44,6 +46,7 @@ import java.util.Set;
  * The Class EchoSignPollingService.
  */
 @Transactional
+@Service
 public class EchoSignPollingService implements EsignaturePollingService {
 
     /**
@@ -59,25 +62,14 @@ public class EchoSignPollingService implements EsignaturePollingService {
     /**
      * The consent repository.
      */
+    @Autowired
     private ConsentRepository consentRepository;
 
     /**
      * The signature service.
      */
+    @Autowired
     private EchoSignSignatureService signatureService;
-
-
-    /**
-     * Instantiates a new echo sign polling service.
-     *
-     * @param consentRepository the consent repository
-     * @param signatureService  the signature service
-     */
-    public EchoSignPollingService(ConsentRepository consentRepository,
-                                  EchoSignSignatureService signatureService) {
-        this.consentRepository = consentRepository;
-        this.signatureService = signatureService;
-    }
 
     /**
      * Gets the latest sign status.

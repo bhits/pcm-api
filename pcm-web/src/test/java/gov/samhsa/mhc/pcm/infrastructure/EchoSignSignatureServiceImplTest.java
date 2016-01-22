@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -29,7 +30,7 @@ public class EchoSignSignatureServiceImplTest {
     /**
      * The document bytes.
      */
-    byte[] DOCUMENT_BYTES = "text" .getBytes();
+    byte[] DOCUMENT_BYTES = "text".getBytes();
 
     /**
      * The document file name.
@@ -62,10 +63,11 @@ public class EchoSignSignatureServiceImplTest {
     String ECHOSIGN_SERVICE_URL = "echoSignServiceUrl";
 
     /**
-     * The sut.
+     * The spy.
      */
     @InjectMocks
-    EchoSignSignatureServiceImpl sut = spy(new EchoSignSignatureServiceImpl("echoSignServiceUrl", "echoSignApiKey"));
+    private EchoSignSignatureServiceImpl sut;
+    private EchoSignSignatureServiceImpl spy;
 
     private EchoSignDocumentService20PortType service;
 
@@ -79,10 +81,13 @@ public class EchoSignSignatureServiceImplTest {
 
     @Before
     public void setUp() {
+        ReflectionTestUtils.setField(sut, "echoSignServiceUrl", "echoSignServiceUrl");
+        ReflectionTestUtils.setField(sut, "echoSignApiKey", "echoSignApiKey");
+        spy = spy(sut);
         service = mock(EchoSignDocumentService20PortType.class);
         EmbeddedWidgetCreationResult widgetResult = mock(EmbeddedWidgetCreationResult.class);
         doReturn(widgetResult).when(service).createPersonalEmbeddedWidget(eq("echoSignApiKey"), isNull(SenderInfo.class), any(WidgetCreationInfo.class), any(WidgetPersonalizationInfo.class));
-        doReturn(service).when(sut).getCachedService();
+        doReturn(service).when(spy).getCachedService();
 
         mockDocumentKey = "mockDocumentKey";
         mockEchoSignApiKey = "echoSignApiKey";
@@ -98,7 +103,7 @@ public class EchoSignSignatureServiceImplTest {
     @Test
     public void testCreateEmbeddedWidget() {
 
-        sut.createEmbeddedWidget(DOCUMENT_BYTES, DOCUMENT_FILE_NAME, DOCUMENT_NAME, SIGNED_DOCUMENT_URL, EMAIL);
+        spy.createEmbeddedWidget(DOCUMENT_BYTES, DOCUMENT_FILE_NAME, DOCUMENT_NAME, SIGNED_DOCUMENT_URL, EMAIL);
         verify(service).createPersonalEmbeddedWidget(eq("echoSignApiKey"), isNull(SenderInfo.class), any(WidgetCreationInfo.class), any(WidgetPersonalizationInfo.class));
     }
 
@@ -107,7 +112,7 @@ public class EchoSignSignatureServiceImplTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testCreateEmbeddedWidget_when_file_name_is_null() {
-        sut.createEmbeddedWidget(DOCUMENT_BYTES, null, DOCUMENT_NAME, SIGNED_DOCUMENT_URL, EMAIL);
+        spy.createEmbeddedWidget(DOCUMENT_BYTES, null, DOCUMENT_NAME, SIGNED_DOCUMENT_URL, EMAIL);
     }
 
     /**
@@ -115,7 +120,7 @@ public class EchoSignSignatureServiceImplTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testCreateEmbeddedWidget_when_file_document_byte_is_null() {
-        sut.createEmbeddedWidget(null, DOCUMENT_FILE_NAME, DOCUMENT_NAME, SIGNED_DOCUMENT_URL, EMAIL);
+        spy.createEmbeddedWidget(null, DOCUMENT_FILE_NAME, DOCUMENT_NAME, SIGNED_DOCUMENT_URL, EMAIL);
     }
 
 
@@ -127,7 +132,7 @@ public class EchoSignSignatureServiceImplTest {
         doReturn(mockFormDataCsv).when(mockGetFormDataResult).getFormDataCsv();
 
         doReturn(mockGetFormDataResult).when(service).getFormData(mockEchoSignApiKey, mockDocumentKey);
-        Assert.assertNull(sut.getChildDocumentKey(mockDocumentKey));
+        Assert.assertNull(spy.getChildDocumentKey(mockDocumentKey));
     }
 
     @Test
@@ -140,7 +145,7 @@ public class EchoSignSignatureServiceImplTest {
         doReturn(mockFormDataCsv).when(mockGetFormDataResult).getFormDataCsv();
 
         doReturn(mockGetFormDataResult).when(service).getFormData(mockEchoSignApiKey, mockDocumentKey);
-        String actual = sut.getChildDocumentKey(mockDocumentKey);
+        String actual = spy.getChildDocumentKey(mockDocumentKey);
         Assert.assertNotNull(actual);
         Assert.assertEquals(expected, actual);
     }
@@ -154,7 +159,7 @@ public class EchoSignSignatureServiceImplTest {
         doReturn(mockFormDataCsv).when(mockGetFormDataResult).getFormDataCsv();
         doReturn(mockGetFormDataResult).when(service).getFormData(mockEchoSignApiKey, mockDocumentKey);
 
-        Assert.assertNull(sut.getChildDocumentKey(mockDocumentKey));
+        Assert.assertNull(spy.getChildDocumentKey(mockDocumentKey));
     }
 
     @Test
@@ -166,7 +171,7 @@ public class EchoSignSignatureServiceImplTest {
         doReturn(mockFormDataCsv).when(mockGetFormDataResult).getFormDataCsv();
 
         doReturn(mockGetFormDataResult).when(service).getFormData(mockEchoSignApiKey, mockDocumentKey);
-        Assert.assertNull(sut.getChildDocumentKey(mockDocumentKey));
+        Assert.assertNull(spy.getChildDocumentKey(mockDocumentKey));
     }
 
 }

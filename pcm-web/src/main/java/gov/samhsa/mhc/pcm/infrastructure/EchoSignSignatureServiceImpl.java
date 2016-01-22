@@ -29,6 +29,9 @@ import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -57,36 +60,22 @@ import echosign.api.clientv20.service.EchoSignDocumentService20PortType;
 /**
  * The Class EchoSignSignatureServiceImpl.
  */
+@Service
 public class EchoSignSignatureServiceImpl implements EchoSignSignatureService {
 
 	/** The echo sign service url. */
+	@Value("${mhc.pcm.config.echosign.echoSignDocumentServiceEndpointAddress}")
 	private String echoSignServiceUrl;
 
 	/** The echo sign api key. */
+	@Value("${mhc.pcm.config.echosign.echoSignApiKey}")
 	private String echoSignApiKey;
 
 	/** The cached service. */
 	private EchoSignDocumentService20PortType cachedService;
 	
 	/** The logger. */
-	private final Logger logger = LoggerFactory.getLogger(this.getClass()); 
-
-	/**
-	 * Instantiates a new echo sign signature service impl.
-	 *
-	 * @param echoSignServiceUrl
-	 *            the echo sign service url
-	 * @param echoSignApiKey
-	 *            the echo sign api key
-	 */
-	public EchoSignSignatureServiceImpl(String echoSignServiceUrl,
-			String echoSignApiKey) {
-		Assert.hasText(echoSignServiceUrl);
-		Assert.hasText(echoSignApiKey);
-
-		this.echoSignServiceUrl = echoSignServiceUrl;
-		this.echoSignApiKey = echoSignApiKey;
-	}
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * Gets the cached service.
