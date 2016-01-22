@@ -9,10 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.util.Arrays;
 
 import static org.junit.Assert.*;
@@ -137,12 +134,8 @@ public class DocumentXmlConverterImplTest {
 
     private static Object readObject(String filePath) throws IOException,
             ClassNotFoundException {
-        File file = new File(filePath);
-        byte[] b = null;
-
-        b = FileUtils.readFileToByteArray(file);
-        ByteArrayInputStream in = new ByteArrayInputStream(b);
-        ObjectInputStream is = new ObjectInputStream(in);
-        return is.readObject();
+        FileInputStream fileInputStream = new FileInputStream(filePath);
+        ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+        return objectInputStream.readObject();
     }
 }
