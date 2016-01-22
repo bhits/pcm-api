@@ -30,6 +30,8 @@ import gov.samhsa.mhc.pcm.domain.clinicaldata.ClinicalDocumentRepository;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.domain.patient.PatientRepository;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
+import gov.samhsa.mhc.pcm.service.clinicaldata.ClinicalDocumentService;
+import gov.samhsa.mhc.pcm.service.dto.CCDDto;
 import gov.samhsa.mhc.pcm.service.dto.ClinicalDocumentDto;
 import gov.samhsa.mhc.pcm.service.dto.LookupDto;
 import gov.samhsa.mhc.pcm.service.dto.PatientProfileDto;
@@ -262,6 +264,18 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
         return clinicalDocumentDto;
     }
 
+
+    public CCDDto findCCDDto(long documentId){
+
+        ClinicalDocument clinicalDocument = findClinicalDocument(documentId);
+        ClinicalDocumentDto clinicalDocumentDto = modelMapper.map(clinicalDocument, ClinicalDocumentDto.class);
+        // manual mapping without using model mapper
+        clinicalDocumentDto.setPatientId(patientRepository.findByUsername(username).getId());
+        byte[] docStr =  clinicalDocumentDto.getContent();
+        CCDDto ccdDto =  new CCDDto( clinicalDocumentDto.getContent());
+
+        return ccdDto;
+    };
     /*
      * (non-Javadoc)
      *

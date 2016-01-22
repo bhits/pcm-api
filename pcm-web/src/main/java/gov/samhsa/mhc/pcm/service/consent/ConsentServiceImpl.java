@@ -317,8 +317,15 @@ public class ConsentServiceImpl implements ConsentService {
             final Set<String> consentShareForPurposeOfUseCode = new HashSet<String>();
             for (final ConsentShareForPurposeOfUseCode item : consent
                     .getShareForPurposeOfUseCodes()) {
-                consentShareForPurposeOfUseCode.add(item.getPurposeOfUseCode()
-                        .getDisplayName());
+                consentShareForPurposeOfUseCode.add(item.getPurposeOfUseCode().getDisplayName());
+            }
+
+            final Set<PurposeOfUseCode> shareForPurposeOfUse = new HashSet<PurposeOfUseCode>();
+            for (final ConsentShareForPurposeOfUseCode item : consent
+                    .getShareForPurposeOfUseCodes()) {
+
+                String code = item.getPurposeOfUseCode().getCode();
+                shareForPurposeOfUse.add(purposeOfUseCodeRepository.findByCode(code));
             }
 
             final Set<String> consentDoNotShareClinicalConceptCodes = new HashSet<String>();
@@ -369,6 +376,8 @@ public class ConsentServiceImpl implements ConsentService {
                     .setDoNotShareClinicalDocumentTypeCodes(consentDoNotShareClinicalDocumentTypeCode);
             consentListDto
                     .setShareForPurposeOfUseCodes(consentShareForPurposeOfUseCode);
+            consentListDto
+                    .setShareForPurposeOfUse(shareForPurposeOfUse);
             consentListDto
                     .setDoNotShareSensitivityPolicyCodes(consentDoNotShareSensitivityPolicyCode);
 

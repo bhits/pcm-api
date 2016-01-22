@@ -40,6 +40,7 @@ import gov.samhsa.mhc.pcm.service.dto.PatientProfileDto;
 import gov.samhsa.mhc.pcm.service.exception.*;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import gov.samhsa.mhc.pcm.service.reference.ClinicalDocumentTypeCodeService;
+import gov.samhsa.mhc.pcm.service.dto.CCDDto;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -235,6 +236,11 @@ public class ClinicalDocumentRestController {
                 e.printStackTrace();
             }
         }
+    }
+
+    @RequestMapping(value = "clinicaldocuments/ccd/{documentId}", method = RequestMethod.GET)
+    public CCDDto getClinicalDocument(@PathVariable("documentId") Long documentId) {
+        return clinicalDocumentService.findCCDDto(documentId);
     }
 
     String scanMultipartFile(MultipartFile file) {
