@@ -16,10 +16,12 @@ import gov.samhsa.mhc.pcm.service.dto.ConsentValidationDto;
 import gov.samhsa.mhc.pcm.service.dto.SpecificMedicalInfoDto;
 
 import org.modelmapper.internal.util.Assert;
+import org.springframework.stereotype.Service;
 
 /**
  * The Class ConsentHelper.
  */
+@Service
 public class ConsentHelper {
 
 	/**
