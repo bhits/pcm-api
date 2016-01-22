@@ -1,4 +1,4 @@
-package gov.samhsa.mhc.pcm.web.rest;
+package gov.samhsa.mhc.pcm.web;
 
 import gov.samhsa.mhc.pcm.service.consent.ConsentService;
 import gov.samhsa.mhc.pcm.service.dto.XacmlDto;

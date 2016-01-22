@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-package gov.samhsa.mhc.pcm.web.rest;
+package gov.samhsa.mhc.pcm.web;
 
 import gov.samhsa.mhc.common.validation.XmlValidation;
 import gov.samhsa.mhc.pcm.infrastructure.eventlistener.EventService;

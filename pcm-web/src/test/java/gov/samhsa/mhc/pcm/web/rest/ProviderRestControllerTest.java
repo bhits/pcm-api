@@ -27,6 +27,7 @@ import gov.samhsa.mhc.pcm.service.provider.HashMapResultToProviderDtoConverter;
 import gov.samhsa.mhc.pcm.service.provider.IndividualProviderService;
 import gov.samhsa.mhc.pcm.service.provider.OrganizationalProviderService;
 import gov.samhsa.mhc.pcm.service.provider.ProviderSearchLookupService;
+import gov.samhsa.mhc.pcm.web.ProviderRestController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
