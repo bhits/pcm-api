@@ -41,7 +41,7 @@ security:
     resource:
       jwt:
         key-uri: http://localhost:8080/uaa/token_key
-bhits:
+mhc:
   pcm:
     config:
       clinicaldata:
