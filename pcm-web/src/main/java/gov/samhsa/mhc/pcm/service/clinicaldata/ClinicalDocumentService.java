@@ -143,6 +143,12 @@ public interface ClinicalDocumentService {
      */
     public abstract boolean isDocumentBelongsToThisUser(ClinicalDocumentDto clinicalDocumentDto);
 
+    /**
+     * Finds the CCD DTo for the given Id..
+     *
+     * @param documentId the clinical document id
+     * @return CCDDto, The CCD document DTO.
+     */
     public abstract CCDDto findCCDDto(long documentId);
 
     boolean isDocumentOversized(MultipartFile file);

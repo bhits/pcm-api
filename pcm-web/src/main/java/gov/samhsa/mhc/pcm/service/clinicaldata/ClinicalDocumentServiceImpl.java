@@ -264,16 +264,12 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
         return clinicalDocumentDto;
     }
 
-
+    @Override
     public CCDDto findCCDDto(long documentId){
-
         ClinicalDocument clinicalDocument = findClinicalDocument(documentId);
         ClinicalDocumentDto clinicalDocumentDto = modelMapper.map(clinicalDocument, ClinicalDocumentDto.class);
-        // manual mapping without using model mapper
         clinicalDocumentDto.setPatientId(patientRepository.findByUsername(username).getId());
-        byte[] docStr =  clinicalDocumentDto.getContent();
         CCDDto ccdDto =  new CCDDto( clinicalDocumentDto.getContent());
-
         return ccdDto;
     };
     /*
