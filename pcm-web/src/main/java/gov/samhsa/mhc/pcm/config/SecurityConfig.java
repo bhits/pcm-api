@@ -11,6 +11,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 
+import static gov.samhsa.mhc.common.oauth2.OAuth2ScopeUtils.hasScope;
+
 @Configuration
 public class SecurityConfig {
 
@@ -30,14 +32,14 @@ public class SecurityConfig {
                     http.requiresChannel().anyRequest().requiresSecure();
                 }
                 http.authorizeRequests()
-                        .antMatchers(HttpMethod.GET, "/patients/providers/**").access("#oauth2.hasScope('pcm.readProvider')")
-                        .antMatchers(HttpMethod.POST, "/patients/providers/**").access("#oauth2.hasScope('pcm.writeProvider')")
-                        .antMatchers(HttpMethod.PUT, "/patients/providers/**").access("#oauth2.hasScope('pcm.writeProvider')")
-                        .antMatchers(HttpMethod.DELETE, "/patients/providers/**").access("#oauth2.hasScope('pcm.deleteProvider')")
-                        .antMatchers(HttpMethod.GET, "/patients/consents/**").access("#oauth2.hasScope('pcm.readConsent')")
-                        .antMatchers(HttpMethod.POST, "/patients/consents/**").access("#oauth2.hasScope('pcm.writeConsent')")
-                        .antMatchers(HttpMethod.PUT, "/patients/consents/**").access("#oauth2.hasScope('pcm.writeConsent')")
-                        .antMatchers(HttpMethod.DELETE, "/patients/consents/**").access("#oauth2.hasScope('pcm.deleteConsent')");
+                        .antMatchers(HttpMethod.GET, "/patients/providers/**").access(hasScope("pcm.readProvider"))
+                        .antMatchers(HttpMethod.POST, "/patients/providers/**").access(hasScope("pcm.writeProvider"))
+                        .antMatchers(HttpMethod.PUT, "/patients/providers/**").access(hasScope("pcm.writeProvider"))
+                        .antMatchers(HttpMethod.DELETE, "/patients/providers/**").access(hasScope("pcm.deleteProvider"))
+                        .antMatchers(HttpMethod.GET, "/patients/consents/**").access(hasScope("pcm.readConsent"))
+                        .antMatchers(HttpMethod.POST, "/patients/consents/**").access(hasScope("pcm.writeConsent"))
+                        .antMatchers(HttpMethod.PUT, "/patients/consents/**").access(hasScope("pcm.writeConsent"))
+                        .antMatchers(HttpMethod.DELETE, "/patients/consents/**").access(hasScope("pcm.deleteConsent"));
 
             }
         };
