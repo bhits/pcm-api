@@ -21,22 +21,21 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <javax.mail.version>1.4.1</javax.mail.version>
+        <!-- MHC Common Libraries' version -->
+        <mhc.common-libraries.version>1.0.0-SNAPSHOT</mhc.common-libraries.version>
+        <!-- Thrid-party library versions -->
         <adobe-echosign.version>20</adobe-echosign.version>
         <apache.commons.version>3.3.2</apache.commons.version>
         <modelmapper.version>0.7.5</modelmapper.version>
-        <itextpdf.version>5.5.3</itextpdf.version>
         <poi.version>3.11</poi.version>
         <poi-ooxml.version>3.11</poi-ooxml.version>
         <libclamav.version>1.0</libclamav.version>
+        <itextpdf.version>5.5.3</itextpdf.version>
         <logback.version>1.0.11</logback.version>
-        <logback-audit.version>0.6</logback-audit.version>
-        <Saxon-HE.version>9.6.0-3</Saxon-HE.version>
-        <powermock.version>1.6.4</powermock.version>
-        <xmlunit.version>1.5</xmlunit.version>
     </properties>
 
     <dependencies>
+        <!-- Spring Dependencies -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-oauth2</artifactId>
@@ -57,6 +56,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+        <!-- Third-party dependencies used by Spring -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -68,6 +68,16 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+        </dependency>
+        <!-- Other Third-party dependencies -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -88,11 +98,6 @@
                     <groupId>org.apache.ws.commons</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>${javax.mail.version}</version>
         </dependency>
         <dependency>
             <groupId>org.modelmapper</groupId>
@@ -119,59 +124,52 @@
             <artifactId>libclamav</artifactId>
             <version>${libclamav.version}</version>
         </dependency>
+        <!-- MHC Common Libraries -->
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback.version}</version>
+            <groupId>gov.samhsa.mhc</groupId>
+            <artifactId>xml-validation</artifactId>
+            <version>${mhc.common-libraries.version}</version>
         </dependency>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>audit-client</artifactId>
-            <version>${logback-audit.version}</version>
+            <groupId>gov.samhsa.mhc</groupId>
+            <artifactId>document-transformer</artifactId>
+            <version>${mhc.common-libraries.version}</version>
         </dependency>
         <dependency>
-            <groupId>net.sf.saxon</groupId>
-            <artifactId>Saxon-HE</artifactId>
-            <version>${Saxon-HE.version}</version>
-        </dependency>
-        <!-- common-unit dependencies -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>compile</scope>
+            <groupId>gov.samhsa.mhc</groupId>
+            <artifactId>document-converter</artifactId>
+            <version>${mhc.common-libraries.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-            <scope>compile</scope>
+            <groupId>gov.samhsa.mhc</groupId>
+            <artifactId>document-accessor</artifactId>
+            <version>${mhc.common-libraries.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <scope>compile</scope>
+            <groupId>gov.samhsa.mhc</groupId>
+            <artifactId>audit-service</artifactId>
+            <version>${mhc.common-libraries.version}</version>
         </dependency>
         <dependency>
-            <groupId>xmlunit</groupId>
-            <artifactId>xmlunit</artifactId>
-            <version>${xmlunit.version}</version>
+            <groupId>gov.samhsa.mhc</groupId>
+            <artifactId>common-util</artifactId>
+            <version>${mhc.common-libraries.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.samhsa.mhc</groupId>
+            <artifactId>resource-url</artifactId>
+            <version>${mhc.common-libraries.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.samhsa.mhc</groupId>
+            <artifactId>oauth2</artifactId>
+            <version>${mhc.common-libraries.version}</version>
         </dependency>
 
         <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <version>${powermock.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-            <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
