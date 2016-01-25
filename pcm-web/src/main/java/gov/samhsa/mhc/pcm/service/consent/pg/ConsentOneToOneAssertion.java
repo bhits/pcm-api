@@ -53,9 +53,11 @@ public class ConsentOneToOneAssertion implements ConsentAssertion {
         int countProvidersDisclosureIsMadeTo = 0;
         int countProvidersPermittedToDisclose = 0;
         countProvidersDisclosureIsMadeTo += getSize(consentDto, ConsentDto::getOrganizationalProvidersDisclosureIsMadeTo);
+        countProvidersDisclosureIsMadeTo += getSize(consentDto, ConsentDto::getOrganizationalProvidersDisclosureIsMadeToNpi);
         countProvidersDisclosureIsMadeTo += getSize(consentDto, ConsentDto::getProvidersDisclosureIsMadeTo);
         countProvidersDisclosureIsMadeTo += getSize(consentDto, ConsentDto::getProvidersDisclosureIsMadeToNpi);
         countProvidersPermittedToDisclose += getSize(consentDto, ConsentDto::getOrganizationalProvidersPermittedToDisclose);
+        countProvidersPermittedToDisclose += getSize(consentDto, ConsentDto::getOrganizationalProvidersPermittedToDiscloseNpi);
         countProvidersPermittedToDisclose += getSize(consentDto, ConsentDto::getProvidersPermittedToDisclose);
         countProvidersPermittedToDisclose += getSize(consentDto, ConsentDto::getProvidersPermittedToDiscloseNpi);
 
