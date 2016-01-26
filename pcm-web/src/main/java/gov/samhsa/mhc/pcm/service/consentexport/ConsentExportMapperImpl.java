@@ -1,6 +1,6 @@
 package gov.samhsa.mhc.pcm.service.consentexport;
 
-import gov.samhsa.mhc.consentgen.*;
+import gov.samhsa.mhc.common.consentgen.*;
 import gov.samhsa.mhc.pcm.domain.consent.*;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalConceptCode;
 import org.modelmapper.ModelMapper;

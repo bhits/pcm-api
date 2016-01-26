@@ -1,11 +1,11 @@
 package gov.samhsa.mhc.pcm.config;
 
 import gov.samhsa.mhc.common.document.transformer.XmlTransformer;
-import gov.samhsa.mhc.consentgen.ConsentBuilder;
-import gov.samhsa.mhc.consentgen.ConsentBuilderImpl;
-import gov.samhsa.mhc.consentgen.ConsentDtoFactory;
-import gov.samhsa.mhc.consentgen.XacmlXslUrlProvider;
-import gov.samhsa.mhc.consentgen.pg.XacmlXslUrlProviderImpl;
+import gov.samhsa.mhc.common.consentgen.ConsentBuilder;
+import gov.samhsa.mhc.common.consentgen.ConsentBuilderImpl;
+import gov.samhsa.mhc.common.consentgen.ConsentDtoFactory;
+import gov.samhsa.mhc.common.consentgen.XacmlXslUrlProvider;
+import gov.samhsa.mhc.common.consentgen.pg.XacmlXslUrlProviderImpl;
 import gov.samhsa.mhc.pcm.domain.consent.ConsentRepository;
 import gov.samhsa.mhc.pcm.service.consentexport.ConsentDtoFactoryImpl;
 import gov.samhsa.mhc.pcm.service.consentexport.ConsentExportMapper;

@@ -25,7 +25,7 @@
  ******************************************************************************/
 package gov.samhsa.mhc.pcm.web;
 
-import gov.samhsa.mhc.consentgen.ConsentGenException;
+import gov.samhsa.mhc.common.consentgen.ConsentGenException;
 import gov.samhsa.mhc.pcm.service.consent.ConsentHelper;
 import gov.samhsa.mhc.pcm.service.consent.ConsentService;
 import gov.samhsa.mhc.pcm.service.dto.*;

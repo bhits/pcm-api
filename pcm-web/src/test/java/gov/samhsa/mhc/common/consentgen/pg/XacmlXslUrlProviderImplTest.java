@@ -1,8 +1,8 @@
-package gov.samhsa.mhc.consentgen.pg;
+package gov.samhsa.mhc.common.consentgen.pg;
 
 import static org.junit.Assert.assertEquals;
 
-import gov.samhsa.mhc.consentgen.XslResource;
+import gov.samhsa.mhc.common.consentgen.XslResource;
 import org.junit.Test;
 
 public class XacmlXslUrlProviderImplTest {

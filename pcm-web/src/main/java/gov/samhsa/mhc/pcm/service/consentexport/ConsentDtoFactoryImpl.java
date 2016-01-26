@@ -1,7 +1,7 @@
 package gov.samhsa.mhc.pcm.service.consentexport;
 
-import gov.samhsa.mhc.consentgen.ConsentDto;
-import gov.samhsa.mhc.consentgen.ConsentDtoFactory;
+import gov.samhsa.mhc.common.consentgen.ConsentDto;
+import gov.samhsa.mhc.common.consentgen.ConsentDtoFactory;
 import gov.samhsa.mhc.pcm.domain.consent.Consent;
 import gov.samhsa.mhc.pcm.domain.consent.ConsentRepository;
 import org.modelmapper.ModelMapper;

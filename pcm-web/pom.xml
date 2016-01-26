@@ -23,7 +23,7 @@
         <java.version>1.8</java.version>
         <!-- MHC Common Libraries' version -->
         <mhc.common-libraries.version>1.0.0-SNAPSHOT</mhc.common-libraries.version>
-        <!-- Thrid-party library versions -->
+        <!-- Third-party library versions -->
         <adobe-echosign.version>20</adobe-echosign.version>
         <apache.commons.version>3.3.2</apache.commons.version>
         <modelmapper.version>0.7.5</modelmapper.version>
@@ -163,6 +163,11 @@
         <dependency>
             <groupId>gov.samhsa.mhc</groupId>
             <artifactId>oauth2</artifactId>
+            <version>${mhc.common-libraries.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.samhsa.mhc</groupId>
+            <artifactId>consent-gen</artifactId>
             <version>${mhc.common-libraries.version}</version>
         </dependency>
 

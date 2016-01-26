@@ -26,7 +26,7 @@
 package gov.samhsa.mhc.pcm.service.consentexport;
 
 
-import gov.samhsa.mhc.consentgen.ConsentGenException;
+import gov.samhsa.mhc.common.consentgen.ConsentGenException;
 import gov.samhsa.mhc.pcm.domain.consent.Consent;
 
 /**

@@ -1,4 +1,4 @@
-package gov.samhsa.mhc.consentgen;
+package gov.samhsa.mhc.common.consentgen;
 
 import static org.junit.Assert.assertEquals;
 
