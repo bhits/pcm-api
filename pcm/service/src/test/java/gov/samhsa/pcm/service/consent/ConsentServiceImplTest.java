@@ -479,10 +479,6 @@ public class ConsentServiceImplTest {
 				consentExportService
 						.exportConsent2XacmlPdfConsentTo(any(Consent.class)))
 				.thenReturn(xacmlMock);
-		when(
-				consentExportService
-						.exportConsent2CDAR2ConsentDirective(any(Consent.class)))
-				.thenReturn(xacmlMock);
 		ConsentDto consentDto = mock(ConsentDto.class);
 		when(consentCheckService.getConflictConsent(consentDto)).thenReturn(
 				null);

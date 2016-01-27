@@ -1434,9 +1434,6 @@ public class ConsentServiceImpl implements ConsentService {
 		consent.setUnsignedPdfConsent(consentPdfGenerator
 				.generate42CfrPart2Pdf(consent));
 		try {
-			consent.setExportedCDAR2Consent(consentExportService.exportConsent2CDAR2ConsentDirective(
-					consent).getBytes());
-
 			consent.setXacmlCcd(consentExportService.exportConsent2XACML(
 					consent).getBytes());
 

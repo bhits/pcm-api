@@ -43,8 +43,6 @@ public abstract interface ConsentExportService {
 	 */
 	String exportConsent2CDAR2(Long consentId) throws ConsentGenException;
 
-	String exportConsent2CDAR2ConsentDirective(Consent consent) throws ConsentGenException;
-
 	/**
 	 * Export consent to xacml format.
 	 *
