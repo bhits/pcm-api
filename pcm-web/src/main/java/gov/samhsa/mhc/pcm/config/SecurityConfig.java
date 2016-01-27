@@ -32,15 +32,25 @@ public class SecurityConfig {
                     http.requiresChannel().anyRequest().requiresSecure();
                 }
                 http.authorizeRequests()
-                        .antMatchers(HttpMethod.GET, "/patients/providers/**").access(hasScope("pcm.readProvider"))
-                        .antMatchers(HttpMethod.POST, "/patients/providers/**").access(hasScope("pcm.writeProvider"))
-                        .antMatchers(HttpMethod.PUT, "/patients/providers/**").access(hasScope("pcm.writeProvider"))
-                        .antMatchers(HttpMethod.DELETE, "/patients/providers/**").access(hasScope("pcm.deleteProvider"))
-                        .antMatchers(HttpMethod.GET, "/patients/consents/**").access(hasScope("pcm.readConsent"))
-                        .antMatchers(HttpMethod.POST, "/patients/consents/**").access(hasScope("pcm.writeConsent"))
-                        .antMatchers(HttpMethod.PUT, "/patients/consents/**").access(hasScope("pcm.writeConsent"))
-                        .antMatchers(HttpMethod.DELETE, "/patients/consents/**").access(hasScope("pcm.deleteConsent"));
-
+                        .antMatchers(HttpMethod.GET, "/patients/consents/signConsent/**").access(hasScope("pcm.consent_sign"))
+                        .antMatchers(HttpMethod.GET, "/patients/consents/revokeConsent/**").access(hasScope("pcm.consent_revoke"))
+                        .antMatchers(HttpMethod.GET, "/patients/providers/**").access(hasScope("pcm.provider_read"))
+                        .antMatchers(HttpMethod.POST, "/patients/providers/**").access(hasScope("pcm.provider_create"))
+                        .antMatchers(HttpMethod.DELETE, "/patients/providers/**").access(hasScope("pcm.provider_delete"))
+                        .antMatchers(HttpMethod.GET, "/patients/consents/**").access(hasScope("pcm.consent_read"))
+                        .antMatchers(HttpMethod.POST, "/patients/consents/**").access(hasScope("pcm.consent_create"))
+                        .antMatchers(HttpMethod.PUT, "/patients/consents/**").access(hasScope("pcm.consent_update"))
+                        .antMatchers(HttpMethod.DELETE, "/patients/consents/**").access(hasScope("pcm.consent_delete"))
+                        .antMatchers(HttpMethod.GET, "/patients/clinicaldocuments/**").access(hasScope("pcm.clinicalDocument_read"))
+                        .antMatchers(HttpMethod.POST, "/patients/clinicaldocuments/**").access(hasScope("pcm.clinicalDocument_create"))
+                        .antMatchers(HttpMethod.DELETE, "/patients/clinicaldocuments/**").access(hasScope("pcm.clinicalDocument_delete"))
+                        .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/patients/purposeOfUse", "/patients/medicalSection","/patients/sensitivityPolicy").authenticated()
+                        // FIXME (BU): this permission must be removed and XACML resource URL must be finalized after Try Policy service can access PCM securely
+                        .antMatchers(HttpMethod.GET, "/xacml/*").permitAll()
+                        // TODO (BU): remove this permission after VSS is separated
+                        .antMatchers(HttpMethod.GET, "/lookupService/**").permitAll()
+                        .anyRequest().denyAll();
             }
         };
     }
