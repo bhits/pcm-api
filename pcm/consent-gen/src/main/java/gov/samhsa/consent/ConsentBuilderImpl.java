@@ -99,6 +99,19 @@ public class ConsentBuilderImpl implements ConsentBuilder {
 			throw new ConsentGenException(e.getMessage(), e);
 		}
 	}
+	@Override
+	public String buildConsent2Cdar2ConsentDirective(Object obj) throws ConsentGenException {
+		try {
+			final ConsentDto consentDto = consentDtoFactory
+					.createConsentDto(obj);
+			final String cdar2consentDirective = xmlTransformer.transform(consentDto,
+					xacmlXslUrlProvider.getUrl(XslResource.CDAR2CONSENTDIRECTIVEXSLNAME),
+					Optional.empty(), Optional.empty());
+			return cdar2consentDirective;
+		} catch (final Exception e) {
+			throw new ConsentGenException(e.getMessage(), e);
+		}
+	}
 
 	/*
 	 * (non-Javadoc)

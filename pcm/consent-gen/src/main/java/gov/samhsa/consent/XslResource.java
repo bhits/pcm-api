@@ -2,7 +2,7 @@ package gov.samhsa.consent;
 
 public enum XslResource {
 
-	CDAR2XSLNAME("c2cdar2.xsl"), XACMLXSLNAME("c2xacml.xsl"), XACMLPDFCONSENTFROMXSLNAME(
+	CDAR2XSLNAME("c2cdar2.xsl"), CDAR2CONSENTDIRECTIVEXSLNAME("c2consentDirectiveWithEmbeddedXACML.xsl"),CDAR2XACSLNAME("c2cdaWithEmbeddedXACML.xsl"),XACMLXSLNAME("c2xacml.xsl"), XACMLPDFCONSENTFROMXSLNAME(
 			"c2xacmlpdfConsentFrom.xsl"), XACMLPDFCONSENTTOXSLNAME(
 			"c2xacmlpdfConsentTo.xsl");
 

@@ -41,7 +41,9 @@ public interface ConsentBuilder {
 	 */
 	public String buildConsent2Cdar2(long consentId) throws ConsentGenException;
 
-	/**
+
+	public String buildConsent2Cdar2ConsentDirective(Object obj) throws ConsentGenException;
+/**
 	 * Builds the consent2 xacml.
 	 * 
 	 * @param obj
