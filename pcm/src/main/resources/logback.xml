@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration scan="true" scanPeriod="30 seconds">
+
+	<include file="${MHC_PROPS}/pcm/pcm-config-logback_included.xml"/>
+
+</configuration>
