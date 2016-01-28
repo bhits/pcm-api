@@ -10,6 +10,44 @@
 
     <name>Patient Consent Management API</name>
     <description>Patient Consent Management API</description>
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>http://BhitsBuild03/</url>
+    </ciManagement>
+
+    <!-- Since buildnumber-maven-plugin uses git command, git command must in
+        path. i.e. need set git in the path Environment variable -->
+    <scm>
+        <url>https://github.com/FEISystems/pcm-api</url>
+        <connection>scm:git:https://github.com/FEISystems/pcm-api.git</connection>
+        <developerConnection>scm:git:https://github.com/FEISystems/pcm-api.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>Bhits.Java</id>
+            <name>Bhits Java</name>
+            <email>Bhits.Java@feisystems.com</email>
+            <organization>FEi Systems</organization>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+    </developers>
+
+    <distributionManagement>
+        <repository>
+            <id>deployment</id>
+            <name>Internal Releases</name>
+            <url>http://${maven.nexus.servername}/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>deployment</id>
+            <name>Internal Releases</name>
+            <url>http://${maven.nexus.servername}/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
