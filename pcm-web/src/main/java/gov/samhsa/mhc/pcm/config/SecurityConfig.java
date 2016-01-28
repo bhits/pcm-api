@@ -41,9 +41,13 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.POST, "/patients/consents/**").access(hasScope("pcm.consent_create"))
                         .antMatchers(HttpMethod.PUT, "/patients/consents/**").access(hasScope("pcm.consent_update"))
                         .antMatchers(HttpMethod.DELETE, "/patients/consents/**").access(hasScope("pcm.consent_delete"))
-                        .antMatchers(HttpMethod.GET, "/patients/clinicaldocuments/**").access(hasScope("pcm.clinicalDocument_read"))
-                        .antMatchers(HttpMethod.POST, "/patients/clinicaldocuments/**").access(hasScope("pcm.clinicalDocument_create"))
-                        .antMatchers(HttpMethod.DELETE, "/patients/clinicaldocuments/**").access(hasScope("pcm.clinicalDocument_delete"))
+                        // FIXME (BU): these URLs must be protected again after Try Policy service can access PCM securely
+                        .antMatchers(HttpMethod.GET, "/patients/clinicaldocuments/**").permitAll()
+                        .antMatchers(HttpMethod.POST, "/patients/clinicaldocuments/**").permitAll()
+                        .antMatchers(HttpMethod.DELETE, "/patients/clinicaldocuments/**").permitAll()
+                        //.antMatchers(HttpMethod.GET, "/patients/clinicaldocuments/**").access(hasScope("pcm.clinicalDocument_read"))
+                        //.antMatchers(HttpMethod.POST, "/patients/clinicaldocuments/**").access(hasScope("pcm.clinicalDocument_create"))
+                        //.antMatchers(HttpMethod.DELETE, "/patients/clinicaldocuments/**").access(hasScope("pcm.clinicalDocument_delete"))
                         .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .antMatchers(HttpMethod.GET, "/patients/purposeOfUse", "/patients/medicalSection","/patients/sensitivityPolicy").authenticated()
                         // FIXME (BU): this permission must be removed and XACML resource URL must be finalized after Try Policy service can access PCM securely
