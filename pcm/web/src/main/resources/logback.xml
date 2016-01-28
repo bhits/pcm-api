@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
-<configuration scan="${AUTO_SCAN}" scanPeriod="${SCAN_PERIOD}">
-
-	<include file="${PP_PROPS}/pcm-api/config-template/pcm-config-logback_included.xml"/>
-
-</configuration>

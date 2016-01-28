@@ -1,0 +1,69 @@
+server:
+  context-path: /pcm
+  port: 8083
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/pcm?autoReconnect=true
+    username: root
+    password: admin
+    driver-class-name: com.mysql.jdbc.Driver
+    validation-query: select 1
+    test-on-borrow: true
+    test-on-return: true
+    test-while-idle: true
+    time-between-eviction-runs-millis: 1800000
+    num-tests-per-eviction-run: 3
+    min-evictable-idle-time-millis: 1800000
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        hbm2ddl:
+          auto: validate
+    hibernate:
+      ddl-auto: none
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+    username: consent2share@gmail.com
+    password: fei@columbia
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+  messages:
+    basename: i18n/messages
+security:
+  basic:
+    enabled: false
+  oauth2:
+    resource:
+      jwt:
+        key-uri: http://localhost:8080/uaa/token_key
+      user-info-uri: http://localhost:8080/uaa/userinfo
+mhc:
+  pcm:
+    config:
+      clinicaldata:
+        maximumUploadFileSize: 10000000
+        extensionsPermittedToUpload: xml,txt
+      clamd:
+        host: 172.20.139.101
+        port: 3310
+        connTimeOut: 90
+      pid:
+        domain:
+          id: 2.16.840.1.113883.3.704.100.200.1.1.3.1
+          type: ISO
+        org: C2S Health
+        prefix: MHC
+      echosign:
+        echoSignDocumentServiceEndpointAddress: https://secure.echosign.com/services/EchoSignDocumentService20
+        echoSignApiKey: SBC5B7XK5A7Y5V
+        esignaturePollingServicePollTaskFixedDelayInMilliseconds: 2000
+      pls:
+        api: http://localhost:8080/pls/providers
+  vss:
+    config:
+      conceptCodeListPageSize: 20
