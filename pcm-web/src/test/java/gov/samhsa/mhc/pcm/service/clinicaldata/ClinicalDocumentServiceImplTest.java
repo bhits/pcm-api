@@ -148,7 +148,7 @@ public class ClinicalDocumentServiceImplTest {
         doReturn("1").when(patientsClinicalDocumentDto).getId();
         doReturn(patient).when(patientRepository).findByUsername("Owner");
         doReturn(clinicaldocumentDtos).when(sut).findDtoByPatient(patient);
-        assertTrue(sut.isDocumentBelongsToThisUser(clinicalDocumentDto));
+        assertTrue(sut.isDocumentBelongsToThisUser("Owner", clinicalDocumentDto));
     }
 
     @Ignore
@@ -162,7 +162,7 @@ public class ClinicalDocumentServiceImplTest {
         doReturn("2").when(patientsClinicalDocumentDto).getId();
         doReturn(patient).when(patientRepository).findByUsername("Owner");
         doReturn(clinicaldocumentDtos).when(sut).findDtoByPatient(patient);
-        assertFalse(sut.isDocumentBelongsToThisUser(clinicalDocumentDto));
+        assertFalse(sut.isDocumentBelongsToThisUser("Owner", clinicalDocumentDto));
     }
 
     @Test

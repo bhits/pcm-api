@@ -26,12 +26,12 @@
 package gov.samhsa.mhc.pcm.service.consent;
 
 import echosign.api.clientv20.dto16.EmbeddedWidgetCreationResult;
+import gov.samhsa.mhc.common.consentgen.ConsentBuilder;
+import gov.samhsa.mhc.common.consentgen.ConsentGenException;
 import gov.samhsa.mhc.common.document.accessor.DocumentAccessor;
 import gov.samhsa.mhc.common.document.converter.DocumentXmlConverter;
 import gov.samhsa.mhc.common.document.transformer.XmlTransformer;
 import gov.samhsa.mhc.common.util.UniqueValueGeneratorException;
-import gov.samhsa.mhc.common.consentgen.ConsentBuilder;
-import gov.samhsa.mhc.common.consentgen.ConsentGenException;
 import gov.samhsa.mhc.pcm.domain.consent.*;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.domain.patient.PatientRepository;
@@ -620,12 +620,14 @@ public class ConsentServiceImpl implements ConsentService {
      */
     @Override
     @Transactional(readOnly = true)
-    public ConsentDto findConsentById(Long consentId) {
+    public ConsentDto findConsentById(String username, Long consentId) {
         Consent consent = null;
         ConsentDto consentDto = null;
-
-        if (consentRepository.findOne(consentId) != null) {
-            consent = consentRepository.findOne(consentId);
+        Optional<Consent> findConsentOptional = patientRepository.findByUsername(username).getConsents().stream()
+                .filter(c -> consentId.equals(c.getId()))
+                .findAny();
+        if (findConsentOptional.isPresent()) {
+            consent = findConsentOptional.get();
 
             consentDto = new ConsentDto();
             // Get fields

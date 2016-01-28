@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Open Behavioral Health Information Technology Architecture (OBHITA.org)
- * <p>
+ * <p/>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * * Redistributions of source code must retain the above copyright
@@ -11,7 +11,7 @@
  * * Neither the name of the <organization> nor the
  * names of its contributors may be used to endorse or promote products
  * derived from this software without specific prior written permission.
- * <p>
+ * <p/>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -31,6 +31,7 @@ import gov.samhsa.mhc.pcm.service.consent.ConsentService;
 import gov.samhsa.mhc.pcm.service.dto.*;
 import gov.samhsa.mhc.pcm.service.exception.*;
 import gov.samhsa.mhc.pcm.service.notification.NotificationService;
+import gov.samhsa.mhc.pcm.service.patient.MrnService;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import gov.samhsa.mhc.pcm.service.reference.PurposeOfUseCodeService;
 import gov.samhsa.mhc.vss.service.MedicalSectionService;
@@ -40,10 +41,12 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.*;
 
 /**
@@ -91,15 +94,21 @@ public class ConsentRestController {
      */
     @Autowired
     private ValueSetCategoryService valueSetCategoryService;
-    private String username = "albert.smith";
+
+    @Autowired
+    private MrnService mrnService;
 
     private String revokationType = "EMERGENCY ONLY";
 
-    @RequestMapping(value = "consents/pageNumber/{pageNumber}")
-    public ConsentsListDto listConsents(@PathVariable("pageNumber") String pageNumber) {
+    @Autowired
+    private ResourceServerProperties resourceServerProperties;
 
+    @RequestMapping(value = "consents/pageNumber/{pageNumber}")
+    public ConsentsListDto listConsents(Principal principal, @PathVariable("pageNumber") String pageNumber) {
+        // FIXME: remove this line when patient creation concept in PCM is finalized
+        patientService.createNewPatientWithOAuth2AuthenticationIfNotExists(principal, mrnService.generateMrn());
         ConsentsListDto consentsListDto = new ConsentsListDto(consentService
-                .findAllConsentsDtoByPatientAndPage(patientService.findIdByUsername(username), pageNumber));
+                .findAllConsentsDtoByPatientAndPage(patientService.findIdByUsername(principal.getName()), pageNumber));
         // using directId
         // accessReferenceMapper.setupAccessReferenceMap(consentsListDto.getConsentList());
         return consentsListDto;
@@ -130,8 +139,8 @@ public class ConsentRestController {
     }
 
     @RequestMapping(value = "consents/{consentId}", method = RequestMethod.DELETE)
-    public void deleteConsent(@PathVariable("consentId") Long consentId) {
-        final Long patientId = patientService.findIdByUsername(username);
+    public void deleteConsent(Principal principal, @PathVariable("consentId") Long consentId) {
+        final Long patientId = patientService.findIdByUsername(principal.getName());
 
         // final Long directConsentId =
         // accessReferenceMapper.getDirectReference(consentId);
@@ -146,21 +155,19 @@ public class ConsentRestController {
     }
 
     @RequestMapping(value = "consents/{consentId}", method = RequestMethod.GET)
-    public ConsentDto getConsent(@PathVariable("consentId") String consentId) {
-
+    public ConsentDto getConsent(Principal principal, @PathVariable("consentId") String consentId) {
         // Long directConsentId =
         // accessReferenceMapper.getDirectReference(consentId);
-        ConsentDto consentDto = consentService.findConsentById(Long.valueOf(consentId));
+        ConsentDto consentDto = consentService.findConsentById(principal.getName(), Long.valueOf(consentId));
         consentDto.setId(consentId);
         return consentDto;
     }
 
     @RequestMapping(value = "consents", method = RequestMethod.POST)
-    public void consentAddPost(@RequestBody ConsentDto consentDto,
+    public void consentAddPost(Principal principal, @RequestBody ConsentDto consentDto,
                                @RequestParam(value = "ICD9", required = false) HashSet<String> icd9)
             throws ConsentGenException, IOException {
-
-        consentDto.setUsername(username);
+        consentDto.setUsername(principal.getName());
         /*
          * if (consentDto.getId() != null) { final String directConsentId =
 		 * String.valueOf(accessReferenceMapper
@@ -274,11 +281,11 @@ public class ConsentRestController {
     }
 
     @RequestMapping(value = "consents/{consentId}", method = RequestMethod.PUT)
-    public void updateConsents(@RequestBody ConsentDto consentDto, @PathVariable("consentId") Long consentId,
+    public void updateConsents(Principal principal, @RequestBody ConsentDto consentDto, @PathVariable("consentId") Long consentId,
                                @RequestParam(value = "ICD9", required = false) HashSet<String> icd9)
             throws ConsentGenException, IOException {
 
-        consentDto.setUsername(username);
+        consentDto.setUsername(principal.getName());
         /*
          * if (consentDto.getId() != null) { final String directConsentId =
 		 * String.valueOf(accessReferenceMapper
@@ -390,8 +397,8 @@ public class ConsentRestController {
     }
 
     @RequestMapping(value = "consents/signConsent/{consentId}", method = RequestMethod.GET)
-    public Map<String, String> signConsent(@PathVariable("consentId") Long consentId) {
-        final Long patientId = patientService.findIdByUsername(username);
+    public Map<String, String> signConsent(Principal principal, @PathVariable("consentId") Long consentId) {
+        final Long patientId = patientService.findIdByUsername(principal.getName());
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
                 && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
             final ConsentPdfDto consentPdfDto = consentService.findConsentPdfDto(consentId);
@@ -410,8 +417,8 @@ public class ConsentRestController {
     }
 
     @RequestMapping(value = "consents/revokeConsent/{consentId}", method = RequestMethod.GET)
-    public Map<String, String> signConsentRevokation(@PathVariable("consentId") Long consentId) {
-        final Long patientId = patientService.findIdByUsername(username);
+    public Map<String, String> signConsentRevokation(Principal principal, @PathVariable("consentId") Long consentId) {
+        final Long patientId = patientService.findIdByUsername(principal.getName());
         consentService.addUnsignedConsentRevokationPdf(consentId, revokationType);
         if (consentService.isConsentBelongToThisUser(consentId, patientId)) {
             final ConsentRevokationPdfDto consentRevokationPdfDto = consentService

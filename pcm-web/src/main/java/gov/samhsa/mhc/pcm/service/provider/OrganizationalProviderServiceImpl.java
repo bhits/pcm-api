@@ -47,15 +47,21 @@ import java.util.Set;
 public class OrganizationalProviderServiceImpl implements
         OrganizationalProviderService {
 
-    /** The patient repository. */
+    /**
+     * The patient repository.
+     */
     @Autowired
     private PatientRepository patientRepository;
 
-    /** The model mapper. */
+    /**
+     * The model mapper.
+     */
     @Autowired
     private ModelMapper modelMapper;
 
-    /** The organizational provider repository. */
+    /**
+     * The organizational provider repository.
+     */
     @Autowired
     private OrganizationalProviderRepository organizationalProviderRepository;
 
@@ -223,8 +229,8 @@ public class OrganizationalProviderServiceImpl implements
     }
 
     @Override
-    public void deleteOrganizationalProviderByNpi(String npi) {
-        Patient patient = patientRepository.findByUsername("albert.smith");
+    public void deleteOrganizationalProviderByNpi(String username, String npi) {
+        Patient patient = patientRepository.findByUsername(username);
         Set<OrganizationalProvider> organizationalProviders = patient.getOrganizationalProviders();
         for (OrganizationalProvider o : organizationalProviders) {
             if (o.getNpi().equals(npi)) {
@@ -492,8 +498,7 @@ public class OrganizationalProviderServiceImpl implements
     /**
      * Find organizational provider by npi.
      *
-     * @param npi
-     *            the npi
+     * @param npi the npi
      * @return the organizational provider
      */
     public OrganizationalProvider findOrganizationalProviderByNpi(String npi) {

@@ -22,6 +22,7 @@ import gov.samhsa.mhc.pcm.domain.reference.EntityType;
 import gov.samhsa.mhc.pcm.service.dto.IndividualProviderDto;
 import gov.samhsa.mhc.pcm.service.dto.OrganizationalProviderDto;
 import gov.samhsa.mhc.pcm.service.dto.ProviderDto;
+import gov.samhsa.mhc.pcm.service.patient.MrnService;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import gov.samhsa.mhc.pcm.service.provider.HashMapResultToProviderDtoConverter;
 import gov.samhsa.mhc.pcm.service.provider.IndividualProviderService;
@@ -34,6 +35,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -61,6 +63,12 @@ public class ProviderRestControllerTest {
     @Mock
     private ObjectMapper objectMapper;
 
+    @Mock
+    private MrnService mrnService;
+
+    @Mock
+    private OAuth2Authentication principal;
+
     @InjectMocks
     ProviderRestController providerRestController;
 
@@ -79,7 +87,7 @@ public class ProviderRestControllerTest {
         providerDto.setNpi("1234567890");
         providerDtos.add(providerDto);
         when(patientService.findProvidersByUsername(anyString())).thenReturn(providerDtos);
-        mockMvc.perform(get("/patients/providers")).andExpect(status().isOk());
+        mockMvc.perform(get("/patients/providers").principal(principal)).andExpect(status().isOk());
     }
 
     @Test
@@ -93,7 +101,7 @@ public class ProviderRestControllerTest {
 
         when(patientService.findProvidersByUsername(anyString())).thenReturn(providerDtos);
 
-        mockMvc.perform(delete("/patients/providers/1234567890")).andExpect(status().isOk());
+        mockMvc.perform(delete("/patients/providers/1234567890").principal(principal)).andExpect(status().isOk());
     }
 
     @Test
@@ -108,7 +116,7 @@ public class ProviderRestControllerTest {
         when(patientService.findProvidersByUsername(anyString())).thenReturn(providerDtos);
 
 
-        mockMvc.perform(delete("/patients/providers/1234567890")).andExpect(status().isConflict());
+        mockMvc.perform(delete("/patients/providers/1234567890").principal(principal)).andExpect(status().isConflict());
     }
 
     @Test
@@ -122,7 +130,7 @@ public class ProviderRestControllerTest {
 
         when(patientService.findProvidersByUsername(anyString())).thenReturn(providerDtos);
 
-        mockMvc.perform(delete("/patients/providers/1234567890")).andExpect(status().isOk());
+        mockMvc.perform(delete("/patients/providers/1234567890").principal(principal)).andExpect(status().isOk());
     }
 
     @Test
@@ -136,7 +144,7 @@ public class ProviderRestControllerTest {
 
         when(patientService.findProvidersByUsername(anyString())).thenReturn(providerDtos);
 
-        mockMvc.perform(delete("/patients/providers/1234567890")).andExpect(status().isConflict());
+        mockMvc.perform(delete("/patients/providers/1234567890").principal(principal)).andExpect(status().isConflict());
     }
 
     @Test
@@ -152,7 +160,7 @@ public class ProviderRestControllerTest {
         when(individualProviderService.addNewIndividualProvider(any(IndividualProviderDto.class)))
                 .thenReturn(individualProvider);
 
-        mockMvc.perform(post("/patients/providers/1234567890")).andExpect(status().isOk());
+        mockMvc.perform(post("/patients/providers/1234567890").principal(principal)).andExpect(status().isOk());
 
     }
 
@@ -172,7 +180,7 @@ public class ProviderRestControllerTest {
         when(organizationalProviderService.addNewOrganizationalProvider(any(OrganizationalProviderDto.class)))
                 .thenReturn(organizationalProvider);
 
-        mockMvc.perform(post("/patients/providers/1234567890")).andExpect(status().isOk());
+        mockMvc.perform(post("/patients/providers/1234567890").principal(principal)).andExpect(status().isOk());
 
     }
 
@@ -186,7 +194,7 @@ public class ProviderRestControllerTest {
         when(objectMapper.readValue(json, HashMap.class)).thenReturn(result);
         when(individualProviderService.addNewIndividualProvider(any(IndividualProviderDto.class))).thenReturn(null);
 
-        mockMvc.perform(post("/patients/providers/1234567890")).andExpect(status().is4xxClientError());
+        mockMvc.perform(post("/patients/providers/1234567890").principal(principal)).andExpect(status().is4xxClientError());
 
     }
 
@@ -202,7 +210,7 @@ public class ProviderRestControllerTest {
         when(organizationalProviderService.addNewOrganizationalProvider(any(OrganizationalProviderDto.class)))
                 .thenReturn(null);
 
-        mockMvc.perform(post("/patients/providers/1234567890")).andExpect(status().is4xxClientError());
+        mockMvc.perform(post("/patients/providers/1234567890").principal(principal)).andExpect(status().is4xxClientError());
 
     }
 

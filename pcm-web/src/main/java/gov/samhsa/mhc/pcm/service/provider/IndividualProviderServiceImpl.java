@@ -49,18 +49,26 @@ import java.util.Set;
 @Service
 public class IndividualProviderServiceImpl implements IndividualProviderService {
 
-    /** The logger. */
+    /**
+     * The logger.
+     */
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    /** The individual provider repository. */
+    /**
+     * The individual provider repository.
+     */
     @Autowired
     private IndividualProviderRepository individualProviderRepository;
 
-    /** The model mapper. */
+    /**
+     * The model mapper.
+     */
     @Autowired
     private ModelMapper modelMapper;
 
-    /** The patient repository. */
+    /**
+     * The patient repository.
+     */
     @Autowired
     private PatientRepository patientRepository;
 
@@ -300,9 +308,9 @@ public class IndividualProviderServiceImpl implements IndividualProviderService 
     }
 
     @Override
-    public void deleteIndividualProviderByNpi(String npi) {
+    public void deleteIndividualProviderByNpi(String username, String npi) {
 
-        Patient patient = patientRepository.findByUsername("albert.smith");
+        Patient patient = patientRepository.findByUsername(username);
         Set<IndividualProvider> individualProviders = patient.getIndividualProviders();
         for (IndividualProvider o : individualProviders) {
             if (o.getNpi().equals(npi)) {

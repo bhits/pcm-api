@@ -1,17 +1,17 @@
 /*******************************************************************************
  * Open Behavioral Health Information Technology Architecture (OBHITA.org)
- * 
+ * <p/>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the <organization> nor the
- *       names of its contributors may be used to endorse or promote products
- *       derived from this software without specific prior written permission.
- * 
+ * * Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ * * Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
+ * * Neither the name of the <organization> nor the
+ * names of its contributors may be used to endorse or promote products
+ * derived from this software without specific prior written permission.
+ * <p/>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -36,118 +36,118 @@ import java.util.List;
  */
 public interface OrganizationalProviderService {
 
-	/**
-	 * Count all organizational providers.
-	 *
-	 * @return the long
-	 */
-	public abstract long countAllOrganizationalProviders();
+    /**
+     * Count all organizational providers.
+     *
+     * @return the long
+     */
+    public abstract long countAllOrganizationalProviders();
 
-	/**
-	 * Delete organizational provider.
-	 *
-	 * @param organizationalProvider
-	 *            the organizational provider
-	 */
-	public abstract void deleteOrganizationalProvider(
-			OrganizationalProvider organizationalProvider);
+    /**
+     * Delete organizational provider.
+     *
+     * @param organizationalProvider
+     *            the organizational provider
+     */
+    public abstract void deleteOrganizationalProvider(
+            OrganizationalProvider organizationalProvider);
 
-	/**
-	 * Delete organizational provider dto.
-	 *
-	 * @param organizationalProviderDto
-	 *            the organizational provider dto
-	 */
-	public abstract void deleteOrganizationalProviderDto(
-			OrganizationalProviderDto organizationalProviderDto);
+    /**
+     * Delete organizational provider dto.
+     *
+     * @param organizationalProviderDto
+     *            the organizational provider dto
+     */
+    public abstract void deleteOrganizationalProviderDto(
+            OrganizationalProviderDto organizationalProviderDto);
 
-	/**
-	 * Delete organizational provider by patient id.
-	 *
-	 * @param organizationalProviderDto
-	 *            the organizational provider dto
-	 */
-	public abstract void deleteOrganizationalProviderDtoByPatientId(
-			OrganizationalProviderDto organizationalProviderDto);
+    /**
+     * Delete organizational provider by patient id.
+     *
+     * @param organizationalProviderDto
+     *            the organizational provider dto
+     */
+    public abstract void deleteOrganizationalProviderDtoByPatientId(
+            OrganizationalProviderDto organizationalProviderDto);
 
-	/**
-	 * Find organizational provider.
-	 *
-	 * @param id
-	 *            the id
-	 * @return the organizational provider
-	 */
-	public abstract OrganizationalProvider findOrganizationalProvider(Long id);
+    /**
+     * Find organizational provider.
+     *
+     * @param id
+     *            the id
+     * @return the organizational provider
+     */
+    public abstract OrganizationalProvider findOrganizationalProvider(Long id);
 
-	/**
-	 * Find organizational provider dto.
-	 *
-	 * @param id
-	 *            the id
-	 * @return the organizational provider dto
-	 */
-	public abstract OrganizationalProviderDto findOrganizationalProviderDto(
-			Long id);
+    /**
+     * Find organizational provider dto.
+     *
+     * @param id
+     *            the id
+     * @return the organizational provider dto
+     */
+    public abstract OrganizationalProviderDto findOrganizationalProviderDto(
+            Long id);
 
-	/**
-	 * Update organizational provider.
-	 *
-	 * @param organizationalProviderDto
-	 *            the organizational provider dto
-	 */
-	public abstract void updateOrganizationalProvider(
-			OrganizationalProviderDto organizationalProviderDto);
-	
-	
-	public abstract void  deleteOrganizationalProviderByNpi(String npi);
+    /**
+     * Update organizational provider.
+     *
+     * @param organizationalProviderDto
+     *            the organizational provider dto
+     */
+    public abstract void updateOrganizationalProvider(
+            OrganizationalProviderDto organizationalProviderDto);
 
-	/**
-	 * Add new organizational provider
-	 * 
-	 * Returns in_organizationalProviderReturned if added successfully; Returns
-	 * null if add fails (e.g. if added provider already exists)
-	 * 
-	 * @param organizationalProviderDto
-	 * @return OrganizationalProvider in_organizationalProviderReturned
-	 */
-	public abstract OrganizationalProvider addNewOrganizationalProvider(
-			OrganizationalProviderDto organizationalProviderDto);
 
-	/**
-	 * Find all organizational providers.
-	 *
-	 * @return the list
-	 */
-	public abstract List<OrganizationalProvider> findAllOrganizationalProviders();
+    public abstract void deleteOrganizationalProviderByNpi(String username, String npi);
 
-	/**
-	 * Find organizational provider entries.
-	 *
-	 * @param firstResult
-	 *            the first result
-	 * @param maxResults
-	 *            the max results
-	 * @return the list
-	 */
-	public abstract List<OrganizationalProvider> findOrganizationalProviderEntries(
-			int firstResult, int maxResults);
+    /**
+     * Add new organizational provider
+     *
+     * Returns in_organizationalProviderReturned if added successfully; Returns
+     * null if add fails (e.g. if added provider already exists)
+     *
+     * @param organizationalProviderDto
+     * @return OrganizationalProvider in_organizationalProviderReturned
+     */
+    public abstract OrganizationalProvider addNewOrganizationalProvider(
+            OrganizationalProviderDto organizationalProviderDto);
 
-	/**
-	 * Save organizational provider.
-	 *
-	 * @param organizationalProvider
-	 *            the organizational provider
-	 */
-	public abstract void saveOrganizationalProvider(
-			OrganizationalProvider organizationalProvider);
+    /**
+     * Find all organizational providers.
+     *
+     * @return the list
+     */
+    public abstract List<OrganizationalProvider> findAllOrganizationalProviders();
 
-	/**
-	 * Update organizational provider.
-	 *
-	 * @param organizationalProvider
-	 *            the organizational provider
-	 * @return the organizational provider
-	 */
-	public abstract OrganizationalProvider updateOrganizationalProvider(
-			OrganizationalProvider organizationalProvider);
+    /**
+     * Find organizational provider entries.
+     *
+     * @param firstResult
+     *            the first result
+     * @param maxResults
+     *            the max results
+     * @return the list
+     */
+    public abstract List<OrganizationalProvider> findOrganizationalProviderEntries(
+            int firstResult, int maxResults);
+
+    /**
+     * Save organizational provider.
+     *
+     * @param organizationalProvider
+     *            the organizational provider
+     */
+    public abstract void saveOrganizationalProvider(
+            OrganizationalProvider organizationalProvider);
+
+    /**
+     * Update organizational provider.
+     *
+     * @param organizationalProvider
+     *            the organizational provider
+     * @return the organizational provider
+     */
+    public abstract OrganizationalProvider updateOrganizationalProvider(
+            OrganizationalProvider organizationalProvider);
 }

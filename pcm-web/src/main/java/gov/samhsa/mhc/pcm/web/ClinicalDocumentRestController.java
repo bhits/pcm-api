@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Open Behavioral Health Information Technology Architecture (OBHITA.org)
- * <p>
+ * <p/>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * * Redistributions of source code must retain the above copyright
@@ -11,7 +11,7 @@
  * * Neither the name of the <organization> nor the
  * names of its contributors may be used to endorse or promote products
  * derived from this software without specific prior written permission.
- * <p>
+ * <p/>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -34,13 +34,14 @@ import gov.samhsa.mhc.pcm.infrastructure.securityevent.FileDownloadedEvent;
 import gov.samhsa.mhc.pcm.infrastructure.securityevent.FileUploadedEvent;
 import gov.samhsa.mhc.pcm.infrastructure.securityevent.MaliciousFileDetectedEvent;
 import gov.samhsa.mhc.pcm.service.clinicaldata.ClinicalDocumentService;
+import gov.samhsa.mhc.pcm.service.dto.CCDDto;
 import gov.samhsa.mhc.pcm.service.dto.ClinicalDocumentDto;
 import gov.samhsa.mhc.pcm.service.dto.LookupDto;
 import gov.samhsa.mhc.pcm.service.dto.PatientProfileDto;
 import gov.samhsa.mhc.pcm.service.exception.*;
+import gov.samhsa.mhc.pcm.service.patient.MrnService;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import gov.samhsa.mhc.pcm.service.reference.ClinicalDocumentTypeCodeService;
-import gov.samhsa.mhc.pcm.service.dto.CCDDto;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -99,33 +101,19 @@ public class ClinicalDocumentRestController {
      * The xml validator.
      */
     private XmlValidation xmlValidator;
-    private String username = "albert.smith";
 
-    public ClinicalDocumentRestController(
-            ClinicalDocumentService clinicalDocumentService,
-            PatientService patientService,
-            ClinicalDocumentTypeCodeService clinicalDocumentTypeCodeService,
-            ClamAVService clamAVUtil,
-            EventService eventService, XmlValidation xmlValidator) {
-        super();
-        this.clinicalDocumentService = clinicalDocumentService;
-        this.patientService = patientService;
-        this.clinicalDocumentTypeCodeService = clinicalDocumentTypeCodeService;
-        this.clamAVUtil = clamAVUtil;
-        this.eventService = eventService;
-        this.xmlValidator = xmlValidator;
-    }
-
-    private ClinicalDocumentRestController() {
-    }
+    @Autowired
+    private MrnService mrnService;
 
     /**
      * List clinical documents.
      */
     @RequestMapping(value = "clinicaldocuments", method = RequestMethod.GET)
-    public List<ClinicalDocumentDto> listClinicalDocuments() {
+    public List<ClinicalDocumentDto> listClinicalDocuments(Principal principal) {
+        // FIXME: remove this line when patient creation concept in PCM is finalized
+        patientService.createNewPatientWithOAuth2AuthenticationIfNotExists(principal, mrnService.generateMrn());
         PatientProfileDto patientDto = patientService
-                .findPatientProfileByUsername(username);
+                .findPatientProfileByUsername(principal.getName());
         List<ClinicalDocumentDto> clinicaldocumentDtos = clinicalDocumentService
                 .findDtoByPatientDto(patientDto);
         return clinicaldocumentDtos;
@@ -136,12 +124,13 @@ public class ClinicalDocumentRestController {
      */
     @RequestMapping(value = "clinicaldocuments", method = RequestMethod.POST)
     public void uploadClinicalDocuments(
+            Principal principal,
             HttpServletRequest request,
             @RequestParam("file") MultipartFile file,
             @RequestParam("name") String documentName,
             @RequestParam("description") String description,
             @RequestParam("documentType") String documentTypeCode) {
-
+        final String username = principal.getName();
         if (scanMultipartFile(file) == "error") {
             throw new InternalServerErrorException("An unknown error has occured.");
         } else {
@@ -190,12 +179,12 @@ public class ClinicalDocumentRestController {
      * Removes clinical documents.
      */
     @RequestMapping(value = "clinicaldocuments/{documentId}", method = RequestMethod.DELETE)
-    public void removeClinicalDocument(@PathVariable("documentId") Long documentId) {
+    public void removeClinicalDocument(Principal principal, @PathVariable("documentId") Long documentId) {
         ClinicalDocumentDto clinicalDocumentDto = clinicalDocumentService
-                .findClinicalDocumentDto(documentId);
+                .findClinicalDocumentDto(principal.getName(), documentId);
 
         if (clinicalDocumentService
-                .isDocumentBelongsToThisUser(clinicalDocumentDto)) {
+                .isDocumentBelongsToThisUser(principal.getName(), clinicalDocumentDto)) {
             clinicalDocumentService.deleteClinicalDocument(clinicalDocumentDto);
         } else {
             throw new InvalidDeleteDocumentRequestException("Error: Unable to delete this document because it is not belong to user.");
@@ -206,13 +195,14 @@ public class ClinicalDocumentRestController {
      * Download.
      */
     @RequestMapping(value = "clinicaldocuments/{documentId}", method = RequestMethod.GET)
-    public void downloadClinicalDocument(@PathVariable("documentId") Long documentId,
+    public void downloadClinicalDocument(Principal principal,
+                                         @PathVariable("documentId") Long documentId,
                                          HttpServletRequest request,
                                          HttpServletResponse response) {
         ClinicalDocumentDto clinicalDocumentDto = clinicalDocumentService
-                .findClinicalDocumentDto(documentId);
+                .findClinicalDocumentDto(principal.getName(), documentId);
         if (clinicalDocumentService
-                .isDocumentBelongsToThisUser(clinicalDocumentDto)) {
+                .isDocumentBelongsToThisUser(principal.getName(), clinicalDocumentDto)) {
             try {
                 response.setHeader(
                         "Content-Disposition",
@@ -229,7 +219,7 @@ public class ClinicalDocumentRestController {
                 out.close();
                 eventService
                         .raiseSecurityEvent(new FileDownloadedEvent(request
-                                .getRemoteAddr(), username, "Clinical_Document_"
+                                .getRemoteAddr(), principal.getName(), "Clinical_Document_"
                                 + documentId));
 
             } catch (IOException e) {
@@ -239,8 +229,8 @@ public class ClinicalDocumentRestController {
     }
 
     @RequestMapping(value = "clinicaldocuments/ccd/{documentId}", method = RequestMethod.GET)
-    public CCDDto getClinicalDocument(@PathVariable("documentId") Long documentId) {
-        return clinicalDocumentService.findCCDDto(documentId);
+    public CCDDto getClinicalDocument(Principal principal, @PathVariable("documentId") Long documentId) {
+        return clinicalDocumentService.findCCDDto(principal.getName(), documentId);
     }
 
     String scanMultipartFile(MultipartFile file) {

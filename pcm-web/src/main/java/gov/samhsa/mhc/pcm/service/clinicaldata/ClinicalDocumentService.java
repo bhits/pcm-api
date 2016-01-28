@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Open Behavioral Health Information Technology Architecture (OBHITA.org)
- * <p>
+ * <p/>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * * Redistributions of source code must retain the above copyright
@@ -11,7 +11,7 @@
  * * Neither the name of the <organization> nor the
  * names of its contributors may be used to endorse or promote products
  * derived from this software without specific prior written permission.
- * <p>
+ * <p/>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -61,7 +61,7 @@ public interface ClinicalDocumentService {
      * @param id the id
      * @return the clinical document
      */
-    public abstract ClinicalDocument findClinicalDocument(Long id);
+    public abstract ClinicalDocument findClinicalDocument(String username, Long id);
 
 
     /**
@@ -106,7 +106,7 @@ public interface ClinicalDocumentService {
      * @param documentId the document id
      * @return the clinical document dto
      */
-    public abstract ClinicalDocumentDto findClinicalDocumentDto(long documentId);
+    public abstract ClinicalDocumentDto findClinicalDocumentDto(String usrename, long documentId);
 
 
     /**
@@ -141,7 +141,7 @@ public interface ClinicalDocumentService {
      * @param clinicalDocumentDto the clinical document dto
      * @return true, if is document belongs to this user
      */
-    public abstract boolean isDocumentBelongsToThisUser(ClinicalDocumentDto clinicalDocumentDto);
+    public abstract boolean isDocumentBelongsToThisUser(String username, ClinicalDocumentDto clinicalDocumentDto);
 
     /**
      * Finds the CCD DTo for the given Id..
@@ -149,7 +149,7 @@ public interface ClinicalDocumentService {
      * @param documentId the clinical document id
      * @return CCDDto, The CCD document DTO.
      */
-    public abstract CCDDto findCCDDto(long documentId);
+    public abstract CCDDto findCCDDto(String username, long documentId);
 
     boolean isDocumentOversized(MultipartFile file);
 

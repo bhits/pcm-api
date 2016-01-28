@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Open Behavioral Health Information Technology Architecture (OBHITA.org)
- * <p>
+ * <p/>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * * Redistributions of source code must retain the above copyright
@@ -11,7 +11,7 @@
  * * Neither the name of the <organization> nor the
  * names of its contributors may be used to endorse or promote products
  * derived from this software without specific prior written permission.
- * <p>
+ * <p/>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -30,7 +30,6 @@ import gov.samhsa.mhc.pcm.domain.clinicaldata.ClinicalDocumentRepository;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.domain.patient.PatientRepository;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
-import gov.samhsa.mhc.pcm.service.clinicaldata.ClinicalDocumentService;
 import gov.samhsa.mhc.pcm.service.dto.CCDDto;
 import gov.samhsa.mhc.pcm.service.dto.ClinicalDocumentDto;
 import gov.samhsa.mhc.pcm.service.dto.LookupDto;
@@ -82,8 +81,6 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
      * The permitted extensions array.
      */
     private String[] permittedExtensionsArray;
-
-    private String username = "albert.smith";
 
     /**
      * The clinical document repository.
@@ -184,8 +181,12 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
      * #findClinicalDocument(java.lang.Long)
      */
     @Override
-    public ClinicalDocument findClinicalDocument(Long id) {
-        return clinicalDocumentRepository.findOne(id);
+    public ClinicalDocument findClinicalDocument(String username, Long id) {
+        return patientRepository.findByUsername(username).getClinicalDocuments()
+                .stream()
+                .filter(doc -> doc.getId().equals(id))
+                .findAny()
+                .get();
     }
 
     /*
@@ -253,8 +254,8 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
      * #findClinicalDocumentDto(long)
      */
     @Override
-    public ClinicalDocumentDto findClinicalDocumentDto(long documentId) {
-        ClinicalDocument clinicalDocument = findClinicalDocument(documentId);
+    public ClinicalDocumentDto findClinicalDocumentDto(String username, long documentId) {
+        ClinicalDocument clinicalDocument = findClinicalDocument(username, documentId);
         ClinicalDocumentDto clinicalDocumentDto = modelMapper.map(
                 clinicalDocument, ClinicalDocumentDto.class);
 
@@ -265,13 +266,14 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
     }
 
     @Override
-    public CCDDto findCCDDto(long documentId){
-        ClinicalDocument clinicalDocument = findClinicalDocument(documentId);
+    public CCDDto findCCDDto(String username, long documentId) {
+        ClinicalDocument clinicalDocument = findClinicalDocument(username, documentId);
         ClinicalDocumentDto clinicalDocumentDto = modelMapper.map(clinicalDocument, ClinicalDocumentDto.class);
         clinicalDocumentDto.setPatientId(patientRepository.findByUsername(username).getId());
-        CCDDto ccdDto =  new CCDDto( clinicalDocumentDto.getContent());
+        CCDDto ccdDto = new CCDDto(clinicalDocumentDto.getContent());
         return ccdDto;
-    };
+    }
+
     /*
      * (non-Javadoc)
      *
@@ -329,15 +331,12 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
      */
     @Override
     public boolean isDocumentBelongsToThisUser(
+            String username,
             ClinicalDocumentDto clinicalDocumentDto) {
         Patient patient = patientRepository.findByUsername(username);
         List<ClinicalDocumentDto> clinicaldocumentDtos = findDtoByPatient(patient);
-        for (ClinicalDocumentDto documentDto : clinicaldocumentDtos) {
-            if (documentDto.getId().equals(clinicalDocumentDto.getId())) {
-                return true;
-            }
-        }
-        return false;
+        return clinicaldocumentDtos.stream()
+                .anyMatch(doc -> doc.getId().equals(clinicalDocumentDto.getId()));
     }
 
     /*

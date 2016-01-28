@@ -32,10 +32,11 @@ import gov.samhsa.mhc.pcm.domain.reference.EntityType;
 import gov.samhsa.mhc.pcm.service.dto.IndividualProviderDto;
 import gov.samhsa.mhc.pcm.service.dto.OrganizationalProviderDto;
 import gov.samhsa.mhc.pcm.service.dto.ProviderDto;
-import gov.samhsa.mhc.pcm.service.exception.ProviderAlreadyInUseException;
 import gov.samhsa.mhc.pcm.service.exception.CannotDeleteProviderException;
 import gov.samhsa.mhc.pcm.service.exception.CannotDeserializeProviderResultException;
+import gov.samhsa.mhc.pcm.service.exception.ProviderAlreadyInUseException;
 import gov.samhsa.mhc.pcm.service.exception.ProviderNotFoundException;
+import gov.samhsa.mhc.pcm.service.patient.MrnService;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import gov.samhsa.mhc.pcm.service.provider.HashMapResultToProviderDtoConverter;
 import gov.samhsa.mhc.pcm.service.provider.IndividualProviderService;
@@ -50,6 +51,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -61,15 +63,13 @@ import java.util.Set;
 public class ProviderRestController {
 
     /**
-     * The logger.
-     */
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    /**
      * The Constant NPI_LENGTH.
      */
     public static final int NPI_LENGTH = 10;
-
+    /**
+     * The logger.
+     */
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     /**
      * The patient service.
      */
@@ -103,14 +103,19 @@ public class ProviderRestController {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private MrnService mrnService;
+
     /**
      * List providers.
      *
      * @return the sets the
      */
     @RequestMapping(value = "providers", method = RequestMethod.GET)
-    public Set<ProviderDto> listProviders() {
-        Set<ProviderDto> providerDtos = patientService.findProvidersByUsername("albert.smith");
+    public Set<ProviderDto> listProviders(Principal principal) {
+        // FIXME: remove this line when patient creation concept in PCM is finalized
+        patientService.createNewPatientWithOAuth2AuthenticationIfNotExists(principal, mrnService.generateMrn());
+        Set<ProviderDto> providerDtos = patientService.findProvidersByUsername(principal.getName());
         return providerDtos;
     }
 
@@ -120,9 +125,9 @@ public class ProviderRestController {
      * @param npi the npi
      */
     @RequestMapping(value = "providers/{npi}", method = RequestMethod.DELETE)
-    public void deleteProvider(@PathVariable("npi") String npi) {
+    public void deleteProvider(Principal principal, @PathVariable("npi") String npi) {
 
-        Set<ProviderDto> providerDtos = patientService.findProvidersByUsername("albert.smith");
+        Set<ProviderDto> providerDtos = patientService.findProvidersByUsername(principal.getName());
         try {
             ProviderDto providerDto = providerDtos.stream().filter(t -> t.getNpi().equals(npi)).findAny().orElseThrow(() -> new ProviderNotFoundException("This patient doesn't have this provider"));
 
@@ -132,9 +137,9 @@ public class ProviderRestController {
                 if (providerDto.isDeletable() == false)
                     throw new ProviderAlreadyInUseException("Error: Unable to delete this provider because it is currently used in one or more of your consents.");
                 if (providerDto.isDeletable() == true && providerDto.getEntityType().equals("Individual"))
-                    individualProviderService.deleteIndividualProviderByNpi(npi);
+                    individualProviderService.deleteIndividualProviderByNpi(principal.getName(), npi);
                 else
-                    organizationalProviderService.deleteOrganizationalProviderByNpi(npi);
+                    organizationalProviderService.deleteOrganizationalProviderByNpi(principal.getName(), npi);
             }
 
         } catch (Exception e) {
@@ -152,8 +157,8 @@ public class ProviderRestController {
      * @param npi the npi
      */
     @RequestMapping(value = "providers/{npi}", method = RequestMethod.POST)
-    public void addProvider(@PathVariable("npi") String npi) {
-
+    public void addProvider(Principal principal, @PathVariable("npi") String npi) {
+        final String username = principal.getName();
         OrganizationalProvider organizationalProviderReturned = null;
         IndividualProvider individualProviderReturned = null;
         boolean isOrgProvider = false;
@@ -173,8 +178,7 @@ public class ProviderRestController {
                 providerDto.setAuthorizedOfficialTitle(result.get("authorizedOfficialTitleorPosition"));
                 providerDto.setAuthorizedOfficialNamePrefix(result.get("authorizedOfficialNamePrefixText"));
                 providerDto.setAuthorizedOfficialTelephoneNumber(result.get("authorizedOfficialTelephoneNumber"));
-                // TODO: hardcoded the patient username
-                providerDto.setUsername("albert.smith");
+                providerDto.setUsername(username);
 
                 organizationalProviderReturned = organizationalProviderService
                         .addNewOrganizationalProvider(providerDto);
@@ -188,9 +192,7 @@ public class ProviderRestController {
                 providerDto.setNamePrefix(result.get("providerNamePrefixText"));
                 providerDto.setNameSuffix(result.get("providerNameSuffixText"));
                 providerDto.setCredential(result.get("providerCredentialText"));
-
-                // TODO: hardcoded the patient username
-                providerDto.setUsername("albert.smith");
+                providerDto.setUsername(username);
 
                 individualProviderReturned = individualProviderService.addNewIndividualProvider(providerDto);
             }

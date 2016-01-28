@@ -35,6 +35,7 @@ import gov.samhsa.mhc.pcm.domain.patient.PatientRepository;
 import gov.samhsa.mhc.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.mhc.pcm.domain.provider.OrganizationalProvider;
 import gov.samhsa.mhc.pcm.service.dto.*;
+import gov.samhsa.mhc.pcm.service.userinfo.OpenIDConnectUserInfoService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
+import java.security.Principal;
 import java.util.*;
 
 /**
@@ -93,6 +95,9 @@ public class PatientServiceImpl implements PatientService {
      */
     @Autowired
     private EmailSender emailSender;
+
+    @Autowired
+    private OpenIDConnectUserInfoService openIDConnectUserInfoService;
 
     /*
      * (non-Javadoc)
@@ -644,6 +649,23 @@ public class PatientServiceImpl implements PatientService {
         }
 
         return patients;
+    }
+
+    // FIXME: remove this block when patient creation concept in PCM is finalized
+    @Override
+    @Transactional
+    public void createNewPatientWithOAuth2AuthenticationIfNotExists(Principal principal, String mrn) {
+        final String username = principal.getName();
+        if (patientRepository.findByUsername(username) == null) {
+            final OpenIDConnectUserInfoDto userInfo = openIDConnectUserInfoService.getUserInfo(principal);
+            Patient patient = new Patient();
+            patient.setUsername(userInfo.getUserName());
+            patient.setFirstName(userInfo.getGivenName());
+            patient.setLastName(userInfo.getFamilyName());
+            patient.setEmail(userInfo.getEmail());
+            patient.setMedicalRecordNumber(mrn);
+            patientRepository.save(patient);
+        }
     }
 
     /**
