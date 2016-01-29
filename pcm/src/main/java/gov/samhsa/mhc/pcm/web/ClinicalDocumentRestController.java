@@ -233,6 +233,12 @@ public class ClinicalDocumentRestController {
         return clinicalDocumentService.findCCDDto(principal.getName(), documentId);
     }
 
+    //FIXME
+    @RequestMapping(value = "clinicaldocuments/ccd/{patientUserName}/{documentId}", method = RequestMethod.GET)
+    public CCDDto getClinicalDocumentByUserName(@PathVariable("patientUserName") String patientUserName, @PathVariable("documentId") Long documentId) {
+        return clinicalDocumentService.findCCDDto(patientUserName, documentId);
+    }
+
     String scanMultipartFile(MultipartFile file) {
         Boolean isItClean = null;
         try (InputStream inputStream = file.getInputStream()) {
