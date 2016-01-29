@@ -1,6 +1,8 @@
 server:
   context-path: /pcm
   port: 8083
+logging:
+  file: C:/java/MHC_LOGS/pcm/pcm.log
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/pcm?autoReconnect=true
