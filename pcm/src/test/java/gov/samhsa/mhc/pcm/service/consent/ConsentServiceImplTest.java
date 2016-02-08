@@ -455,6 +455,10 @@ public class ConsentServiceImplTest {
                 .thenReturn(xacmlMock);
         when(
                 consentExportService
+                        .exportConsent2CDAR2ConsentDirective(any(Consent.class)))
+                .thenReturn(xacmlMock);
+        when(
+                consentExportService
                         .exportConsent2XacmlPdfConsentFrom(any(Consent.class)))
                 .thenReturn(xacmlMock);
         when(
