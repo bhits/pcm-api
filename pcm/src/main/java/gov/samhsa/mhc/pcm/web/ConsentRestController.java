@@ -26,6 +26,8 @@
 package gov.samhsa.mhc.pcm.web;
 
 import gov.samhsa.mhc.common.consentgen.ConsentGenException;
+import gov.samhsa.mhc.pcm.infrastructure.eventlistener.EventService;
+import gov.samhsa.mhc.pcm.infrastructure.securityevent.FileDownloadedEvent;
 import gov.samhsa.mhc.pcm.service.consent.ConsentHelper;
 import gov.samhsa.mhc.pcm.service.consent.ConsentService;
 import gov.samhsa.mhc.pcm.service.dto.*;
@@ -42,9 +44,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
@@ -97,6 +104,9 @@ public class ConsentRestController {
 
     @Autowired
     private MrnService mrnService;
+
+    @Autowired
+    private EventService eventService;
 
     private String revokationType = "EMERGENCY ONLY";
 
@@ -397,7 +407,8 @@ public class ConsentRestController {
     }
 
     @RequestMapping(value = "consents/signConsent/{consentId}", method = RequestMethod.GET)
-    public Map<String, String> signConsent(Principal principal, @PathVariable("consentId") Long consentId) {
+    public Map<String, String> signConsent(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException
+    {
         final Long patientId = patientService.findIdByUsername(principal.getName());
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
                 && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
@@ -436,6 +447,33 @@ public class ConsentRestController {
             return map;
         } else
             throw new InternalServerErrorException("Resource Not Found");
+    }
+
+
+    @RequestMapping(value = "consents/exportConsentDirective/{consentId}", method = RequestMethod.GET)
+    public Map exportConsentDirective(HttpServletRequest request, Principal principal, @PathVariable("consentId") Long consentId)
+    {
+        final Long patientId = patientService.findIdByUsername(principal.getName());
+        if (consentService
+                .isConsentBelongToThisUser(consentId, patientId))
+        {
+            final byte[] consentDirective = consentService.getConsentDirective(consentId);
+
+            eventService.raiseSecurityEvent(new FileDownloadedEvent(
+                    request.getRemoteAddr(), "User_"
+                    + principal.getName(), "Consent_"
+                    + consentId));
+            final HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_XML);
+
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("data", new String(consentDirective));
+            return map;
+            //return new ResponseEntity<byte[]>(consentDirective,headers, HttpStatus.OK);
+        }
+        else
+        throw new InternalServerErrorException("Resource Not Found");
+
     }
 
 }

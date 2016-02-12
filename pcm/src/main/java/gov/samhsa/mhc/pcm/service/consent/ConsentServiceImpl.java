@@ -408,7 +408,8 @@ public class ConsentServiceImpl implements ConsentService {
      * (gov.samhsa.consent2share.service.dto.ConsentPdfDto)
      */
     @Override
-    public String createConsentEmbeddedWidget(ConsentPdfDto consentPdfDto) {
+    public String createConsentEmbeddedWidget(ConsentPdfDto consentPdfDto) throws ConsentGenException
+    {
         final Consent consent = consentRepository
                 .findOne(consentPdfDto.getId());
         // SignConsent
@@ -428,6 +429,9 @@ public class ConsentServiceImpl implements ConsentService {
         signedPdfConsent.setSignerEmail(patientEmail);
         signedPdfConsent.setDocumentSignedStatus("Unsigned");
         consent.setSignedPdfConsent(signedPdfConsent);
+        //generate consent directive when submitting consent to sign
+        consent.setExportedCDAR2Consent(consentExportService.exportConsent2CDAR2ConsentDirective(
+                consent).getBytes());
         consentRepository.save(consent);
         return result.getJavascript();
     }
@@ -985,6 +989,17 @@ public class ConsentServiceImpl implements ConsentService {
         return consentRepository.findOne(consentId).getXacmlCcd();
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * gov.samhsa.consent2share.service.consent.ConsentService#getConsentDirective(java
+     * .lang.Long)
+     */
+    public byte[] getConsentDirective(Long consentId) {
+        return consentRepository.findOne(consentId).getExportedCDAR2Consent();
+    }
+
     /**
      * Checks if is consent belong to this user.
      *
@@ -1292,8 +1307,6 @@ public class ConsentServiceImpl implements ConsentService {
                 .generate42CfrPart2Pdf(consent));
         try {
 
-            consent.setExportedCDAR2Consent(consentExportService.exportConsent2CDAR2ConsentDirective(
-                    					consent).getBytes());
 
             consent.setXacmlCcd(consentExportService.exportConsent2XACML(
                     consent).getBytes());

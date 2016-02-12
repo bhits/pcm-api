@@ -268,7 +268,7 @@ public interface ConsentService {
      * @param consentPdfDto the consent pdf dto
      * @return the string
      */
-    String createConsentEmbeddedWidget(ConsentPdfDto consentPdfDto);
+    String createConsentEmbeddedWidget(ConsentPdfDto consentPdfDto) throws ConsentGenException;
 
     /**
      * Creates the revocation embedded widget.
@@ -294,6 +294,8 @@ public interface ConsentService {
      * @return the xacml ccd
      */
     byte[] getXacmlCcd(Long consentId);
+
+    byte[] getConsentDirective(Long consentId);
 
     Map<String, Object> findAllConsentsDtoByPatientAndPage(Long patientId, String pageNumber);
 }

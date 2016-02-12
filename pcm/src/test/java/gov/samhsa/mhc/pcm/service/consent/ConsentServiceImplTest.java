@@ -1,6 +1,7 @@
 package gov.samhsa.mhc.pcm.service.consent;
 
 import echosign.api.clientv20.dto16.EmbeddedWidgetCreationResult;
+import gov.samhsa.mhc.common.consentgen.ConsentGenException;
 import gov.samhsa.mhc.pcm.domain.consent.*;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.domain.patient.PatientRepository;
@@ -628,9 +629,11 @@ public class ConsentServiceImplTest {
     }
 
     @Test
-    public void testCreateConsentEmbeddedWidget() {
+    public void testCreateConsentEmbeddedWidget() throws ConsentGenException
+    {
         Consent consent = mock(Consent.class);
         Patient patient = mock(Patient.class);
+        String consentDirective="consentDirective";
         when(consentRepository.findOne(anyLong())).thenReturn(consent);
 
         ConsentService spy = spy(cst);
@@ -649,6 +652,11 @@ public class ConsentServiceImplTest {
                         .createEmbeddedWidget(DOCUMENT_BYTES,
                                 DOCUMENT_FILE_NAME, DOCUMENT_NAME,
                                 null, EMAIL)).thenReturn(result);
+
+        when(
+                consentExportService
+                        .exportConsent2CDAR2ConsentDirective(any(Consent.class)))
+                .thenReturn(consentDirective);
         spy.createConsentEmbeddedWidget(consentPdfDto);
 
         verify(consentRepository).save(consent);
