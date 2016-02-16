@@ -39,21 +39,20 @@ import gov.samhsa.mhc.pcm.service.reference.PurposeOfUseCodeService;
 import gov.samhsa.mhc.vss.service.MedicalSectionService;
 import gov.samhsa.mhc.vss.service.ValueSetCategoryService;
 import gov.samhsa.mhc.vss.service.dto.AddConsentFieldsDto;
-import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.security.Principal;
 import java.util.*;
 
@@ -104,11 +103,10 @@ public class ConsentRestController {
     private ValueSetCategoryService valueSetCategoryService;
 
     @Autowired
-    private EventService eventService;
-
+    private MrnService mrnService;
 
     @Autowired
-    private MrnService mrnService;
+    private EventService eventService;
 
     private String revokationType = "EMERGENCY ONLY";
 
@@ -409,7 +407,8 @@ public class ConsentRestController {
     }
 
     @RequestMapping(value = "consents/signConsent/{consentId}", method = RequestMethod.GET)
-    public Map<String, String> signConsent(Principal principal, @PathVariable("consentId") Long consentId) {
+    public Map<String, String> signConsent(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException
+    {
         final Long patientId = patientService.findIdByUsername(principal.getName());
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
                 && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
@@ -450,30 +449,47 @@ public class ConsentRestController {
             throw new InternalServerErrorException("Resource Not Found");
     }
 
-    @RequestMapping(value = "consents/download/{docType}/{consentId}", method = RequestMethod.GET, produces = "application/pdf")
-    public String downloadConsentPdfFile(HttpServletRequest request,
-             HttpServletResponse response, Principal principal, @PathVariable("consentId") Long consentId, @PathVariable("docType") String docType) {
+
+    @RequestMapping(value = "consents/download/{docType}/{consentId}", method = RequestMethod.GET)
+    public Map<String, byte[]> downloadConsentPdfFile(HttpServletRequest request, Principal principal, @PathVariable("consentId") Long consentId, @PathVariable("docType") String docType) throws IOException
+    {
         final Long patientId = patientService.findIdByUsername(principal.getName());
-        final AbstractPdfDto pdfDto = getPdfDto(docType, consentId);
         if (consentService
                 .isConsentBelongToThisUser(consentId, patientId)) {
-            try (final OutputStream out = response.getOutputStream()) {
-                response.setContentType("application/pdf");
-                response.setHeader("Content-Disposition",
-                        "attachment;filename=\"" + pdfDto.getFilename() + "\"");
-                IOUtils.copy(new ByteArrayInputStream(pdfDto.getContent()), out);
-                out.flush();
-                eventService.raiseSecurityEvent(new FileDownloadedEvent(request
-                        .getRemoteAddr(), "User_" + principal.getName(),
-                        "Consent_" + consentId));
-            } catch (final IOException e) {
-                logger.warn("Error while reading pdf file.");
-                logger.warn("The exception is: ", e);
-            }
-        }
-
-        return null;
+            final AbstractPdfDto pdfDto = getPdfDto(docType, consentId);
+            eventService.raiseSecurityEvent(new FileDownloadedEvent(request
+                    .getRemoteAddr(), "User_" + principal.getName(),
+                    "Consent_" + consentId));
+            Map<String, byte[]> map = new HashMap<String, byte[]>();
+            map.put("data", pdfDto.getContent());
+            System.out.println(pdfDto.getContent().length);
+            return map;
+        }  else
+            throw new InternalServerErrorException("Resource Not Found");
     }
+
+//    @RequestMapping(value = "consents/download/{docType}/{consentId}", method = RequestMethod.GET, produces = "application/pdf")
+//    public String downloadConsentPdfFile(HttpServletRequest request,
+//                                         HttpServletResponse response, Principal principal, @PathVariable("consentId") Long consentId, @PathVariable("docType") String docType) {
+//        final Long patientId = patientService.findIdByUsername(principal.getName());
+//        final AbstractPdfDto pdfDto = getPdfDto(docType, consentId);
+//        if (consentService
+//                .isConsentBelongToThisUser(consentId, patientId)) {
+//            try (final OutputStream out = response.getOutputStream()) {
+//                response.setContentType("application/pdf");
+//                response.setHeader("Content-Disposition","attachment;filename=\"" + pdfDto.getFilename() + "\"");
+//                IOUtils.copy(new ByteArrayInputStream(pdfDto.getContent()), out);
+//                out.flush();
+//
+//                eventService.raiseSecurityEvent(new FileDownloadedEvent(request.getRemoteAddr(), "User_" + principal.getName(),"Consent_" + consentId));
+//            } catch (final IOException e) {
+//                logger.warn("Error while reading pdf file.");
+//                logger.warn("The exception is: ", e);
+//            }
+//        }
+//
+//        return null;
+//    }
 
     private AbstractPdfDto getPdfDto(String docType, long consentId) {
         if (docType.equals("revokation")) {
