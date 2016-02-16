@@ -1,6 +1,9 @@
 server:
   context-path: /pcm
-  port: 8083
+  port: 8446
+  ssl:
+        key-store: c:/ssl_keystore.keystore
+        key-store-password: changeit
 logging:
   file: C:/java/MHC_LOGS/pcm/pcm.log
 spring:
@@ -42,8 +45,8 @@ security:
   oauth2:
     resource:
       jwt:
-        key-uri: http://localhost:8080/uaa/token_key
-      user-info-uri: http://localhost:8080/uaa/userinfo
+        key-uri: https://localhost:8443/uaa/token_key
+      user-info-uri: https://localhost:8443/uaa/userinfo
 mhc:
   pcm:
     config:
@@ -65,7 +68,7 @@ mhc:
         echoSignApiKey: SBC5B7XK5A7Y5V
         esignaturePollingServicePollTaskFixedDelayInMilliseconds: 2000
       pls:
-        api: http://localhost:8080/pls/providers
+        api: https://localhost:8443/pls/providers
   vss:
     config:
       conceptCodeListPageSize: 20
