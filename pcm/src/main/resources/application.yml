@@ -2,10 +2,13 @@ server:
   context-path: /pcm
   port: 8446
   ssl:
-        key-store: c:/ssl_keystore.keystore
-        key-store-password: changeit
+    key-store: C:/ssl_keystore.keystore
+    key-store-password: changeit
 logging:
   file: C:/java/MHC_LOGS/pcm/pcm.log
+  level:
+    org.hibernate: DEBUG
+    org.springframework.security: DEBUG
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/pcm?autoReconnect=true
