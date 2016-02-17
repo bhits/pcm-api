@@ -39,6 +39,7 @@ import gov.samhsa.mhc.pcm.service.reference.PurposeOfUseCodeService;
 import gov.samhsa.mhc.vss.service.MedicalSectionService;
 import gov.samhsa.mhc.vss.service.ValueSetCategoryService;
 import gov.samhsa.mhc.vss.service.dto.AddConsentFieldsDto;
+import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.security.Principal;
 import java.util.*;
 
@@ -449,9 +451,8 @@ public class ConsentRestController {
             throw new InternalServerErrorException("Resource Not Found");
     }
 
-
     @RequestMapping(value = "consents/download/{docType}/{consentId}", method = RequestMethod.GET)
-    public Map<String, byte[]> downloadConsentPdfFile(HttpServletRequest request, Principal principal, @PathVariable("consentId") Long consentId, @PathVariable("docType") String docType) throws IOException
+    public ResponseEntity<byte[]> downloadConsentPdfFile(HttpServletRequest request, Principal principal, @PathVariable("consentId") Long consentId, @PathVariable("docType") String docType) throws IOException
     {
         final Long patientId = patientService.findIdByUsername(principal.getName());
         if (consentService
@@ -460,36 +461,10 @@ public class ConsentRestController {
             eventService.raiseSecurityEvent(new FileDownloadedEvent(request
                     .getRemoteAddr(), "User_" + principal.getName(),
                     "Consent_" + consentId));
-            Map<String, byte[]> map = new HashMap<String, byte[]>();
-            map.put("data", pdfDto.getContent());
-            System.out.println(pdfDto.getContent().length);
-            return map;
+            return new ResponseEntity<byte[]>(pdfDto.getContent(),null,HttpStatus.OK);
         }  else
             throw new InternalServerErrorException("Resource Not Found");
     }
-
-//    @RequestMapping(value = "consents/download/{docType}/{consentId}", method = RequestMethod.GET, produces = "application/pdf")
-//    public String downloadConsentPdfFile(HttpServletRequest request,
-//                                         HttpServletResponse response, Principal principal, @PathVariable("consentId") Long consentId, @PathVariable("docType") String docType) {
-//        final Long patientId = patientService.findIdByUsername(principal.getName());
-//        final AbstractPdfDto pdfDto = getPdfDto(docType, consentId);
-//        if (consentService
-//                .isConsentBelongToThisUser(consentId, patientId)) {
-//            try (final OutputStream out = response.getOutputStream()) {
-//                response.setContentType("application/pdf");
-//                response.setHeader("Content-Disposition","attachment;filename=\"" + pdfDto.getFilename() + "\"");
-//                IOUtils.copy(new ByteArrayInputStream(pdfDto.getContent()), out);
-//                out.flush();
-//
-//                eventService.raiseSecurityEvent(new FileDownloadedEvent(request.getRemoteAddr(), "User_" + principal.getName(),"Consent_" + consentId));
-//            } catch (final IOException e) {
-//                logger.warn("Error while reading pdf file.");
-//                logger.warn("The exception is: ", e);
-//            }
-//        }
-//
-//        return null;
-//    }
 
     private AbstractPdfDto getPdfDto(String docType, long consentId) {
         if (docType.equals("revokation")) {
