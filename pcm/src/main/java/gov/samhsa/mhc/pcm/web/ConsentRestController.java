@@ -451,8 +451,8 @@ public class ConsentRestController {
             throw new InternalServerErrorException("Resource Not Found");
     }
 
-    @RequestMapping(value = "consents/download/{docType}/{consentId}", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> downloadConsentPdfFile(HttpServletRequest request, Principal principal, @PathVariable("consentId") Long consentId, @PathVariable("docType") String docType) throws IOException
+    @RequestMapping(value = "consents/download/{docType}/{consentId}", method = RequestMethod.GET, produces = "application/pdf")
+    public byte[] downloadConsentPdfFile(HttpServletRequest request, Principal principal, @PathVariable("consentId") Long consentId, @PathVariable("docType") String docType) throws IOException
     {
         final Long patientId = patientService.findIdByUsername(principal.getName());
         if (consentService
@@ -461,7 +461,7 @@ public class ConsentRestController {
             eventService.raiseSecurityEvent(new FileDownloadedEvent(request
                     .getRemoteAddr(), "User_" + principal.getName(),
                     "Consent_" + consentId));
-            return new ResponseEntity<byte[]>(pdfDto.getContent(),null,HttpStatus.OK);
+            return pdfDto.getContent();
         }  else
             throw new InternalServerErrorException("Resource Not Found");
     }
