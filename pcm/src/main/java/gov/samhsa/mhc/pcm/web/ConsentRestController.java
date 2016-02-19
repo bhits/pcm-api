@@ -39,7 +39,6 @@ import gov.samhsa.mhc.pcm.service.reference.PurposeOfUseCodeService;
 import gov.samhsa.mhc.vss.service.MedicalSectionService;
 import gov.samhsa.mhc.vss.service.ValueSetCategoryService;
 import gov.samhsa.mhc.vss.service.dto.AddConsentFieldsDto;
-import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -449,6 +448,33 @@ public class ConsentRestController {
             return map;
         } else
             throw new InternalServerErrorException("Resource Not Found");
+    }
+
+
+    @RequestMapping(value = "consents/exportConsentDirective/{consentId}", method = RequestMethod.GET)
+    public Map exportConsentDirective(HttpServletRequest request, Principal principal, @PathVariable("consentId") Long consentId)
+    {
+        final Long patientId = patientService.findIdByUsername(principal.getName());
+        if (consentService
+                .isConsentBelongToThisUser(consentId, patientId))
+        {
+            final byte[] consentDirective = consentService.getConsentDirective(consentId);
+
+            eventService.raiseSecurityEvent(new FileDownloadedEvent(
+                    request.getRemoteAddr(), "User_"
+                    + principal.getName(), "Consent_"
+                    + consentId));
+            final HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_XML);
+
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("data", new String(consentDirective));
+            return map;
+            //return new ResponseEntity<byte[]>(consentDirective,headers, HttpStatus.OK);
+        }
+        else
+        throw new InternalServerErrorException("Resource Not Found");
+
     }
 
     @RequestMapping(value = "consents/download/{docType}/{consentId}", method = RequestMethod.GET, produces = "application/pdf")

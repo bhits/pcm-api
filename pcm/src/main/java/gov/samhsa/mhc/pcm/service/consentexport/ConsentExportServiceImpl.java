@@ -62,6 +62,12 @@ public class ConsentExportServiceImpl implements ConsentExportService {
 		return consentBuilder.buildConsent2Cdar2(consentId);
 	}
 
+	@Override
+		public String exportConsent2CDAR2ConsentDirective(Consent consent)
+				throws ConsentGenException {
+				return consentBuilder.buildConsent2Cdar2ConsentDirective(consent);
+			}
+
 	/*
 	 * (non-Javadoc)
 	 * 
