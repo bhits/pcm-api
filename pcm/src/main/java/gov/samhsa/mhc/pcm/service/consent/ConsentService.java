@@ -167,6 +167,8 @@ public interface ConsentService {
      */
     ConsentDto findConsentById(String username, Long consentId);
 
+    List<String> findObligationsConsentById(String username, Long consentId);
+
     XacmlDto findXACMLForCCDByConsentId(Long consentId);
 
     /**

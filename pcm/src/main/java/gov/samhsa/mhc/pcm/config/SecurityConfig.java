@@ -52,6 +52,7 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.GET, "/patients/purposeOfUse", "/patients/medicalSection","/patients/sensitivityPolicy").authenticated()
                         // FIXME (BU): this permission must be removed and XACML resource URL must be finalized after Try Policy service can access PCM securely
                         .antMatchers(HttpMethod.GET, "/xacml/*").permitAll()
+                        .antMatchers(HttpMethod.GET, "/obligations/**").permitAll()
                         // TODO (BU): remove this permission after VSS is separated
                         .antMatchers(HttpMethod.GET, "/lookupService/**").permitAll()
                         .anyRequest().denyAll();

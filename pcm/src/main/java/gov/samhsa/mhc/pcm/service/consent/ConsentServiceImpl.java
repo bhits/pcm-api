@@ -781,6 +781,53 @@ public class ConsentServiceImpl implements ConsentService {
         return consentDto;
     }
 
+    /**
+     * Returns consentDto based on consent id.
+     *
+     * @param consentId the consent id
+     * @return ConsentDto
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<String> findObligationsConsentById(String username, Long consentId) {
+        Consent consent = null;
+        final Set<String> obligationCodes = new HashSet<String>();
+        Optional<Consent> findConsentOptional = patientRepository.findByUsername(username).getConsents().stream()
+                .filter(c -> consentId.equals(c.getId()))
+                .findAny();
+        if (findConsentOptional.isPresent()) {
+            consent = findConsentOptional.get();
+
+            for (final ConsentDoNotShareClinicalDocumentTypeCode item : consent
+                    .getDoNotShareClinicalDocumentTypeCodes()) {
+                obligationCodes.add(item
+                        .getClinicalDocumentTypeCode().getCode());
+            }
+
+            for (final ConsentDoNotShareClinicalDocumentSectionTypeCode item : consent
+                    .getDoNotShareClinicalDocumentSectionTypeCodes()) {
+                obligationCodes.add(item
+                        .getMedicalSection().getCode());
+            }
+
+            for (final ConsentDoNotShareSensitivityPolicyCode item : consent
+                    .getDoNotShareSensitivityPolicyCodes()) {
+                obligationCodes.add(item
+                        .getValueSetCategory().getCode());
+            }
+
+            final Set<String> consentDoNotShareClinicalConceptCodes = new HashSet<String>();
+            for (final ClinicalConceptCode item : consent
+                    .getDoNotShareClinicalConceptCodes()) {
+                final SpecificMedicalInfoDto specificMedicalInfoDto = new SpecificMedicalInfoDto();
+                consentDoNotShareClinicalConceptCodes
+                        .add(item.getCode());
+            }
+
+        }
+        return new ArrayList<String>(obligationCodes);
+    }
+
     /*
      * (non-Javadoc)
      *
