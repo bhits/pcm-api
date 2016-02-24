@@ -32,6 +32,7 @@ public class SecurityConfig {
                     http.requiresChannel().anyRequest().requiresSecure();
                 }
                 http.authorizeRequests()
+                        .antMatchers(HttpMethod.GET, "/patients/*/consents/*/obligations").permitAll()
                         .antMatchers(HttpMethod.GET, "/patients/consents/signConsent/**").access(hasScope("pcm.consent_sign"))
                         .antMatchers(HttpMethod.GET, "/patients/consents/revokeConsent/**").access(hasScope("pcm.consent_revoke"))
                         .antMatchers(HttpMethod.GET, "/patients/providers/**").access(hasScope("pcm.provider_read"))
@@ -50,9 +51,6 @@ public class SecurityConfig {
                         //.antMatchers(HttpMethod.DELETE, "/patients/clinicaldocuments/**").access(hasScope("pcm.clinicalDocument_delete"))
                         .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .antMatchers(HttpMethod.GET, "/patients/purposeOfUse", "/patients/medicalSection","/patients/sensitivityPolicy").authenticated()
-                        // FIXME (BU): this permission must be removed and XACML resource URL must be finalized after Try Policy service can access PCM securely
-                        .antMatchers(HttpMethod.GET, "/xacml/*").permitAll()
-                        .antMatchers(HttpMethod.GET, "/obligations/**").permitAll()
                         // TODO (BU): remove this permission after VSS is separated
                         .antMatchers(HttpMethod.GET, "/lookupService/**").permitAll()
                         .anyRequest().denyAll();

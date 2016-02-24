@@ -2,10 +2,10 @@ server:
   context-path: /pcm
   port: 8446
   ssl:
-    key-store: C:/ssl_keystore.keystore
+    key-store: /ssl_keystore.keystore
     key-store-password: changeit
 logging:
-  file: C:/java/MHC_LOGS/pcm/pcm.log
+  file: /java/MHC_LOGS/pcm/pcm.log
   level:
     org.springframework.security: DEBUG
 spring:
