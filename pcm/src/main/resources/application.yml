@@ -2,7 +2,7 @@ server:
   context-path: /pcm
   port: 8446
   ssl:
-    key-store: /ssl_keystore.keystore
+    key-store: /java/MHC_PROPS/ssl_keystore.keystore
     key-store-password: changeit
 logging:
   file: /java/MHC_LOGS/pcm/pcm.log
