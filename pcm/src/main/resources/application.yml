@@ -2,20 +2,24 @@ server:
   context-path: /pcm
   port: 8446
   ssl:
-    key-store: /java/keystore/pcm.keystore
+    key-store: /ssl_keystore.keystore
     key-store-password: changeit
 logging:
   file: /java/MHC_LOGS/pcm/pcm.log
   level:
     org.springframework.security: DEBUG
 spring:
+  profiles:
+    active: docker
   datasource:
-    url: jdbc:mysql://pcmdatabase:3306/pcm?autoReconnect=true
+    url: jdbc:mysql://localhost:3306/pcm?autoReconnect=true
     username: root
     password: admin
     driver-class-name: com.mysql.jdbc.Driver
     validation-query: select 1
-    test-on-borro    test-while-idle: true
+    test-on-borrow: true
+    test-on-return: true
+    test-while-idle: true
     time-between-eviction-runs-millis: 1800000
     num-tests-per-eviction-run: 3
     min-evictable-idle-time-millis: 1800000
@@ -39,6 +43,7 @@ spring:
       mail.smtp.starttls.enable: true
   messages:
     basename: i18n/messages
+
 security:
   basic:
     enabled: false
@@ -55,7 +60,7 @@ security:
                          jfj9Cw2QICsc5+Pwf21fP+hzf+1WSRHbnYv8uanRO0gZ8ekGaghM/2H6gqJbo2nI
                          JwIDAQAB
                          -----END PUBLIC KEY-----
-      user-info-uri: https://uaa:8443/uaa/userinfo
+      user-info-uri: https://localhost:8443/uaa/userinfo
 mhc:
   pcm:
     config:
@@ -77,7 +82,22 @@ mhc:
         echoSignApiKey: SBC5B7XK5A7Y5V
         esignaturePollingServicePollTaskFixedDelayInMilliseconds: 2000
       pls:
-        api: http://pls:8080/pls/providers
+        api: https://localhost:8443/pls/providers
   vss:
     config:
       conceptCodeListPageSize: 20
+
+---
+spring:
+  profiles: docker
+  datasource:
+    url: jdbc:mysql://pcmdatabase.mhc:3306/pcm?autoReconnect=true
+server:
+  ssl:
+    key-store: /java/keystore/mhc.keystore
+    key-store-password: changeit
+mhc.pcm.config.pls.api: https://pls.mhc:8443/pls/providers
+security:
+  oauth2:
+    resource:
+      user-info-uri: https://uaa.mhc:8443/uaa/userinfo
