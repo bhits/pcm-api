@@ -53,6 +53,7 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.GET, "/patients/purposeOfUse", "/patients/medicalSection","/patients/sensitivityPolicy").authenticated()
                         // TODO (BU): remove this permission after VSS is separated
                         .antMatchers(HttpMethod.GET, "/lookupService/**").permitAll()
+                        .antMatchers(HttpMethod.POST, "/lookupService/**").permitAll()
                         .anyRequest().denyAll();
             }
         };

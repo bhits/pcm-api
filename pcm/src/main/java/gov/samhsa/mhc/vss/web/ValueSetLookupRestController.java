@@ -4,6 +4,7 @@ import gov.samhsa.mhc.vss.service.CodeSystemVersionNotFoundException;
 import gov.samhsa.mhc.vss.service.ConceptCodeNotFoundException;
 import gov.samhsa.mhc.vss.service.ValueSetLookupService;
 import gov.samhsa.mhc.vss.service.ValueSetNotFoundException;
+import gov.samhsa.mhc.vss.service.dto.ConceptCodeAndCodeSystemOidDto;
 import gov.samhsa.mhc.vss.service.dto.ValueSetQueryDto;
 import gov.samhsa.mhc.vss.service.dto.ValueSetQueryListDto;
 import org.slf4j.Logger;
@@ -12,9 +13,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 public class ValueSetLookupRestController {
@@ -63,6 +67,13 @@ public class ValueSetLookupRestController {
         }
 
         return valueSetQueryDtoList;
+    }
+
+    @RequestMapping(value = "/lookupService/valueSetCategories", method = RequestMethod.POST)
+    public List<ValueSetQueryDto> lookupValueSetCategories(@Valid @RequestBody List<ConceptCodeAndCodeSystemOidDto> conceptCodeAndCodeSystemOidDtos) {
+        return conceptCodeAndCodeSystemOidDtos.stream()
+                .map(dto -> getValueSetQueryDto(dto.getConceptCode(), dto.getCodeSystemOid()))
+                .collect(toList());
     }
 
     /**
