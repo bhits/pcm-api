@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Open Behavioral Health Information Technology Architecture (OBHITA.org)
- * <p/>
+ * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * * Redistributions of source code must retain the above copyright
@@ -11,7 +11,7 @@
  * * Neither the name of the <organization> nor the
  * names of its contributors may be used to endorse or promote products
  * derived from this software without specific prior written permission.
- * <p/>
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -42,22 +42,23 @@ import gov.samhsa.mhc.pcm.service.exception.*;
 import gov.samhsa.mhc.pcm.service.patient.MrnService;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import gov.samhsa.mhc.pcm.service.reference.ClinicalDocumentTypeCodeService;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The Class ClinicalDocumentController.
@@ -195,37 +196,30 @@ public class ClinicalDocumentRestController {
      * Download.
      */
     @RequestMapping(value = "clinicaldocuments/{documentId}", method = RequestMethod.GET)
-    public void downloadClinicalDocument(Principal principal,
-                                         @PathVariable("documentId") Long documentId,
-                                         HttpServletRequest request,
-                                         HttpServletResponse response) {
+    public Map<String, String> downloadClinicalDocument(Principal principal,
+                                                        @PathVariable("documentId") Long documentId,
+                                                        HttpServletRequest request,
+                                                        HttpServletResponse response) {
         ClinicalDocumentDto clinicalDocumentDto = clinicalDocumentService
                 .findClinicalDocumentDto(principal.getName(), documentId);
+        Map<String, String> map = new HashMap<String, String>();
         if (clinicalDocumentService
                 .isDocumentBelongsToThisUser(principal.getName(), clinicalDocumentDto)) {
             try {
-                response.setHeader(
-                        "Content-Disposition",
-                        "attachment;filename=\""
-                                + clinicalDocumentDto.getFilename() + "\"");
-                response.setHeader("Content-Type", "application/"
-                        + clinicalDocumentDto.getContentType());
-                OutputStream out = response.getOutputStream();
-                response.setContentType(clinicalDocumentDto.getContentType());
-                IOUtils.copy(
-                        new ByteArrayInputStream(clinicalDocumentDto
-                                .getContent()), out);
-                out.flush();
-                out.close();
+                byte[] fileContent = clinicalDocumentDto.getContent();
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_XML);
+                map.put("data", new String(fileContent));
+
                 eventService
                         .raiseSecurityEvent(new FileDownloadedEvent(request
                                 .getRemoteAddr(), principal.getName(), "Clinical_Document_"
                                 + documentId));
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                throw new InternalServerErrorException("Resource Not Found");
             }
         }
+        return map;
     }
 
     @RequestMapping(value = "clinicaldocuments/ccd/{documentId}", method = RequestMethod.GET)
