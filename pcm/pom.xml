@@ -243,6 +243,9 @@
                 <configuration>
                     <imageName>${project.artifactId}</imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
+                    <buildArgs>
+                        <finalName>${project.build.finalName}.jar</finalName>
+                    </buildArgs>
                     <resources>
                         <resource>
                             <targetPath>/</targetPath>

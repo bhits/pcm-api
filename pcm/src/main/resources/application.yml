@@ -9,8 +9,6 @@ logging:
   level:
     org.springframework.security: DEBUG
 spring:
-  profiles:
-    active: docker
   datasource:
     url: jdbc:mysql://localhost:3306/pcm?autoReconnect=true
     username: root
