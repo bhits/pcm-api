@@ -89,7 +89,7 @@ mhc:
 spring:
   profiles: docker
   datasource:
-    url: jdbc:mysql://pcmdatabase.mhc:3306/pcm?autoReconnect=true
+    url: jdbc:mysql://pcm-db.mhc:3306/pcm?autoReconnect=true
 server:
   ssl:
     key-store: /java/keystore/mhc.keystore
