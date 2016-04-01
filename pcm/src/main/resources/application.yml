@@ -112,13 +112,15 @@ server:
 spring:
   profiles: docker
   datasource:
-    url: jdbc:mysql://pcm-db.mhc:3306/pcm?autoReconnect=true
-server:
-  ssl:
-    key-store: /java/keystore/mhc.keystore
-    key-store-password: changeit
-mhc.pcm.config.pls.api: https://pls.mhc:8443/pls/providers
+    url: jdbc:mysql://pcm-db.mhc.com:3306/pcm?autoReconnect=true
+mhc.pcm.config.pls.api: https://pls.mhc.com:8443/pls/providers
 security:
   oauth2:
     resource:
-      user-info-uri: https://uaa.mhc:8443/uaa/userinfo
+      user-info-uri: https://uaa.mhc.com:8443/uaa/userinfo
+eureka:
+  client:
+    service-url:
+      defaultZone: https://discovery-server.mhc.com:8761/eureka/
+  instance:
+    prefer-ip-address: true
