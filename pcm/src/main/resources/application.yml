@@ -113,7 +113,9 @@ spring:
   profiles: docker
   datasource:
     url: jdbc:mysql://pcm-db.mhc.com:3306/pcm?autoReconnect=true
-mhc.pcm.config.pls.api: https://pls.mhc.com:8443/pls/providers
+mhc.pcm.config:
+  pls.api: https://pls.mhc.com:8443/pls/providers
+  clamd.host: clamd.mhc.com
 security:
   oauth2:
     resource:
