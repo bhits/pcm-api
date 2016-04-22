@@ -254,7 +254,7 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>${docker.maven.version}</version>
                 <configuration>
-                    <imageName>${project.artifactId}</imageName>
+                    <imageName>bhits/${project.artifactId}</imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
                     <buildArgs>
                         <finalName>${project.build.finalName}.jar</finalName>
