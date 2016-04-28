@@ -33,7 +33,6 @@ import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
 import gov.samhsa.mhc.pcm.service.dto.CCDDto;
 import gov.samhsa.mhc.pcm.service.dto.ClinicalDocumentDto;
 import gov.samhsa.mhc.pcm.service.dto.LookupDto;
-import gov.samhsa.mhc.pcm.service.dto.PatientProfileDto;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -297,19 +296,10 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
         return clinicalDocumentRepository.findByPatientId(patientId);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * gov.samhsa.consent2share.service.clinicaldata.ClinicalDocumentService
-     * #findDtoByPatientDto
-     * (gov.samhsa.consent2share.service.dto.PatientProfileDto)
-     */
     @Override
-    public List<ClinicalDocumentDto> findDtoByPatientDto(
-            PatientProfileDto patientDto) {
-        Patient patient = patientRepository.findByUsername(patientDto
-                .getUsername());
+    public List<ClinicalDocumentDto> findClinicalDocumentDtoByPatientId(
+            Long patientId) {
+        Patient patient = patientRepository.findOne(patientId);
         List<ClinicalDocumentDto> dtos = findDtoByPatient(patient);
         for (ClinicalDocumentDto dto : dtos) {
             if (dto.getClinicalDocumentTypeCode() == null) {

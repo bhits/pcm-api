@@ -30,12 +30,11 @@ import gov.samhsa.mhc.pcm.domain.patient.PatientRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 /**
  * The Class MrnServiceImpl.
  */
-@Service
+//@Service // disabled
 public class MrnServiceImpl implements MrnService {
 
     /**

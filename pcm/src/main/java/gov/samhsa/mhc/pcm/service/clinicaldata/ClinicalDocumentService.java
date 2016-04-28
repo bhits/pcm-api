@@ -29,7 +29,6 @@ import gov.samhsa.mhc.pcm.domain.clinicaldata.ClinicalDocument;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.service.dto.CCDDto;
 import gov.samhsa.mhc.pcm.service.dto.ClinicalDocumentDto;
-import gov.samhsa.mhc.pcm.service.dto.PatientProfileDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -129,10 +128,10 @@ public interface ClinicalDocumentService {
     /**
      * Find dto by patient dto.
      *
-     * @param patientDto the patient dto
+     * @param patientId the patient id
      * @return the list
      */
-    public abstract List<ClinicalDocumentDto> findDtoByPatientDto(PatientProfileDto patientDto);
+    public abstract List<ClinicalDocumentDto> findClinicalDocumentDtoByPatientId(Long patientId);
 
 
     /**

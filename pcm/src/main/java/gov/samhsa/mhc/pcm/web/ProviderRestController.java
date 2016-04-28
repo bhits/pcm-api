@@ -36,7 +36,6 @@ import gov.samhsa.mhc.pcm.service.exception.CannotDeleteProviderException;
 import gov.samhsa.mhc.pcm.service.exception.CannotDeserializeProviderResultException;
 import gov.samhsa.mhc.pcm.service.exception.ProviderAlreadyInUseException;
 import gov.samhsa.mhc.pcm.service.exception.ProviderNotFoundException;
-import gov.samhsa.mhc.pcm.service.patient.MrnService;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import gov.samhsa.mhc.pcm.service.provider.HashMapResultToProviderDtoConverter;
 import gov.samhsa.mhc.pcm.service.provider.IndividualProviderService;
@@ -103,19 +102,16 @@ public class ProviderRestController {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private MrnService mrnService;
-
     /**
      * List providers.
      *
      * @return the sets the
      */
     @RequestMapping(value = "providers", method = RequestMethod.GET)
-    public Set<ProviderDto> listProviders(Principal principal) {
+    public Set<ProviderDto> listProviders() {
         // FIXME: remove this line when patient creation concept in PCM is finalized
-        patientService.createNewPatientWithOAuth2AuthenticationIfNotExists(principal, mrnService.generateMrn());
-        Set<ProviderDto> providerDtos = patientService.findProvidersByUsername(principal.getName());
+        final Long patientId = patientService.createNewPatientWithOAuth2AuthenticationIfNotExists();
+        Set<ProviderDto> providerDtos = patientService.findProvidersByPatientId(patientId);
         return providerDtos;
     }
 

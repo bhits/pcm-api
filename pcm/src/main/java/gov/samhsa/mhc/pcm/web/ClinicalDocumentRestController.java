@@ -37,9 +37,7 @@ import gov.samhsa.mhc.pcm.service.clinicaldata.ClinicalDocumentService;
 import gov.samhsa.mhc.pcm.service.dto.CCDDto;
 import gov.samhsa.mhc.pcm.service.dto.ClinicalDocumentDto;
 import gov.samhsa.mhc.pcm.service.dto.LookupDto;
-import gov.samhsa.mhc.pcm.service.dto.PatientProfileDto;
 import gov.samhsa.mhc.pcm.service.exception.*;
-import gov.samhsa.mhc.pcm.service.patient.MrnService;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import gov.samhsa.mhc.pcm.service.reference.ClinicalDocumentTypeCodeService;
 import org.slf4j.Logger;
@@ -103,20 +101,15 @@ public class ClinicalDocumentRestController {
      */
     private XmlValidation xmlValidator;
 
-    @Autowired
-    private MrnService mrnService;
-
     /**
      * List clinical documents.
      */
     @RequestMapping(value = "clinicaldocuments", method = RequestMethod.GET)
-    public List<ClinicalDocumentDto> listClinicalDocuments(Principal principal) {
+    public List<ClinicalDocumentDto> listClinicalDocuments() {
         // FIXME: remove this line when patient creation concept in PCM is finalized
-        patientService.createNewPatientWithOAuth2AuthenticationIfNotExists(principal, mrnService.generateMrn());
-        PatientProfileDto patientDto = patientService
-                .findPatientProfileByUsername(principal.getName());
+        final Long patientId = patientService.createNewPatientWithOAuth2AuthenticationIfNotExists();
         List<ClinicalDocumentDto> clinicaldocumentDtos = clinicalDocumentService
-                .findDtoByPatientDto(patientDto);
+                .findClinicalDocumentDtoByPatientId(patientId);
         return clinicaldocumentDtos;
     }
 
@@ -253,5 +246,4 @@ public class ClinicalDocumentRestController {
                 .getResourceAsStream(C32_CDA_XSD_PATH + C32_CDA_XSD_NAME),
                 C32_CDA_XSD_PATH);
     }
-
 }

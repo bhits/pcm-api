@@ -1,5 +1,6 @@
 package gov.samhsa.mhc.pcm.service.clinicaldata;
 
+import gov.samhsa.mhc.pcm.domain.clinicaldata.ClinicalDocument;
 import gov.samhsa.mhc.pcm.domain.clinicaldata.ClinicalDocumentRepository;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.domain.patient.PatientRepository;
@@ -166,15 +167,27 @@ public class ClinicalDocumentServiceImplTest {
     }
 
     @Test
-    public void testFindDtoByPatientDto() {
+    public void testFindClinicalDocumentDtoByPatientId() {
+        // Arrange
         PatientProfileDto patientDto = mock(PatientProfileDto.class);
         Patient patient = mock(Patient.class);
         ClinicalDocumentDto clinicalDocumentDto = mock(ClinicalDocumentDto.class);
         List<ClinicalDocumentDto> dtos = Arrays.asList(clinicalDocumentDto);
+        ClinicalDocument clinicalDocument = mock(ClinicalDocument.class);
+        List<ClinicalDocument> clinicalDocuments = Arrays.asList(clinicalDocument);
         when(patientDto.getUsername()).thenReturn("user1");
+        Long patientId = 10L;
+        when(patientDto.getId()).thenReturn(patientId);
         when(patientRepository.findByUsername("user1")).thenReturn(patient);
+        when(patientRepository.findOne(patientId)).thenReturn(patient);
+        when(clinicalDocumentRepository.findByPatientId(patientId)).thenReturn(clinicalDocuments);
         doReturn(dtos).when(sut).findDtoByPatient(patient);
-        assertEquals(dtos, sut.findDtoByPatientDto(patientDto));
+
+        // Act
+        final List<ClinicalDocumentDto> response = sut.findClinicalDocumentDtoByPatientId(patientId);
+
+        // Assert
+        assertEquals(dtos, response);
     }
 
 }

@@ -28,7 +28,6 @@ package gov.samhsa.mhc.pcm.service.patient;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.service.dto.*;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Set;
 
@@ -47,8 +46,7 @@ public interface PatientService {
     /**
      * Find patient.
      *
-     * @param id
-     *            the id
+     * @param id the id
      * @return the patient profile dto
      */
     PatientProfileDto findPatient(Long id);
@@ -56,8 +54,7 @@ public interface PatientService {
     /**
      * Find id by username.
      *
-     * @param username
-     *            the username
+     * @param username the username
      * @return the long
      */
     Long findIdByUsername(String username);
@@ -65,8 +62,7 @@ public interface PatientService {
     /**
      * Find username by id.
      *
-     * @param id
-     *            the id
+     * @param id the id
      * @return the string
      */
     String findUsernameById(long id);
@@ -74,8 +70,7 @@ public interface PatientService {
     /**
      * Find patient email by username.
      *
-     * @param username
-     *            the username
+     * @param username the username
      * @return the string
      */
     String findPatientEmailByUsername(String username);
@@ -83,17 +78,17 @@ public interface PatientService {
     /**
      * Find patient profile by username.
      *
-     * @param username
-     *            the username
+     * @param username the username
      * @return the patient profile dto
      */
     PatientProfileDto findPatientProfileByUsername(String username);
 
+    PatientProfileDto findPatientProfileByPatientId(Long patientId);
+
     /**
      * Find patient connection by username.
      *
-     * @param username
-     *            the username
+     * @param username the username
      * @return the patient connection dto
      */
     PatientConnectionDto findPatientConnectionByUsername(String username);
@@ -101,8 +96,7 @@ public interface PatientService {
     /**
      * Find patient connection by patient.
      *
-     * @param patient
-     *            the patient
+     * @param patient the patient
      * @return the patient connection dto
      */
     PatientConnectionDto findPatientConnectionByPatient(Patient patient);
@@ -111,8 +105,7 @@ public interface PatientService {
     /**
      * Find patient connection by username.
      *
-     * @param username
-     *            the username
+     * @param username the username
      * @return the patient connection dto
      */
     Set<ProviderDto> findProvidersByUsername(String username);
@@ -120,17 +113,17 @@ public interface PatientService {
     /**
      * Find patient connection by patient.
      *
-     * @param patient
-     *            the patient
+     * @param patient the patient
      * @return the patient connection dto
      */
     Set<ProviderDto> findProvidersByPatient(Patient patient);
 
+    Set<ProviderDto> findProvidersByPatientId(Long patientId);
+
     /**
      * Find patient connection by username.
      *
-     * @param id
-     *            the id
+     * @param id the id
      * @return the patient connection dto
      */
     PatientConnectionDto findPatientConnectionById(long id);
@@ -138,10 +131,8 @@ public interface PatientService {
     /**
      * Find patient entries.
      *
-     * @param pageNumber
-     *            the page number
-     * @param pageSzie
-     *            the page szie
+     * @param pageNumber the page number
+     * @param pageSzie   the page szie
      * @return the list
      */
     List<PatientProfileDto> findPatientEntries(int pageNumber, int pageSzie);
@@ -149,8 +140,7 @@ public interface PatientService {
     /**
      * Save patient.
      *
-     * @param patientProfileDto
-     *            the patient profile dto
+     * @param patientProfileDto the patient profile dto
      * @return the patient profile dto
      */
     PatientProfileDto savePatient(PatientProfileDto patientProfileDto);
@@ -158,16 +148,14 @@ public interface PatientService {
     /**
      * Update patient.
      *
-     * @param patientDto
-     *            the patient dto
+     * @param patientDto the patient dto
      */
     void updatePatient(PatientProfileDto patientDto);
 
     /**
      * Find add consent individual provider dto by username.
      *
-     * @param username
-     *            the username
+     * @param username the username
      * @return the array list
      */
     List<AddConsentIndividualProviderDto> findAddConsentIndividualProviderDtoByUsername(
@@ -176,8 +164,7 @@ public interface PatientService {
     /**
      * Find add consent organizational provider dto by username.
      *
-     * @param username
-     *            the username
+     * @param username the username
      * @return the array list
      */
     List<AddConsentOrganizationalProviderDto> findAddConsentOrganizationalProviderDtoByUsername(
@@ -186,8 +173,7 @@ public interface PatientService {
     /**
      * Find add consent individual provider dto by patient id.
      *
-     * @param pateintId
-     *            the pateint id
+     * @param pateintId the pateint id
      * @return the list
      */
     List<AddConsentIndividualProviderDto> findAddConsentIndividualProviderDtoByPatientId(
@@ -196,8 +182,7 @@ public interface PatientService {
     /**
      * Find add consent organizational provider dto by username.
      *
-     * @param pateintId
-     *            the pateint id
+     * @param pateintId the pateint id
      * @return the array list
      */
     List<AddConsentOrganizationalProviderDto> findAddConsentOrganizationalProviderDtoByPatientId(
@@ -205,9 +190,9 @@ public interface PatientService {
 
     /**
      * Checks if is legal rep for current user.
-     * @param username username
-     * @param legalRepId
-     *            the legal rep id
+     *
+     * @param username   username
+     * @param legalRepId the legal rep id
      * @return true, if is legal rep for current user
      */
     boolean isLegalRepForCurrentUser(String username, Long legalRepId);
@@ -215,8 +200,7 @@ public interface PatientService {
     /**
      * Find patient by first name and last name.
      *
-     * @param tokens
-     *            the tokens
+     * @param tokens the tokens
      * @return the patient profile dto
      */
     public List<PatientAdminDto> findAllPatientByFirstNameAndLastName(
@@ -225,8 +209,7 @@ public interface PatientService {
     /**
      * Find recent patient dtos by id.
      *
-     * @param ids
-     *            the ids
+     * @param ids the ids
      * @return the list
      */
     public List<RecentPatientDto> findRecentPatientDtosById(List<String> ids);
@@ -234,12 +217,11 @@ public interface PatientService {
     /**
      * Find by username.
      *
-     * @param username
-     *            the username
+     * @param username the username
      * @return the patient profile dto
      */
     PatientProfileDto findByUsername(String username);
 
     // FIXME: remove this block when patient creation concept in PCM is finalized
-    void createNewPatientWithOAuth2AuthenticationIfNotExists(Principal principal, String mrn);
+    Long createNewPatientWithOAuth2AuthenticationIfNotExists();
 }

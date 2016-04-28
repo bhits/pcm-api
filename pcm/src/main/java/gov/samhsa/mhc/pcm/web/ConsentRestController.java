@@ -33,7 +33,6 @@ import gov.samhsa.mhc.pcm.service.consent.ConsentService;
 import gov.samhsa.mhc.pcm.service.dto.*;
 import gov.samhsa.mhc.pcm.service.exception.*;
 import gov.samhsa.mhc.pcm.service.notification.NotificationService;
-import gov.samhsa.mhc.pcm.service.patient.MrnService;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import gov.samhsa.mhc.pcm.service.reference.PurposeOfUseCodeService;
 import gov.samhsa.mhc.vss.service.MedicalSectionService;
@@ -45,15 +44,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
 
@@ -104,9 +100,6 @@ public class ConsentRestController {
     private ValueSetCategoryService valueSetCategoryService;
 
     @Autowired
-    private MrnService mrnService;
-
-    @Autowired
     private EventService eventService;
 
     private String revokationType = "EMERGENCY ONLY";
@@ -115,11 +108,11 @@ public class ConsentRestController {
     private ResourceServerProperties resourceServerProperties;
 
     @RequestMapping(value = "consents/pageNumber/{pageNumber}")
-    public ConsentsListDto listConsents(Principal principal, @PathVariable("pageNumber") String pageNumber) {
+    public ConsentsListDto listConsents(@PathVariable("pageNumber") String pageNumber) {
         // FIXME: remove this line when patient creation concept in PCM is finalized
-        patientService.createNewPatientWithOAuth2AuthenticationIfNotExists(principal, mrnService.generateMrn());
+        final Long patientId = patientService.createNewPatientWithOAuth2AuthenticationIfNotExists();
         ConsentsListDto consentsListDto = new ConsentsListDto(consentService
-                .findAllConsentsDtoByPatientAndPage(patientService.findIdByUsername(principal.getName()), pageNumber));
+                .findAllConsentsDtoByPatientAndPage(patientId, pageNumber));
         // using directId
         // accessReferenceMapper.setupAccessReferenceMap(consentsListDto.getConsentList());
         return consentsListDto;
@@ -408,8 +401,7 @@ public class ConsentRestController {
     }
 
     @RequestMapping(value = "consents/signConsent/{consentId}", method = RequestMethod.GET)
-    public Map<String, String> signConsent(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException
-    {
+    public Map<String, String> signConsent(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
                 && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
@@ -452,12 +444,10 @@ public class ConsentRestController {
 
 
     @RequestMapping(value = "consents/exportConsentDirective/{consentId}", method = RequestMethod.GET)
-    public Map exportConsentDirective(HttpServletRequest request, Principal principal, @PathVariable("consentId") Long consentId)
-    {
+    public Map exportConsentDirective(HttpServletRequest request, Principal principal, @PathVariable("consentId") Long consentId) {
         final Long patientId = patientService.findIdByUsername(principal.getName());
         if (consentService
-                .isConsentBelongToThisUser(consentId, patientId))
-        {
+                .isConsentBelongToThisUser(consentId, patientId)) {
             final byte[] consentDirective = consentService.getConsentDirective(consentId);
 
             eventService.raiseSecurityEvent(new FileDownloadedEvent(
@@ -471,15 +461,13 @@ public class ConsentRestController {
             map.put("data", new String(consentDirective));
             return map;
             //return new ResponseEntity<byte[]>(consentDirective,headers, HttpStatus.OK);
-        }
-        else
-        throw new InternalServerErrorException("Resource Not Found");
+        } else
+            throw new InternalServerErrorException("Resource Not Found");
 
     }
 
     @RequestMapping(value = "consents/download/{docType}/{consentId}", method = RequestMethod.GET, produces = "application/pdf")
-    public byte[] downloadConsentPdfFile(HttpServletRequest request, Principal principal, @PathVariable("consentId") Long consentId, @PathVariable("docType") String docType) throws IOException
-    {
+    public byte[] downloadConsentPdfFile(HttpServletRequest request, Principal principal, @PathVariable("consentId") Long consentId, @PathVariable("docType") String docType) throws IOException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
         if (consentService
                 .isConsentBelongToThisUser(consentId, patientId)) {
@@ -488,7 +476,7 @@ public class ConsentRestController {
                     .getRemoteAddr(), "User_" + principal.getName(),
                     "Consent_" + consentId));
             return pdfDto.getContent();
-        }  else
+        } else
             throw new InternalServerErrorException("Resource Not Found");
     }
 

@@ -34,8 +34,9 @@ import gov.samhsa.mhc.pcm.domain.patient.PatientLegalRepresentativeAssociationRe
 import gov.samhsa.mhc.pcm.domain.patient.PatientRepository;
 import gov.samhsa.mhc.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.mhc.pcm.domain.provider.OrganizationalProvider;
+import gov.samhsa.mhc.pcm.infrastructure.PhrService;
+import gov.samhsa.mhc.pcm.infrastructure.dto.PatientDto;
 import gov.samhsa.mhc.pcm.service.dto.*;
-import gov.samhsa.mhc.pcm.service.userinfo.OpenIDConnectUserInfoService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +47,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
-import java.security.Principal;
 import java.util.*;
 
 /**
@@ -97,7 +97,7 @@ public class PatientServiceImpl implements PatientService {
     private EmailSender emailSender;
 
     @Autowired
-    private OpenIDConnectUserInfoService openIDConnectUserInfoService;
+    private PhrService phrService;
 
     /*
      * (non-Javadoc)
@@ -221,6 +221,14 @@ public class PatientServiceImpl implements PatientService {
         PatientProfileDto patientDto = modelMapper.map(patient,
                 PatientProfileDto.class);
 
+        return patientDto;
+    }
+
+    @Override
+    public PatientProfileDto findPatientProfileByPatientId(Long patientId) {
+        Patient patient = patientRepository.findOne(patientId);
+        PatientProfileDto patientDto = modelMapper.map(patient,
+                PatientProfileDto.class);
         return patientDto;
     }
 
@@ -430,6 +438,12 @@ public class PatientServiceImpl implements PatientService {
             }
 
         return providerDtos;
+    }
+
+    @Override
+    public Set<ProviderDto> findProvidersByPatientId(Long patientId) {
+        Patient patient = patientRepository.findOne(patientId);
+        return findProvidersByPatient(patient);
     }
 
     /*
@@ -654,18 +668,19 @@ public class PatientServiceImpl implements PatientService {
     // FIXME: remove this block when patient creation concept in PCM is finalized
     @Override
     @Transactional
-    public void createNewPatientWithOAuth2AuthenticationIfNotExists(Principal principal, String mrn) {
-        final String username = principal.getName();
-        if (patientRepository.findByUsername(username) == null) {
-            final OpenIDConnectUserInfoDto userInfo = openIDConnectUserInfoService.getUserInfo(principal);
+    public Long createNewPatientWithOAuth2AuthenticationIfNotExists() {
+        final PatientDto patientProfile = phrService.getPatientProfile();
+        if (!patientRepository.findOneAsOptional(patientProfile.getId()).isPresent()) {
             Patient patient = new Patient();
-            patient.setUsername(userInfo.getUserName());
-            patient.setFirstName(userInfo.getGivenName());
-            patient.setLastName(userInfo.getFamilyName());
-            patient.setEmail(userInfo.getEmail());
-            patient.setMedicalRecordNumber(mrn);
+            patient.setId(patientProfile.getId());
+            patient.setFirstName(patientProfile.getFirstName());
+            patient.setLastName(patientProfile.getLastName());
+            patient.setMedicalRecordNumber(patientProfile.getMedicalRecordNumber());
+            patient.setEmail(patientProfile.getEmail());
+            patient.setUsername(patientProfile.getEmail());
             patientRepository.save(patient);
         }
+        return patientProfile.getId();
     }
 
     /**
