@@ -173,6 +173,8 @@ public class ValueSetCategoryServiceImpl implements ValueSetCategoryService {
             sensitivityPolicyDtoItem.setDisplayName(valueSetCategory.getName());
             sensitivityPolicyDtoItem.setDescription(valueSetCategory
                     .getDescription());
+            sensitivityPolicyDtoItem.setFederal(valueSetCategory.isFederal());
+            sensitivityPolicyDtoItem.setDisplayOrder(valueSetCategory.getDisplayOrder());
             sensitivityPolicyDto.add(sensitivityPolicyDtoItem);
         }
         return sensitivityPolicyDto;

@@ -170,17 +170,25 @@ public class ValueSetCategoryServiceImplTest {
         String vscMockCode = "vscMockCode";
         String vscMockName = "vscMockName";
         String vscMockDescription = "vscMockDescription";
+        boolean vscMockIsFederal= true;
+        Long vscMockDisplayOrder = 1l;
         String vscMock2Code = "vscMock2Code";
         String vscMock2Name = "vscMock2Name";
         String vscMock2Description = "vscMock2Description";
+        boolean vscMock2IsFederal= true;
+        Long vscMock2DisplayOrder = 2l;
         ValueSetCategory vscMock = mock(ValueSetCategory.class);
         ValueSetCategory vscMock2 = mock(ValueSetCategory.class);
         when(vscMock.getCode()).thenReturn(vscMockCode);
         when(vscMock.getName()).thenReturn(vscMockName);
         when(vscMock.getDescription()).thenReturn(vscMockDescription);
+        when(vscMock.isFederal()).thenReturn(vscMockIsFederal);
+        when(vscMock.getDisplayOrder()).thenReturn(vscMockDisplayOrder);
         when(vscMock2.getCode()).thenReturn(vscMock2Code);
         when(vscMock2.getName()).thenReturn(vscMock2Name);
         when(vscMock2.getDescription()).thenReturn(vscMock2Description);
+        when(vscMock2.isFederal()).thenReturn(vscMock2IsFederal);
+        when(vscMock2.getDisplayOrder()).thenReturn(vscMock2DisplayOrder);
         List<ValueSetCategory> valueSetCategoryListMock = new ArrayList<ValueSetCategory>();
         valueSetCategoryListMock.add(vscMock);
         valueSetCategoryListMock.add(vscMock2);
@@ -197,9 +205,13 @@ public class ValueSetCategoryServiceImplTest {
         assertEquals(vscMockName, sensitivityPolicyDto.get(0).getDisplayName());
         assertEquals(vscMockDescription, sensitivityPolicyDto.get(0)
                 .getDescription());
+        assertEquals(vscMockIsFederal,sensitivityPolicyDto.get(0).isFederal());
+        assertEquals(vscMockDisplayOrder,sensitivityPolicyDto.get(0).getDisplayOrder());
         assertEquals(vscMock2Code, sensitivityPolicyDto.get(1).getCode());
         assertEquals(vscMock2Name, sensitivityPolicyDto.get(1).getDisplayName());
         assertEquals(vscMock2Description, sensitivityPolicyDto.get(1)
                 .getDescription());
+        assertEquals(vscMock2IsFederal,sensitivityPolicyDto.get(1).isFederal());
+        assertEquals(vscMock2DisplayOrder,sensitivityPolicyDto.get(1).getDisplayOrder());
     }
 }

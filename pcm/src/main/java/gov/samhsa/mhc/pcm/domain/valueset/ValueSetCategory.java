@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Open Behavioral Health Information Technology Architecture (OBHITA.org)
- *   
+ *
  *   Redistribution and use in source and binary forms, with or without
  *   modification, are permitted provided that the following conditions are met:
  *       * Redistributions of source code must retain the above copyright
@@ -11,7 +11,7 @@
  *       * Neither the name of the <organization> nor the
  *         names of its contributors may be used to endorse or promote products
  *         derived from this software without specific prior written permission.
- *   
+ *
  *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  *   ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  *   WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,18 +25,12 @@
  ******************************************************************************/
 package gov.samhsa.mhc.pcm.domain.valueset;
 
-import java.util.List;
-
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Audited
@@ -50,6 +44,12 @@ public class ValueSetCategory extends AbstractNode {
 
 	@Column(name = "description", length = 5000)
 	private String description;
+
+	@Column(name = "is_federal")
+	private boolean isFederal;
+
+	@Column(name = "display_order")
+	private Long displayOrder;
 
 	/*
 	 * ValueSet has Composition Relation with ValueSetCategory If
@@ -73,7 +73,7 @@ public class ValueSetCategory extends AbstractNode {
 
 		/**
 		 * Creates a new Builder instance.
-		 * 
+		 *
 		 * @param code
 		 *            The code of the created ValueSetCategory object.
 		 * @param name
@@ -90,7 +90,7 @@ public class ValueSetCategory extends AbstractNode {
 
 		/**
 		 * Builds the new CodeSystem object.
-		 * 
+		 *
 		 * @return The created CodeSystem object.
 		 */
 		public ValueSetCategory build() {
@@ -106,7 +106,7 @@ public class ValueSetCategory extends AbstractNode {
 
 	/**
 	 * Creates a new Builder instance.
-	 * 
+	 *
 	 * @param code
 	 *            The code of the created ValueSetCategory object.
 	 * @param name
@@ -120,7 +120,7 @@ public class ValueSetCategory extends AbstractNode {
 
 	/**
 	 * Updates a ValueSetCategory instance.
-	 * 
+	 *
 	 * @param code
 	 *            The code of the created ValueSetCategory object.
 	 * @param name
@@ -143,6 +143,22 @@ public class ValueSetCategory extends AbstractNode {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public boolean isFederal() {
+		return isFederal;
+	}
+
+	public void setFederal(boolean federal) {
+		isFederal = federal;
+	}
+
+	public Long getDisplayOrder() {
+		return displayOrder;
+	}
+
+	public void setDisplayOrder(Long displayOrder) {
+		this.displayOrder = displayOrder;
 	}
 
 	public Long getId() {
