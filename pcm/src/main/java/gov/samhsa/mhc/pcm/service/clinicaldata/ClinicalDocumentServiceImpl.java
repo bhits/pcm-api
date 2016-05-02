@@ -168,8 +168,13 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
      */
     @Override
     public void deleteClinicalDocument(ClinicalDocumentDto clinicalDocumentDto) {
-        ClinicalDocument clinicalDocument = getClinicalDocumenFromDto(clinicalDocumentDto);
-        clinicalDocumentRepository.delete(clinicalDocument);
+        ClinicalDocument clinicalDocument = clinicalDocumentRepository.findClinicalDocumentById(Long.parseLong(clinicalDocumentDto.getId()));
+        if(clinicalDocument != null){
+            clinicalDocumentRepository.delete(clinicalDocument);
+        }else {
+            logger.error("Cannot get document to be deleted by id.");
+        }
+
     }
 
     /*

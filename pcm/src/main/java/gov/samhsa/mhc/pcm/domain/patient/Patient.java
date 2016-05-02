@@ -164,7 +164,7 @@ public class Patient {
     private Set<OrganizationalProvider> organizationalProviders = new HashSet<OrganizationalProvider>();
 
     /** The clinical documents. */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "patient")
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "patient")
     private Set<ClinicalDocument> clinicalDocuments = new HashSet<ClinicalDocument>();
 
     /** The problems. */

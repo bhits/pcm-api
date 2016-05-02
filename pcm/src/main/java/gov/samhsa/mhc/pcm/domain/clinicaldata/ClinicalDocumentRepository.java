@@ -45,5 +45,7 @@ public interface ClinicalDocumentRepository extends
 	 * @param id the id
 	 * @return the list
 	 */
-	public abstract List<ClinicalDocument> findByPatientId(long id);
+	List<ClinicalDocument> findByPatientId(long id);
+
+	ClinicalDocument findClinicalDocumentById(Long id);
 }
