@@ -179,7 +179,7 @@ public class ClinicalDocumentRestController {
 
         if (clinicalDocumentService
                 .isDocumentBelongsToThisUser(principal.getName(), clinicalDocumentDto)) {
-            clinicalDocumentService.deleteClinicalDocument(clinicalDocumentDto);
+            clinicalDocumentService.deleteClinicalDocument(documentId);
         } else {
             throw new InvalidDeleteDocumentRequestException("Error: Unable to delete this document because it is not belong to user.");
         }

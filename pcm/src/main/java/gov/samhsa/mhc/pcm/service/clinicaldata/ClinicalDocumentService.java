@@ -49,9 +49,9 @@ public interface ClinicalDocumentService {
     /**
      * Delete clinical document.
      *
-     * @param clinicalDocumentDto the clinical document dto
+     * @param documentId the clinical document id
      */
-    public abstract void deleteClinicalDocument(ClinicalDocumentDto clinicalDocumentDto);
+    public abstract void deleteClinicalDocument(Long documentId);
 
 
     /**

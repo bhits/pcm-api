@@ -167,8 +167,8 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
      * (gov.samhsa.consent2share.service.dto.ClinicalDocumentDto)
      */
     @Override
-    public void deleteClinicalDocument(ClinicalDocumentDto clinicalDocumentDto) {
-        ClinicalDocument clinicalDocument = clinicalDocumentRepository.findClinicalDocumentById(Long.parseLong(clinicalDocumentDto.getId()));
+    public void deleteClinicalDocument(Long documentId) {
+        ClinicalDocument clinicalDocument = clinicalDocumentRepository.findClinicalDocumentById(documentId);
         if(clinicalDocument != null){
             clinicalDocumentRepository.delete(clinicalDocument);
         }else {
