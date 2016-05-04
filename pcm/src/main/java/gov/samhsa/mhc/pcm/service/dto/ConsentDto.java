@@ -114,11 +114,6 @@ public class ConsentDto {
     private Set<String> doNotShareClinicalDocumentTypeCodes;
 
     /**
-     * The do not share clinical document section type codes.
-     */
-    private Set<String> doNotShareClinicalDocumentSectionTypeCodes;
-
-    /**
      * The do not share sensitivity policy codes.
      */
     private Set<String> doNotShareSensitivityPolicyCodes;
@@ -398,24 +393,6 @@ public class ConsentDto {
         this.doNotShareClinicalDocumentTypeCodes = doNotShareClinicalDocumentTypeCodes;
     }
 
-    /**
-     * Gets the do not share clinical document section type codes.
-     *
-     * @return the do not share clinical document section type codes
-     */
-    public Set<String> getDoNotShareClinicalDocumentSectionTypeCodes() {
-        return doNotShareClinicalDocumentSectionTypeCodes;
-    }
-
-    /**
-     * Sets the do not share clinical document section type codes.
-     *
-     * @param doNotShareClinicalDocumentSectionTypeCodes the new do not share clinical document section type codes
-     */
-    public void setDoNotShareClinicalDocumentSectionTypeCodes(
-            Set<String> doNotShareClinicalDocumentSectionTypeCodes) {
-        this.doNotShareClinicalDocumentSectionTypeCodes = doNotShareClinicalDocumentSectionTypeCodes;
-    }
 
     /**
      * Gets the do not share sensitivity policy codes.
@@ -581,8 +558,6 @@ public class ConsentDto {
                 + consentStart + ", consentEnd=" + consentEnd + ", username="
                 + username + ", doNotShareClinicalDocumentTypeCodes="
                 + doNotShareClinicalDocumentTypeCodes
-                + ", doNotShareClinicalDocumentSectionTypeCodes="
-                + doNotShareClinicalDocumentSectionTypeCodes
                 + ", doNotShareSensitivityPolicyCodes="
                 + doNotShareSensitivityPolicyCodes
                 + ", shareForPurposeOfUseCodes="

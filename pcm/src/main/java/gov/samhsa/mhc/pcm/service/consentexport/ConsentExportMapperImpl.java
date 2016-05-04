@@ -118,20 +118,6 @@ public class ConsentExportMapperImpl implements ConsentExportMapper {
         consentDto
                 .setDoNotShareClinicalDocumentTypeCodes(consentDoNotShareClinicalDocumentTypeCode);
 
-        Set<TypeCodesDto> consentDoNotShareClinicalDocumentSectionTypeCode = new HashSet<TypeCodesDto>();
-        for (ConsentDoNotShareClinicalDocumentSectionTypeCode item : consent
-                .getDoNotShareClinicalDocumentSectionTypeCodes()) {
-            TypeCodesDto tcd1 = new TypeCodesDto();
-            tcd1.setDisplayName(item.getMedicalSection().getName());
-            tcd1.setCode(item.getMedicalSection().getCode());
-            tcd1.setCodeSystem(null);
-            tcd1.setCodeSystemName(null);
-            consentDoNotShareClinicalDocumentSectionTypeCode.add(tcd1);
-
-        }
-        consentDto
-                .setDoNotShareClinicalDocumentSectionTypeCodes(consentDoNotShareClinicalDocumentSectionTypeCode);
-
         Set<TypeCodesDto> consentDoNotShareSensitivityPolicyCode = new HashSet<TypeCodesDto>();
         for (ConsentDoNotShareSensitivityPolicyCode item : consent
                 .getDoNotShareSensitivityPolicyCodes()) {

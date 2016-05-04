@@ -53,9 +53,6 @@ public class ConsentListDto implements HasId, Serializable {
 	/** The do not share clinical document type codes. */
 	private Set<String> doNotShareClinicalDocumentTypeCodes;
 
-	/** The do not share clinical document section type codes. */
-	private Set<String> doNotShareClinicalDocumentSectionTypeCodes;
-
 	/** The do not share sensitivity policy codes. */
 	private Set<String> doNotShareSensitivityPolicyCodes;
 
@@ -244,26 +241,6 @@ public class ConsentListDto implements HasId, Serializable {
 	}
 
 	/**
-	 * Gets the do not share clinical document section type codes.
-	 * 
-	 * @return the do not share clinical document section type codes
-	 */
-	public Set<String> getDoNotShareClinicalDocumentSectionTypeCodes() {
-		return doNotShareClinicalDocumentSectionTypeCodes;
-	}
-
-	/**
-	 * Sets the do not share clinical document section type codes.
-	 * 
-	 * @param doNotShareClinicalDocumentSectionTypeCodes
-	 *            the new do not share clinical document section type codes
-	 */
-	public void setDoNotShareClinicalDocumentSectionTypeCodes(
-			Set<String> doNotShareClinicalDocumentSectionTypeCodes) {
-		this.doNotShareClinicalDocumentSectionTypeCodes = doNotShareClinicalDocumentSectionTypeCodes;
-	}
-
-	/**
 	 * Gets the do not share sensitivity policy codes.
 	 * 
 	 * @return the do not share sensitivity policy codes
@@ -369,7 +346,6 @@ public class ConsentListDto implements HasId, Serializable {
 	public boolean isMedicalInformationNotDisclosed() {
 		boolean medicalInformationNotDisclosed = false;
 		if (!doNotShareClinicalConceptCodes.isEmpty()
-				|| !doNotShareClinicalDocumentSectionTypeCodes.isEmpty()
 				|| !doNotShareClinicalDocumentTypeCodes.isEmpty()
 				|| !doNotShareSensitivityPolicyCodes.isEmpty()) {
 			medicalInformationNotDisclosed = true;

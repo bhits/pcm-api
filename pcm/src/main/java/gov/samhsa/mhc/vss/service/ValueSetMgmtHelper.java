@@ -746,47 +746,6 @@ public class ValueSetMgmtHelper {
         return conceptCodeListPageSize;
     }
 
-    /**
-     * Creates the medical section dto from entity.
-     *
-     * @param medicalSection    the medical section
-     * @param consentRepository the consent repository
-     * @return the medical section dto
-     */
-    public MedicalSectionDto createMedicalSectionDtoFromEntity(
-            MedicalSection medicalSection, ConsentRepository consentRepository) {
-        MedicalSectionDto medicalSectionDto = new MedicalSectionDto();
-        medicalSectionDto.setCode(medicalSection.getCode());
-        medicalSectionDto.setDescription(medicalSection.getDescription());
-        medicalSectionDto.setName(medicalSection.getName());
-        medicalSectionDto.setId(medicalSection.getId());
-        // check if consents are created with not to share these sections
-        List<Consent> consentS = consentRepository
-                .findAllByDoNotShareClinicalDocumentSectionTypeCodesMedicalSection(medicalSection);
-        if (null != consentS && consentS.size() > 0) {
-            medicalSectionDto.setDeletable(false);
-        }
-        return medicalSectionDto;
-    }
-
-    /**
-     * Convert medical section entities to dtos.
-     *
-     * @param medicalSections   the medical sections
-     * @param consentRepository the consent repository
-     * @return the list
-     */
-    public List<MedicalSectionDto> convertMedicalSectionEntitiesToDtos(
-            List<MedicalSection> medicalSections,
-            ConsentRepository consentRepository) {
-        List<MedicalSectionDto> MedicalSectionDtos = new ArrayList<MedicalSectionDto>();
-        for (MedicalSection MedicalSection : medicalSections) {
-            MedicalSectionDto MedicalSectionDto = createMedicalSectionDtoFromEntity(
-                    MedicalSection, consentRepository);
-            MedicalSectionDtos.add(MedicalSectionDto);
-        }
-        return MedicalSectionDtos;
-    }
 
     /**
      * Validate inputs.

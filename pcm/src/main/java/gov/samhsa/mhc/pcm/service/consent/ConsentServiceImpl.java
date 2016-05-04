@@ -37,8 +37,6 @@ import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.domain.patient.PatientRepository;
 import gov.samhsa.mhc.pcm.domain.provider.*;
 import gov.samhsa.mhc.pcm.domain.reference.*;
-import gov.samhsa.mhc.pcm.domain.valueset.MedicalSection;
-import gov.samhsa.mhc.pcm.domain.valueset.MedicalSectionRepository;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategoryRepository;
 import gov.samhsa.mhc.pcm.infrastructure.AbstractConsentRevokationPdfGenerator;
@@ -128,12 +126,6 @@ public class ConsentServiceImpl implements ConsentService {
      */
     @Autowired
     private ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository;
-
-    /**
-     * The clinical document section type code repository.
-     */
-    @Autowired
-    private MedicalSectionRepository medicalSectionRepository;
 
     /**
      * The value set category repository.
@@ -300,13 +292,6 @@ public class ConsentServiceImpl implements ConsentService {
                         .getClinicalDocumentTypeCode().getDisplayName());
             }
 
-            final Set<String> consentDoNotShareClinicalDocumentSectionTypeCode = new HashSet<String>();
-            for (final ConsentDoNotShareClinicalDocumentSectionTypeCode item : consent
-                    .getDoNotShareClinicalDocumentSectionTypeCodes()) {
-                consentDoNotShareClinicalDocumentSectionTypeCode.add(item
-                        .getMedicalSection().getName());
-            }
-
             final Set<String> consentDoNotShareSensitivityPolicyCode = new HashSet<String>();
             for (final ConsentDoNotShareSensitivityPolicyCode item : consent
                     .getDoNotShareSensitivityPolicyCodes()) {
@@ -370,8 +355,6 @@ public class ConsentServiceImpl implements ConsentService {
             consentListDto.setId(Long.toString(consent.getId()));
             consentListDto.setIsMadeToName(isMadeToName);
             consentListDto.setToDiscloseName(toDiscloseName);
-            consentListDto
-                    .setDoNotShareClinicalDocumentSectionTypeCodes(consentDoNotShareClinicalDocumentSectionTypeCode);
             consentListDto
                     .setDoNotShareClinicalDocumentTypeCodes(consentDoNotShareClinicalDocumentTypeCode);
             consentListDto
@@ -680,13 +663,6 @@ public class ConsentServiceImpl implements ConsentService {
                         .getClinicalDocumentTypeCode().getCode());
             }
 
-            final Set<String> consentDoNotShareClinicalDocumentSectionTypeCode = new HashSet<String>();
-            for (final ConsentDoNotShareClinicalDocumentSectionTypeCode item : consent
-                    .getDoNotShareClinicalDocumentSectionTypeCodes()) {
-                consentDoNotShareClinicalDocumentSectionTypeCode.add(item
-                        .getMedicalSection().getCode());
-            }
-
             final Set<String> consentDoNotShareSensitivityPolicyCode = new HashSet<String>();
             for (final ConsentDoNotShareSensitivityPolicyCode item : consent
                     .getDoNotShareSensitivityPolicyCodes()) {
@@ -758,9 +734,6 @@ public class ConsentServiceImpl implements ConsentService {
 
             consentDto.setProvidersPermittedToDisclose(toDiscloseName);
             consentDto.setProvidersPermittedToDiscloseNpi(toDiscloseNpi);
-
-            consentDto
-                    .setDoNotShareClinicalDocumentSectionTypeCodes(consentDoNotShareClinicalDocumentSectionTypeCode);
             consentDto
                     .setDoNotShareClinicalDocumentTypeCodes(consentDoNotShareClinicalDocumentTypeCode);
             consentDto
@@ -802,12 +775,6 @@ public class ConsentServiceImpl implements ConsentService {
                     .getDoNotShareClinicalDocumentTypeCodes()) {
                 obligationCodes.add(item
                         .getClinicalDocumentTypeCode().getCode());
-            }
-
-            for (final ConsentDoNotShareClinicalDocumentSectionTypeCode item : consent
-                    .getDoNotShareClinicalDocumentSectionTypeCodes()) {
-                obligationCodes.add(item
-                        .getMedicalSection().getCode());
             }
 
             for (final ConsentDoNotShareSensitivityPolicyCode item : consent
@@ -1278,22 +1245,6 @@ public class ConsentServiceImpl implements ConsentService {
             consent.setDoNotShareClinicalDocumentTypeCodes(doNotShareClinicalDocumentTypeCodes);
         } else {
             consent.setDoNotShareClinicalDocumentTypeCodes(new HashSet<ConsentDoNotShareClinicalDocumentTypeCode>());
-        }
-
-        if (consentDto.getDoNotShareClinicalDocumentSectionTypeCodes() != null) {
-            final Set<ConsentDoNotShareClinicalDocumentSectionTypeCode> doNotShareClinicalDocumentSectionTypeCodes = new HashSet<ConsentDoNotShareClinicalDocumentSectionTypeCode>();
-            for (final String item : consentDto
-                    .getDoNotShareClinicalDocumentSectionTypeCodes()) {
-                final MedicalSection medicalSectionCode = medicalSectionRepository
-                        .findByCode(item);
-                final ConsentDoNotShareClinicalDocumentSectionTypeCode consentDoNotShareClinicalDocumentSectionTypeCode = new ConsentDoNotShareClinicalDocumentSectionTypeCode(
-                        medicalSectionCode);
-                doNotShareClinicalDocumentSectionTypeCodes
-                        .add(consentDoNotShareClinicalDocumentSectionTypeCode);
-            }
-            consent.setDoNotShareClinicalDocumentSectionTypeCodes(doNotShareClinicalDocumentSectionTypeCodes);
-        } else {
-            consent.setDoNotShareClinicalDocumentSectionTypeCodes(new HashSet<ConsentDoNotShareClinicalDocumentSectionTypeCode>());
         }
 
         if (consentDto.getDoNotShareSensitivityPolicyCodes() != null) {
