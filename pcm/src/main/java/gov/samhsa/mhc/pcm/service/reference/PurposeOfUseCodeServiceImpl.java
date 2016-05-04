@@ -62,6 +62,7 @@ public class PurposeOfUseCodeServiceImpl implements PurposeOfUseCodeService {
             purposeOfUseDtoItem.setCode(purposeOfUseCode.getCode());
             purposeOfUseDtoItem.setDisplayName(purposeOfUseCode
                     .getDisplayName());
+            purposeOfUseDtoItem.setDescription(purposeOfUseCode.getOriginalText());
             purposeOfUseDto.add(purposeOfUseDtoItem);
         }
         return purposeOfUseDto;
