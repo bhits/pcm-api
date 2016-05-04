@@ -35,7 +35,6 @@ import gov.samhsa.mhc.pcm.service.exception.*;
 import gov.samhsa.mhc.pcm.service.notification.NotificationService;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import gov.samhsa.mhc.pcm.service.reference.PurposeOfUseCodeService;
-import gov.samhsa.mhc.vss.service.MedicalSectionService;
 import gov.samhsa.mhc.vss.service.ValueSetCategoryService;
 import gov.samhsa.mhc.vss.service.dto.AddConsentFieldsDto;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -83,11 +82,7 @@ public class ConsentRestController {
      */
     @Autowired
     private PatientService patientService;
-    /**
-     * The clinical document section type code service.
-     */
-    @Autowired
-    private MedicalSectionService medicalSectionServiceImpl;
+
     /**
      * The purpose of use code service.
      */
@@ -124,14 +119,6 @@ public class ConsentRestController {
         List<AddConsentFieldsDto> purposeOfUseDto = purposeOfUseCodeService
                 .findAllPurposeOfUseCodesAddConsentFieldsDto();
         return purposeOfUseDto;
-    }
-
-    @RequestMapping(value = "medicalSection")
-    public List<AddConsentFieldsDto> medicalSectionLookup() {
-
-        List<AddConsentFieldsDto> medicalSectionDtos = medicalSectionServiceImpl
-                .findAllMedicalSectionsAddConsentFieldsDto();
-        return medicalSectionDtos;
     }
 
     @RequestMapping(value = "sensitivityPolicy")

@@ -182,13 +182,6 @@ public class Consent {
 	// @Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 	private Set<ConsentDoNotShareClinicalDocumentTypeCode> doNotShareClinicalDocumentTypeCodes = new HashSet<ConsentDoNotShareClinicalDocumentTypeCode>();
 
-	/** The do not share clinical document section type codes. */
-	@ElementCollection
-	@CollectionTable(name = "ConsentDoNotShareClinicalDocumentSectionTypeCode", joinColumns = @JoinColumn(name = "CONSENT_ID"))
-	@Basic(fetch = FetchType.EAGER)
-	@NotAudited
-	private Set<ConsentDoNotShareClinicalDocumentSectionTypeCode> doNotShareClinicalDocumentSectionTypeCodes = new HashSet<ConsentDoNotShareClinicalDocumentSectionTypeCode>();
-
 	/** The do not share clinical concept codes. */
 	@ElementCollection
 	@CollectionTable(name = "ConsentDoNotShareClinicalConceptCodes", joinColumns = @JoinColumn(name = "CONSENT_ID"))
@@ -484,25 +477,6 @@ public class Consent {
 		this.doNotShareClinicalDocumentTypeCodes = doNotShareClinicalDocumentTypeCodes;
 	}
 
-	/**
-	 * Gets the do not share clinical document section type codes.
-	 *
-	 * @return the do not share clinical document section type codes
-	 */
-	public Set<ConsentDoNotShareClinicalDocumentSectionTypeCode> getDoNotShareClinicalDocumentSectionTypeCodes() {
-		return this.doNotShareClinicalDocumentSectionTypeCodes;
-	}
-
-	/**
-	 * Sets the do not share clinical document section type codes.
-	 *
-	 * @param doNotShareClinicalDocumentSectionTypeCodes
-	 *            the new do not share clinical document section type codes
-	 */
-	public void setDoNotShareClinicalDocumentSectionTypeCodes(
-			Set<ConsentDoNotShareClinicalDocumentSectionTypeCode> doNotShareClinicalDocumentSectionTypeCodes) {
-		this.doNotShareClinicalDocumentSectionTypeCodes = doNotShareClinicalDocumentSectionTypeCodes;
-	}
 
 	/**
 	 * Gets the do not share sensitivity policy codes.
