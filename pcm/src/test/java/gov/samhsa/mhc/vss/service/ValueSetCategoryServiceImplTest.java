@@ -3,8 +3,8 @@ package gov.samhsa.mhc.vss.service;
 import gov.samhsa.mhc.pcm.domain.consent.ConsentRepository;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategoryRepository;
-import gov.samhsa.mhc.vss.service.dto.AddConsentFieldsDto;
 import gov.samhsa.mhc.vss.service.dto.ValueSetCategoryDto;
+import gov.samhsa.mhc.vss.service.dto.ValueSetCategoryFieldsDto;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -196,7 +196,7 @@ public class ValueSetCategoryServiceImplTest {
                 valueSetCategoryListMock);
 
         // Act
-        List<AddConsentFieldsDto> sensitivityPolicyDto = vst
+        List<ValueSetCategoryFieldsDto> sensitivityPolicyDto = vst
                 .findAllValueSetCategoriesAddConsentFieldsDto();
 
         // Assert

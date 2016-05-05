@@ -46,18 +46,14 @@ public class AddConsentFieldsDto {
     /** The description. */
     private String description;
 
-    private boolean isFederal;
-
-    private Long displayOrder;
-
-    /**
-     * Gets the code.
-     *
-     * @return the code
-     */
-    public String getCode() {
-        return code;
-    }
+	/**
+	 * Gets the code.
+	 *
+	 * @return the code
+	 */
+	public String getCode() {
+		return code;
+	}
 
 	/**
 	 * Sets the code.
@@ -95,28 +91,12 @@ public class AddConsentFieldsDto {
 		return description;
 	}
 
-    /**
-     * Sets the description.
-     *
-     * @param description the new description
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public boolean isFederal() {
-        return isFederal;
-    }
-
-    public void setFederal(boolean federal) {
-        isFederal = federal;
-    }
-
-    public Long getDisplayOrder() {
-        return displayOrder;
-    }
-
-    public void setDisplayOrder(Long displayOrder) {
-        this.displayOrder = displayOrder;
-    }
+	/**
+	 * Sets the description.
+	 *
+	 * @param description the new description
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

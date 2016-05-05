@@ -37,6 +37,7 @@ import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import gov.samhsa.mhc.pcm.service.reference.PurposeOfUseCodeService;
 import gov.samhsa.mhc.vss.service.ValueSetCategoryService;
 import gov.samhsa.mhc.vss.service.dto.AddConsentFieldsDto;
+import gov.samhsa.mhc.vss.service.dto.ValueSetCategoryFieldsDto;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,9 +123,9 @@ public class ConsentRestController {
     }
 
     @RequestMapping(value = "sensitivityPolicy")
-    public List<AddConsentFieldsDto> sensitivityPolicyLookup() {
+    public List<ValueSetCategoryFieldsDto> sensitivityPolicyLookup() {
 
-        List<AddConsentFieldsDto> sensitivityPolicyDtos = valueSetCategoryService
+        List<ValueSetCategoryFieldsDto> sensitivityPolicyDtos = valueSetCategoryService
                 .findAllValueSetCategoriesAddConsentFieldsDto();
         return sensitivityPolicyDtos;
     }
