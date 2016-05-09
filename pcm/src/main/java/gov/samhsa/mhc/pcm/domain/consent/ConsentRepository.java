@@ -27,7 +27,6 @@ package gov.samhsa.mhc.pcm.domain.consent;
 
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategory;
-import gov.samhsa.mhc.pcm.domain.valueset.MedicalSection;
 
 import java.util.List;
 
@@ -114,16 +113,6 @@ public interface ConsentRepository extends JpaSpecificationExecutor<Consent>,
 	 * @return the list
 	 */
 	List<Consent> findAllByPatientUsername(String username);
-
-	/**
-	 * Find by DoNotShareClinicalDocumentSectionTypeCodes by medicalSection.
-	 *
-	 * @param medicalSection
-	 *            the medicalSection
-	 * @return the list
-	 */
-	List<Consent> findAllByDoNotShareClinicalDocumentSectionTypeCodesMedicalSection(
-			MedicalSection medicalSection);
 
 	/**
 	 * Find by ConsentDoNotShareSensitivityPolicyCode by ValueSetCategory.

@@ -33,8 +33,6 @@ import gov.samhsa.mhc.pcm.domain.consent.*;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalConceptCode;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
 import gov.samhsa.mhc.pcm.domain.reference.PurposeOfUseCode;
-import gov.samhsa.mhc.pcm.domain.valueset.MedicalSection;
-import gov.samhsa.mhc.pcm.domain.valueset.MedicalSectionRepository;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,10 +56,6 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     /** The clinical document type code repository. */
     @Autowired
     private ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository;
-
-    /** The medical section repository. */
-    @Autowired
-    private MedicalSectionRepository medicalSectionRepository;
 
     /*
      * (non-Javadoc)
@@ -202,15 +196,11 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             // Do Not Share Clinical Document Type List
             Paragraph clinicalDocumentTypeParagraph = getClinicalDocumentTypeParagraph(consent);
 
-            // Do Not Share Clinical Document Section Type List
-            Paragraph clinicalDocumentSectionTypeParagraph = getClinicalDocumentSectionTypeParagraph(consent);
-
             Paragraph clinicalConceptCodesParagraph = getClinicalConceptCodesParagraph(consent);
 
             Chunk chunk9 = null;
             if (sensitivityParagraph != null
                     || clinicalDocumentTypeParagraph != null
-                    || clinicalDocumentSectionTypeParagraph != null
                     || clinicalConceptCodesParagraph != null) {
                 // chunk9 = new Chunk(" except the following:");
                 chunk9 = new Chunk(" :\n\n");
@@ -279,9 +269,6 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             }
             if (clinicalDocumentTypeParagraph != null) {
                 document.add(clinicalDocumentTypeParagraph);
-            }
-            if (clinicalDocumentSectionTypeParagraph != null) {
-                document.add(clinicalDocumentSectionTypeParagraph);
             }
             if (clinicalConceptCodesParagraph != null) {
                 document.add(clinicalConceptCodesParagraph);
@@ -400,44 +387,6 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         return paragraph;
     }
 
-    /**
-     * Gets the clinical document section type paragraph.
-     *
-     * @param consent
-     *            the consent
-     * @return the clinical document section type paragraph
-     */
-    private Paragraph getClinicalDocumentSectionTypeParagraph(Consent consent) {
-        Paragraph paragraph = null;
-        Set<ConsentDoNotShareClinicalDocumentSectionTypeCode> doNotShareClinicalDocumentSectionTypeCodes = consent
-                .getDoNotShareClinicalDocumentSectionTypeCodes();
-        Set<MedicalSection> medicalSections = new HashSet<MedicalSection>(
-                medicalSectionRepository.findAll());
-
-        if (doNotShareClinicalDocumentSectionTypeCodes.size() < medicalSections
-                .size()) {
-            paragraph = new Paragraph();
-            paragraph.add(new Chunk("Medical Information Categories:"));
-
-            List<String> nameList = new ArrayList<String>();
-            for (ConsentDoNotShareClinicalDocumentSectionTypeCode consentClinicalDocumentSectionTypeCode : doNotShareClinicalDocumentSectionTypeCodes) {
-                medicalSections.remove(consentClinicalDocumentSectionTypeCode
-                        .getMedicalSection());
-
-            }
-
-            for (MedicalSection medicalSection : medicalSections)
-                nameList.add(medicalSection.getName());
-            Collections.sort(nameList);
-            com.itextpdf.text.List list = new com.itextpdf.text.List(false, 20);
-            for (String displayName : nameList) {
-                list.add(new ListItem(displayName));
-            }
-
-            paragraph.add(list);
-        }
-        return paragraph;
-    }
 
     /**
      * Gets the clinical concept codes paragraph.

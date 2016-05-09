@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Open Behavioral Health Information Technology Architecture (OBHITA.org)
- * <p/>
+ * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * * Redistributions of source code must retain the above copyright
@@ -11,7 +11,7 @@
  * * Neither the name of the <organization> nor the
  * names of its contributors may be used to endorse or promote products
  * derived from this software without specific prior written permission.
- * <p/>
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,48 +23,36 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-package gov.samhsa.mhc.pcm.service.reference;
-
-import gov.samhsa.mhc.pcm.domain.reference.PurposeOfUseCode;
-import gov.samhsa.mhc.pcm.domain.reference.PurposeOfUseCodeRepository;
-import gov.samhsa.mhc.vss.service.dto.AddConsentFieldsDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
+package gov.samhsa.mhc.vss.service.dto;
 
 /**
- * The Class PurposeOfUseCodeServiceImpl.
+ * The Class AddConsentFieldsDto.
  */
-@Transactional
-@Service
-public class PurposeOfUseCodeServiceImpl implements PurposeOfUseCodeService {
+public class ValueSetCategoryFieldsDto extends AddConsentFieldsDto {
 
-    /** The purpose of use code repository. */
-    @Autowired
-    private PurposeOfUseCodeRepository purposeOfUseCodeRepository;
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see gov.samhsa.consent2share.service.reference.PurposeOfUseCodeService#
-     * findAllPurposeOfUseCodesAddConsentFieldsDto()
+    /**
+     * The isFederal.
      */
-    @Override
-    public List<AddConsentFieldsDto> findAllPurposeOfUseCodesAddConsentFieldsDto() {
-        List<AddConsentFieldsDto> purposeOfUseDto = new ArrayList<AddConsentFieldsDto>();
-        List<PurposeOfUseCode> purposeOfUse = purposeOfUseCodeRepository
-                .findAll();
-        for (PurposeOfUseCode purposeOfUseCode : purposeOfUse) {
-            AddConsentFieldsDto purposeOfUseDtoItem = new AddConsentFieldsDto();
-            purposeOfUseDtoItem.setCode(purposeOfUseCode.getCode());
-            purposeOfUseDtoItem.setDisplayName(purposeOfUseCode
-                    .getDisplayName());
-            purposeOfUseDtoItem.setDescription(purposeOfUseCode.getOriginalText());
-            purposeOfUseDto.add(purposeOfUseDtoItem);
-        }
-        return purposeOfUseDto;
+    private boolean isFederal;
+
+    /**
+     * The displayOrder.
+     */
+    private Long displayOrder;
+
+    public boolean isFederal() {
+        return isFederal;
+    }
+
+    public void setFederal(boolean federal) {
+        isFederal = federal;
+    }
+
+    public Long getDisplayOrder() {
+        return displayOrder;
+    }
+
+    public void setDisplayOrder(Long displayOrder) {
+        this.displayOrder = displayOrder;
     }
 }

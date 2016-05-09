@@ -11,9 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ValueSetServiceConfig {
 
-    @Autowired
-    private MedicalSectionRepository medicalSectionRepository;
-
     @Value("${mhc.vss.config.conceptCodeListPageSize}")
     private int conceptCodeListPageSize;
 
@@ -22,13 +19,6 @@ public class ValueSetServiceConfig {
 
     @Autowired
     private ValueSetCategoryRepository valueSetCategoryRepository;
-
-    @Bean
-    public MedicalSectionService medicalSectionService() {
-        return new MedicalSectionServiceImpl(medicalSectionRepository,
-                consentRepository,
-                valueSetMgmtHelper());
-    }
 
     @Bean
     public ValueSetMgmtHelper valueSetMgmtHelper() {

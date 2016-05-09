@@ -1,7 +1,7 @@
 package gov.samhsa.mhc.vss.service;
 
-import gov.samhsa.mhc.vss.service.dto.AddConsentFieldsDto;
 import gov.samhsa.mhc.vss.service.dto.ValueSetCategoryDto;
+import gov.samhsa.mhc.vss.service.dto.ValueSetCategoryFieldsDto;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -55,5 +55,5 @@ public interface ValueSetCategoryService {
      *
      * @return the list
      */
-    public List<AddConsentFieldsDto> findAllValueSetCategoriesAddConsentFieldsDto();
+    public List<ValueSetCategoryFieldsDto> findAllValueSetCategoriesAddConsentFieldsDto();
 }

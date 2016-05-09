@@ -3,8 +3,8 @@ package gov.samhsa.mhc.vss.service;
 import gov.samhsa.mhc.pcm.domain.consent.ConsentRepository;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategoryRepository;
-import gov.samhsa.mhc.vss.service.dto.AddConsentFieldsDto;
 import gov.samhsa.mhc.vss.service.dto.ValueSetCategoryDto;
+import gov.samhsa.mhc.vss.service.dto.ValueSetCategoryFieldsDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -163,16 +163,18 @@ public class ValueSetCategoryServiceImpl implements ValueSetCategoryService {
      * findAllValueSetCategoriesAddConsentFieldsDto()
      */
     @Override
-    public List<AddConsentFieldsDto> findAllValueSetCategoriesAddConsentFieldsDto() {
+    public List<ValueSetCategoryFieldsDto> findAllValueSetCategoriesAddConsentFieldsDto() {
         List<ValueSetCategory> valueSetCategoryList = valueSetCategoryRepository
                 .findAll();
-        List<AddConsentFieldsDto> sensitivityPolicyDto = new ArrayList<AddConsentFieldsDto>();
+        List<ValueSetCategoryFieldsDto> sensitivityPolicyDto = new ArrayList<ValueSetCategoryFieldsDto>();
         for (ValueSetCategory valueSetCategory : valueSetCategoryList) {
-            AddConsentFieldsDto sensitivityPolicyDtoItem = new AddConsentFieldsDto();
+            ValueSetCategoryFieldsDto sensitivityPolicyDtoItem = new ValueSetCategoryFieldsDto();
             sensitivityPolicyDtoItem.setCode(valueSetCategory.getCode());
             sensitivityPolicyDtoItem.setDisplayName(valueSetCategory.getName());
             sensitivityPolicyDtoItem.setDescription(valueSetCategory
                     .getDescription());
+            sensitivityPolicyDtoItem.setFederal(valueSetCategory.isFederal());
+            sensitivityPolicyDtoItem.setDisplayOrder(valueSetCategory.getDisplayOrder());
             sensitivityPolicyDto.add(sensitivityPolicyDtoItem);
         }
         return sensitivityPolicyDto;
