@@ -33,6 +33,8 @@ import gov.samhsa.mhc.pcm.domain.consent.*;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalConceptCode;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
 import gov.samhsa.mhc.pcm.domain.reference.PurposeOfUseCode;
+import gov.samhsa.mhc.pcm.domain.reference.StateCode;
+import gov.samhsa.mhc.pcm.domain.valueobject.Address;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,202 +69,221 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     public byte[] generate42CfrPart2Pdf(Consent consent) {
         Assert.notNull(consent, "Consent is required.");
 
-        // Step 1
+        ArrayList<String> ary_parConsentAgreementTextStrings = new ArrayList<>();
+        ary_parConsentAgreementTextStrings.add("I understand that my records are protected under the federal regulations governing Confidentiality of Alcohol and Drug Abuse Patient Records, 42 CFR Part 2, and cannot be disclosed without my written consent unless otherwise provided for in the regulations, and may not be redisclosed without my written permission or as otherwise permitted by 42 CFR part 2. I also understand that I may revoke this consent at any time except to the extent that action has been taken in reliance on it, and that in any event this consent expires automatically as follows:");
+
+        Font fontbold = FontFactory.getFont("Helvetica", 12, Font.BOLD);
+        Font fontheader = FontFactory.getFont("Helvetica", 19, Font.BOLD);
+        Font fontnotification = FontFactory.getFont("Helvetica", 16, Font.ITALIC);
+
+        String strConsentIdValue = String.valueOf(consent.getConsentReferenceId());
+        String strConsentDescriptionValue = consent.getDescription();
+        Date dateConsentEndDate = consent.getEndDate();
+        Date dateConsentStartDate = consent.getStartDate();
+
+        String strPatientNameValue = consent.getPatient().getFirstName() + " " + consent.getPatient().getLastName() + "\n";
+        Date datePatientDOB = consent.getPatient().getBirthDay();
+        Address addrsPatientAddress = consent.getPatient().getAddress();
+
         Document document = new Document();
 
         ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
-        try {
-            Font fontbold = FontFactory.getFont("Helvetica", 12, Font.BOLD);
-            Font fontheader = FontFactory.getFont("Helvetica", 19, Font.BOLD);
-            Font fontnotification = FontFactory.getFont("Helvetica", 16,
-                    Font.ITALIC);
 
+        try {
             PdfWriter.getInstance(document, pdfOutputStream);
 
             document.open();
 
-            Paragraph consentID = new Paragraph(20);
-            consentID.setAlignment(Element.ALIGN_LEFT);
-            Chunk chuckId = new Chunk();
-            chuckId.append("Consent Reference Number: ");
-            String consentIdString = String.valueOf(consent
-                    .getConsentReferenceId());
-            chuckId.append(consentIdString);
-            consentID.add(chuckId);
+            Paragraph parConsentId = new Paragraph(20);
+            parConsentId.setAlignment(Element.ALIGN_LEFT);
 
-            Paragraph paragraph1 = new Paragraph(20);
-            paragraph1.setSpacingAfter(10);
+            Chunk chunkConsentIdLabel = new Chunk();
+            chunkConsentIdLabel.append("Consent Reference Number: ");
 
-            paragraph1.setAlignment(Element.ALIGN_CENTER);
-            Chunk chunk = new Chunk(consent.getDescription(), fontheader);
-            paragraph1.add(chunk);
+            chunkConsentIdLabel.append(strConsentIdValue);
+            parConsentId.add(chunkConsentIdLabel);
 
-            Paragraph paragraph2 = new Paragraph(20);
-            paragraph2.setSpacingBefore(10);
+
+            Paragraph parConsentDescription = new Paragraph(20);
+            parConsentDescription.setSpacingAfter(10);
+            parConsentDescription.setAlignment(Element.ALIGN_CENTER);
+
+            Chunk chunkConsentDescription = new Chunk(strConsentDescriptionValue, fontheader);
+
+            parConsentDescription.add(chunkConsentDescription);
+
+
+            Paragraph parPatientInfoAndProviders = new Paragraph(20);
+            parPatientInfoAndProviders.setSpacingBefore(10);
 
             PdfPTable headerNotification = new PdfPTable(1);
             headerNotification.setHorizontalAlignment(Element.ALIGN_CENTER);
             headerNotification.setWidthPercentage(100f);
-            headerNotification.addCell(new PdfPCell(new Phrase(
-                    "***PLEASE READ THE ENTIRE FORM BEFORE SIGNING BELOW***",
-                    fontnotification)));
+            headerNotification.addCell(new PdfPCell(new Phrase("***PLEASE READ THE ENTIRE FORM BEFORE SIGNING BELOW***", fontnotification)));
 
-            Chunk chunk2 = new Chunk(
-                    "Patient (name and information of person whose health information is being disclosed): \n\n",
-                    fontbold);
-            Chunk chunk31 = new Chunk("Name (First Middle Last):");
-            Chunk chunk32 = new Chunk("Date of Birth(mm/dd/yyyy): ");
-            Chunk chunk33 = new Chunk("Street: ");
-            Chunk chunk34 = new Chunk("City: ");
-            Chunk chunk35 = new Chunk("State: ");
-            Chunk chunk36 = new Chunk("Zip: ");
-            String patientName = consent.getPatient().getFirstName() + " "
-                    + consent.getPatient().getLastName() + "\n";
-            Chunk chunkDob = null;
-            Chunk chunkStreet = null;
-            Chunk chunkCity = null;
-            Chunk chunkState = null;
-            Chunk chunkZip = null;
+            Chunk chunkPatientInfoFieldsHeader = new Chunk("Patient (name and information of person whose health information is being disclosed): \n\n", fontbold);
+            Chunk chunkPatientNameLabel = new Chunk("Name (First Middle Last):");
+            Chunk chunkPatientDOBLabel = new Chunk("Date of Birth(mm/dd/yyyy): ");
+            Chunk chunkPatientStreetLabel = new Chunk("Street: ");
+            Chunk chunkPatientCityLabel = new Chunk("City: ");
+            Chunk chunkPatientStateLabel = new Chunk("State: ");
+            Chunk chunkPatientZipLabel = new Chunk("Zip: ");
 
-            if (consent.getPatient().getBirthDay() != null) {
-                chunkDob = new Chunk(String.format("%tm/%td/%tY", consent
-                        .getPatient().getBirthDay(), consent.getPatient()
-                        .getBirthDay(), consent.getPatient().getBirthDay())
-                        + "\n");
-                chunkDob.setUnderline(1, -2);
+            Chunk chunkPatientDOBValue = null;
+            Chunk chunkPatientStreetValue = null;
+            Chunk chunkPatientCityValue = null;
+            Chunk chunkPatientStateValue = null;
+            Chunk chunkPatientZipValue = null;
+
+            if (datePatientDOB != null) {
+                chunkPatientDOBValue = new Chunk(String.format("%tm/%td/%tY", datePatientDOB, datePatientDOB, datePatientDOB) + "\n");
+                chunkPatientDOBValue.setUnderline(1, -2);
             }
-            if (consent.getPatient().getAddress() != null) {
-                if (consent.getPatient().getAddress().getStreetAddressLine() != null) {
-                    chunkStreet = new Chunk(consent.getPatient().getAddress()
-                            .getStreetAddressLine()
-                            + "\n");
-                    chunkStreet.setUnderline(1, -2);
+            if (addrsPatientAddress != null) {
+                String strPatientStreetAddress = addrsPatientAddress.getStreetAddressLine();
+                String strPatientCity = addrsPatientAddress.getCity();
+                StateCode scPatientStateCode = addrsPatientAddress.getStateCode();
+                String strPatientPostalCode = addrsPatientAddress.getPostalCode();
+
+                if (strPatientStreetAddress != null) {
+                    chunkPatientStreetValue = new Chunk(strPatientStreetAddress + "\n");
+                    chunkPatientStreetValue.setUnderline(1, -2);
                 }
-                if (consent.getPatient().getAddress().getCity() != null) {
-                    chunkCity = new Chunk(consent.getPatient().getAddress()
-                            .getCity()
-                            + "  ");
-                    chunkCity.setUnderline(1, -2);
+
+                if (strPatientCity != null) {
+                    chunkPatientCityValue = new Chunk(strPatientCity + "  ");
+                    chunkPatientCityValue.setUnderline(1, -2);
                 }
-                if (consent.getPatient().getAddress().getStateCode() != null) {
-                    chunkState = new Chunk(consent.getPatient().getAddress()
-                            .getStateCode().getDisplayName()
-                            + "  ");
-                    chunkState.setUnderline(1, -2);
+
+                if (scPatientStateCode != null) {
+                    chunkPatientStateValue = new Chunk(scPatientStateCode.getDisplayName() + "  ");
+                    chunkPatientStateValue.setUnderline(1, -2);
                 }
-                if (consent.getPatient().getAddress().getPostalCode() != null) {
-                    chunkZip = new Chunk(consent.getPatient().getAddress()
-                            .getPostalCode());
-                    chunkZip.setUnderline(1, -2);
+
+                if (strPatientPostalCode != null) {
+                    chunkPatientZipValue = new Chunk(strPatientPostalCode);
+                    chunkPatientZipValue.setUnderline(1, -2);
                 }
             }
 
-            Chunk chunk3 = new Chunk(patientName);
-            chunk3.setUnderline(1, -2);
+            Chunk chunkPatientNameValue = new Chunk(strPatientNameValue);
+            chunkPatientNameValue.setUnderline(1, -2);
 
-            Chunk chunk4 = new Chunk("authorizes ");
-            Chunk chunk6 = new Chunk(" to disclose to ");
-            Chunk chunk8 = new Chunk("Share the following medical information",
-                    fontbold);
-            chunk8.setUnderline(1, -2);
-            paragraph2.add(headerNotification);
-            paragraph2.add(chunk2);
-            paragraph2.add(chunk31);
-            paragraph2.add(chunk3);
-            if (chunkDob != null) {
-                paragraph2.add(chunk32);
-                paragraph2.add(chunkDob);
-            }
-            if (consent.getPatient().getAddress() != null) {
-                paragraph2.add(chunk33);
-                paragraph2.add(chunkStreet);
-                paragraph2.add(chunk34);
-                paragraph2.add(chunkCity);
-                paragraph2.add(chunk35);
-                paragraph2.add(chunkState);
-                paragraph2.add(chunk36);
-                paragraph2.add(chunkZip);
-            }
-            paragraph2.add(new Chunk("\n\n"));
-            paragraph2.add(chunk4);
-            paragraph2.add(createConsentMadeFromTable(consent));
-            paragraph2.add(chunk6);
-            paragraph2.add(createConsentMadeToTable(consent));
-            paragraph2.add(chunk8);
+            Chunk chunkAuthorizesLabel = new Chunk("authorizes ");
+            Chunk chunkDiscloseToLabel = new Chunk(" to disclose to ");
 
-            // Do Not Share Sensitivity List
+            parPatientInfoAndProviders.add(headerNotification);
+            parPatientInfoAndProviders.add(chunkPatientInfoFieldsHeader);
+            parPatientInfoAndProviders.add(chunkPatientNameLabel);
+            parPatientInfoAndProviders.add(chunkPatientNameValue);
+
+            if (chunkPatientDOBValue != null) {
+                parPatientInfoAndProviders.add(chunkPatientDOBLabel);
+                parPatientInfoAndProviders.add(chunkPatientDOBValue);
+            }
+
+            if (addrsPatientAddress != null) {
+                parPatientInfoAndProviders.add(chunkPatientStreetLabel);
+                parPatientInfoAndProviders.add(chunkPatientStreetValue);
+                parPatientInfoAndProviders.add(chunkPatientCityLabel);
+                parPatientInfoAndProviders.add(chunkPatientCityValue);
+                parPatientInfoAndProviders.add(chunkPatientStateLabel);
+                parPatientInfoAndProviders.add(chunkPatientStateValue);
+                parPatientInfoAndProviders.add(chunkPatientZipLabel);
+                parPatientInfoAndProviders.add(chunkPatientZipValue);
+            }
+
+            parPatientInfoAndProviders.add(new Chunk("\n\n"));
+            parPatientInfoAndProviders.add(chunkAuthorizesLabel);
+            parPatientInfoAndProviders.add(createConsentMadeFromTable(consent));
+            parPatientInfoAndProviders.add(chunkDiscloseToLabel);
+            parPatientInfoAndProviders.add(createConsentMadeToTable(consent));
+
+            Paragraph parConsentShareMedInfoHeader = new Paragraph(20);
+            parConsentShareMedInfoHeader.setSpacingBefore(10);
+
+            Chunk chunkShareFollowingMedInfoLabel = new Chunk("Share the following medical information", fontbold);
+            chunkShareFollowingMedInfoLabel.setUnderline(1, -2);
+
+
+            parConsentShareMedInfoHeader.add(chunkShareFollowingMedInfoLabel);
+
             Paragraph sensitivityParagraph = getSensitivityParagraph(consent);
 
-            // Do Not Share Clinical Document Type List
             Paragraph clinicalDocumentTypeParagraph = getClinicalDocumentTypeParagraph(consent);
 
             Paragraph clinicalConceptCodesParagraph = getClinicalConceptCodesParagraph(consent);
 
-            Chunk chunk9 = null;
+
+            Chunk chunkEndShareMedInfoHeaderSymbol = null;
+
             if (sensitivityParagraph != null
                     || clinicalDocumentTypeParagraph != null
                     || clinicalConceptCodesParagraph != null) {
-                // chunk9 = new Chunk(" except the following:");
-                chunk9 = new Chunk(" :\n\n");
-                // chunk9.setUnderline(1, -2);
+                // chunkEndShareMedInfoHeaderSymbol = new Chunk(" except the following:");
+                chunkEndShareMedInfoHeaderSymbol = new Chunk(" :\n\n");
+                // chunkEndShareMedInfoHeaderSymbol.setUnderline(1, -2);
             } else {
-                chunk9 = new Chunk(".");
+                chunkEndShareMedInfoHeaderSymbol = new Chunk(".");
             }
 
-            paragraph2.add(chunk9);
+            parConsentShareMedInfoHeader.add(chunkEndShareMedInfoHeaderSymbol);
 
-            Paragraph paragraph4 = new Paragraph(20);
-            paragraph4.setSpacingAfter(10);
-            paragraph4.setSpacingBefore(10);
+            Paragraph parShareForFollowingPurposesHeader = new Paragraph(20);
+            parShareForFollowingPurposesHeader.setSpacingAfter(10);
+            parShareForFollowingPurposesHeader.setSpacingBefore(10);
 
-            Chunk chunk11 = new Chunk("Share for the following purpose(s):",
-                    fontbold);
-            chunk11.setUnderline(1, -2);
+            Chunk chunkShareForFollowingPurposesLabel = new Chunk("Share for the following purpose(s):", fontbold);
+            chunkShareForFollowingPurposesLabel.setUnderline(1, -2);
 
-            paragraph4.add(new Chunk("\n"));
-            paragraph4.add(chunk11);
+            parShareForFollowingPurposesHeader.add(new Chunk("\n"));
+            parShareForFollowingPurposesHeader.add(chunkShareForFollowingPurposesLabel);
 
             // Do Not Share Purpose of Use List
             Paragraph purposeOfUseParagraph = getPurposeOfUseParagraph(consent);
 
-            Paragraph paragraph5 = new Paragraph(20);
-            paragraph5.setSpacingBefore(10);
+            ArrayList<Paragraph> ary_parConsentAgreementText = new ArrayList<>();
 
-            Chunk chunk13 = new Chunk(
-                    "I understand that my records are protected under the federal regulations governing Confidentiality of Alcohol and Drug Abuse Patient Records, 42 CFR Part 2, and cannot be disclosed without my written consent unless otherwise provided for in the regulations, and may not be redisclosed without my written permission or as otherwise permitted by 42 CFR part 2. I also understand that I may revoke this consent at any time except to the extent that action has been taken in reliance on it, and that in any event this consent expires automatically as follows:");
-            paragraph5.add(chunk13);
+            for(String curParTextString : ary_parConsentAgreementTextStrings) {
+                Paragraph parConsentAgreementText = new Paragraph(20);
+                parConsentAgreementText.setSpacingBefore(10);
 
-            Paragraph paragraph6 = new Paragraph(20);
+                Chunk chunkCurParText = new Chunk(curParTextString);
+                parConsentAgreementText.add(chunkCurParText);
 
-            Chunk chunk14;
-            if (consent.getEndDate() != null) {
-                chunk14 = new Chunk(String.format(
-                        "Expiration Date: %tm/%td/%ty", consent.getEndDate(),
-                        consent.getEndDate(), consent.getEndDate()));
-            } else {
-                chunk14 = new Chunk("N/A");
+                ary_parConsentAgreementText.add(parConsentAgreementText);
             }
 
-            chunk14.setUnderline(1, -2);
+            Paragraph parConsentDateRange = new Paragraph(20);
 
-            Chunk chunk15;
-            if (consent.getEndDate() != null) {
-                chunk15 = new Chunk(String.format(
-                        "Effective Date: %tm/%td/%ty\n",
-                        consent.getStartDate(), consent.getStartDate(),
-                        consent.getStartDate()));
+            Chunk chunkExpirationDate;
+            if (dateConsentEndDate != null) {
+                chunkExpirationDate = new Chunk(String.format("Expiration Date: %tm/%td/%ty", dateConsentEndDate, dateConsentEndDate, dateConsentEndDate));
             } else {
-                chunk15 = new Chunk("N/A");
+                chunkExpirationDate = new Chunk("N/A");
             }
 
-            chunk15.setUnderline(1, -2);
+            chunkExpirationDate.setUnderline(1, -2);
 
-            paragraph6.add(chunk15);
-            paragraph6.add(chunk14);
 
-            document.add(consentID);
-            document.add(paragraph1);
-            document.add(paragraph2);
+            Chunk chunkEffectiveDate;
+            if (dateConsentStartDate != null) {
+                chunkEffectiveDate = new Chunk(String.format("Effective Date: %tm/%td/%ty\n", dateConsentStartDate, dateConsentStartDate, dateConsentStartDate));
+            } else {
+                chunkEffectiveDate = new Chunk("N/A");
+            }
+
+            chunkEffectiveDate.setUnderline(1, -2);
+
+
+            parConsentDateRange.add(chunkEffectiveDate);
+            parConsentDateRange.add(chunkExpirationDate);
+
+            document.add(parConsentId);
+            document.add(parConsentDescription);
+            document.add(parPatientInfoAndProviders);
+
+            document.add(parConsentShareMedInfoHeader);
 
             if (sensitivityParagraph != null) {
                 document.add(sensitivityParagraph);
@@ -274,16 +295,20 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
                 document.add(clinicalConceptCodesParagraph);
             }
 
-            document.add(paragraph4);
+            document.add(parShareForFollowingPurposesHeader);
 
             if (purposeOfUseParagraph != null) {
                 document.add(purposeOfUseParagraph);
             }
 
-            document.add(paragraph5);
-            document.add(paragraph6);
 
-            // Step 5
+            for(Paragraph curPar : ary_parConsentAgreementText){
+                document.add(curPar);
+            }
+
+
+            document.add(parConsentDateRange);
+
             document.close();
 
         } catch (Throwable e) {
