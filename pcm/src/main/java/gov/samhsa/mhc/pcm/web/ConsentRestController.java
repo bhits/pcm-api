@@ -408,6 +408,17 @@ public class ConsentRestController {
             throw new InternalServerErrorException("Resource Not Found");
     }
 
+    @RequestMapping(value = "consents/attestation/{consentId}", method = RequestMethod.GET)
+    public ConsentAttestationDto getConsentAttestationDto(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
+        final Long patientId = patientService.findIdByUsername(principal.getName());
+
+        if (consentService.isConsentBelongToThisUser(consentId, patientId)
+                && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
+            return consentService.getConsentAttestationDto(principal.getName(),consentId);
+        } else
+            throw new InternalServerErrorException("Consent Attestation Dto Not Found");
+    }
+
     @RequestMapping(value = "consents/revokeConsent/{consentId}", method = RequestMethod.GET)
     public Map<String, String> signConsentRevokation(Principal principal, @PathVariable("consentId") Long consentId) {
         final Long patientId = patientService.findIdByUsername(principal.getName());

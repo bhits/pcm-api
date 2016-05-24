@@ -300,4 +300,6 @@ public interface ConsentService {
     byte[] getConsentDirective(Long consentId);
 
     Map<String, Object> findAllConsentsDtoByPatientAndPage(Long patientId, String pageNumber);
+
+    ConsentAttestationDto getConsentAttestationDto(String userName, Long consentId);
 }
