@@ -388,26 +388,21 @@ public class ConsentRestController {
 
     }
 
+    //FIXME: REWRITE THIS FUNCTION AFTER IMPLEMENTING PATIENT CHECKBOX ATTESTATION FOR SIGNING
     @RequestMapping(value = "consents/signConsent/{consentId}", method = RequestMethod.GET)
     public Map<String, String> signConsent(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
                 && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
             final ConsentPdfDto consentPdfDto = consentService.findConsentPdfDto(consentId);
-            final String javascriptWidgetCode = consentService.createConsentEmbeddedWidget(consentPdfDto);
 
-            String[] rt = javascriptWidgetCode.split("'");
-
-            RestTemplate restTemplate = new RestTemplate();
-            String javaScript = restTemplate.getForObject(rt[5], String.class);
-
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("javascriptCode", javaScript.substring(javaScript.indexOf("(") + 2, javaScript.indexOf(")") - 1));
-            return map;
+            //FIXME: Temporarily returning null after removing EchoSign
+            return null;
         } else
             throw new InternalServerErrorException("Resource Not Found");
     }
 
+    //FIXME: REWRITE THIS FUNCTION AFTER IMPLEMENTING PATIENT CHECKBOX ATTESTATION FOR SIGNING
     @RequestMapping(value = "consents/revokeConsent/{consentId}", method = RequestMethod.GET)
     public Map<String, String> signConsentRevokation(Principal principal, @PathVariable("consentId") Long consentId) {
         final Long patientId = patientService.findIdByUsername(principal.getName());
@@ -416,16 +411,9 @@ public class ConsentRestController {
             final ConsentRevokationPdfDto consentRevokationPdfDto = consentService
                     .findConsentRevokationPdfDto(consentId);
             consentRevokationPdfDto.setRevokationType(revokationType);
-            final String javascriptWidgetCode = consentService.createRevocationEmbeddedWidget(consentRevokationPdfDto);
 
-            String[] rt = javascriptWidgetCode.split("'");
-
-            RestTemplate restTemplate = new RestTemplate();
-            String javaScript = restTemplate.getForObject(rt[5], String.class);
-
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("javascriptCode", javaScript.substring(javaScript.indexOf("(") + 2, javaScript.indexOf(")") - 1));
-            return map;
+            //FIXME: Temporarily returning null after removing EchoSign
+            return null;
         } else
             throw new InternalServerErrorException("Resource Not Found");
     }

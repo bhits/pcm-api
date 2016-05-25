@@ -1,7 +1,5 @@
 package gov.samhsa.mhc.pcm.service.consent;
 
-import echosign.api.clientv20.dto16.EmbeddedWidgetCreationResult;
-import gov.samhsa.mhc.common.consentgen.ConsentGenException;
 import gov.samhsa.mhc.pcm.domain.consent.*;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.domain.patient.PatientRepository;
@@ -12,7 +10,6 @@ import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentSectionTypeCodeReposi
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
 import gov.samhsa.mhc.pcm.domain.reference.PurposeOfUseCodeRepository;
 import gov.samhsa.mhc.pcm.domain.reference.SensitivityPolicyCodeRepository;
-import gov.samhsa.mhc.pcm.infrastructure.EchoSignSignatureService;
 import gov.samhsa.mhc.pcm.service.consentexport.ConsentExportService;
 import gov.samhsa.mhc.pcm.service.dto.ConsentDto;
 import gov.samhsa.mhc.pcm.service.dto.ConsentListDto;
@@ -87,11 +84,6 @@ public class ConsentServiceImplTest {
     @Mock
     PurposeOfUseCodeRepository purposeOfUseCodeRepository;
     /**
-     * The echo sign signature service.
-     */
-    @Mock
-    EchoSignSignatureService echoSignSignatureService;
-    /**
      * The consent check service.
      */
     @Mock
@@ -112,8 +104,7 @@ public class ConsentServiceImplTest {
     String DOCUMENT_NAME = "documentName";
     String SIGNED_DOCUMENT_URL = "signedDocumentUrl";
     String EMAIL = "consent2shar@gmail.com";
-    String ECHOSIGN_API_KEY = "echoSignApiKey";
-    String ECHOSIGN_SERVICE_URL = "echoSignServiceUrl";
+
     /**
      * The patient repository.
      */
@@ -626,104 +617,6 @@ public class ConsentServiceImplTest {
         verify(consentRevokationPdfDto).setConsentName(anyString());
         verify(consentRevokationPdfDto).setId(anyLong());
 
-    }
-
-    @Test
-    public void testCreateConsentEmbeddedWidget() throws ConsentGenException
-    {
-        Consent consent = mock(Consent.class);
-        Patient patient = mock(Patient.class);
-        String consentDirective="consentDirective";
-        when(consentRepository.findOne(anyLong())).thenReturn(consent);
-
-        ConsentService spy = spy(cst);
-        ConsentPdfDto consentPdfDto = mock(ConsentPdfDto.class);
-        when(consentPdfDto.getContent()).thenReturn(DOCUMENT_BYTES);
-        when(consentPdfDto.getFilename()).thenReturn(DOCUMENT_FILE_NAME);
-        when(consentPdfDto.getConsentName()).thenReturn(DOCUMENT_NAME);
-        when(consentPdfDto.getId()).thenReturn((long) 1);
-        SignedPDFConsent signedPdfConsent = mock(SignedPDFConsent.class);
-        when(spy.makeSignedPdfConsent()).thenReturn(signedPdfConsent);
-        when(consent.getPatient()).thenReturn(patient);
-        when(patient.getEmail()).thenReturn(EMAIL);
-        EmbeddedWidgetCreationResult result = mock(EmbeddedWidgetCreationResult.class);
-        when(
-                echoSignSignatureService
-                        .createEmbeddedWidget(DOCUMENT_BYTES,
-                                DOCUMENT_FILE_NAME, DOCUMENT_NAME,
-                                null, EMAIL)).thenReturn(result);
-
-        when(
-                consentExportService
-                        .exportConsent2CDAR2ConsentDirective(any(Consent.class)))
-                .thenReturn(consentDirective);
-        spy.createConsentEmbeddedWidget(consentPdfDto);
-
-        verify(consentRepository).save(consent);
-    }
-
-    @Test
-    public void testCreateRevocationEmbeddedWidget_when_revocation_type_is_emergency_only() {
-        Consent consent = mock(Consent.class);
-        Patient patient = mock(Patient.class);
-        when(consentRepository.findOne(anyLong())).thenReturn(consent);
-
-        ConsentService spy = spy(cst);
-        ConsentRevokationPdfDto consentRevokationPdfDto = mock(ConsentRevokationPdfDto.class);
-        when(consentRevokationPdfDto.getContent()).thenReturn(DOCUMENT_BYTES);
-        when(consentRevokationPdfDto.getFilename()).thenReturn(
-                DOCUMENT_FILE_NAME);
-        when(consentRevokationPdfDto.getConsentName())
-                .thenReturn(DOCUMENT_NAME);
-        when(consentRevokationPdfDto.getId()).thenReturn((long) 1);
-        when(consentRevokationPdfDto.getRevokationType()).thenReturn(
-                "EMERGENCY ONLY");
-        SignedPDFConsent signedPdfConsent = mock(SignedPDFConsent.class);
-        when(spy.makeSignedPdfConsent()).thenReturn(signedPdfConsent);
-        when(consent.getPatient()).thenReturn(patient);
-        when(patient.getEmail()).thenReturn(EMAIL);
-        EmbeddedWidgetCreationResult result = mock(EmbeddedWidgetCreationResult.class);
-        when(
-                echoSignSignatureService.createEmbeddedWidget(DOCUMENT_BYTES,
-                        DOCUMENT_FILE_NAME, DOCUMENT_NAME
-                                + " Revocation", null, EMAIL)).thenReturn(
-                result);
-        spy.createRevocationEmbeddedWidget(consentRevokationPdfDto);
-
-        verify(consentRepository).save(consent);
-        verify(consent).setConsentRevokationType("EMERGENCY ONLY");
-    }
-
-    @Test
-    public void testCreateRevocationEmbeddedWidget_when_revocation_type_is_no_never() {
-        Consent consent = mock(Consent.class);
-        Patient patient = mock(Patient.class);
-        when(consentRepository.findOne(anyLong())).thenReturn(consent);
-
-        ConsentService spy = spy(cst);
-        ConsentRevokationPdfDto consentRevokationPdfDto = mock(ConsentRevokationPdfDto.class);
-        when(consentRevokationPdfDto.getContent()).thenReturn(DOCUMENT_BYTES);
-        when(consentRevokationPdfDto.getFilename()).thenReturn(
-                DOCUMENT_FILE_NAME);
-        when(consentRevokationPdfDto.getConsentName())
-                .thenReturn(DOCUMENT_NAME);
-        when(consentRevokationPdfDto.getId()).thenReturn((long) 1);
-        when(consentRevokationPdfDto.getRevokationType())
-                .thenReturn("NO NEVER");
-        SignedPDFConsent signedPdfConsent = mock(SignedPDFConsent.class);
-        when(spy.makeSignedPdfConsent()).thenReturn(signedPdfConsent);
-        when(consent.getPatient()).thenReturn(patient);
-        when(patient.getEmail()).thenReturn(EMAIL);
-        EmbeddedWidgetCreationResult result = mock(EmbeddedWidgetCreationResult.class);
-        when(
-                echoSignSignatureService.createEmbeddedWidget(DOCUMENT_BYTES,
-                        DOCUMENT_FILE_NAME, DOCUMENT_NAME
-                                + " Revocation", null, EMAIL)).thenReturn(
-                result);
-        spy.createRevocationEmbeddedWidget(consentRevokationPdfDto);
-
-        verify(consentRepository).save(consent);
-        verify(consent).setConsentRevokationType("NO NEVER");
     }
 
     @Test

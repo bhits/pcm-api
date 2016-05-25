@@ -265,23 +265,6 @@ public interface ConsentService {
     List<ConsentListDto> findAllConsentsDtoByUserName(String userName);
 
     /**
-     * Creates the embedded widget.
-     *
-     * @param consentPdfDto the consent pdf dto
-     * @return the string
-     */
-    String createConsentEmbeddedWidget(ConsentPdfDto consentPdfDto) throws ConsentGenException;
-
-    /**
-     * Creates the revocation embedded widget.
-     *
-     * @param consentRevokationPdfDto the consent revokation pdf dto
-     * @return the string
-     */
-    String createRevocationEmbeddedWidget(
-            ConsentRevokationPdfDto consentRevokationPdfDto);
-
-    /**
      * Gets the consent signed stage.
      *
      * @param consentId the consent id

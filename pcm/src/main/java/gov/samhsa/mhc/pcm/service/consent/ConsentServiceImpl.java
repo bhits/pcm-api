@@ -25,7 +25,6 @@
  ******************************************************************************/
 package gov.samhsa.mhc.pcm.service.consent;
 
-import echosign.api.clientv20.dto16.EmbeddedWidgetCreationResult;
 import gov.samhsa.mhc.common.consentgen.ConsentBuilder;
 import gov.samhsa.mhc.common.consentgen.ConsentGenException;
 import gov.samhsa.mhc.common.document.accessor.DocumentAccessor;
@@ -40,7 +39,6 @@ import gov.samhsa.mhc.pcm.domain.reference.*;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategoryRepository;
 import gov.samhsa.mhc.pcm.infrastructure.AbstractConsentRevokationPdfGenerator;
-import gov.samhsa.mhc.pcm.infrastructure.EchoSignSignatureService;
 import gov.samhsa.mhc.pcm.service.consentexport.ConsentExportService;
 import gov.samhsa.mhc.pcm.service.dto.*;
 import gov.samhsa.mhc.pcm.service.exception.XacmlNotFoundException;
@@ -138,12 +136,6 @@ public class ConsentServiceImpl implements ConsentService {
      */
     @Autowired
     private PurposeOfUseCodeRepository purposeOfUseCodeRepository;
-
-    /**
-     * The echo sign signature service.
-     */
-    @Autowired
-    private EchoSignSignatureService echoSignSignatureService;
 
     /**
      * The consent revokation pdf generator.
@@ -381,91 +373,6 @@ public class ConsentServiceImpl implements ConsentService {
     @Override
     public long countAllConsents() {
         return consentRepository.count();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see gov.samhsa.consent2share.service.consent.ConsentService#
-     * createConsentEmbeddedWidget
-     * (gov.samhsa.consent2share.service.dto.ConsentPdfDto)
-     */
-    @Override
-    public String createConsentEmbeddedWidget(ConsentPdfDto consentPdfDto) throws ConsentGenException
-    {
-        final Consent consent = consentRepository
-                .findOne(consentPdfDto.getId());
-        // SignConsent
-        final SignedPDFConsent signedPdfConsent = makeSignedPdfConsent();
-        final Patient patient = consent.getPatient();
-        final String patientEmail = patient.getEmail();
-
-        final EmbeddedWidgetCreationResult result = echoSignSignatureService
-                .createEmbeddedWidget(consentPdfDto.getContent(),
-                        consentPdfDto.getFilename(),
-                        consentPdfDto.getConsentName(), null, patientEmail);
-        signedPdfConsent.setDocumentId(result.getDocumentKey());
-        signedPdfConsent
-                .setDocumentNameBySender(consentPdfDto.getConsentName());
-        signedPdfConsent
-                .setDocumentMessageBySender("This is a hard-coded greeting to be replaced. Hi.");
-        signedPdfConsent.setSignerEmail(patientEmail);
-        signedPdfConsent.setDocumentSignedStatus("Unsigned");
-        consent.setSignedPdfConsent(signedPdfConsent);
-        //generate consent directive when submitting consent to sign
-        consent.setExportedCDAR2Consent(consentExportService.exportConsent2CDAR2ConsentDirective(
-                consent).getBytes());
-        consentRepository.save(consent);
-        return result.getJavascript();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see gov.samhsa.consent2share.service.consent.ConsentService#
-     * createRevocationEmbeddedWidget
-     * (gov.samhsa.consent2share.service.dto.ConsentRevokationPdfDto)
-     */
-    @Override
-    public String createRevocationEmbeddedWidget(
-            ConsentRevokationPdfDto consentRevokationPdfDto) {
-        final Consent consent = consentRepository
-                .findOne(consentRevokationPdfDto.getId());
-        // SignConsentRevokation
-        final SignedPDFConsentRevocation signedPDFConsentRevocation = makeSignedPDFConsentRevocation();
-        final Patient patient = consent.getPatient();
-        final String patientEmail = patient.getEmail();
-
-        final EmbeddedWidgetCreationResult result = echoSignSignatureService
-                .createEmbeddedWidget(consentRevokationPdfDto.getContent(),
-                        consentRevokationPdfDto.getFilename(),
-                        consentRevokationPdfDto.getConsentName()
-                                + " Revocation", null, patientEmail);
-        signedPDFConsentRevocation.setDocumentId(result.getDocumentKey());
-        signedPDFConsentRevocation
-                .setDocumentNameBySender(consentRevokationPdfDto
-                        .getConsentName());
-        signedPDFConsentRevocation
-                .setDocumentMessageBySender("This is a hard-coded greeting to be replaced. Hi.");
-        signedPDFConsentRevocation.setSignerEmail("consent2share@gmail.com");
-        signedPDFConsentRevocation.setDocumentSignedStatus("Unsigned");
-        signedPDFConsentRevocation.setDocumentCreatedBy(consent.getPatient()
-                .getLastName() + ", " + consent.getPatient().getFirstName());
-        signedPDFConsentRevocation
-                .setDocumentSentOutForSignatureDateTime(new Date());
-        consent.setConsentRevoked(true);
-        consent.setSignedPdfConsentRevoke(signedPDFConsentRevocation);
-
-        if (consentRevokationPdfDto.getRevokationType()
-                .equals("EMERGENCY ONLY")) {
-            consent.setConsentRevokationType("EMERGENCY ONLY");
-        }
-        if (consentRevokationPdfDto.getRevokationType().equals("NO NEVER")) {
-            consent.setConsentRevokationType("NO NEVER");
-        }
-
-        consentRepository.save(consent);
-        return result.getJavascript();
     }
 
     /**
@@ -1350,11 +1257,8 @@ public class ConsentServiceImpl implements ConsentService {
         final String patientEmail = patient.getEmail();
 
         // Email hard-coded and to be changed
-        signedPdfConsent.setDocumentId(echoSignSignatureService
-                .sendDocumentToSign(consentPdfDto.getContent(),
-                        consentPdfDto.getFilename(),
-                        consentPdfDto.getConsentName(), patientEmail,
-                        "consent2share@gmail.com"));
+        //FIXME: NO DOCUMENT ID AFTER REMOVING ECHOSIGN; FIND REPLACEMENT FOR DOCUMENT ID VALUE SOURCE
+        signedPdfConsent.setDocumentId(null);
         signedPdfConsent
                 .setDocumentNameBySender(consentPdfDto.getConsentName());
         signedPdfConsent
@@ -1384,12 +1288,8 @@ public class ConsentServiceImpl implements ConsentService {
         final String patientEmail = patient.getEmail();
 
         // TODO:Email and Email message hard-coded and to be changed
-        signedPDFConsentRevocation.setDocumentId(echoSignSignatureService
-                .sendDocumentToSign(consentRevokationPdfDto.getContent(),
-                        consentRevokationPdfDto.getFilename(),
-                        consentRevokationPdfDto.getConsentName()
-                                + " Revocation", patientEmail,
-                        "consent2share@gmail.com"));
+        //FIXME: NO DOCUMENT ID AFTER REMOVING ECHOSIGN; FIND REPLACEMENT FOR DOCUMENT ID VALUE SOURCE
+        signedPDFConsentRevocation.setDocumentId(null);
         signedPDFConsentRevocation
                 .setDocumentNameBySender(consentRevokationPdfDto
                         .getConsentName());

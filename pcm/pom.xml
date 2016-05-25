@@ -137,21 +137,6 @@
             <version>${apache.commons.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.echosign</groupId>
-            <artifactId>adobe-echosign</artifactId>
-            <version>${adobe-echosign.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>XmlSchema</artifactId>
-                    <groupId>org.apache.ws.commons</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>${modelmapper.version}</version>
