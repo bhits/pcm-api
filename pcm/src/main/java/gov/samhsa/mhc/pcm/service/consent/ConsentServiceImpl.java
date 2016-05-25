@@ -25,6 +25,7 @@
  ******************************************************************************/
 package gov.samhsa.mhc.pcm.service.consent;
 
+import echosign.api.clientv20.dto16.EmbeddedWidgetCreationResult;
 import gov.samhsa.mhc.common.consentgen.ConsentBuilder;
 import gov.samhsa.mhc.common.consentgen.ConsentGenException;
 import gov.samhsa.mhc.common.document.accessor.DocumentAccessor;
@@ -39,6 +40,8 @@ import gov.samhsa.mhc.pcm.domain.reference.*;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategoryRepository;
 import gov.samhsa.mhc.pcm.infrastructure.AbstractConsentRevokationPdfGenerator;
+import gov.samhsa.mhc.pcm.infrastructure.PhrService;
+import gov.samhsa.mhc.pcm.infrastructure.dto.PatientDto;
 import gov.samhsa.mhc.pcm.service.consentexport.ConsentExportService;
 import gov.samhsa.mhc.pcm.service.dto.*;
 import gov.samhsa.mhc.pcm.service.exception.XacmlNotFoundException;
@@ -197,6 +200,8 @@ public class ConsentServiceImpl implements ConsentService {
     @Autowired
     private DocumentAccessor documentAccessor;
 
+    @Autowired
+    private PhrService phrService;
     /*
      * (non-Javadoc)
      *
@@ -473,6 +478,84 @@ public class ConsentServiceImpl implements ConsentService {
         pageResultsMap.put("currentPage", pages.getNumber());
 
         return pageResultsMap;
+    }
+
+    @Override
+    public ConsentAttestationDto getConsentAttestationDto( String userName,Long consentId) {
+
+        Consent consent = null;
+        ConsentAttestationDto consentAttestationDto = null;
+        Optional<Consent> findConsentOptional = patientRepository.findByUsername(userName).getConsents().stream()
+                .filter(c -> consentId.equals(c.getId()))
+                .findAny();
+        if (findConsentOptional.isPresent()) {
+            consent = findConsentOptional.get();
+
+            consentAttestationDto = new ConsentAttestationDto();
+            consentAttestationDto.setConsentReferenceNumber(consent.getConsentReferenceId());
+
+            final PatientDto patientProfile = phrService.getPatientProfile();
+
+            if(consentAttestationDto != null){
+                consentAttestationDto.setPatientDateOfBirth(patientProfile.getBirthDate());
+                consentAttestationDto.setFirstName(patientProfile.getFirstName());
+                consentAttestationDto.setLastName(patientProfile.getLastName());
+            }
+
+            final Set<OrganizationalProvider> consentOrganizationalProviderDisclosureIsMadeTo = new HashSet<OrganizationalProvider>();
+            for (final ConsentOrganizationalProviderDisclosureIsMadeTo item : consent.getOrganizationalProvidersDisclosureIsMadeTo()) {
+                consentOrganizationalProviderDisclosureIsMadeTo.add(item.getOrganizationalProvider());
+            }
+
+            final Set<IndividualProvider> consentIndividualProviderDisclosureIsMadeTo = new HashSet<IndividualProvider>();
+            for (final ConsentIndividualProviderDisclosureIsMadeTo item : consent.getProvidersDisclosureIsMadeTo()) {
+                consentIndividualProviderDisclosureIsMadeTo.add(item.getIndividualProvider());
+            }
+
+
+            final Set<OrganizationalProvider> consentOrganizationalProviderPermittedToDisclose = new HashSet<OrganizationalProvider>();
+            for (final ConsentOrganizationalProviderPermittedToDisclose item : consent.getOrganizationalProvidersPermittedToDisclose()) {
+                consentOrganizationalProviderPermittedToDisclose.add(item.getOrganizationalProvider());
+            }
+
+            final Set<IndividualProvider> consentIndividualProviderPermittedToDisclose = new HashSet<IndividualProvider>();
+            for (final ConsentIndividualProviderPermittedToDisclose item : consent.getProvidersPermittedToDisclose()) {
+                consentIndividualProviderPermittedToDisclose.add(item.getIndividualProvider());
+            }
+
+            final Set<String> doNotShareSensitivityPolicyDisplayName = new HashSet<String>();
+            for (final ConsentDoNotShareSensitivityPolicyCode item : consent.getDoNotShareSensitivityPolicyCodes()) {
+                doNotShareSensitivityPolicyDisplayName.add(item.getValueSetCategory().getName());
+            }
+
+            // Set fields
+            // isMadeToName.addAll(isMadeToOrgName);
+            // toDiscloseName.addAll(toDiscloseOrgName);
+            consentAttestationDto.setConsentId(String.valueOf(consent.getId()));
+            consentAttestationDto.setUsername(consent.getPatient().getUsername());
+
+            //Set start and end date
+            consentAttestationDto.setConsentStart(consent.getStartDate());
+            consentAttestationDto.setConsentEnd(consent.getEndDate());
+
+            //Authorize to
+            consentAttestationDto.setOrgProvidersPermittedToDisclosure(consentOrganizationalProviderPermittedToDisclose);
+            consentAttestationDto.setIndProvidersPermittedToDisclosure(consentIndividualProviderPermittedToDisclose);
+
+            //Disclose to
+            consentAttestationDto.setOrgProvidersDisclosureIsMadeTo(consentOrganizationalProviderDisclosureIsMadeTo);
+            consentAttestationDto.setIndProvidersDisclosureIsMadeTo(consentIndividualProviderDisclosureIsMadeTo);
+
+            consentAttestationDto.setDoNotShareSensitivityPolicyDisplayNames(doNotShareSensitivityPolicyDisplayName);
+
+            final Set<PurposeOfUseCode> purposeOfUses= new HashSet<PurposeOfUseCode>();
+            for (final ConsentShareForPurposeOfUseCode purposeOfUseCode : consent.getShareForPurposeOfUseCodes()) {
+                purposeOfUses.add(purposeOfUseCode.getPurposeOfUseCode());
+            }
+            consentAttestationDto.setPurposeOfUseCodes(purposeOfUses);
+        }
+
+        return consentAttestationDto;
     }
 
     /*
