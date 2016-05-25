@@ -25,7 +25,6 @@
  ******************************************************************************/
 package gov.samhsa.mhc.pcm.service.consent;
 
-import echosign.api.clientv20.dto16.EmbeddedWidgetCreationResult;
 import gov.samhsa.mhc.common.consentgen.ConsentBuilder;
 import gov.samhsa.mhc.common.consentgen.ConsentGenException;
 import gov.samhsa.mhc.common.document.accessor.DocumentAccessor;
