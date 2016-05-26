@@ -223,7 +223,7 @@ public class Consent {
     /** The created on date. */
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "MM/dd/yyyy")
-    private Date createdOnDate;
+    private Date createdDateTime;
 
 	/** The signed date. */
 	@Temporal(TemporalType.TIMESTAMP)
@@ -585,15 +585,15 @@ public class Consent {
      *
      * @return the created on date
      */
-    public Date getCreatedOnDate() { return createdOnDate; }
+    public Date getCreatedDateTime() { return createdDateTime; }
 
     /**
      * Sets the created on date.
      *
-     * @param createdOnDate
+     * @param createdDateTime
      *            the new created on date
      */
-    public void setCreatedOnDate(Date createdOnDate) { this.createdOnDate = createdOnDate; }
+    public void setCreatedDateTime(Date createdDateTime) { this.createdDateTime = createdDateTime; }
 
 	/**
 	 * Gets the signed date.
