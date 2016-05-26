@@ -220,6 +220,11 @@ public class Consent {
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	private Date endDate;
 
+    /** The created on date. */
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    private Date createdOnDate;
+
 	/** The signed date. */
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
@@ -574,6 +579,21 @@ public class Consent {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
+
+    /**
+     * Gets the created on date.
+     *
+     * @return the created on date
+     */
+    public Date getCreatedOnDate() { return createdOnDate; }
+
+    /**
+     * Sets the created on date.
+     *
+     * @param createdOnDate
+     *            the new created on date
+     */
+    public void setCreatedOnDate(Date createdOnDate) { this.createdOnDate = createdOnDate; }
 
 	/**
 	 * Gets the signed date.
