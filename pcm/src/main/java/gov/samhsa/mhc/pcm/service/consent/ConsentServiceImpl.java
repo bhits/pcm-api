@@ -1293,7 +1293,9 @@ public class ConsentServiceImpl implements ConsentService {
         consent.setName("Consent");
         consent.setDescription("This is a consent made by "
                 + patient.getFirstName() + " " + patient.getLastName());
+
         consent.setUnsignedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent));
+
         try {
 
 

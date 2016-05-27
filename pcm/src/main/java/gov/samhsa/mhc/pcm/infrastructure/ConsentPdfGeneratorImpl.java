@@ -30,6 +30,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import gov.samhsa.mhc.pcm.domain.consent.*;
+import gov.samhsa.mhc.pcm.domain.provider.AbstractProvider;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalConceptCode;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
 import gov.samhsa.mhc.pcm.domain.reference.PurposeOfUseCode;
@@ -42,6 +43,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -94,191 +96,6 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
             document.open();
 
-            Paragraph parConsentId = new Paragraph(20);
-            parConsentId.setAlignment(Element.ALIGN_LEFT);
-
-            Chunk chunkConsentIdLabel = new Chunk();
-            chunkConsentIdLabel.append("Consent Reference Number: ");
-
-            chunkConsentIdLabel.append(strConsentIdValue);
-            parConsentId.add(chunkConsentIdLabel);
-
-
-            Paragraph parConsentDescription = new Paragraph(20);
-            parConsentDescription.setSpacingAfter(10);
-            parConsentDescription.setAlignment(Element.ALIGN_CENTER);
-
-            Chunk chunkConsentDescription = new Chunk(strConsentDescriptionValue, fontheader);
-
-            parConsentDescription.add(chunkConsentDescription);
-
-
-            Paragraph parPatientInfoAndProviders = new Paragraph(20);
-            parPatientInfoAndProviders.setSpacingBefore(10);
-
-            PdfPTable headerNotification = new PdfPTable(1);
-            headerNotification.setHorizontalAlignment(Element.ALIGN_CENTER);
-            headerNotification.setWidthPercentage(100f);
-            headerNotification.addCell(new PdfPCell(new Phrase("***PLEASE READ THE ENTIRE FORM BEFORE SIGNING BELOW***", fontnotification)));
-
-            Chunk chunkPatientInfoFieldsHeader = new Chunk("Patient (name and information of person whose health information is being disclosed): \n\n", fontbold);
-            Chunk chunkPatientNameLabel = new Chunk("Name (First Middle Last):");
-            Chunk chunkPatientDOBLabel = new Chunk("Date of Birth(mm/dd/yyyy): ");
-            Chunk chunkPatientStreetLabel = new Chunk("Street: ");
-            Chunk chunkPatientCityLabel = new Chunk("City: ");
-            Chunk chunkPatientStateLabel = new Chunk("State: ");
-            Chunk chunkPatientZipLabel = new Chunk("Zip: ");
-
-            Chunk chunkPatientDOBValue = null;
-            Chunk chunkPatientStreetValue = null;
-            Chunk chunkPatientCityValue = null;
-            Chunk chunkPatientStateValue = null;
-            Chunk chunkPatientZipValue = null;
-
-            if (datePatientDOB != null) {
-                chunkPatientDOBValue = new Chunk(String.format("%tm/%td/%tY", datePatientDOB, datePatientDOB, datePatientDOB) + "\n");
-                chunkPatientDOBValue.setUnderline(1, -2);
-            }
-            if (addrsPatientAddress != null) {
-                String strPatientStreetAddress = addrsPatientAddress.getStreetAddressLine();
-                String strPatientCity = addrsPatientAddress.getCity();
-                StateCode scPatientStateCode = addrsPatientAddress.getStateCode();
-                String strPatientPostalCode = addrsPatientAddress.getPostalCode();
-
-                if (strPatientStreetAddress != null) {
-                    chunkPatientStreetValue = new Chunk(strPatientStreetAddress + "\n");
-                    chunkPatientStreetValue.setUnderline(1, -2);
-                }
-
-                if (strPatientCity != null) {
-                    chunkPatientCityValue = new Chunk(strPatientCity + "  ");
-                    chunkPatientCityValue.setUnderline(1, -2);
-                }
-
-                if (scPatientStateCode != null) {
-                    chunkPatientStateValue = new Chunk(scPatientStateCode.getDisplayName() + "  ");
-                    chunkPatientStateValue.setUnderline(1, -2);
-                }
-
-                if (strPatientPostalCode != null) {
-                    chunkPatientZipValue = new Chunk(strPatientPostalCode);
-                    chunkPatientZipValue.setUnderline(1, -2);
-                }
-            }
-
-            Chunk chunkPatientNameValue = new Chunk(strPatientNameValue);
-            chunkPatientNameValue.setUnderline(1, -2);
-
-            Chunk chunkAuthorizesLabel = new Chunk("authorizes ");
-            Chunk chunkDiscloseToLabel = new Chunk(" to disclose to ");
-
-            parPatientInfoAndProviders.add(headerNotification);
-            parPatientInfoAndProviders.add(chunkPatientInfoFieldsHeader);
-            parPatientInfoAndProviders.add(chunkPatientNameLabel);
-            parPatientInfoAndProviders.add(chunkPatientNameValue);
-
-            if (chunkPatientDOBValue != null) {
-                parPatientInfoAndProviders.add(chunkPatientDOBLabel);
-                parPatientInfoAndProviders.add(chunkPatientDOBValue);
-            }
-
-            if (addrsPatientAddress != null) {
-                parPatientInfoAndProviders.add(chunkPatientStreetLabel);
-                parPatientInfoAndProviders.add(chunkPatientStreetValue);
-                parPatientInfoAndProviders.add(chunkPatientCityLabel);
-                parPatientInfoAndProviders.add(chunkPatientCityValue);
-                parPatientInfoAndProviders.add(chunkPatientStateLabel);
-                parPatientInfoAndProviders.add(chunkPatientStateValue);
-                parPatientInfoAndProviders.add(chunkPatientZipLabel);
-                parPatientInfoAndProviders.add(chunkPatientZipValue);
-            }
-
-            parPatientInfoAndProviders.add(new Chunk("\n\n"));
-            parPatientInfoAndProviders.add(chunkAuthorizesLabel);
-            parPatientInfoAndProviders.add(createConsentMadeFromTable(consent));
-            parPatientInfoAndProviders.add(chunkDiscloseToLabel);
-            parPatientInfoAndProviders.add(createConsentMadeToTable(consent));
-
-            Paragraph parConsentShareMedInfoHeader = new Paragraph(20);
-            parConsentShareMedInfoHeader.setSpacingBefore(10);
-
-            Chunk chunkShareFollowingMedInfoLabel = new Chunk("Share the following medical information", fontbold);
-            chunkShareFollowingMedInfoLabel.setUnderline(1, -2);
-
-
-            parConsentShareMedInfoHeader.add(chunkShareFollowingMedInfoLabel);
-
-            Paragraph sensitivityParagraph = getSensitivityParagraph(consent);
-
-            Paragraph clinicalDocumentTypeParagraph = getClinicalDocumentTypeParagraph(consent);
-
-            Paragraph clinicalConceptCodesParagraph = getClinicalConceptCodesParagraph(consent);
-
-
-            Chunk chunkEndShareMedInfoHeaderSymbol = null;
-
-            if (sensitivityParagraph != null
-                    || clinicalDocumentTypeParagraph != null
-                    || clinicalConceptCodesParagraph != null) {
-                // chunkEndShareMedInfoHeaderSymbol = new Chunk(" except the following:");
-                chunkEndShareMedInfoHeaderSymbol = new Chunk(" :\n\n");
-                // chunkEndShareMedInfoHeaderSymbol.setUnderline(1, -2);
-            } else {
-                chunkEndShareMedInfoHeaderSymbol = new Chunk(".");
-            }
-
-            parConsentShareMedInfoHeader.add(chunkEndShareMedInfoHeaderSymbol);
-
-            Paragraph parShareForFollowingPurposesHeader = new Paragraph(20);
-            parShareForFollowingPurposesHeader.setSpacingAfter(10);
-            parShareForFollowingPurposesHeader.setSpacingBefore(10);
-
-            Chunk chunkShareForFollowingPurposesLabel = new Chunk("Share for the following purpose(s):", fontbold);
-            chunkShareForFollowingPurposesLabel.setUnderline(1, -2);
-
-            parShareForFollowingPurposesHeader.add(new Chunk("\n"));
-            parShareForFollowingPurposesHeader.add(chunkShareForFollowingPurposesLabel);
-
-            // Do Not Share Purpose of Use List
-            Paragraph purposeOfUseParagraph = getPurposeOfUseParagraph(consent);
-
-            ArrayList<Paragraph> ary_parConsentAgreementText = new ArrayList<>();
-
-            for(String curParTextString : ary_parConsentAgreementTextStrings) {
-                Paragraph parConsentAgreementText = new Paragraph(20);
-                parConsentAgreementText.setSpacingBefore(10);
-
-                Chunk chunkCurParText = new Chunk(curParTextString);
-                parConsentAgreementText.add(chunkCurParText);
-
-                ary_parConsentAgreementText.add(parConsentAgreementText);
-            }
-
-            Paragraph parConsentDateRange = new Paragraph(20);
-
-            Chunk chunkExpirationDate;
-            if (dateConsentEndDate != null) {
-                chunkExpirationDate = new Chunk(String.format("Expiration Date: %tm/%td/%ty", dateConsentEndDate, dateConsentEndDate, dateConsentEndDate));
-            } else {
-                chunkExpirationDate = new Chunk("N/A");
-            }
-
-            chunkExpirationDate.setUnderline(1, -2);
-
-
-            Chunk chunkEffectiveDate;
-            if (dateConsentStartDate != null) {
-                chunkEffectiveDate = new Chunk(String.format("Effective Date: %tm/%td/%ty\n", dateConsentStartDate, dateConsentStartDate, dateConsentStartDate));
-            } else {
-                chunkEffectiveDate = new Chunk("N/A");
-            }
-
-            chunkEffectiveDate.setUnderline(1, -2);
-
-
-            parConsentDateRange.add(chunkEffectiveDate);
-            parConsentDateRange.add(chunkExpirationDate);
-
             //New code
 
             // Title
@@ -303,14 +120,14 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
             //Authorization to disclose section
             document.add(createSectionTitle("AUTHORIZATION TO DISCLOSE"));
-
+            //Authorizes
             document.add(new Paragraph("Authorizes: "));
 
-            document.add(new Paragraph(""));
-
+            document.add(createProviderTable(null));
+            //To disclose to
             document.add(new Paragraph("To disclose to: "));
 
-            document.add(new Paragraph(""));
+            document.add(createProviderTable(null));
 
             //Health information to be disclosed section
             document.add(createSectionTitle("HEALTH INFORMATION TO BE DISCLOSED"));
@@ -334,7 +151,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         } catch (Throwable e) {
             // TODO log exception
             e.printStackTrace();
-            throw new ConsentPdfGenerationException("Excecption when trying to generate pdf", e);
+            throw new ConsentPdfGenerationException("Exception when trying to generate pdf", e);
         }
 
         byte[] pdfBytes = pdfOutputStream.toByteArray();
@@ -353,11 +170,9 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         }else{
             titleParagraph = new Paragraph(title);
         }
-//        Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.BOLD);
-//        Paragraph titleParagraph = new Paragraph(title, titleFont);
+
         return titleParagraph;
     }
-
 
     // Create borderless table
     private PdfPTable  createBorderlessTable(int column){
@@ -376,6 +191,8 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             cell = new PdfPCell(new Paragraph(content));
         }
         cell.setBorder(Rectangle.NO_BORDER);
+        cell.setPaddingLeft(0);
+
         return cell;
     }
 
@@ -390,6 +207,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
         return consentReferenceNumberTable;
     }
+
     private Chunk createChunkWithFont(String text, Font textFont){
         Chunk labelChunk = null;
         if(text != null && textFont != null ){
@@ -425,15 +243,20 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         return consentReferenceNumberTable;
     }
 
+    private String formatDate(Date aDate){
+        String dateFormat  = "MM/dd/yyyy";
+        return new SimpleDateFormat(dateFormat).format(aDate);
+    }
+
     private PdfPTable createStartAndEndDateTable(Consent consent) {
         PdfPTable consentStartAndEndDateTable = createBorderlessTable(3);
 
         if (consent != null) {
             Font patientDateFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
-            PdfPCell EffectiveDateCell = new PdfPCell(createCellContent("Effective Date: ", patientDateFont, "05/27/2016", patientDateFont));
+            PdfPCell EffectiveDateCell = new PdfPCell(createCellContent("Effective Date: ", patientDateFont, formatDate(consent.getStartDate()), patientDateFont));
             EffectiveDateCell.setBorder(Rectangle.NO_BORDER);
 
-            PdfPCell expirationDateCell = new PdfPCell(createCellContent("Expiration Date: ", patientDateFont, "06/01/2016", patientDateFont));
+            PdfPCell expirationDateCell = new PdfPCell(createCellContent("Expiration Date: ", patientDateFont,formatDate(consent.getEndDate()), patientDateFont));
             expirationDateCell.setBorder(Rectangle.NO_BORDER);
 
             PdfPCell emptyCell = new PdfPCell();
@@ -445,7 +268,6 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         }
         return consentStartAndEndDateTable;
     }
-
 
     private PdfPTable createSectionTitle(String title){
         PdfPTable sectionTitle = createBorderlessTable(1);
@@ -471,19 +293,39 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         return createParagraphWithContent(term, null);
     }
 
+    private PdfPTable createProviderPropertyValueTable(String propertyName, String propertyValue){
+        PdfPTable providerTable = createBorderlessTable(1);
+
+        Font propertNameFont = new Font(Font.FontFamily.TIMES_ROMAN,10);
+        providerTable.addCell(createBorderlessCell(propertyName, propertNameFont));
+        Font valueFont = new Font(Font.FontFamily.TIMES_ROMAN,12,Font.BOLD);
+        providerTable.addCell(createBorderlessCell(propertyValue, valueFont));
+
+        return providerTable;
+    }
+    private PdfPTable createProviderTable(AbstractProvider provider){
+        PdfPTable providerTable = createBorderlessTable(4);
+        providerTable.addCell(createProviderPropertyValueTable("Provider Name", "KOYOMJI DENTAL"));
+        providerTable.addCell(createProviderPropertyValueTable("NPI Number", "111111111"));
+        providerTable.addCell(createProviderPropertyValueTable("Address", "8601 Falls Run Road Unit F, Ellicott City, MD 21043"));
+        providerTable.addCell(createProviderPropertyValueTable("Phone", "301-654-1111"));
+//        if(provider != null){
+//            providerTable.addCell(createProviderPropertyValueTable("Provider"));
+//        }
+
+        return providerTable;
+    }
+
+    //// Old code
 
 
-
-
-
-
-        /**
-         * Gets the sensitivity paragraph.
-         *
-         * @param consent
-         *            the consent
-         * @return the sensitivity paragraph
-         */
+    /**
+     * Gets the sensitivity paragraph.
+     *
+     * @param consent
+     *            the consent
+     * @return the sensitivity paragraph
+     */
     private Paragraph getSensitivityParagraph(Consent consent) {
         Paragraph paragraph = null;
         Set<ConsentDoNotShareSensitivityPolicyCode> consentDoNotShareSensitivityPolicyCodes = consent
