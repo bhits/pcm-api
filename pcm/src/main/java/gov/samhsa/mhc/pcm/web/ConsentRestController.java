@@ -412,6 +412,19 @@ public class ConsentRestController {
         } else
             throw new InternalServerErrorException("Consent Attestation Dto Not Found");
     }
+
+    @RequestMapping(value = "consents/attestation/download/{consentId}", method = RequestMethod.GET)
+    public byte[] getConsentAttestationPDF(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
+        final Long patientId = patientService.findIdByUsername(principal.getName());
+
+        if (consentService.isConsentBelongToThisUser(consentId, patientId)
+                && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
+            ConsentPdfDto consentPdfDto = consentService.findConsentPdfDto(consentId);
+            return consentPdfDto.getContent();
+        } else
+            throw new InternalServerErrorException("Consent Attestation PDF Not Found");
+    }
+
     //FIXME: REWRITE THIS FUNCTION AFTER IMPLEMENTING PATIENT CHECKBOX ATTESTATION FOR SIGNING
     @RequestMapping(value = "consents/revokeConsent/{consentId}", method = RequestMethod.GET)
     public Map<String, String> signConsentRevokation(Principal principal, @PathVariable("consentId") Long consentId) {
@@ -427,7 +440,6 @@ public class ConsentRestController {
         } else
             throw new InternalServerErrorException("Resource Not Found");
     }
-
 
     @RequestMapping(value = "consents/exportConsentDirective/{consentId}", method = RequestMethod.GET)
     public Map exportConsentDirective(HttpServletRequest request, Principal principal, @PathVariable("consentId") Long consentId) {

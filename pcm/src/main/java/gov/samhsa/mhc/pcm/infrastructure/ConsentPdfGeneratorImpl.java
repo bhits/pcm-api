@@ -279,43 +279,47 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             parConsentDateRange.add(chunkEffectiveDate);
             parConsentDateRange.add(chunkExpirationDate);
 
-            document.add(parConsentId);
-            document.add(parConsentDescription);
-            document.add(parPatientInfoAndProviders);
+            //New code
 
-            document.add(parConsentShareMedInfoHeader);
+            // Title
+            Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.BOLD);
+            document.add(createParagraphWithContent("Consent to Share My Health Information", titleFont));
 
-            if (sensitivityParagraph != null) {
-                document.add(sensitivityParagraph);
-            }
-            if (clinicalDocumentTypeParagraph != null) {
-                document.add(clinicalDocumentTypeParagraph);
-            }
-            if (clinicalConceptCodesParagraph != null) {
-                document.add(clinicalConceptCodesParagraph);
-            }
+            // Blank line
+            document.add( Chunk.NEWLINE );
 
-            document.add(parShareForFollowingPurposesHeader);
+            // Consent Created Date
+            document.add(createParagraphWithContent("Created On: " + "05/26/2016" , null));
 
-            if (purposeOfUseParagraph != null) {
-                document.add(purposeOfUseParagraph);
-            }
+            //consent Reference Number
+            document.add(createConsentReferenceNumberTable(consent));
 
+            document.add(new Paragraph(" "));
 
-            for(Paragraph curPar : ary_parConsentAgreementText){
-                document.add(curPar);
-            }
+            //Patient Name and date of birth
+            document.add(createPatientNameAndDOBTable(consent));
 
+            document.add(new Paragraph(" "));
 
-            document.add(parConsentDateRange);
+            //Authorization to disclose
+            document.add(createSectionTitle("AUTHORIZATION TO DISCLOSE"));
+
+            document.add(new Paragraph(" "));
+
+            //Health information to be disclosed
+            document.add(createSectionTitle("HEALTH INFORMATION TO BE DISCLOSED"));
+
+            document.add(new Paragraph(" "));
+
+            //Health information to be disclosed
+            document.add(createSectionTitle("CONSENT TERMS"));
 
             document.close();
 
         } catch (Throwable e) {
             // TODO log exception
             e.printStackTrace();
-            throw new ConsentPdfGenerationException(
-                    "Excecption when trying to generate pdf", e);
+            throw new ConsentPdfGenerationException("Excecption when trying to generate pdf", e);
         }
 
         byte[] pdfBytes = pdfOutputStream.toByteArray();
@@ -323,13 +327,119 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         return pdfBytes;
     }
 
-    /**
-     * Gets the sensitivity paragraph.
-     *
-     * @param consent
-     *            the consent
-     * @return the sensitivity paragraph
-     */
+
+
+    //Create document title
+    private Paragraph createParagraphWithContent(String title, Font font){
+        Paragraph titleParagraph = null;
+
+        if(font != null){
+            titleParagraph = new Paragraph(title, font);
+        }else{
+            titleParagraph = new Paragraph(title);
+        }
+//        Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.BOLD);
+//        Paragraph titleParagraph = new Paragraph(title, titleFont);
+        return titleParagraph;
+    }
+
+
+    // Create borderless table
+    private PdfPTable  createBorderlessTable(int column){
+        PdfPTable table = new PdfPTable(column);
+        table.setWidthPercentage(100);
+        table.getDefaultCell().setBorder(0);
+        return table;
+    }
+
+    private PdfPCell createBorderlessCell(String content, Font font){
+        PdfPCell cell = null;
+
+        if(font != null){
+            cell = new PdfPCell(new Paragraph(content, font));
+        }else {
+            cell = new PdfPCell(new Paragraph(content));
+        }
+        cell.setBorder(Rectangle.NO_BORDER);
+        return cell;
+    }
+
+    private PdfPTable createConsentReferenceNumberTable(Consent consent){
+        PdfPTable  consentReferenceNumberTable  = createBorderlessTable(1);
+
+        if(consent != null){
+            consentReferenceNumberTable.addCell(createBorderlessCell("Consent Reference Number:", null));
+            Font consentRefNumberFont = new Font(Font.FontFamily.TIMES_ROMAN, 11);
+            consentReferenceNumberTable.addCell(createBorderlessCell(consent.getConsentReferenceId(),consentRefNumberFont));
+        }
+
+        return consentReferenceNumberTable;
+    }
+    private Chunk createChunkWithFont(String text, Font textFont){
+        Chunk labelChunk = null;
+        if(text != null && textFont != null ){
+            labelChunk = new Chunk(text, textFont);
+        }else if(text != null){
+            labelChunk = new Chunk(text);
+        }
+        return labelChunk;
+    }
+
+    private Paragraph createCellContent(String label, Font labelFont, String value, Font valueFont){
+        Paragraph content = new Paragraph();
+        content.add(createChunkWithFont(label, labelFont));
+        content.add(createChunkWithFont(value, valueFont));
+        return content;
+    }
+
+    private PdfPTable createPatientNameAndDOBTable(Consent consent) {
+        PdfPTable consentReferenceNumberTable = createBorderlessTable(2);
+
+        if (consent != null) {
+            Font patientInfoFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
+            PdfPCell patientNameCell = new PdfPCell(createCellContent("Patient Name : ", null, "Tomson Ngassa", patientInfoFont));
+            patientNameCell.setBorder(Rectangle.NO_BORDER);
+
+            PdfPCell patientDOBCell = new PdfPCell(createCellContent("Patient DOB : ", null, "05/27/2015", patientInfoFont));
+            patientDOBCell.setBorder(Rectangle.NO_BORDER);
+
+            consentReferenceNumberTable.addCell(patientNameCell);
+            consentReferenceNumberTable.addCell(patientDOBCell);
+        }
+
+        return consentReferenceNumberTable;
+    }
+
+
+    private PdfPTable createSectionTitle(String title){
+        PdfPTable sectionTitle = createBorderlessTable(1);
+
+        Font cellFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
+        cellFont.setColor(BaseColor.WHITE);
+
+        PdfPCell cell = createBorderlessCell(title,cellFont);
+        cell.setBackgroundColor(new BaseColor(73,89,105));
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setPaddingBottom(5);
+        sectionTitle.addCell(cell);
+
+        return sectionTitle;
+    }
+
+
+
+
+
+
+
+
+        /**
+         * Gets the sensitivity paragraph.
+         *
+         * @param consent
+         *            the consent
+         * @return the sensitivity paragraph
+         */
     private Paragraph getSensitivityParagraph(Consent consent) {
         Paragraph paragraph = null;
         Set<ConsentDoNotShareSensitivityPolicyCode> consentDoNotShareSensitivityPolicyCodes = consent
