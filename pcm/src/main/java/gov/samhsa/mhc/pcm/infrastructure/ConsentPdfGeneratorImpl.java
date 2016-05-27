@@ -71,22 +71,6 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     public byte[] generate42CfrPart2Pdf(Consent consent) {
         Assert.notNull(consent, "Consent is required.");
 
-        ArrayList<String> ary_parConsentAgreementTextStrings = new ArrayList<>();
-        ary_parConsentAgreementTextStrings.add("I understand that my records are protected under the federal regulations governing Confidentiality of Alcohol and Drug Abuse Patient Records, 42 CFR Part 2, and cannot be disclosed without my written consent unless otherwise provided for in the regulations, and may not be redisclosed without my written permission or as otherwise permitted by 42 CFR part 2. I also understand that I may revoke this consent at any time except to the extent that action has been taken in reliance on it, and that in any event this consent expires automatically as follows:");
-
-        Font fontbold = FontFactory.getFont("Helvetica", 12, Font.BOLD);
-        Font fontheader = FontFactory.getFont("Helvetica", 19, Font.BOLD);
-        Font fontnotification = FontFactory.getFont("Helvetica", 16, Font.ITALIC);
-
-        String strConsentIdValue = String.valueOf(consent.getConsentReferenceId());
-        String strConsentDescriptionValue = consent.getDescription();
-        Date dateConsentEndDate = consent.getEndDate();
-        Date dateConsentStartDate = consent.getStartDate();
-
-        String strPatientNameValue = consent.getPatient().getFirstName() + " " + consent.getPatient().getLastName() + "\n";
-        Date datePatientDOB = consent.getPatient().getBirthDay();
-        Address addrsPatientAddress = consent.getPatient().getAddress();
-
         Document document = new Document();
 
         ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
@@ -95,8 +79,6 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             PdfWriter.getInstance(document, pdfOutputStream);
 
             document.open();
-
-            //New code
 
             // Title
             Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.BOLD);
@@ -132,6 +114,8 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             //Health information to be disclosed section
             document.add(createSectionTitle("HEALTH INFORMATION TO BE DISCLOSED"));
 
+            document.add(createHealthInformationToBeDisclose());
+
             document.add(new Paragraph(" "));
 
             //Consent terms section
@@ -144,7 +128,6 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
             // Consent effective and expiration date
             document.add(createStartAndEndDateTable(consent));
-
 
             document.close();
 
@@ -309,303 +292,34 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         providerTable.addCell(createProviderPropertyValueTable("NPI Number", "111111111"));
         providerTable.addCell(createProviderPropertyValueTable("Address", "8601 Falls Run Road Unit F, Ellicott City, MD 21043"));
         providerTable.addCell(createProviderPropertyValueTable("Phone", "301-654-1111"));
-//        if(provider != null){
-//            providerTable.addCell(createProviderPropertyValueTable("Provider"));
-//        }
 
         return providerTable;
     }
 
-    //// Old code
-
-
-    /**
-     * Gets the sensitivity paragraph.
-     *
-     * @param consent
-     *            the consent
-     * @return the sensitivity paragraph
-     */
-    private Paragraph getSensitivityParagraph(Consent consent) {
-        Paragraph paragraph = null;
-        Set<ConsentDoNotShareSensitivityPolicyCode> consentDoNotShareSensitivityPolicyCodes = consent
-                .getDoNotShareSensitivityPolicyCodes();
-
-        Set<ValueSetCategory> valueSetCategorys = new HashSet<ValueSetCategory>(
-                valueSetCategoryRepository.findAll());
-
-        if (consentDoNotShareSensitivityPolicyCodes.size() < valueSetCategorys
-                .size()) {
-            paragraph = new Paragraph();
-            paragraph.add(new Chunk("Sensitivity Categories:"));
-
-            List<String> nameList = new ArrayList<String>();
-
-            for (ConsentDoNotShareSensitivityPolicyCode consentSensitivityPolicyCode : consentDoNotShareSensitivityPolicyCodes) {
-                valueSetCategorys.remove(consentSensitivityPolicyCode
-                        .getValueSetCategory());
-
-            }
-            for (ValueSetCategory valueSetCategory : valueSetCategorys)
-                nameList.add(valueSetCategory.getName());
-
-            Collections.sort(nameList);
-            com.itextpdf.text.List list = new com.itextpdf.text.List(false, 20);
-            for (String displayName : nameList) {
-                list.add(new ListItem(displayName));
-            }
-
-            paragraph.add(list);
-            paragraph.add("\n");
-        }
-
-        return paragraph;
+    private Chunk createUnderlineText(String text){
+        Chunk underlineText = new Chunk(text);
+        underlineText.setUnderline(0.1f, -2f); //0.1 thick, -2 y-location
+        return underlineText;
     }
 
-    /**
-     * Gets the clinical document type paragraph.
-     *
-     * @param consent
-     *            the consent
-     * @return the clinical document type paragraph
-     */
-    private Paragraph getClinicalDocumentTypeParagraph(Consent consent) {
-        Paragraph paragraph = null;
-        // Set<ConsentDoNotShareClinicalDocumentTypeCode>
-        // consentDoNotShareClinicalDocumentTypeCodes = consent
-        // .getDoNotShareClinicalDocumentTypeCodes();
-        // @SuppressWarnings("unchecked")
-        // Set<ClinicalDocumentTypeCode>
-        // clinicalDocumentTypeCodes=(Set<ClinicalDocumentTypeCode>)
-        // clinicalDocumentTypeCodeRepository.findAll();
-        //
-        // if (consentDoNotShareClinicalDocumentTypeCodes.size() <
-        // clinicalDocumentTypeCodes.size()) {
-        // paragraph = new Paragraph();
-        // paragraph.add(new Chunk("Clinical Document Types:"));
-        //
-        // List<String> nameList = new ArrayList<String>();
-        // for (ConsentDoNotShareClinicalDocumentTypeCode
-        // consentClinicalDocumentTypeCode :
-        // consentDoNotShareClinicalDocumentTypeCodes) {
-        // clinicalDocumentTypeCodes.remove(consentClinicalDocumentTypeCode
-        // .getClinicalDocumentTypeCode());
-        // }
-        //
-        // for (ClinicalDocumentTypeCode clinicalDocumentTypeCode :
-        // clinicalDocumentTypeCodes)
-        // nameList.add(clinicalDocumentTypeCode.getDisplayName());
-        //
-        // Collections.sort(nameList);
-        // com.itextpdf.text.List list = new com.itextpdf.text.List(false, 20);
-        // for (String displayName : nameList) {
-        // list.add(new ListItem(displayName));
-        // }
-
-        // paragraph.add(list);
-        // }
-
-        return paragraph;
+    private PdfPCell createEmptyBorderlessCell(){
+        PdfPCell aCell = new PdfPCell();
+        aCell.setBorder(0);
+        return aCell;
     }
 
-
-    /**
-     * Gets the clinical concept codes paragraph.
-     *
-     * @param consent
-     *            the consent
-     * @return the clinical concept codes paragraph
-     */
-    private Paragraph getClinicalConceptCodesParagraph(Consent consent) {
-        Paragraph paragraph = null;
-        Set<ClinicalConceptCode> doNotShareClinicalConceptCodes = consent
-                .getDoNotShareClinicalConceptCodes();
-        if (doNotShareClinicalConceptCodes.size() > 0) {
-            paragraph = new Paragraph();
-            paragraph.add(new Chunk("Specific Medical Information:"));
-
-            List<String> nameList = new ArrayList<String>();
-            for (ClinicalConceptCode clinicalConceptCode : doNotShareClinicalConceptCodes) {
-                nameList.add(clinicalConceptCode.getDisplayName());
-            }
-            Collections.sort(nameList);
-            com.itextpdf.text.List list = new com.itextpdf.text.List(false, 20);
-            for (String displayName : nameList) {
-                list.add(new ListItem(displayName));
-            }
-
-            paragraph.add(list);
-        }
-        return paragraph;
+    private PdfPCell createCellWithUnderlineContent(String text){
+        PdfPCell aCell = createEmptyBorderlessCell();
+        aCell.addElement(createUnderlineText(text));
+        return aCell;
     }
 
-    /**
-     * Gets the purpose of use paragraph.
-     *
-     * @param consent
-     *            the consent
-     * @return the purpose of use paragraph
-     */
-    private Paragraph getPurposeOfUseParagraph(Consent consent) {
-        Paragraph paragraph = null;
-        Set<ConsentShareForPurposeOfUseCode> shareForPurposeOfUseCodeCodes = consent
-                .getShareForPurposeOfUseCodes();
-        if (shareForPurposeOfUseCodeCodes.size() > 0) {
-            paragraph = new Paragraph();
-            List<String> nameList = new ArrayList<String>();
-            for (ConsentShareForPurposeOfUseCode consentPurposeOfUseCode : shareForPurposeOfUseCodeCodes) {
-                PurposeOfUseCode code = consentPurposeOfUseCode
-                        .getPurposeOfUseCode();
-                nameList.add(code.getDisplayName());
-            }
-            Collections.sort(nameList);
-            com.itextpdf.text.List list = new com.itextpdf.text.List(false, 20);
-            for (String displayName : nameList) {
-                list.add(new ListItem(displayName));
-            }
+    private PdfPTable createHealthInformationToBeDisclose(){
+        PdfPTable healthInformationToBeDisclose = createBorderlessTable(2);
+        healthInformationToBeDisclose.addCell(createCellWithUnderlineContent("To SHARE the following medical information:"));
+        healthInformationToBeDisclose.addCell(createCellWithUnderlineContent("To SHARE for the following purpose(s):"));
 
-            paragraph.add(list);
-        }
-        return paragraph;
-    }
 
-    /**
-     * Creates the consent made from table.
-     *
-     * @param consent
-     *            the consent
-     * @return the pdf p table
-     */
-    private PdfPTable createConsentMadeFromTable(Consent consent) {
-        // a table with three columns
-        Font fontbold = FontFactory.getFont("Helvetica", 12, Font.BOLD);
-        PdfPTable table = new PdfPTable(new float[]{0.2f, 0.2f, 0.4f, 0.2f});
-        // table.setWidths(new int[]{1, 1, 2, 1});
-        table.setWidthPercentage(100f);
-        table.setHeaderRows(1);
-        // table.addCell("Person/Organization Name");
-        table.addCell(new PdfPCell(new Phrase("Provider Name", fontbold)));
-        table.addCell(new PdfPCell(new Phrase("Phone", fontbold)));
-        table.addCell(new PdfPCell(new Phrase("Address", fontbold)));
-        table.addCell(new PdfPCell(new Phrase("NPI Number", fontbold)));
-
-        for (ConsentIndividualProviderPermittedToDisclose item : consent
-                .getProvidersPermittedToDisclose()) {
-            table.addCell(item.getIndividualProvider().getFirstName() + " "
-                    + item.getIndividualProvider().getLastName());
-            table.addCell(item.getIndividualProvider()
-                    .getPracticeLocationAddressTelephoneNumber());
-            table.addCell(item.getIndividualProvider()
-                    .getFirstLinePracticeLocationAddress()
-                    + ((item.getIndividualProvider()
-                    .getSecondLinePracticeLocationAddress()
-                    .replaceAll("\\W", "") == "") ? "" : "\n"
-                    + item.getIndividualProvider()
-                    .getSecondLinePracticeLocationAddress())
-                    + "\n"
-                    + item.getIndividualProvider()
-                    .getPracticeLocationAddressCityName()
-                    + ", "
-                    + item.getIndividualProvider()
-                    .getPracticeLocationAddressStateName()
-                    + ", "
-                    + item.getIndividualProvider()
-                    .getPracticeLocationAddressPostalCode());
-            table.addCell(item.getIndividualProvider().getNpi());
-        }
-
-        for (ConsentOrganizationalProviderPermittedToDisclose item : consent
-                .getOrganizationalProvidersPermittedToDisclose()) {
-            table.addCell(item.getOrganizationalProvider().getOrgName());
-            table.addCell(item.getOrganizationalProvider()
-                    .getPracticeLocationAddressTelephoneNumber());
-            table.addCell(item.getOrganizationalProvider()
-                    .getFirstLinePracticeLocationAddress()
-                    + ((item.getOrganizationalProvider()
-                    .getSecondLinePracticeLocationAddress()
-                    .replaceAll("\\W", "") == "") ? "" : "\n"
-                    + item.getOrganizationalProvider()
-                    .getSecondLinePracticeLocationAddress())
-                    + "\n"
-                    + item.getOrganizationalProvider()
-                    .getPracticeLocationAddressCityName()
-                    + ", "
-                    + item.getOrganizationalProvider()
-                    .getPracticeLocationAddressStateName()
-                    + ", "
-                    + item.getOrganizationalProvider()
-                    .getPracticeLocationAddressPostalCode());
-            table.addCell(item.getOrganizationalProvider().getNpi());
-        }
-        return table;
-    }
-
-    /**
-     * Creates the consent made to table.
-     *
-     * @param consent
-     *            the consent
-     * @return the pdf p table
-     */
-    private PdfPTable createConsentMadeToTable(Consent consent) {
-        Font fontbold = FontFactory.getFont("Helvetica", 12, Font.BOLD);
-        PdfPTable table = new PdfPTable(new float[]{0.2f, 0.2f, 0.4f, 0.2f});
-        // table.setWidths(new int[]{1, 1, 2, 1});
-        table.setWidthPercentage(100f);
-        table.setHeaderRows(1);
-        // table.addCell("Person/Organization Name");
-        table.addCell(new PdfPCell(new Phrase("Provider Name", fontbold)));
-        table.addCell(new PdfPCell(new Phrase("Phone", fontbold)));
-        table.addCell(new PdfPCell(new Phrase("Address", fontbold)));
-        table.addCell(new PdfPCell(new Phrase("NPI Number", fontbold)));
-        for (ConsentIndividualProviderDisclosureIsMadeTo item : consent
-                .getProvidersDisclosureIsMadeTo()) {
-            table.addCell(item.getIndividualProvider().getFirstName() + " "
-                    + item.getIndividualProvider().getLastName());
-            table.addCell(item.getIndividualProvider()
-                    .getPracticeLocationAddressTelephoneNumber());
-            table.addCell(item.getIndividualProvider()
-                    .getFirstLinePracticeLocationAddress()
-                    + ((item.getIndividualProvider()
-                    .getSecondLinePracticeLocationAddress()
-                    .replaceAll("\\W", "") == "") ? "" : "\n"
-                    + item.getIndividualProvider()
-                    .getSecondLinePracticeLocationAddress())
-                    + "\n"
-                    + item.getIndividualProvider()
-                    .getPracticeLocationAddressCityName()
-                    + ", "
-                    + item.getIndividualProvider()
-                    .getPracticeLocationAddressStateName()
-                    + ", "
-                    + item.getIndividualProvider()
-                    .getPracticeLocationAddressPostalCode());
-            table.addCell(item.getIndividualProvider().getNpi());
-        }
-
-        for (ConsentOrganizationalProviderDisclosureIsMadeTo item : consent
-                .getOrganizationalProvidersDisclosureIsMadeTo()) {
-            table.addCell(item.getOrganizationalProvider().getOrgName());
-            table.addCell(item.getOrganizationalProvider()
-                    .getPracticeLocationAddressTelephoneNumber());
-            table.addCell(item.getOrganizationalProvider()
-                    .getFirstLinePracticeLocationAddress()
-                    + ((item.getOrganizationalProvider()
-                    .getSecondLinePracticeLocationAddress()
-                    .replaceAll("\\W", "") == "") ? "" : "\n"
-                    + item.getOrganizationalProvider()
-                    .getSecondLinePracticeLocationAddress())
-                    + "\n"
-                    + item.getOrganizationalProvider()
-                    .getPracticeLocationAddressCityName()
-                    + ", "
-                    + item.getOrganizationalProvider()
-                    .getPracticeLocationAddressStateName()
-                    + ", "
-                    + item.getOrganizationalProvider()
-                    .getPracticeLocationAddressPostalCode());
-            table.addCell(item.getOrganizationalProvider().getNpi());
-        }
-        return table;
+        return healthInformationToBeDisclose;
     }
 }
