@@ -1100,6 +1100,7 @@ public class ConsentServiceImpl implements ConsentService {
      */
     @Override
     public void saveConsent(Consent consent) {
+        consent.setCreatedDateTime(new Date());
         consentRepository.save(consent);
     }
 
@@ -1285,6 +1286,8 @@ public class ConsentServiceImpl implements ConsentService {
         // Set Dates
         consent.setStartDate(consentDto.getConsentStart());
         consent.setEndDate(consentDto.getConsentEnd());
+
+        consent.setCreatedDateTime(new Date());
 
         consent.setPatient(patient);
         consent.setName("Consent");
@@ -1525,6 +1528,7 @@ public class ConsentServiceImpl implements ConsentService {
      */
     @Override
     public Consent updateConsent(Consent consent) {
+        consent.setCreatedDateTime(new Date());
         return consentRepository.save(consent);
     }
 

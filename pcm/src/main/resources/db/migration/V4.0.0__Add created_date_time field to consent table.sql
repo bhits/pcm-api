@@ -1,0 +1,1 @@
+ALTER TABLE consent ADD COLUMN created_date_time DATETIME;
