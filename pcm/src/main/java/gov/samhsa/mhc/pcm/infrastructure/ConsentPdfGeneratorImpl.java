@@ -311,8 +311,11 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
             document.add(new Paragraph(" "));
 
-            //Health information to be disclosed
+            //Consent terms
             document.add(createSectionTitle("CONSENT TERMS"));
+
+            document.add(createStartAndEndDateTable(consent));
+
 
             document.close();
 
@@ -397,10 +400,10 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
         if (consent != null) {
             Font patientInfoFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
-            PdfPCell patientNameCell = new PdfPCell(createCellContent("Patient Name : ", null, "Tomson Ngassa", patientInfoFont));
+            PdfPCell patientNameCell = new PdfPCell(createCellContent("Patient Name: ", null, "Tomson Ngassa", patientInfoFont));
             patientNameCell.setBorder(Rectangle.NO_BORDER);
 
-            PdfPCell patientDOBCell = new PdfPCell(createCellContent("Patient DOB : ", null, "05/27/2015", patientInfoFont));
+            PdfPCell patientDOBCell = new PdfPCell(createCellContent("Patient DOB: ", null, "05/27/2015", patientInfoFont));
             patientDOBCell.setBorder(Rectangle.NO_BORDER);
 
             consentReferenceNumberTable.addCell(patientNameCell);
@@ -408,6 +411,27 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         }
 
         return consentReferenceNumberTable;
+    }
+
+    private PdfPTable createStartAndEndDateTable(Consent consent) {
+        PdfPTable consentStartAndEndDateTable = createBorderlessTable(3);
+
+        if (consent != null) {
+            Font patientDateFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
+            PdfPCell EffectiveDateCell = new PdfPCell(createCellContent("Effective Date: ", patientDateFont, "05/27/2016", patientDateFont));
+            EffectiveDateCell.setBorder(Rectangle.NO_BORDER);
+
+            PdfPCell expirationDateCell = new PdfPCell(createCellContent("Expiration Date: ", patientDateFont, "06/01/2016", patientDateFont));
+            expirationDateCell.setBorder(Rectangle.NO_BORDER);
+
+            PdfPCell emptyCell = new PdfPCell();
+            emptyCell.setBorder(Rectangle.NO_BORDER);
+
+            consentStartAndEndDateTable.addCell(EffectiveDateCell);
+            consentStartAndEndDateTable.addCell(expirationDateCell);
+            consentStartAndEndDateTable.addCell(emptyCell);
+        }
+        return consentStartAndEndDateTable;
     }
 
 
