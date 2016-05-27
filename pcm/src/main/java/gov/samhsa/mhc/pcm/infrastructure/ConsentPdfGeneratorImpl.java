@@ -301,19 +301,31 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
             document.add(new Paragraph(" "));
 
-            //Authorization to disclose
+            //Authorization to disclose section
             document.add(createSectionTitle("AUTHORIZATION TO DISCLOSE"));
 
-            document.add(new Paragraph(" "));
+            document.add(new Paragraph("Authorizes: "));
 
-            //Health information to be disclosed
+            document.add(new Paragraph(""));
+
+            document.add(new Paragraph("To disclose to: "));
+
+            document.add(new Paragraph(""));
+
+            //Health information to be disclosed section
             document.add(createSectionTitle("HEALTH INFORMATION TO BE DISCLOSED"));
 
             document.add(new Paragraph(" "));
 
-            //Consent terms
+            //Consent terms section
             document.add(createSectionTitle("CONSENT TERMS"));
 
+            // Consent term
+            document.add(createConsentTerms());
+
+            document.add(new Paragraph(" "));
+
+            // Consent effective and expiration date
             document.add(createStartAndEndDateTable(consent));
 
 
@@ -450,6 +462,14 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         return sectionTitle;
     }
 
+    private Paragraph createConsentTerms(){
+       String term =  "I, Bob Lastname, understand that my records are protected under the federal regulations governing Confidentiality of " +
+                "Alcohol and Drug Abuse Patient Records, 42 CFR part 2, and cannot be disclosed without my written permission or " +
+                "as otherwise permitted by 42 CFR part 2. I also understand that I may revoke this consent at any time except to the " +
+                "extent that action has been taken in reliance on it, and that any event this consent expires automatically as follows:";
+
+        return createParagraphWithContent(term, null);
+    }
 
 
 
