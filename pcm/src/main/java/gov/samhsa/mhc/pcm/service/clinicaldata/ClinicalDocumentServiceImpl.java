@@ -30,6 +30,9 @@ import gov.samhsa.mhc.pcm.domain.clinicaldata.ClinicalDocumentRepository;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.domain.patient.PatientRepository;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
+import gov.samhsa.mhc.pcm.infrastructure.DssService;
+import gov.samhsa.mhc.pcm.infrastructure.dto.ClinicalDocumentValidationRequest;
+import gov.samhsa.mhc.pcm.infrastructure.dto.ClinicalDocumentValidationResult;
 import gov.samhsa.mhc.pcm.service.dto.CCDDto;
 import gov.samhsa.mhc.pcm.service.dto.ClinicalDocumentDto;
 import gov.samhsa.mhc.pcm.service.dto.LookupDto;
@@ -47,6 +50,7 @@ import javax.annotation.PostConstruct;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -111,6 +115,9 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
     @Autowired
     private Validator validator;
 
+    @Autowired
+    private DssService dssService;
+
     public ClinicalDocumentServiceImpl() {
     }
 
@@ -169,9 +176,9 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
     @Override
     public void deleteClinicalDocument(Long documentId) {
         ClinicalDocument clinicalDocument = clinicalDocumentRepository.findClinicalDocumentById(documentId);
-        if(clinicalDocument != null){
+        if (clinicalDocument != null) {
             clinicalDocumentRepository.delete(clinicalDocument);
-        }else {
+        } else {
             logger.error("Cannot get document to be deleted by id.");
         }
 
@@ -373,6 +380,23 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
 
         }
         return result;
+    }
+
+    @Override
+    public void validate(MultipartFile file) throws IOException {
+        byte[] clinicalDocument = file.getBytes();
+        invokeDssService(clinicalDocument);
+    }
+
+    private ClinicalDocumentValidationResult invokeDssService(byte[] document) {
+        ClinicalDocumentValidationRequest request = createValidationRequest(document);
+        return dssService.validateClinicalDocument(request);
+    }
+
+    private ClinicalDocumentValidationRequest createValidationRequest(byte[] document) {
+        ClinicalDocumentValidationRequest validationRequest = new ClinicalDocumentValidationRequest();
+        validationRequest.setDocument(document);
+        return validationRequest;
     }
 
     /**

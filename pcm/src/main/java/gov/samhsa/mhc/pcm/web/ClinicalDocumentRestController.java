@@ -25,7 +25,6 @@
  ******************************************************************************/
 package gov.samhsa.mhc.pcm.web;
 
-import gov.samhsa.mhc.common.validation.XmlValidation;
 import gov.samhsa.mhc.pcm.infrastructure.eventlistener.EventService;
 import gov.samhsa.mhc.pcm.infrastructure.security.ClamAVClientNotAvailableException;
 import gov.samhsa.mhc.pcm.infrastructure.security.ClamAVService;
@@ -48,7 +47,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -65,14 +63,6 @@ import java.util.Map;
 @RequestMapping("/patients")
 public class ClinicalDocumentRestController {
 
-    /**
-     * The Constant C32_CDA_XSD_PATH.
-     */
-    public static final String C32_CDA_XSD_PATH = "schema/cdar2c32/infrastructure/cda/";
-    /**
-     * The Constant C32_CDA_XSD_NAME.
-     */
-    public static final String C32_CDA_XSD_NAME = "C32_CDA.xsd";
     /**
      * The logger.
      */
@@ -96,10 +86,6 @@ public class ClinicalDocumentRestController {
     private ClamAVService clamAVUtil;
     @Autowired
     private EventService eventService;
-    /**
-     * The xml validator.
-     */
-    private XmlValidation xmlValidator;
 
     /**
      * List clinical documents.
@@ -138,10 +124,13 @@ public class ClinicalDocumentRestController {
             throw new OversizedFileException("Size over limits");
         if (!clinicalDocumentService.isDocumentExtensionPermitted(file))
             throw new InvalidFileExtensionException("Extension not permitted");
+
+        //Validate Clinical Document
         try {
-            xmlValidator.validate(file.getInputStream());
+            clinicalDocumentService.validate(file);
         } catch (Exception e) {
-            throw new InvalidClinicalDocumentException("Invalid C32");
+            logger.error(e.getMessage());
+            throw new InvalidClinicalDocumentException("Invalid Clinical Document");
         }
 
         ClinicalDocumentDto clinicalDocumentDto = new ClinicalDocumentDto();
@@ -238,12 +227,5 @@ public class ClinicalDocumentRestController {
             return "error";
         }
         return isItClean.toString();
-    }
-
-    @PostConstruct
-    public void afterPropertiesSet() throws Exception {
-        this.xmlValidator = new XmlValidation(this.getClass().getClassLoader()
-                .getResourceAsStream(C32_CDA_XSD_PATH + C32_CDA_XSD_NAME),
-                C32_CDA_XSD_PATH);
     }
 }
