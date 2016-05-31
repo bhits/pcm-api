@@ -115,7 +115,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             //Health information to be disclosed section
             document.add(createSectionTitle("HEALTH INFORMATION TO BE DISCLOSED"));
 
-            document.add(createHealthInformationToBeDisclose());
+            document.add(createHealthInformationToBeDisclose(consent));
 
             document.add(new Paragraph(" "));
 
@@ -321,7 +321,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         }
         return unorderedList;
     }
-    private PdfPTable createHealthInformationToBeDisclose(){
+    private PdfPTable createHealthInformationToBeDisclose(Consent consent){
         PdfPTable healthInformationToBeDisclose = createBorderlessTable(2);
 
         // Medical Information
@@ -329,20 +329,32 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         Paragraph sensitivityCategory = createParagraphWithContent("Sensitivity Categories:", null);
         medicalInformation.addElement(sensitivityCategory);
 
-        ArrayList<String> medInfo = new ArrayList<String>();
-        medInfo.add("Addictions Information");
-        medInfo.add("Alcohol use and Alcoholism Information");
-        medicalInformation.addElement(createUnorderList(medInfo));
-
+        ArrayList<String> medicalInformationList = getMedicalInformation(consent);
+        medicalInformation.addElement(createUnorderList(medicalInformationList));
         healthInformationToBeDisclose.addCell(medicalInformation);
 
         //Purposes of use
-        PdfPCell purposeOfUse = createCellWithUnderlineContent("To SHARE for the following purpose(s):");
-        ArrayList<String> purposes = new ArrayList<String>();
-        purposes.add("Health Treatment");
-        purposeOfUse.addElement(createUnorderList(purposes));
-        healthInformationToBeDisclose.addCell(purposeOfUse);
+        PdfPCell purposeOfUseCell = createCellWithUnderlineContent("To SHARE for the following purpose(s):");
+        ArrayList<String> purposes = getPurposeOfUse(consent);
+        purposeOfUseCell.addElement(createUnorderList(purposes));
+        healthInformationToBeDisclose.addCell(purposeOfUseCell);
 
         return healthInformationToBeDisclose;
+    }
+
+    private ArrayList<String> getMedicalInformation(Consent consent){
+        ArrayList<String> medicalInformationList = new ArrayList<String>();
+        for (final ConsentDoNotShareSensitivityPolicyCode item : consent.getDoNotShareSensitivityPolicyCodes()) {
+            medicalInformationList.add(item.getValueSetCategory().getName());
+        }
+        return medicalInformationList;
+    }
+
+    private ArrayList<String> getPurposeOfUse(Consent consent){
+        ArrayList<String> purposesOfUseList = new ArrayList<String>();
+        for (final ConsentShareForPurposeOfUseCode purposeOfUseCode : consent.getShareForPurposeOfUseCodes()) {
+            purposesOfUseList.add(purposeOfUseCode.getPurposeOfUseCode().getDisplayName());
+        }
+        return purposesOfUseList;
     }
 }
