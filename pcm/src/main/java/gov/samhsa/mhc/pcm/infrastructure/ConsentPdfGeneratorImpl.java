@@ -31,6 +31,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import gov.samhsa.mhc.pcm.domain.consent.*;
+import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.domain.provider.AbstractProvider;
 import gov.samhsa.mhc.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.mhc.pcm.domain.provider.OrganizationalProvider;
@@ -41,6 +42,7 @@ import gov.samhsa.mhc.pcm.domain.reference.StateCode;
 import gov.samhsa.mhc.pcm.domain.valueobject.Address;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategoryRepository;
+import gov.samhsa.mhc.pcm.infrastructure.dto.PatientDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -71,7 +73,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
      * generate42CfrPart2Pdf(gov.samhsa.consent2share.domain.consent.Consent)
      */
     @Override
-    public byte[] generate42CfrPart2Pdf(Consent consent) {
+    public byte[] generate42CfrPart2Pdf(Consent consent, Patient patientProfile) {
         Assert.notNull(consent, "Consent is required.");
 
         Document document = new Document();
@@ -91,7 +93,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             document.add( Chunk.NEWLINE );
 
             // Consent Created Date
-            document.add(createParagraphWithContent("Created On: " + "05/26/2016" , null));
+            document.add(createParagraphWithContent("Created On: " + formatDate(consent.getCreatedDateTime()) , null));
 
             //consent Reference Number
             document.add(createConsentReferenceNumberTable(consent));
@@ -99,7 +101,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             document.add(new Paragraph(" "));
 
             //Patient Name and date of birth
-            document.add(createPatientNameAndDOBTable(consent));
+            document.add(createPatientNameAndDOBTable(patientProfile));
 
             document.add(new Paragraph(" "));
 
@@ -127,7 +129,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             document.add(createSectionTitle("CONSENT TERMS"));
 
             // Consent term
-            document.add(createConsentTerms());
+            document.add(createConsentTerms(patientProfile));
 
             document.add(new Paragraph(" "));
 
@@ -212,16 +214,18 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         content.add(createChunkWithFont(value, valueFont));
         return content;
     }
-
-    private PdfPTable createPatientNameAndDOBTable(Consent consent) {
+    private String getFullName(Patient patientProfile){
+        return patientProfile.getFirstName() + " " + patientProfile.getLastName();
+    }
+    private PdfPTable createPatientNameAndDOBTable(Patient patientProfile) {
         PdfPTable consentReferenceNumberTable = createBorderlessTable(2);
 
-        if (consent != null) {
+        if (patientProfile != null) {
             Font patientInfoFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
-            PdfPCell patientNameCell = new PdfPCell(createCellContent("Patient Name: ", null, "Tomson Ngassa", patientInfoFont));
+            PdfPCell patientNameCell = new PdfPCell(createCellContent("Patient Name: ", null, getFullName(patientProfile), patientInfoFont));
             patientNameCell.setBorder(Rectangle.NO_BORDER);
 
-            PdfPCell patientDOBCell = new PdfPCell(createCellContent("Patient DOB: ", null, "05/27/2015", patientInfoFont));
+            PdfPCell patientDOBCell = new PdfPCell(createCellContent("Patient DOB: ", null, formatDate(patientProfile.getBirthDay()), patientInfoFont));
             patientDOBCell.setBorder(Rectangle.NO_BORDER);
 
             consentReferenceNumberTable.addCell(patientNameCell);
@@ -272,8 +276,8 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         return sectionTitle;
     }
 
-    private Paragraph createConsentTerms(){
-       String term =  "I, Bob Lastname, understand that my records are protected under the federal regulations governing Confidentiality of " +
+    private Paragraph createConsentTerms(Patient patientProfile){
+       String term =  "I, "+ getFullName(patientProfile) + ", understand that my records are protected under the federal regulations governing Confidentiality of " +
                 "Alcohol and Drug Abuse Patient Records, 42 CFR part 2, and cannot be disclosed without my written permission or " +
                 "as otherwise permitted by 42 CFR part 2. I also understand that I may revoke this consent at any time except to the " +
                 "extent that action has been taken in reliance on it, and that any event this consent expires automatically as follows:";

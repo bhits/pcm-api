@@ -502,6 +502,24 @@ public class PatientServiceImpl implements PatientService {
         return patientProfileDto;
     }
 
+    public void updatePatientFromPHR(PatientDto patientDto) {
+        logger.info("{} being run...", "updatePatient with patient data from PHR");
+        Optional<Patient> patientOptional = patientRepository.findOneAsOptional(patientDto.getId());
+        if (patientOptional.isPresent()) {
+            Patient patient = patientOptional.get();
+            patient.setFirstName(patientDto.getFirstName());
+            patient.setLastName(patientDto.getLastName());
+            patient.setMedicalRecordNumber(patientDto.getMedicalRecordNumber());
+            patient.setEmail(patientDto.getEmail());
+            patient.setUsername(patientDto.getEmail());
+            patient.setBirthDay(patientDto.getBirthDate());
+            patientRepository.save(patient);
+        }else{
+            logger.info("{} being run...", "updatePatient but patient not present in pcm");
+        }
+
+    }
+
     /*
      * (non-Javadoc)
      *
@@ -678,6 +696,7 @@ public class PatientServiceImpl implements PatientService {
             patient.setMedicalRecordNumber(patientProfile.getMedicalRecordNumber());
             patient.setEmail(patientProfile.getEmail());
             patient.setUsername(patientProfile.getEmail());
+            patient.setBirthDay(patientProfile.getBirthDate());
             patientRepository.save(patient);
         }
         return patientProfile.getId();

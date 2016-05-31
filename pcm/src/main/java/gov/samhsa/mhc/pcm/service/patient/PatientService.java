@@ -26,6 +26,7 @@
 package gov.samhsa.mhc.pcm.service.patient;
 
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
+import gov.samhsa.mhc.pcm.infrastructure.dto.PatientDto;
 import gov.samhsa.mhc.pcm.service.dto.*;
 
 import java.util.List;
@@ -224,4 +225,6 @@ public interface PatientService {
 
     // FIXME: remove this block when patient creation concept in PCM is finalized
     Long createNewPatientWithOAuth2AuthenticationIfNotExists();
+
+    void updatePatientFromPHR(PatientDto patientDto);
 }

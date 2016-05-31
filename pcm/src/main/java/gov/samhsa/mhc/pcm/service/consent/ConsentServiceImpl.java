@@ -44,6 +44,8 @@ import gov.samhsa.mhc.pcm.infrastructure.dto.PatientDto;
 import gov.samhsa.mhc.pcm.service.consentexport.ConsentExportService;
 import gov.samhsa.mhc.pcm.service.dto.*;
 import gov.samhsa.mhc.pcm.service.exception.XacmlNotFoundException;
+import gov.samhsa.mhc.pcm.service.patient.PatientService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -201,6 +203,15 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Autowired
     private PhrService phrService;
+
+    @Autowired
+    private PatientService patientService;
+
+    /**
+     * The model mapper.
+     */
+    @Autowired
+    private ModelMapper modelMapper;
     /*
      * (non-Javadoc)
      *
@@ -1132,8 +1143,9 @@ public class ConsentServiceImpl implements ConsentService {
         if (patientId != 0) {
             patient = patientRepository.findOne(patientId);
         } else {
-            patient = patientRepository
-                    .findByUsername(consentDto.getUsername());
+            //Updating the patient data with data from phr api
+            patientService.updatePatientFromPHR(phrService.getPatientProfile());
+            patient = patientRepository.findByUsername(consentDto.getUsername());
         }
         final Map<String, AbstractProvider> providerMap = new HashMap<String, AbstractProvider>();
         for (final IndividualProvider o : patient.getIndividualProviders()) {
@@ -1294,7 +1306,7 @@ public class ConsentServiceImpl implements ConsentService {
         consent.setDescription("This is a consent made by "
                 + patient.getFirstName() + " " + patient.getLastName());
 
-        consent.setUnsignedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent));
+        consent.setUnsignedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient));
 
         try {
 

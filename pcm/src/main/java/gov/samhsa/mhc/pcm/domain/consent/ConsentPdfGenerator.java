@@ -25,6 +25,9 @@
  ******************************************************************************/
 package gov.samhsa.mhc.pcm.domain.consent;
 
+import gov.samhsa.mhc.pcm.domain.patient.Patient;
+import gov.samhsa.mhc.pcm.infrastructure.dto.PatientDto;
+
 /**
  * The Interface ConsentPdfGenerator.
  */
@@ -36,5 +39,5 @@ public interface ConsentPdfGenerator {
 	 * @param consent the consent
 	 * @return the byte[]
 	 */
-	byte[] generate42CfrPart2Pdf(Consent consent);
+	byte[] generate42CfrPart2Pdf(Consent consent, Patient patientProfile);
 }
