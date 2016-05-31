@@ -27,6 +27,7 @@ package gov.samhsa.mhc.pcm.service.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import gov.samhsa.mhc.pcm.domain.consent.ConsentTermsVersions;
 import gov.samhsa.mhc.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.mhc.pcm.domain.provider.OrganizationalProvider;
 import gov.samhsa.mhc.pcm.domain.reference.PurposeOfUseCode;
@@ -68,6 +69,8 @@ public class ConsentAttestationDto{
     private Date consentStart;
 
     private Date consentEnd;
+
+    private ConsentTermsVersions consentTermsVersions;
 
     private Set<OrganizationalProvider> orgProvidersDisclosureIsMadeTo;
 
@@ -199,5 +202,13 @@ public class ConsentAttestationDto{
 
     public void setConsentEnd(Date consentEnd) {
         this.consentEnd = consentEnd;
+    }
+
+    public ConsentTermsVersions getConsentTermsVersions() {
+        return consentTermsVersions;
+    }
+
+    public void setConsentTermsVersions(ConsentTermsVersions consentTermsVersions) {
+        this.consentTermsVersions = consentTermsVersions;
     }
 }

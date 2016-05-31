@@ -207,6 +207,9 @@ public class ConsentServiceImpl implements ConsentService {
     @Autowired
     private PatientService patientService;
 
+    @Autowired
+    private ConsentTermsVersionsService consentTermsVersionsService;
+
     /**
      * The model mapper.
      */
@@ -563,6 +566,8 @@ public class ConsentServiceImpl implements ConsentService {
                 purposeOfUses.add(purposeOfUseCode.getPurposeOfUseCode());
             }
             consentAttestationDto.setPurposeOfUseCodes(purposeOfUses);
+
+            consentAttestationDto.setConsentTermsVersions(consentTermsVersionsService.findByVersionDisabled());
         }
 
         return consentAttestationDto;
