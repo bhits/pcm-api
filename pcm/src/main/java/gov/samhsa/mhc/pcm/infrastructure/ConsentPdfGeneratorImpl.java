@@ -32,6 +32,8 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import gov.samhsa.mhc.pcm.domain.consent.*;
 import gov.samhsa.mhc.pcm.domain.provider.AbstractProvider;
+import gov.samhsa.mhc.pcm.domain.provider.IndividualProvider;
+import gov.samhsa.mhc.pcm.domain.provider.OrganizationalProvider;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalConceptCode;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
 import gov.samhsa.mhc.pcm.domain.reference.PurposeOfUseCode;
@@ -106,11 +108,13 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             //Authorizes
             document.add(new Paragraph("Authorizes: "));
 
-            document.add(createProviderTable(null));
+            document.add(createProviderPermittedToDiscloseTable(consent));
             //To disclose to
             document.add(new Paragraph("To disclose to: "));
 
-            document.add(createProviderTable(null));
+            document.add(createProviderDisclosureIsMadeToTable(consent));
+
+            document.add(new Paragraph(" "));
 
             //Health information to be disclosed section
             document.add(createSectionTitle("HEALTH INFORMATION TO BE DISCLOSED"));
@@ -282,17 +286,71 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
         Font propertNameFont = new Font(Font.FontFamily.TIMES_ROMAN,10);
         providerTable.addCell(createBorderlessCell(propertyName, propertNameFont));
-        Font valueFont = new Font(Font.FontFamily.TIMES_ROMAN,12,Font.BOLD);
+        Font valueFont = new Font(Font.FontFamily.TIMES_ROMAN,10,Font.BOLD);
         providerTable.addCell(createBorderlessCell(propertyValue, valueFont));
 
         return providerTable;
     }
-    private PdfPTable createProviderTable(AbstractProvider provider){
+
+    private String composeAddress(AbstractProvider provider){
+        String address = "";
+        if(provider != null){
+            if(provider.getFirstLinePracticeLocationAddress() != null){
+                address += provider.getFirstLinePracticeLocationAddress() + ", ";
+            }
+
+            if(provider.getPracticeLocationAddressCityName()!= null){
+                address += provider.getPracticeLocationAddressCityName() + ", ";
+            }
+
+            if(provider.getPracticeLocationAddressStateName() != null && provider.getPracticeLocationAddressPostalCode() != null){
+                address += provider.getPracticeLocationAddressStateName() + " " + provider.getPracticeLocationAddressPostalCode() ;
+            }
+
+        }
+        return address;
+    }
+
+    private void setNpiAddressState(PdfPTable providerTable, AbstractProvider provider){
+        providerTable.addCell(createProviderPropertyValueTable("NPI Number", provider.getNpi()));
+        providerTable.addCell(createProviderPropertyValueTable("Address", composeAddress(provider)));
+        providerTable.addCell(createProviderPropertyValueTable("Phone", provider.getPracticeLocationAddressTelephoneNumber()));
+    }
+
+    private PdfPTable createProviderPermittedToDiscloseTable(Consent consent){
         PdfPTable providerTable = createBorderlessTable(4);
-        providerTable.addCell(createProviderPropertyValueTable("Provider Name", "KOYOMJI DENTAL"));
-        providerTable.addCell(createProviderPropertyValueTable("NPI Number", "111111111"));
-        providerTable.addCell(createProviderPropertyValueTable("Address", "8601 Falls Run Road Unit F, Ellicott City, MD 21043"));
-        providerTable.addCell(createProviderPropertyValueTable("Phone", "301-654-1111"));
+        Set<OrganizationalProvider> ordProvidersPermittedToDisclose = getOrdProvidersPermittedToDisclose(consent);
+
+        for(OrganizationalProvider provider : ordProvidersPermittedToDisclose){
+            providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getOrgName()));
+            setNpiAddressState(providerTable,provider);
+        }
+
+        Set<IndividualProvider> indProvidersPermittedToDisclose = getIndProvidersPermittedToDisclose(consent);
+
+        for(IndividualProvider provider : indProvidersPermittedToDisclose){
+            providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getFirstName() + " " + provider.getLastName()));
+            setNpiAddressState(providerTable,provider);
+        }
+
+        return providerTable;
+    }
+
+    private PdfPTable createProviderDisclosureIsMadeToTable(Consent consent){
+        PdfPTable providerTable = createBorderlessTable(4);
+        Set<OrganizationalProvider> ordProvidersDisclosureIsMadeTo = getOrgProvidersDisclosureIsMadeTo(consent);
+
+        for(OrganizationalProvider provider : ordProvidersDisclosureIsMadeTo){
+            providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getOrgName()));
+            setNpiAddressState(providerTable,provider);
+        }
+
+        Set<IndividualProvider> indProvidersDisclosureIsMadeTo = getIndProvidersDisclosureIsMadeTo(consent);
+
+        for(IndividualProvider provider : indProvidersDisclosureIsMadeTo){
+            providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getFirstName() + " " + provider.getLastName()));
+            setNpiAddressState(providerTable,provider);
+        }
 
         return providerTable;
     }
@@ -321,6 +379,51 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         }
         return unorderedList;
     }
+
+    private Set<OrganizationalProvider> getOrdProvidersPermittedToDisclose(Consent consent){
+        final Set<OrganizationalProvider> consentProvidersPermittedToDisclose = new HashSet<OrganizationalProvider>();
+
+        if(consent.getOrganizationalProvidersPermittedToDisclose() != null & consent.getOrganizationalProvidersPermittedToDisclose().size() >0){
+            for (final ConsentOrganizationalProviderPermittedToDisclose item : consent.getOrganizationalProvidersPermittedToDisclose()) {
+                consentProvidersPermittedToDisclose.add(item.getOrganizationalProvider());
+            }
+        }
+        return consentProvidersPermittedToDisclose;
+    }
+
+    private Set<IndividualProvider> getIndProvidersPermittedToDisclose(Consent consent){
+        final Set<IndividualProvider> consentProvidersPermittedToDisclose = new HashSet<IndividualProvider>();
+
+        if(consent.getProvidersPermittedToDisclose() != null & consent.getProvidersPermittedToDisclose().size() >0) {
+            for (final ConsentIndividualProviderPermittedToDisclose item : consent.getProvidersPermittedToDisclose()) {
+                consentProvidersPermittedToDisclose.add(item.getIndividualProvider());
+            }
+        }
+        return consentProvidersPermittedToDisclose;
+    }
+
+    private Set<OrganizationalProvider> getOrgProvidersDisclosureIsMadeTo(Consent consent){
+        final Set<OrganizationalProvider> consentProvidersDisclosureIsMadeTo = new HashSet<OrganizationalProvider>();
+
+        if(consent.getOrganizationalProvidersDisclosureIsMadeTo() != null & consent.getOrganizationalProvidersDisclosureIsMadeTo().size() >0){
+            for (final ConsentOrganizationalProviderDisclosureIsMadeTo item : consent.getOrganizationalProvidersDisclosureIsMadeTo()) {
+                consentProvidersDisclosureIsMadeTo.add(item.getOrganizationalProvider());
+            }
+        }
+        return consentProvidersDisclosureIsMadeTo;
+    }
+
+    private Set<IndividualProvider> getIndProvidersDisclosureIsMadeTo(Consent consent){
+        final Set<IndividualProvider> consentProvidersDisclosureIsMadeTo = new HashSet<IndividualProvider>();
+
+        if(consent.getProvidersDisclosureIsMadeTo() != null & consent.getProvidersDisclosureIsMadeTo().size() >0){
+            for (final ConsentIndividualProviderDisclosureIsMadeTo item : consent.getProvidersDisclosureIsMadeTo()) {
+                consentProvidersDisclosureIsMadeTo.add(item.getIndividualProvider());
+            }
+        }
+        return consentProvidersDisclosureIsMadeTo;
+    }
+
     private PdfPTable createHealthInformationToBeDisclose(Consent consent){
         PdfPTable healthInformationToBeDisclose = createBorderlessTable(2);
 
