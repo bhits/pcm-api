@@ -26,6 +26,7 @@
 package gov.samhsa.mhc.pcm.infrastructure;
 
 import com.itextpdf.text.*;
+import com.itextpdf.text.List;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -45,7 +46,7 @@ import org.springframework.util.Assert;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.List;
+
 
 /**
  * The Class ConsentPdfGeneratorImpl.
@@ -313,12 +314,34 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         aCell.addElement(createUnderlineText(text));
         return aCell;
     }
-
+    private List createUnorderList(ArrayList<String> items){
+        List unorderedList = new List(List.UNORDERED);
+        for( String item :items){
+            unorderedList.add(new ListItem(item));
+        }
+        return unorderedList;
+    }
     private PdfPTable createHealthInformationToBeDisclose(){
         PdfPTable healthInformationToBeDisclose = createBorderlessTable(2);
-        healthInformationToBeDisclose.addCell(createCellWithUnderlineContent("To SHARE the following medical information:"));
-        healthInformationToBeDisclose.addCell(createCellWithUnderlineContent("To SHARE for the following purpose(s):"));
 
+        // Medical Information
+        PdfPCell medicalInformation = createCellWithUnderlineContent("To SHARE the following medical information:");
+        Paragraph sensitivityCategory = createParagraphWithContent("Sensitivity Categories:", null);
+        medicalInformation.addElement(sensitivityCategory);
+
+        ArrayList<String> medInfo = new ArrayList<String>();
+        medInfo.add("Addictions Information");
+        medInfo.add("Alcohol use and Alcoholism Information");
+        medicalInformation.addElement(createUnorderList(medInfo));
+
+        healthInformationToBeDisclose.addCell(medicalInformation);
+
+        //Purposes of use
+        PdfPCell purposeOfUse = createCellWithUnderlineContent("To SHARE for the following purpose(s):");
+        ArrayList<String> purposes = new ArrayList<String>();
+        purposes.add("Health Treatment");
+        purposeOfUse.addElement(createUnorderList(purposes));
+        healthInformationToBeDisclose.addCell(purposeOfUse);
 
         return healthInformationToBeDisclose;
     }
