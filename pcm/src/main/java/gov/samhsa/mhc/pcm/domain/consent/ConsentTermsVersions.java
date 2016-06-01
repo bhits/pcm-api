@@ -1,5 +1,6 @@
 package gov.samhsa.mhc.pcm.domain.consent;
 
+import org.hibernate.envers.Audited;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "consent_terms_versions")
+@Audited
 public class ConsentTermsVersions {
 
     @Id

@@ -146,6 +146,26 @@ public class Consent {
 	@NotAudited
 	private byte[] xacmlPdfConsentTo;
 
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
+	@NotAudited
+	private byte[] unAttestedPdfConsent;
+
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
+	@NotAudited
+	private byte[] unAttestedPdfConsentRevoke;
+
+	/** The signed pdf consent. */
+	@OneToOne(cascade = CascadeType.ALL)
+	@Basic(fetch = FetchType.LAZY)
+	private AttestedConsent attestedConsent;
+
+	/** The signed pdf consent. */
+	@OneToOne(cascade = CascadeType.ALL)
+	@Basic(fetch = FetchType.LAZY)
+	private AttestedConsentRevocation attestedConsentRevocation;
+
 	/** The providers permitted to disclose. */
 	@ElementCollection
 	@CollectionTable(name = "ConsentIndividualProviderPermittedToDisclose", joinColumns = @JoinColumn(name = "CONSENT_ID"))
@@ -862,5 +882,37 @@ public class Consent {
 	 */
 	public void setXacmlPdfConsentTo(byte[] xacmlPdfConsentTo) {
 		this.xacmlPdfConsentTo = xacmlPdfConsentTo;
+	}
+
+	public byte[] getUnAttestedPdfConsent() {
+		return unAttestedPdfConsent;
+	}
+
+	public void setUnAttestedPdfConsent(byte[] unAttestedPdfConsent) {
+		this.unAttestedPdfConsent = unAttestedPdfConsent;
+	}
+
+	public byte[] getUnAttestedPdfConsentRevoke() {
+		return unAttestedPdfConsentRevoke;
+	}
+
+	public void setUnAttestedPdfConsentRevoke(byte[] unAttestedPdfConsentRevoke) {
+		this.unAttestedPdfConsentRevoke = unAttestedPdfConsentRevoke;
+	}
+
+	public AttestedConsent getAttestedConsent() {
+		return attestedConsent;
+	}
+
+	public void setAttestedConsent(AttestedConsent attestedConsent) {
+		this.attestedConsent = attestedConsent;
+	}
+
+	public AttestedConsentRevocation getAttestedConsentRevocation() {
+		return attestedConsentRevocation;
+	}
+
+	public void setAttestedConsentRevocation(AttestedConsentRevocation attestedConsentRevocation) {
+		this.attestedConsentRevocation = attestedConsentRevocation;
 	}
 }
