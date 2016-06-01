@@ -31,31 +31,20 @@ import gov.samhsa.mhc.pcm.service.util.CustomJsonDateDeserializer;
 import gov.samhsa.mhc.pcm.service.util.CustomJsonDateSerializer;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Set;
-
 
 /**
  * The Class ConsentDto.
  */
 public class ConsentTermsVersionsDto {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
     private Long id;
 
-    @NotNull
-    @Size(max = 20000) //Maximum of 20,000 characters (using utf-8 encoding)
-    @Column(columnDefinition = "TEXT")
     private String consentTermsText;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "MM/dd/yyyy")
+    @JsonDeserialize(using = CustomJsonDateDeserializer.class)
+    @JsonSerialize(using = CustomJsonDateSerializer.class)
     private Date addedDateTime;
 
     //When set to true, this version will not be shown to users regardless of whether it is the most recent or not
