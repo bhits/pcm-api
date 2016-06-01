@@ -869,8 +869,11 @@ public class ConsentServiceImpl implements ConsentService {
                 consentPdfDto.setContent(consent.getUnsignedPdfConsent());
             }
         } else {
-            consentPdfDto.setContent(consent.getUnsignedPdfConsent());
+            // TODO to be removed after refactoring
+            //consentPdfDto.setContent(consent.getUnsignedPdfConsent());
+            consentPdfDto.setContent(consent.getUnAttestedPdfConsent());
         }
+
         consentPdfDto.setFilename(consent.getPatient().getFirstName() + "_"
                 + consent.getPatient().getLastName() + "_Consent"
                 + consent.getId() + ".pdf");
@@ -1310,8 +1313,10 @@ public class ConsentServiceImpl implements ConsentService {
         consent.setName("Consent");
         consent.setDescription("This is a consent made by "
                 + patient.getFirstName() + " " + patient.getLastName());
-
+        // TODO to be removed after refactoring
         consent.setUnsignedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient));
+
+        consent.setUnAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient));
 
         try {
 

@@ -389,7 +389,7 @@ public class ConsentRestController {
     }
 
     //FIXME: REWRITE THIS FUNCTION AFTER IMPLEMENTING PATIENT CHECKBOX ATTESTATION FOR SIGNING
-    @RequestMapping(value = "consents/{consentId}/attestation/complete", method = RequestMethod.GET)
+    @RequestMapping(value = "consents/{consentId}/attested", method = RequestMethod.GET)
     public Map<String, String> signConsent(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
