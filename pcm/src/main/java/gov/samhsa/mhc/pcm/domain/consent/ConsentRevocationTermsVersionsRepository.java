@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface ConsentRevocationTermsVersionsRepository extends JpaSpecificationExecutor<ConsentRevocationTermsVersions>,
         JpaRepository<ConsentRevocationTermsVersions, Long>{
 
+    ConsentRevocationTermsVersions findOneByVersionDisabled(Boolean disabled);
 }
