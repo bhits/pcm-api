@@ -389,7 +389,7 @@ public class ConsentRestController {
     }
 
     //FIXME: REWRITE THIS FUNCTION AFTER IMPLEMENTING PATIENT CHECKBOX ATTESTATION FOR SIGNING
-    @RequestMapping(value = "consents/signConsent/{consentId}", method = RequestMethod.GET)
+    @RequestMapping(value = "consents/{consentId}/attestation/complete", method = RequestMethod.GET)
     public Map<String, String> signConsent(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
@@ -402,7 +402,7 @@ public class ConsentRestController {
             throw new InternalServerErrorException("Resource Not Found");
     }
 
-    @RequestMapping(value = "consents/attestation/{consentId}", method = RequestMethod.GET)
+    @RequestMapping(value = "consents/{consentId}/attestation", method = RequestMethod.GET)
     public ConsentAttestationDto getConsentAttestationDto(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
 
