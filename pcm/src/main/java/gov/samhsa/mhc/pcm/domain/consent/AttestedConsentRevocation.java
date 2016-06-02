@@ -54,7 +54,7 @@ public class AttestedConsentRevocation extends AbstractAttestedPDFDocument{
 	@Column(name = "consent_revoke_terms_accepted")
 	private boolean consentRevokeTermsAccepted;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@Basic(fetch = FetchType.LAZY)
 	private ConsentRevocationTermsVersions consentRevocationTermsVersions;
 

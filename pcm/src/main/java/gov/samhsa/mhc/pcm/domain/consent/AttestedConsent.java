@@ -54,7 +54,7 @@ public class AttestedConsent extends AbstractAttestedPDFDocument{
 	@Column(name = "consent_terms_accepted")
 	private boolean consentTermsAccepted;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@Basic(fetch = FetchType.LAZY)
 	private ConsentTermsVersions consentTermsVersions;
 
