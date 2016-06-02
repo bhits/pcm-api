@@ -39,7 +39,6 @@ import javax.persistence.*;
 @Table(name = "attested_consent")
 public class AttestedConsent extends AbstractAttestedPDFDocument{
 
-
 	/** The id. */
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

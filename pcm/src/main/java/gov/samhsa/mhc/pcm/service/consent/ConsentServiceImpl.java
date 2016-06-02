@@ -882,12 +882,27 @@ public class ConsentServiceImpl implements ConsentService {
     }
 
     @Override
+    public byte[] getAttestedConsentPdf(Long consentId) {
+        final Consent consent = consentRepository.findOne(consentId);
+        //Updating the patient data with data from phr api
+        PatientDto patientDto = phrService.getPatientProfile();
+        final ConsentPdfDto consentPdfDto = makeConsentPdfDto();
+        byte[] attestedConsentPdf = null;
+        if (consent != null && patientDto != null && consent.getAttestedConsent() != null && consent.getAttestedConsent().getAttestedPdfConsent() != null) {
+            attestedConsentPdf =  consent.getAttestedConsent().getAttestedPdfConsent();
+        }else{
+            logger.error("Error in getting attested consent");
+        }
+        return attestedConsentPdf;
+    }
+
+    @Override
     public void createAttestedConsentPdf(Long consentId) {
         final Consent consent = consentRepository.findOne(consentId);
         //Updating the patient data with data from phr api
         PatientDto patientDto = phrService.getPatientProfile();
 
-        if (consent != null && consent.getAttestedConsent() == null && patientDto!= null) {
+        if (consent != null && consent.getAttestedConsent() == null && patientDto!= null ) {
             patientService.updatePatientFromPHR(patientDto);
             Patient patient = patientRepository.findByUsername(patientDto.getEmail());
 
@@ -903,11 +918,14 @@ public class ConsentServiceImpl implements ConsentService {
             attestedConsent.setConsentTermsAccepted(true);
             attestedConsent.setAttesterByUser(patient.getEmail());
             attestedConsent.setConsentReferenceId(consent.getConsentReferenceId());
+            attestedConsent.setStatus("SIGNED");
 
             attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient));
             consent.setAttestedConsent(attestedConsent);
             consent.setSignedDate(new Date());
             consentRepository.save(consent);
+        }else {
+            logger.error("Error in creating attested consent");
         }
 
     }

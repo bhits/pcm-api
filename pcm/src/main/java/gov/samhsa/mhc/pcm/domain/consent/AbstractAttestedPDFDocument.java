@@ -59,6 +59,9 @@ public abstract class AbstractAttestedPDFDocument implements BinaryContentAccess
 	@Column(name = "attester_by_user")
 	private String attesterByUser;
 
+	@NotNull
+	private String status;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "MM/dd/yyyy hh:mm:ss")
 	@Column(name = "attested_date_time")
@@ -118,5 +121,13 @@ public abstract class AbstractAttestedPDFDocument implements BinaryContentAccess
 
 	public void setAttestedDateTime(Date attestedDateTime) {
 		this.attestedDateTime = attestedDateTime;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

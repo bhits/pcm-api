@@ -421,6 +421,17 @@ public class ConsentRestController {
             throw new InternalServerErrorException("Consent Attestation PDF Not Found");
     }
 
+    @RequestMapping(value = "consents/{consentId}/attested/download", method = RequestMethod.GET)
+    public byte[] getAttestedConsent(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
+        final Long patientId = patientService.findIdByUsername(principal.getName());
+        if (consentService.isConsentBelongToThisUser(consentId, patientId)
+                && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
+            consentService.createAttestedConsentPdf(consentId);
+            return consentService.getAttestedConsentPdf(consentId);
+        } else
+            throw new InternalServerErrorException("Resource Not Found");
+    }
+
     //FIXME: REWRITE THIS FUNCTION AFTER IMPLEMENTING PATIENT CHECKBOX ATTESTATION FOR SIGNING
     @RequestMapping(value = "consents/revokeConsent/{consentId}", method = RequestMethod.GET)
     public Map<String, String> signConsentRevokation(Principal principal, @PathVariable("consentId") Long consentId) {
