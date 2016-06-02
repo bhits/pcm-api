@@ -43,5 +43,5 @@ public interface ConsentPdfGenerator {
      * @param isSigned determine whether to add the signing information
 	 * @return the byte[]
 	 */
-	byte[] generate42CfrPart2Pdf(Consent consent, Patient patientProfile, boolean isSigned, Date attestedOn);
+	byte[] generate42CfrPart2Pdf(Consent consent, Patient patientProfile, boolean isSigned, Date attestedOn, String terms);
 }
