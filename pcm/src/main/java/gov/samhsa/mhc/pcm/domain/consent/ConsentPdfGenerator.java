@@ -28,6 +28,8 @@ package gov.samhsa.mhc.pcm.domain.consent;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.infrastructure.dto.PatientDto;
 
+import java.util.Date;
+
 /**
  * The Interface ConsentPdfGenerator.
  */
@@ -41,5 +43,5 @@ public interface ConsentPdfGenerator {
      * @param isSigned determine whether to add the signing information
 	 * @return the byte[]
 	 */
-	byte[] generate42CfrPart2Pdf(Consent consent, Patient patientProfile, boolean isSigned);
+	byte[] generate42CfrPart2Pdf(Consent consent, Patient patientProfile, boolean isSigned, Date attestedOn);
 }
