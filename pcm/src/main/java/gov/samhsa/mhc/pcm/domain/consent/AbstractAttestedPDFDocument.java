@@ -60,7 +60,7 @@ public abstract class AbstractAttestedPDFDocument implements BinaryContentAccess
 	private String attesterByUser;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "MM/dd/yyyy")
+	@DateTimeFormat(pattern = "MM/dd/yyyy hh:mm:ss")
 	@Column(name = "attested_date_time")
 	private Date attestedDateTime;
 
