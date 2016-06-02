@@ -209,7 +209,6 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Autowired
     private ConsentTermsVersionsService consentTermsVersionsService;
-
     /**
      * The model mapper.
      */
@@ -880,6 +879,37 @@ public class ConsentServiceImpl implements ConsentService {
         consentPdfDto.setConsentName(consent.getName());
         consentPdfDto.setId(consentId);
         return consentPdfDto;
+    }
+
+    @Override
+    public void createAttestedConsentPdf(Long consentId) {
+        final Consent consent = consentRepository.findOne(consentId);
+        //Updating the patient data with data from phr api
+        PatientDto patientDto = phrService.getPatientProfile();
+
+        if (consent != null && consent.getAttestedConsent() == null && patientDto!= null) {
+            patientService.updatePatientFromPHR(patientDto);
+            Patient patient = patientRepository.findByUsername(patientDto.getEmail());
+
+            AttestedConsent attestedConsent =  new AttestedConsent();
+            attestedConsent.setConsentTermsVersions(consentTermsVersionsService.findByVersionDisabled());
+
+            attestedConsent.setAttesterEmail(patient.getEmail());
+            attestedConsent.setAttesterLastName(patient.getLastName());
+            // Middle name not available in Patient entity to be updated
+            attestedConsent.setAttesterMiddleName("");
+            attestedConsent.setAttesterFirstName(patient.getFirstName());
+            attestedConsent.setAttestedDateTime(new Date());
+            attestedConsent.setConsentTermsAccepted(true);
+            attestedConsent.setAttesterByUser(patient.getEmail());
+            attestedConsent.setConsentReferenceId(consent.getConsentReferenceId());
+
+            attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient));
+            consent.setAttestedConsent(attestedConsent);
+            consent.setSignedDate(new Date());
+            consentRepository.save(consent);
+        }
+
     }
 
     /*

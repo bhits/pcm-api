@@ -103,6 +103,14 @@ public interface ConsentService {
     ConsentPdfDto findConsentPdfDto(Long consentId);
 
     /**
+     * Create the attested consent.
+     *
+     * @param consentId the consent id
+     * @return the consent pdf dto
+     */
+    void createAttestedConsentPdf(Long consentId);
+
+    /**
      * Find consentPdfDto.
      *
      * @param consentId the consent id

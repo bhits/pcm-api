@@ -388,16 +388,12 @@ public class ConsentRestController {
 
     }
 
-    //FIXME: REWRITE THIS FUNCTION AFTER IMPLEMENTING PATIENT CHECKBOX ATTESTATION FOR SIGNING
     @RequestMapping(value = "consents/{consentId}/attested", method = RequestMethod.GET)
-    public Map<String, String> signConsent(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
+    public void completeConsentAttestation(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
                 && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
-            final ConsentPdfDto consentPdfDto = consentService.findConsentPdfDto(consentId);
-
-            //FIXME: Temporarily returning null after removing EchoSign
-            return null;
+            consentService.createAttestedConsentPdf(consentId);
         } else
             throw new InternalServerErrorException("Resource Not Found");
     }
@@ -413,8 +409,8 @@ public class ConsentRestController {
             throw new InternalServerErrorException("Consent Attestation Dto Not Found");
     }
 
-    @RequestMapping(value = "consents/attestation/download/{consentId}", method = RequestMethod.GET)
-    public byte[] getConsentAttestationPDF(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
+    @RequestMapping(value = "consents/{consentId}/unattested", method = RequestMethod.GET)
+    public byte[] getUnAttestedConsentPDF(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
 
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
