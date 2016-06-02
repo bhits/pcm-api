@@ -73,7 +73,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
      * generate42CfrPart2Pdf(gov.samhsa.consent2share.domain.consent.Consent)
      */
     @Override
-    public byte[] generate42CfrPart2Pdf(Consent consent, Patient patientProfile) {
+    public byte[] generate42CfrPart2Pdf(Consent consent, Patient patientProfile, boolean isSigned) {
         Assert.notNull(consent, "Consent is required.");
 
         Document document = new Document();
@@ -106,7 +106,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             document.add(new Paragraph(" "));
 
             //Authorization to disclose section
-            document.add(createSectionTitle("AUTHORIZATION TO DISCLOSE"));
+            document.add(createSectionTitle(" AUTHORIZATION TO DISCLOSE"));
             //Authorizes
             document.add(new Paragraph("Authorizes: "));
 
@@ -119,14 +119,14 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             document.add(new Paragraph(" "));
 
             //Health information to be disclosed section
-            document.add(createSectionTitle("HEALTH INFORMATION TO BE DISCLOSED"));
+            document.add(createSectionTitle(" HEALTH INFORMATION TO BE DISCLOSED"));
 
             document.add(createHealthInformationToBeDisclose(consent));
 
             document.add(new Paragraph(" "));
 
             //Consent terms section
-            document.add(createSectionTitle("CONSENT TERMS"));
+            document.add(createSectionTitle(" CONSENT TERMS"));
 
             // Consent term
             document.add(createConsentTerms(patientProfile));
@@ -135,6 +135,11 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
             // Consent effective and expiration date
             document.add(createStartAndEndDateTable(consent));
+
+            document.add(new Paragraph(" "));
+
+            //Signing details
+            document.add(createSigningDetailsTable(consent, isSigned));
 
             document.close();
 
@@ -463,5 +468,22 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             purposesOfUseList.add(purposeOfUseCode.getPurposeOfUseCode().getDisplayName());
         }
         return purposesOfUseList;
+    }
+
+    private PdfPTable  createSigningDetailsTable(Consent consent, Boolean isSigned){
+        PdfPTable signingDetailsTable = createBorderlessTable(1);
+
+        if(isSigned && consent != null){
+            Font patientInfoFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
+
+            PdfPCell attesterSignDateCell = new PdfPCell(createCellContent("Signed on: ", patientInfoFont, formatDate(new Date()), null));
+            attesterSignDateCell.setBorder(Rectangle.NO_BORDER);
+            signingDetailsTable.addCell(attesterSignDateCell);
+
+            PdfPCell attesterEmailCell = new PdfPCell(createCellContent("Email: ", patientInfoFont, consent.getPatient().getEmail(), null));
+            attesterEmailCell.setBorder(Rectangle.NO_BORDER);
+            signingDetailsTable.addCell(attesterEmailCell);
+        }
+        return signingDetailsTable;
     }
 }

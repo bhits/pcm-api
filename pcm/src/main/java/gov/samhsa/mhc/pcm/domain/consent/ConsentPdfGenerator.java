@@ -37,7 +37,9 @@ public interface ConsentPdfGenerator {
 	 * Generate42 cfr part2 pdf.
 	 *
 	 * @param consent the consent
+	 * @param patientProfile the patient iformation
+     * @param isSigned determine whether to add the signing information
 	 * @return the byte[]
 	 */
-	byte[] generate42CfrPart2Pdf(Consent consent, Patient patientProfile);
+	byte[] generate42CfrPart2Pdf(Consent consent, Patient patientProfile, boolean isSigned);
 }

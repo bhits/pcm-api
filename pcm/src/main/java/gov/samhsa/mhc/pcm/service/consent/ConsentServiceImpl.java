@@ -920,7 +920,7 @@ public class ConsentServiceImpl implements ConsentService {
             attestedConsent.setConsentReferenceId(consent.getConsentReferenceId());
             attestedConsent.setStatus("SIGNED");
 
-            attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient));
+            attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, true));
             consent.setAttestedConsent(attestedConsent);
             consent.setSignedDate(new Date());
             consentRepository.save(consent);
@@ -1362,9 +1362,9 @@ public class ConsentServiceImpl implements ConsentService {
         consent.setDescription("This is a consent made by "
                 + patient.getFirstName() + " " + patient.getLastName());
         // TODO to be removed after refactoring
-        consent.setUnsignedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient));
+        consent.setUnsignedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, false));
 
-        consent.setUnAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient));
+        consent.setUnAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, false));
 
         try {
 
