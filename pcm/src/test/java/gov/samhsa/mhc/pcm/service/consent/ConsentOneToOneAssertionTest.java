@@ -1,4 +1,4 @@
-package gov.samhsa.mhc.pcm.service.consent.pg;
+package gov.samhsa.mhc.pcm.service.consent;
 
 import java.util.Set;
 

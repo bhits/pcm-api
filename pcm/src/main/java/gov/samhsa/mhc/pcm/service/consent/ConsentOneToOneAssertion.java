@@ -23,9 +23,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-package gov.samhsa.mhc.pcm.service.consent.pg;
+package gov.samhsa.mhc.pcm.service.consent;
 
-import gov.samhsa.mhc.pcm.service.consent.ConsentAssertion;
 import gov.samhsa.mhc.pcm.service.dto.ConsentDto;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -38,14 +37,14 @@ import java.util.function.Function;
  * The Class ConsentOneToOneAssertion.
  */
 @Component
-public class ConsentOneToOneAssertion implements ConsentAssertion {
+class ConsentOneToOneAssertion implements ConsentAssertion {
 
     /*
      * (non-Javadoc)
      *
      * @see
-     * gov.samhsa.consent2share.service.consent.ConsentAssertion#assertConsentDto
-     * (gov.samhsa.consent2share.service.dto.ConsentDto)
+     * gov.samhsa.mhc.pcm.service.consent.ConsentAssertion#assertConsentDto
+     * (gov.samhsa.mhc.pcm.service.dto.ConsentDto)
      */
     @Override
     public void assertConsentDto(ConsentDto consentDto)

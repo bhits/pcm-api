@@ -29,6 +29,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import gov.samhsa.mhc.pcm.domain.consent.Consent;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.io.ByteArrayOutputStream;
@@ -37,6 +38,7 @@ import java.util.Date;
 /**
  * The Class ConsentRevokationPdfGeneratorImpl.
  */
+@Service
 public class ConsentRevokationPdfGeneratorImpl extends
         AbstractConsentRevokationPdfGenerator {
 

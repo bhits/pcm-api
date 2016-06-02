@@ -30,7 +30,7 @@ import gov.samhsa.mhc.pcm.service.dto.ConsentDto;
 /**
  * The Interface ConsentAssertion.
  */
-public interface ConsentAssertion {
+interface ConsentAssertion {
 
 	/**
 	 * Assert consent dto.
@@ -40,7 +40,7 @@ public interface ConsentAssertion {
 	 * @throws IllegalArgumentException
 	 *             the illegal argument exception
 	 */
-	public abstract void assertConsentDto(ConsentDto consentDto)
+	void assertConsentDto(ConsentDto consentDto)
 			throws IllegalArgumentException;
 
 }
