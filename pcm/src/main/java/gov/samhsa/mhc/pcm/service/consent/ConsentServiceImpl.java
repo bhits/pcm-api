@@ -209,6 +209,10 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Autowired
     private ConsentTermsVersionsService consentTermsVersionsService;
+
+    @Autowired
+    private ConsentRevocationTermsVersionsService consentRevocationTermsVersionsService;
+
     /**
      * The model mapper.
      */
@@ -570,6 +574,41 @@ public class ConsentServiceImpl implements ConsentService {
         }
 
         return consentAttestationDto;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ConsentRevocationAttestationDto getConsentRevocationAttestationDto(String userName, Long consentId) {
+        Consent consent = null;
+        ConsentRevocationAttestationDto consentRevocationAttestationDto = null;
+        Optional<Consent> findConsentOptional = patientRepository.findByUsername(userName).getConsents().stream()
+                .filter(c -> consentId.equals(c.getId()))
+                .findAny();
+
+        if(findConsentOptional.isPresent()){
+            consent = findConsentOptional.get();
+
+            consentRevocationAttestationDto = new ConsentRevocationAttestationDto();
+            consentRevocationAttestationDto.setConsentReferenceId(consent.getConsentReferenceId());
+
+            final PatientDto patientProfile = phrService.getPatientProfile();
+
+            if(patientProfile != null){
+                consentRevocationAttestationDto.setAttesterLastName(patientProfile.getLastName());
+                consentRevocationAttestationDto.setAttesterFirstName(patientProfile.getFirstName());
+                consentRevocationAttestationDto.setAttesterMiddleName(null);
+                consentRevocationAttestationDto.setPatientLastName(patientProfile.getLastName());
+                consentRevocationAttestationDto.setPatientFirstName(patientProfile.getFirstName());
+                consentRevocationAttestationDto.setAttesterEmail(patientProfile.getEmail());
+            }
+
+            consentRevocationAttestationDto.setConsentRevokeTermsAccepted(false);
+
+            String currentConsentRevokeTermsText = consentRevocationTermsVersionsService.findByLatestEnabledVersion().getConsentRevokeTermsText();
+            consentRevocationAttestationDto.setConsentRevokeTermsText(currentConsentRevokeTermsText);
+        }
+
+        return consentRevocationAttestationDto;
     }
 
     /*

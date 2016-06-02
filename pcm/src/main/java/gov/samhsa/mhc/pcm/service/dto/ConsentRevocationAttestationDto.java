@@ -11,7 +11,11 @@ public class ConsentRevocationAttestationDto {
 
     private String attesterMiddleName;
 
-    private String attesterByUser;
+    private String attestedByUser;
+
+    private String patientLastName;
+
+    private String patientFirstName;
 
     private boolean consentRevokeTermsAccepted;
 
@@ -57,12 +61,28 @@ public class ConsentRevocationAttestationDto {
         this.attesterMiddleName = attesterMiddleName;
     }
 
-    public String getAttesterByUser() {
-        return attesterByUser;
+    public String getAttestedByUser() {
+        return attestedByUser;
     }
 
-    public void setAttesterByUser(String attesterByUser) {
-        this.attesterByUser = attesterByUser;
+    public void setAttestedByUser(String attestedByUser) {
+        this.attestedByUser = attestedByUser;
+    }
+
+    public String getPatientLastName() {
+        return patientLastName;
+    }
+
+    public void setPatientLastName(String patientLastName) {
+        this.patientLastName = patientLastName;
+    }
+
+    public String getPatientFirstName() {
+        return patientFirstName;
+    }
+
+    public void setPatientFirstName(String patientFirstName) {
+        this.patientFirstName = patientFirstName;
     }
 
     public boolean isConsentRevokeTermsAccepted() {

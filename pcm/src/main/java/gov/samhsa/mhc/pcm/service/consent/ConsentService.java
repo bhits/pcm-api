@@ -301,4 +301,13 @@ public interface ConsentService {
     Map<String, Object> findAllConsentsDtoByPatientAndPage(Long patientId, String pageNumber);
 
     ConsentAttestationDto getConsentAttestationDto(String userName, Long consentId);
+
+    /**
+     * Gets the ConsentRevocationAttestationDto
+     *
+     * @param userName the user/patient name for whom to search for the consent to be revoked
+     * @param consentId the consent id for the consent to be revoked
+     * @return ConsentRevocationAttestationDto
+     */
+    ConsentRevocationAttestationDto getConsentRevocationAttestationDto(String userName, Long consentId);
 }
