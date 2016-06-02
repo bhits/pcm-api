@@ -28,9 +28,12 @@ package gov.samhsa.mhc.pcm.service.consent;
 import gov.samhsa.mhc.pcm.domain.consent.*;
 import gov.samhsa.mhc.pcm.domain.consent.ConsentTermsVersions;
 
+import gov.samhsa.mhc.pcm.service.exception.ConsentTermsVersionNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * The Class ConsentServiceImpl.
@@ -42,8 +45,13 @@ public class ConsentTermsVersionsServiceImpl implements ConsentTermsVersionsServ
     @Autowired
     private ConsentTermsVersionsRepository consentTermsVersionsRepository;
 
-    public ConsentTermsVersions findByVersionDisabled(){
-        return consentTermsVersionsRepository.findOneByVersionDisabled(false);
+    public ConsentTermsVersions getEnabledConsentTermsVersion(){
+        List<ConsentTermsVersions> consentRevocationTermsVersionsList = consentTermsVersionsRepository.findAllByVersionDisabledOrderByAddedDateTimeDesc(false);
+        if(consentRevocationTermsVersionsList.size() > 0){
+            return consentRevocationTermsVersionsList.get(0);
+        }else {
+            throw new ConsentTermsVersionNotFoundException("No active ConsentTermsVersions record found in database");
+        }
     };
 
 }
