@@ -908,19 +908,21 @@ public class ConsentServiceImpl implements ConsentService {
 
             AttestedConsent attestedConsent =  new AttestedConsent();
             attestedConsent.setConsentTermsVersions(consentTermsVersionsService.getEnabledConsentTermsVersion());
-
             attestedConsent.setAttesterEmail(patient.getEmail());
             attestedConsent.setAttesterLastName(patient.getLastName());
             // Middle name not available in Patient entity to be updated
             attestedConsent.setAttesterMiddleName("");
             attestedConsent.setAttesterFirstName(patient.getFirstName());
-            attestedConsent.setAttestedDateTime(new Date());
+
+            Date attesteOn = new Date();
+            attestedConsent.setAttestedDateTime(attesteOn);
+
             attestedConsent.setConsentTermsAccepted(true);
             attestedConsent.setAttesterByUser(patient.getEmail());
             attestedConsent.setConsentReferenceId(consent.getConsentReferenceId());
             attestedConsent.setStatus("SIGNED");
 
-            attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, true));
+            attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, true, attesteOn));
             consent.setAttestedConsent(attestedConsent);
             consent.setSignedDate(new Date());
             consentRepository.save(consent);
@@ -1362,9 +1364,9 @@ public class ConsentServiceImpl implements ConsentService {
         consent.setDescription("This is a consent made by "
                 + patient.getFirstName() + " " + patient.getLastName());
         // TODO to be removed after refactoring
-        consent.setUnsignedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, false));
+        consent.setUnsignedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, false, null));
 
-        consent.setUnAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, false));
+        consent.setUnAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, false, null));
 
         try {
 

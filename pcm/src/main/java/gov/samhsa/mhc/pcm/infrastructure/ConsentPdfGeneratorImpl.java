@@ -73,7 +73,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
      * generate42CfrPart2Pdf(gov.samhsa.consent2share.domain.consent.Consent)
      */
     @Override
-    public byte[] generate42CfrPart2Pdf(Consent consent, Patient patientProfile, boolean isSigned) {
+    public byte[] generate42CfrPart2Pdf(Consent consent, Patient patientProfile, boolean isSigned, Date attestedOn) {
         Assert.notNull(consent, "Consent is required.");
 
         Document document = new Document();
@@ -139,7 +139,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             document.add(new Paragraph(" "));
 
             //Signing details
-            document.add(createSigningDetailsTable(consent, isSigned));
+            document.add(createSigningDetailsTable(consent, isSigned, attestedOn));
 
             document.close();
 
@@ -470,19 +470,20 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         return purposesOfUseList;
     }
 
-    private PdfPTable  createSigningDetailsTable(Consent consent, Boolean isSigned){
+    private PdfPTable  createSigningDetailsTable(Consent consent, Boolean isSigned, Date attestedOn){
         PdfPTable signingDetailsTable = createBorderlessTable(1);
 
-        if(isSigned && consent != null){
+        if(isSigned && consent != null && attestedOn != null){
             Font patientInfoFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
-
-            PdfPCell attesterSignDateCell = new PdfPCell(createCellContent("Signed on: ", patientInfoFont, formatDate(new Date()), null));
-            attesterSignDateCell.setBorder(Rectangle.NO_BORDER);
-            signingDetailsTable.addCell(attesterSignDateCell);
 
             PdfPCell attesterEmailCell = new PdfPCell(createCellContent("Email: ", patientInfoFont, consent.getPatient().getEmail(), null));
             attesterEmailCell.setBorder(Rectangle.NO_BORDER);
             signingDetailsTable.addCell(attesterEmailCell);
+
+            PdfPCell attesterSignDateCell = new PdfPCell(createCellContent("Attested on: ", patientInfoFont, formatDate(attestedOn), null));
+            attesterSignDateCell.setBorder(Rectangle.NO_BORDER);
+            signingDetailsTable.addCell(attesterSignDateCell);
+
         }
         return signingDetailsTable;
     }
