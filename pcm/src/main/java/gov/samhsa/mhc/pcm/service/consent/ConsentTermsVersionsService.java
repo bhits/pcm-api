@@ -31,6 +31,6 @@ import gov.samhsa.mhc.pcm.domain.consent.ConsentTermsVersions;
  */
 public interface ConsentTermsVersionsService {
 
-    ConsentTermsVersions findByVersionDisabled();
+    ConsentTermsVersions getEnabledConsentTermsVersion();
 
 }

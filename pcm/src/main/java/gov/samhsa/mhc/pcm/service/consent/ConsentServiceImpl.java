@@ -566,7 +566,7 @@ public class ConsentServiceImpl implements ConsentService {
             }
             consentAttestationDto.setPurposeOfUseCodes(purposeOfUses);
 
-            consentAttestationDto.setConsentTermsVersions(consentTermsVersionsService.findByVersionDisabled());
+            consentAttestationDto.setConsentTermsVersions(consentTermsVersionsService.getEnabledConsentTermsVersion());
         }
 
         return consentAttestationDto;
@@ -892,7 +892,7 @@ public class ConsentServiceImpl implements ConsentService {
             Patient patient = patientRepository.findByUsername(patientDto.getEmail());
 
             AttestedConsent attestedConsent =  new AttestedConsent();
-            attestedConsent.setConsentTermsVersions(consentTermsVersionsService.findByVersionDisabled());
+            attestedConsent.setConsentTermsVersions(consentTermsVersionsService.getEnabledConsentTermsVersion());
 
             attestedConsent.setAttesterEmail(patient.getEmail());
             attestedConsent.setAttesterLastName(patient.getLastName());
