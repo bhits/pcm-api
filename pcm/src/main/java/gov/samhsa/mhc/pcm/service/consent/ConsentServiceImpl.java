@@ -229,8 +229,8 @@ public class ConsentServiceImpl implements ConsentService {
         } else if (revokationType.equals("NO NEVER")) {
             consent.setConsentRevokationType("NO NEVER");
         }
-        consent.setUnsignedPdfConsentRevoke(consentRevokationPdfGenerator
-                .generateConsentRevokationPdf(consent));
+        //FIXME: Temporarily added two nulls to the method call to match new method signature until this service is refactored.
+        consent.setUnsignedPdfConsentRevoke(consentRevokationPdfGenerator.generateConsentRevokationPdf(consent, null, null));
         consentRepository.save(consent);
     }
 

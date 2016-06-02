@@ -32,6 +32,9 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import gov.samhsa.mhc.pcm.domain.consent.Consent;
+import gov.samhsa.mhc.pcm.domain.patient.Patient;
+
+import java.util.Date;
 
 
 /**
@@ -46,7 +49,7 @@ public abstract class AbstractConsentRevokationPdfGenerator {
 	 *            the consent
 	 * @return the byte[]
 	 */
-	public abstract byte[] generateConsentRevokationPdf(Consent consent);
+	public abstract byte[] generateConsentRevokationPdf(Consent consent, Patient patient, Date attestedOnDateTime);
 
 	/**
 	 * Creates the table.

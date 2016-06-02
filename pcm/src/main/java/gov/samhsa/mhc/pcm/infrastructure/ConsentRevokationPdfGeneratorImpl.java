@@ -28,9 +28,11 @@ package gov.samhsa.mhc.pcm.infrastructure;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import gov.samhsa.mhc.pcm.domain.consent.Consent;
+import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import org.springframework.util.Assert;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Date;
 
 /**
  * The Class ConsentRevokationPdfGeneratorImpl.
@@ -47,7 +49,7 @@ public class ConsentRevokationPdfGeneratorImpl extends
      * (gov.samhsa.consent2share.domain.consent.Consent)
      */
     @Override
-    public byte[] generateConsentRevokationPdf(Consent consent) {
+    public byte[] generateConsentRevokationPdf(Consent consent, Patient patient, Date attestedOnDateTime) {
         Assert.notNull(consent, "Consent is required.");
         Document document = new Document();
         ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
