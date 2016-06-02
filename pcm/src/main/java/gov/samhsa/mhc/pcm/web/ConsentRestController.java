@@ -440,7 +440,7 @@ public class ConsentRestController {
         final Long patientId = patientService.findIdByUsername(principal.getName());
 
         //TODO: Move check for consent belonging to this user and consent signed stage to service
-        if (((consentService.isConsentBelongToThisUser(consentId, patientId)) && (consentService.getConsentSignedStage(consentId).equals("CONSENT_SIGNED"))) || (1 == 1)) {
+        if ((consentService.isConsentBelongToThisUser(consentId, patientId)) /* && (consentService.getConsentSignedStage(consentId).equals("CONSENT_SIGNED"))*/) {
             ConsentRevocationAttestationDto revAttestDto = consentService.getConsentRevocationAttestationDto(principal.getName(),consentId);
             logger.info("Attested By User: " + revAttestDto.getAttestedByUser());
             logger.info("Attester Last Name: " + revAttestDto.getAttesterLastName());
