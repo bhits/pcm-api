@@ -1,0 +1,1 @@
+INSERT INTO consent_revocation_terms_versions (consent_revoke_terms_text, added_date_time, version_disabled) VALUES ('THIS CONSENT REVOCATION TERMS VERSION RECORD IS DISABLED. IF YOU ARE SEEING THIS, THEN THERE IS A BUG IN THE CODE AND/OR DATABASE SCRIPT SOMEWHERE.','2016-06-02 00:00:00',true);
