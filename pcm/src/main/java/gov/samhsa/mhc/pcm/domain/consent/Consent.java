@@ -166,6 +166,9 @@ public class Consent {
 	@Basic(fetch = FetchType.LAZY)
 	private AttestedConsentRevocation attestedConsentRevocation;
 
+	@NotNull
+	private String status;
+
 	/** The providers permitted to disclose. */
 	@ElementCollection
 	@CollectionTable(name = "ConsentIndividualProviderPermittedToDisclose", joinColumns = @JoinColumn(name = "CONSENT_ID"))
@@ -914,5 +917,13 @@ public class Consent {
 
 	public void setAttestedConsentRevocation(AttestedConsentRevocation attestedConsentRevocation) {
 		this.attestedConsentRevocation = attestedConsentRevocation;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

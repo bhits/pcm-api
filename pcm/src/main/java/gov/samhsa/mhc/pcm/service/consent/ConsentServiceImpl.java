@@ -959,13 +959,13 @@ public class ConsentServiceImpl implements ConsentService {
             attestedConsent.setConsentTermsAccepted(true);
             attestedConsent.setAttesterByUser(patient.getEmail());
             attestedConsent.setConsentReferenceId(consent.getConsentReferenceId());
-            attestedConsent.setStatus("SIGNED");
 
             String term = consentTermsVersionsService.getEnabledConsentTermsVersion().getConsentTermsText();
             attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, true, attesteOn, term));
 
             consent.setAttestedConsent(attestedConsent);
             consent.setSignedDate(new Date());
+            consent.setStatus(ConsentStatus.CONSENT_SIGNED);
             consentRepository.save(consent);
         }else {
             logger.error("Error in creating attested consent");
@@ -1399,6 +1399,8 @@ public class ConsentServiceImpl implements ConsentService {
         consent.setEndDate(consentDto.getConsentEnd());
 
         consent.setCreatedDateTime(new Date());
+
+        consent.setStatus(ConsentStatus.CONSENT_SAVED);
 
         consent.setPatient(patient);
         consent.setName("Consent");
