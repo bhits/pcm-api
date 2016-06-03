@@ -75,7 +75,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
      * generate42CfrPart2Pdf(gov.samhsa.consent2share.domain.consent.Consent)
      */
     @Override
-    public byte[] generate42CfrPart2Pdf(Consent consent, Patient patientProfile, boolean isSigned, Date attestedOn) {
+    public byte[] generate42CfrPart2Pdf(Consent consent, Patient patientProfile, boolean isSigned, Date attestedOn, String terms) {
         Assert.notNull(consent, "Consent is required.");
 
         Document document = new Document();
@@ -131,7 +131,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             document.add(iTextPdfService.createSectionTitle(" CONSENT TERMS"));
 
             // Consent term
-            document.add(createConsentTerms(patientProfile));
+            document.add(createConsentTerms(terms, patientProfile));
 
             document.add(new Paragraph(" "));
 
@@ -181,13 +181,25 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         return consentStartAndEndDateTable;
     }
 
-    private Paragraph createConsentTerms(Patient patientProfile) {
-        String term = "I, " + getFullName(patientProfile) + ", understand that my records are protected under the federal regulations governing Confidentiality of " +
-                "Alcohol and Drug Abuse Patient Records, 42 CFR part 2, and cannot be disclosed without my written permission or " +
-                "as otherwise permitted by 42 CFR part 2. I also understand that I may revoke this consent at any time except to the " +
-                "extent that action has been taken in reliance on it, and that any event this consent expires automatically as follows:";
+    private PdfPTable createSectionTitle(String title){
+        PdfPTable sectionTitle = iTextPdfService.createBorderlessTable(1);
 
-        return iTextPdfService.createParagraphWithContent(term, null);
+        Font cellFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
+        cellFont.setColor(BaseColor.WHITE);
+
+        PdfPCell cell = iTextPdfService.createBorderlessCell(title,cellFont);
+        cell.setBackgroundColor(new BaseColor(73,89,105));
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setPaddingBottom(5);
+        sectionTitle.addCell(cell);
+
+        return sectionTitle;
+    }
+
+    private Paragraph createConsentTerms(String terms, Patient patientProfile){
+        String userNameKey = "ATTESTER_FULL_NAME";
+        String termsWithAttestedName =  terms.replace(userNameKey, getFullName(patientProfile));
+        return iTextPdfService.createParagraphWithContent(termsWithAttestedName, null);
     }
 
     private PdfPTable createProviderPropertyValueTable(String propertyName, String propertyValue) {
@@ -343,5 +355,27 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             purposesOfUseList.add(purposeOfUseCode.getPurposeOfUseCode().getDisplayName());
         }
         return purposesOfUseList;
+    }
+
+    private PdfPTable  createSigningDetailsTable(Consent consent, Boolean isSigned, Date attestedOn, Patient patientProfile){
+        PdfPTable signingDetailsTable = iTextPdfService.createBorderlessTable(1);
+
+        if(isSigned && consent != null && attestedOn != null){
+            Font patientInfoFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
+
+            PdfPCell attesterEmailCell = new PdfPCell(iTextPdfService.createCellContent("Email: ", patientInfoFont, consent.getPatient().getEmail(), null));
+            attesterEmailCell.setBorder(Rectangle.NO_BORDER);
+            signingDetailsTable.addCell(attesterEmailCell);
+
+            PdfPCell attesterFullNameCell = new PdfPCell(iTextPdfService.createCellContent("Attested By: ", patientInfoFont, getFullName(patientProfile), null));
+            attesterFullNameCell.setBorder(Rectangle.NO_BORDER);
+            signingDetailsTable.addCell(attesterFullNameCell);
+
+            PdfPCell attesterSignDateCell = new PdfPCell(iTextPdfService.createCellContent("Attested On: ", patientInfoFont, iTextPdfService.formatDate(attestedOn), null));
+            attesterSignDateCell.setBorder(Rectangle.NO_BORDER);
+            signingDetailsTable.addCell(attesterSignDateCell);
+
+        }
+        return signingDetailsTable;
     }
 }

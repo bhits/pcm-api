@@ -961,7 +961,9 @@ public class ConsentServiceImpl implements ConsentService {
             attestedConsent.setConsentReferenceId(consent.getConsentReferenceId());
             attestedConsent.setStatus("SIGNED");
 
-            attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, true, attesteOn));
+            String term = consentTermsVersionsService.getEnabledConsentTermsVersion().getConsentTermsText();
+            attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, true, attesteOn, term));
+
             consent.setAttestedConsent(attestedConsent);
             consent.setSignedDate(new Date());
             consentRepository.save(consent);
@@ -1402,10 +1404,12 @@ public class ConsentServiceImpl implements ConsentService {
         consent.setName("Consent");
         consent.setDescription("This is a consent made by "
                 + patient.getFirstName() + " " + patient.getLastName());
-        // TODO to be removed after refactoring
-        consent.setUnsignedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, false, null));
+        String terms = consentTermsVersionsService.getEnabledConsentTermsVersion().getConsentTermsText();
 
-        consent.setUnAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, false, null));
+        // TODO to be removed after refactoring
+        consent.setUnsignedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, false, null, terms));
+
+        consent.setUnAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, false, null, terms));
 
         try {
 
