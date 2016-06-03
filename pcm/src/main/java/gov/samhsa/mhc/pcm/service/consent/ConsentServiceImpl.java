@@ -335,28 +335,28 @@ public class ConsentServiceImpl implements ConsentService {
 
             if (consent.getSignedPdfConsent() != null) {
                 if (consent.getSignedPdfConsent().getDocumentSignedStatus()
-                        .equals("SIGNED")) {
-                    consentListDto.setConsentStage("CONSENT_SIGNED");
+                        .equals(ConsentStatus.SIGNED)) {
+                    consentListDto.setConsentStage(ConsentStatus.CONSENT_SIGNED);
                 } else {
-                    consentListDto.setConsentStage("CONSENT_SAVED");
+                    consentListDto.setConsentStage(ConsentStatus.CONSENT_SAVED);
                 }
             } else {
-                consentListDto.setConsentStage("CONSENT_SAVED");
+                consentListDto.setConsentStage(ConsentStatus.CONSENT_SAVED);
             }
 
-            if (!consentListDto.getConsentStage().equals("CONSENT_SIGNED")) {
+            if (!consentListDto.getConsentStage().equals(ConsentStatus.CONSENT_SIGNED)) {
                 consentListDto.setRevokeStage("NA");
             } else {
                 if (consent.getSignedPdfConsentRevoke() != null) {
                     if (consent.getSignedPdfConsentRevoke()
-                            .getDocumentSignedStatus().equals("SIGNED")) {
-                        consentListDto.setRevokeStage("REVOCATION_REVOKED");
+                            .getDocumentSignedStatus().equals(ConsentStatus.SIGNED)) {
+                        consentListDto.setRevokeStage(ConsentStatus.REVOCATION_REVOKED);
                     } else {
                         consentListDto
-                                .setRevokeStage("REVOCATION_NOT_SUBMITTED");
+                                .setRevokeStage(ConsentStatus.REVOCATION_NOT_SUBMITTED);
                     }
                 } else {
-                    consentListDto.setRevokeStage("REVOCATION_NOT_SUBMITTED");
+                    consentListDto.setRevokeStage(ConsentStatus.REVOCATION_NOT_SUBMITTED);
                 }
             }
 
@@ -1020,13 +1020,13 @@ public class ConsentServiceImpl implements ConsentService {
         final Consent consent = consentRepository.findOne(consentId);
         if (consent.getSignedPdfConsent() != null) {
             if (consent.getSignedPdfConsent().getDocumentSignedStatus()
-                    .equals("SIGNED")) {
-                signStatus = "CONSENT_SIGNED";
+                    .equals(ConsentStatus.SIGNED)) {
+                signStatus = ConsentStatus.CONSENT_SIGNED;
             } else {
-                signStatus = "CONSENT_SAVED";
+                signStatus = ConsentStatus.CONSENT_SAVED;
             }
         } else {
-            signStatus = "CONSENT_SAVED";
+            signStatus = ConsentStatus.CONSENT_SAVED;
         }
         return signStatus;
     }
