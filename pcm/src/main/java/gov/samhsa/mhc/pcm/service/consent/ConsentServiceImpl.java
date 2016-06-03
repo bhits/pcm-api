@@ -333,9 +333,8 @@ public class ConsentServiceImpl implements ConsentService {
                         .add(item.getDisplayName());
             }
 
-            if (consent.getSignedPdfConsent() != null) {
-                if (consent.getSignedPdfConsent().getDocumentSignedStatus()
-                        .equals(ConsentStatus.SIGNED)) {
+            if (consent.getAttestedConsent() != null) {
+                if (consent.getStatus().equals(ConsentStatus.CONSENT_SIGNED)) {
                     consentListDto.setConsentStage(ConsentStatus.CONSENT_SIGNED);
                 } else {
                     consentListDto.setConsentStage(ConsentStatus.CONSENT_SAVED);
@@ -344,16 +343,14 @@ public class ConsentServiceImpl implements ConsentService {
                 consentListDto.setConsentStage(ConsentStatus.CONSENT_SAVED);
             }
 
-            if (!consentListDto.getConsentStage().equals(ConsentStatus.CONSENT_SIGNED)) {
+            if (consentListDto.getConsentStage() != null && !consentListDto.getConsentStage().equals(ConsentStatus.CONSENT_SIGNED)) {
                 consentListDto.setRevokeStage("NA");
             } else {
-                if (consent.getSignedPdfConsentRevoke() != null) {
-                    if (consent.getSignedPdfConsentRevoke()
-                            .getDocumentSignedStatus().equals(ConsentStatus.SIGNED)) {
+                if (consent.getAttestedConsentRevocation()!= null) {
+                    if (consent.getStatus().equals(ConsentStatus.SIGNED)) {
                         consentListDto.setRevokeStage(ConsentStatus.REVOCATION_REVOKED);
                     } else {
-                        consentListDto
-                                .setRevokeStage(ConsentStatus.REVOCATION_NOT_SUBMITTED);
+                        consentListDto.setRevokeStage(ConsentStatus.REVOCATION_NOT_SUBMITTED);
                     }
                 } else {
                     consentListDto.setRevokeStage(ConsentStatus.REVOCATION_NOT_SUBMITTED);
