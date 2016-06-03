@@ -1,5 +1,13 @@
 package gov.samhsa.mhc.pcm.service.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import gov.samhsa.mhc.pcm.service.util.CustomJsonDateDeserializer;
+import gov.samhsa.mhc.pcm.service.util.CustomJsonDateSerializer;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
 public class ConsentRevocationAttestationDto {
     private String consentReferenceId;
 
@@ -20,6 +28,11 @@ public class ConsentRevocationAttestationDto {
     private boolean consentRevokeTermsAccepted;
 
     private String consentRevokeTermsText;
+
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    @JsonDeserialize(using = CustomJsonDateDeserializer.class)
+    @JsonSerialize(using = CustomJsonDateSerializer.class)
+    private Date patientDateOfBirth ;
 
     public String getConsentReferenceId() {
         return consentReferenceId;
@@ -101,4 +114,11 @@ public class ConsentRevocationAttestationDto {
         this.consentRevokeTermsText = consentRevokeTermsText;
     }
 
+    public Date getPatientDateOfBirth() {
+        return patientDateOfBirth;
+    }
+
+    public void setPatientDateOfBirth(Date patientDateOfBirth) {
+        this.patientDateOfBirth = patientDateOfBirth;
+    }
 }

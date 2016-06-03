@@ -30,6 +30,7 @@ import gov.samhsa.mhc.pcm.infrastructure.eventlistener.EventService;
 import gov.samhsa.mhc.pcm.infrastructure.securityevent.FileDownloadedEvent;
 import gov.samhsa.mhc.pcm.service.consent.ConsentHelper;
 import gov.samhsa.mhc.pcm.service.consent.ConsentService;
+import gov.samhsa.mhc.pcm.service.consent.ConsentStatus;
 import gov.samhsa.mhc.pcm.service.dto.*;
 import gov.samhsa.mhc.pcm.service.exception.*;
 import gov.samhsa.mhc.pcm.service.notification.NotificationService;
@@ -46,7 +47,6 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceS
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -388,6 +388,18 @@ public class ConsentRestController {
 
     }
 
+    @RequestMapping(value = "consents/{consentId}/revocation", method = RequestMethod.POST)
+    public void completeConsentRevocation(Principal principal, @RequestBody RevocationDto revocationDto) throws ConsentGenException {
+        final Long patientId = patientService.findIdByUsername(principal.getName());
+        Long consentId = revocationDto.getConsentId();
+        boolean acceptTerms = revocationDto.isAcceptTerms();
+        //TODO: Move check for consent belonging to this user and consent signed stage to service
+        if (consentId != null && acceptTerms && consentService.isConsentBelongToThisUser(consentId, patientId) && consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SIGNED) ){
+            consentService.attestConsentRevocation(consentId);
+        } else
+            throw new InternalServerErrorException("Resource Not Found");
+    }
+
     @RequestMapping(value = "consents/{consentId}/attested", method = RequestMethod.POST)
     public void completeConsentAttestation(Principal principal, @RequestBody AttestedDto attestedDto) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
@@ -395,8 +407,8 @@ public class ConsentRestController {
         boolean acceptTerms = attestedDto.isAcceptTerms();
         //TODO: Move check for consent belonging to this user and consent signed stage to service
         if (consentId != null && acceptTerms && consentService.isConsentBelongToThisUser(consentId, patientId)
-                && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
-            consentService.createAttestedConsentPdf(consentId);
+                && consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SAVED)) {
+            consentService.attestConsent(consentId);
         } else
             throw new InternalServerErrorException("Resource Not Found");
     }
@@ -407,7 +419,7 @@ public class ConsentRestController {
 
         //TODO: Move check for consent belonging to this user and consent signed stage to service
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
-                && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
+                && consentService.getConsentStatus(consentId).equals("CONSENT_SAVED")) {
             return consentService.getConsentAttestationDto(principal.getName(),consentId);
         } else
             throw new InternalServerErrorException("Consent Attestation Dto Not Found");
@@ -417,7 +429,7 @@ public class ConsentRestController {
     public byte[] getUnAttestedConsentPDF(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
 
-        if (consentService.isConsentBelongToThisUser(consentId, patientId) && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
+        if (consentService.isConsentBelongToThisUser(consentId, patientId) && consentService.getConsentStatus(consentId).equals("CONSENT_SAVED")) {
             ConsentPdfDto consentPdfDto = consentService.findConsentPdfDto(consentId);
             return consentPdfDto.getContent();
         } else
@@ -428,8 +440,18 @@ public class ConsentRestController {
     public byte[] getAttestedConsent(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
-                && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
+                && consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SIGNED)) {
             return consentService.getAttestedConsentPdf(consentId);
+        } else
+            throw new InternalServerErrorException("Resource Not Found");
+    }
+
+    @RequestMapping(value = "consents/{consentId}/revoked/download", method = RequestMethod.GET)
+    public byte[] getAttestedConsentRevoked(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
+        final Long patientId = patientService.findIdByUsername(principal.getName());
+        if (consentService.isConsentBelongToThisUser(consentId, patientId)
+                && consentService.getConsentStatus(consentId).equals(ConsentStatus.REVOCATION_REVOKED)) {
+            return consentService.getAttestedConsentRevokedPdf(consentId);
         } else
             throw new InternalServerErrorException("Resource Not Found");
     }
@@ -437,39 +459,11 @@ public class ConsentRestController {
     @RequestMapping(value = "consents/{consentId}/revokeConsent", method = RequestMethod.GET)
     public ConsentRevocationAttestationDto getConsentRevocationAttestationDto(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
-
         //TODO: Move check for consent belonging to this user and consent signed stage to service
         if ((consentService.isConsentBelongToThisUser(consentId, patientId)) /* && (consentService.getConsentSignedStage(consentId).equals("CONSENT_SIGNED"))*/) {
-            ConsentRevocationAttestationDto revAttestDto = consentService.getConsentRevocationAttestationDto(principal.getName(),consentId);
-            logger.info("Attested By User: " + revAttestDto.getAttestedByUser());
-            logger.info("Attester Last Name: " + revAttestDto.getAttesterLastName());
-            logger.info("Attester First Name: " + revAttestDto.getAttesterFirstName());
-            logger.info("Attester Middle Name: " + revAttestDto.getAttesterMiddleName());
-            logger.info("Attester E-Mail: " + revAttestDto.getAttesterEmail());
-            logger.info("Patient Last Name: " + revAttestDto.getPatientLastName());
-            logger.info("Patient First Name: " + revAttestDto.getPatientFirstName());
-            logger.info("Consent Reference Id: " + revAttestDto.getConsentReferenceId());
-            logger.info("Consent Revoke Terms Accepted: " + revAttestDto.isConsentRevokeTermsAccepted());
-            logger.info("Consent Revoke Terms Text: " + revAttestDto.getConsentRevokeTermsText());
-            return revAttestDto;
+            return consentService.getConsentRevocationAttestationDto(principal.getName(),consentId);
         } else
             throw new InternalServerErrorException("Consent Revocation Attestation Dto Not Found");
-    }
-
-    //FIXME: REWRITE THIS FUNCTION AFTER IMPLEMENTING PATIENT CHECKBOX ATTESTATION FOR SIGNING
-    @RequestMapping(value = "consents/revokeConsent/{consentId}", method = RequestMethod.GET)
-    public Map<String, String> signConsentRevokation(Principal principal, @PathVariable("consentId") Long consentId) {
-        final Long patientId = patientService.findIdByUsername(principal.getName());
-        consentService.addUnsignedConsentRevokationPdf(consentId, revokationType);
-        if (consentService.isConsentBelongToThisUser(consentId, patientId)) {
-            final ConsentRevokationPdfDto consentRevokationPdfDto = consentService
-                    .findConsentRevokationPdfDto(consentId);
-            consentRevokationPdfDto.setRevokationType(revokationType);
-
-            //FIXME: Temporarily returning null after removing EchoSign
-            return null;
-        } else
-            throw new InternalServerErrorException("Resource Not Found");
     }
 
     @RequestMapping(value = "consents/exportConsentDirective/{consentId}", method = RequestMethod.GET)

@@ -36,6 +36,7 @@ import gov.samhsa.mhc.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.mhc.pcm.domain.provider.OrganizationalProvider;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategoryRepository;
+import gov.samhsa.mhc.pcm.service.consent.ConsentRevocationTermsVersionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;

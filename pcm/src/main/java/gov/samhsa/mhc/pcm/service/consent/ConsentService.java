@@ -106,9 +106,17 @@ public interface ConsentService {
      * Gets the attested consent PDF Dto.
      *
      * @param consentId the consent id
-     * @return the consent pdf dto as byte[]
+     * @return the consent pdf as byte[]
      */
     byte[] getAttestedConsentPdf(Long consentId) throws ConsentGenException;
+
+    /**
+     * Gets the attested consent revoked PDF Dto.
+     *
+     * @param consentId the consent id
+     * @return the consent pdf as byte[]
+     */
+    byte[] getAttestedConsentRevokedPdf(Long consentId) throws ConsentGenException;
 
     /**
      * Create the attested consent.
@@ -116,7 +124,17 @@ public interface ConsentService {
      * @param consentId the consent id
      * @return the consent pdf dto
      */
-    void createAttestedConsentPdf(Long consentId);
+    void attestConsent(Long consentId);
+
+
+    /**
+     * Create the attested consent revocation.
+     *
+     * @param consentId the consent id
+     * @return the consent pdf dto
+     */
+    void attestConsentRevocation(Long consentId);
+
 
     /**
      * Find consentPdfDto.
@@ -286,7 +304,8 @@ public interface ConsentService {
      * @param consentId the consent id
      * @return the consent signed stage
      */
-    String getConsentSignedStage(Long consentId);
+    String getConsentStatus(Long consentId);
+
 
     /**
      * Gets the xacml ccd.

@@ -43,6 +43,8 @@ import gov.samhsa.mhc.pcm.infrastructure.PhrService;
 import gov.samhsa.mhc.pcm.infrastructure.dto.PatientDto;
 import gov.samhsa.mhc.pcm.service.consentexport.ConsentExportService;
 import gov.samhsa.mhc.pcm.service.dto.*;
+import gov.samhsa.mhc.pcm.service.exception.AttestedConsentException;
+import gov.samhsa.mhc.pcm.service.exception.AttestedConsentRevocationException;
 import gov.samhsa.mhc.pcm.service.exception.XacmlNotFoundException;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import org.modelmapper.ModelMapper;
@@ -333,29 +335,7 @@ public class ConsentServiceImpl implements ConsentService {
                         .add(item.getDisplayName());
             }
 
-            if (consent.getAttestedConsent() != null) {
-                if (consent.getStatus().equals(ConsentStatus.CONSENT_SIGNED)) {
-                    consentListDto.setConsentStage(ConsentStatus.CONSENT_SIGNED);
-                } else {
-                    consentListDto.setConsentStage(ConsentStatus.CONSENT_SAVED);
-                }
-            } else {
-                consentListDto.setConsentStage(ConsentStatus.CONSENT_SAVED);
-            }
-
-            if (consentListDto.getConsentStage() != null && !consentListDto.getConsentStage().equals(ConsentStatus.CONSENT_SIGNED)) {
-                consentListDto.setRevokeStage("NA");
-            } else {
-                if (consent.getAttestedConsentRevocation()!= null) {
-                    if (consent.getStatus().equals(ConsentStatus.SIGNED)) {
-                        consentListDto.setRevokeStage(ConsentStatus.REVOCATION_REVOKED);
-                    } else {
-                        consentListDto.setRevokeStage(ConsentStatus.REVOCATION_NOT_SUBMITTED);
-                    }
-                } else {
-                    consentListDto.setRevokeStage(ConsentStatus.REVOCATION_NOT_SUBMITTED);
-                }
-            }
+            consentListDto.setConsentStage(consent.getStatus());
 
             // Set fields
             isMadeToName.addAll(isMadeToOrgName);
@@ -578,6 +558,7 @@ public class ConsentServiceImpl implements ConsentService {
     public ConsentRevocationAttestationDto getConsentRevocationAttestationDto(String userName, Long consentId) {
         Consent consent = null;
         ConsentRevocationAttestationDto consentRevocationAttestationDto = null;
+
         Optional<Consent> findConsentOptional = patientRepository.findByUsername(userName).getConsents().stream()
                 .filter(c -> consentId.equals(c.getId()))
                 .findAny();
@@ -597,6 +578,7 @@ public class ConsentServiceImpl implements ConsentService {
                 consentRevocationAttestationDto.setPatientLastName(patientProfile.getLastName());
                 consentRevocationAttestationDto.setPatientFirstName(patientProfile.getFirstName());
                 consentRevocationAttestationDto.setAttesterEmail(patientProfile.getEmail());
+                consentRevocationAttestationDto.setPatientDateOfBirth(patientProfile.getBirthDate());
             }
 
             consentRevocationAttestationDto.setConsentRevokeTermsAccepted(false);
@@ -920,22 +902,40 @@ public class ConsentServiceImpl implements ConsentService {
     @Override
     public byte[] getAttestedConsentPdf(Long consentId) throws ConsentGenException{
         final Consent consent = consentRepository.findOne(consentId);
-        //Updating the patient data with data from phr api
         PatientDto patientDto = phrService.getPatientProfile();
         final ConsentPdfDto consentPdfDto = makeConsentPdfDto();
         byte[] attestedConsentPdf = null;
+
         if (consent != null && patientDto != null && consent.getAttestedConsent() != null && consent.getAttestedConsent().getAttestedPdfConsent() != null
                 && consent.getStatus().equals(ConsentStatus.CONSENT_SIGNED)) {
             attestedConsentPdf =  consent.getAttestedConsent().getAttestedPdfConsent();
         }else{
-            throw new ConsentGenException ("Error in getting attested consent");
-          //  logger.error("Error in getting attested consent");
+            logger.error("Error in getting attested consent pdf.");
+            throw new AttestedConsentException("Error in getting attested consent pdf.");
         }
         return attestedConsentPdf;
     }
 
     @Override
-    public void createAttestedConsentPdf(Long consentId) {
+    public byte[] getAttestedConsentRevokedPdf(Long consentId) throws ConsentGenException{
+        final Consent consent = consentRepository.findOne(consentId);
+        PatientDto patientDto = phrService.getPatientProfile();
+        final ConsentPdfDto consentPdfDto = makeConsentPdfDto();
+        byte[] attestedConsentRevocationPdf = null;
+
+        if (consent != null && patientDto != null && consent.getAttestedConsent() != null && consent.getAttestedConsent().getAttestedPdfConsent() != null
+                && consent.getStatus().equals(ConsentStatus.REVOCATION_REVOKED)) {
+            attestedConsentRevocationPdf =  consent.getAttestedConsentRevocation().getAttestedPdfConsentRevoke();
+        }else{
+            logger.error("Error in getting attested consent revocation pdf");
+            throw new AttestedConsentRevocationException ("Error in getting attested consent revocation pdf");
+        }
+        return attestedConsentRevocationPdf;
+    }
+
+
+    @Override
+    public void attestConsent(Long consentId) {
         final Consent consent = consentRepository.findOne(consentId);
         //Updating the patient data with data from phr api
         PatientDto patientDto = phrService.getPatientProfile();
@@ -945,22 +945,23 @@ public class ConsentServiceImpl implements ConsentService {
             Patient patient = patientRepository.findByUsername(patientDto.getEmail());
 
             AttestedConsent attestedConsent =  new AttestedConsent();
-            attestedConsent.setConsentTermsVersions(consentTermsVersionsService.getEnabledConsentTermsVersion());
+            ConsentTermsVersions consentTerms = consentTermsVersionsService.getEnabledConsentTermsVersion();
+            attestedConsent.setConsentTermsVersions(consentTerms);
             attestedConsent.setAttesterEmail(patient.getEmail());
             attestedConsent.setAttesterLastName(patient.getLastName());
             // Middle name not available in Patient entity to be updated
             attestedConsent.setAttesterMiddleName("");
             attestedConsent.setAttesterFirstName(patient.getFirstName());
 
-            Date attesteOn = new Date();
-            attestedConsent.setAttestedDateTime(attesteOn);
+            Date attestedOn = new Date();
+            attestedConsent.setAttestedDateTime(attestedOn);
 
             attestedConsent.setConsentTermsAccepted(true);
             attestedConsent.setAttesterByUser(patient.getEmail());
             attestedConsent.setConsentReferenceId(consent.getConsentReferenceId());
 
-            String term = consentTermsVersionsService.getEnabledConsentTermsVersion().getConsentTermsText();
-            attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, true, attesteOn, term));
+            String term = consentTerms.getConsentTermsText();
+            attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, true, attestedOn, term));
 
             consent.setAttestedConsent(attestedConsent);
             consent.setSignedDate(new Date());
@@ -968,8 +969,45 @@ public class ConsentServiceImpl implements ConsentService {
             consentRepository.save(consent);
         }else {
             logger.error("Error in creating attested consent");
+            throw new AttestedConsentRevocationException("Error in creating attested consent");
         }
+    }
 
+    @Override
+    public void attestConsentRevocation(Long consentId) {
+        final Consent consent = consentRepository.findOne(consentId);
+        //Updating the patient data with data from phr api
+        PatientDto patientDto = phrService.getPatientProfile();
+
+        if (consent != null && consent.getAttestedConsentRevocation()== null && patientDto!= null ) {
+            patientService.updatePatientFromPHR(patientDto);
+            Patient patient = patientRepository.findByUsername(patientDto.getEmail());
+
+            AttestedConsentRevocation attestedConsentRevocation =  new AttestedConsentRevocation();
+            attestedConsentRevocation.setConsentRevocationTermsVersions(consentRevocationTermsVersionsService.findByLatestEnabledVersion());
+            attestedConsentRevocation.setAttesterEmail(patient.getEmail());
+            attestedConsentRevocation.setAttesterLastName(patient.getLastName());
+            // Middle name not available in Patient entity to be updated
+            attestedConsentRevocation.setAttesterMiddleName("");
+            attestedConsentRevocation.setAttesterFirstName(patient.getFirstName());
+
+            Date revokedOn = new Date();
+            attestedConsentRevocation.setAttestedDateTime(revokedOn);
+
+            attestedConsentRevocation.setConsentRevokeTermsAccepted(true);
+            attestedConsentRevocation.setAttesterByUser(patient.getEmail());
+            attestedConsentRevocation.setConsentReferenceId(consent.getConsentReferenceId());
+
+            attestedConsentRevocation.setAttestedPdfConsentRevoke(consentRevokationPdfGenerator.generateConsentRevokationPdf(consent, patient, revokedOn));
+
+            consent.setAttestedConsentRevocation(attestedConsentRevocation);
+            consent.setRevocationDate(new Date());
+            consent.setStatus(ConsentStatus.REVOCATION_REVOKED);
+            consentRepository.save(consent);
+        }else {
+            logger.error("Error in creating attested consent revocation.");
+            throw new AttestedConsentRevocationException("Error in creating attested consent revocation.");
+        }
     }
 
     /*
@@ -1014,18 +1052,11 @@ public class ConsentServiceImpl implements ConsentService {
      */
     @Override
     @Transactional(readOnly = true)
-    public String getConsentSignedStage(Long consentId) {
+    public String getConsentStatus(Long consentId) {
         String signStatus = "NA";
         final Consent consent = consentRepository.findOne(consentId);
-        if (consent.getSignedPdfConsent() != null) {
-            if (consent.getSignedPdfConsent().getDocumentSignedStatus()
-                    .equals(ConsentStatus.SIGNED)) {
-                signStatus = ConsentStatus.CONSENT_SIGNED;
-            } else {
-                signStatus = ConsentStatus.CONSENT_SAVED;
-            }
-        } else {
-            signStatus = ConsentStatus.CONSENT_SAVED;
+        if (consent!= null) {
+            signStatus = consent.getStatus();
         }
         return signStatus;
     }
