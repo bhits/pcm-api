@@ -388,12 +388,13 @@ public class ConsentRestController {
 
     }
 
-    @RequestMapping(value = "consents/{consentId}/attested", method = RequestMethod.GET)
-    public void completeConsentAttestation(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
+    @RequestMapping(value = "consents/{consentId}/attested", method = RequestMethod.POST)
+    public void completeConsentAttestation(Principal principal, @RequestBody AttestedDto attestedDto) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
-
+        Long consentId = attestedDto.getConsentId();
+        boolean acceptTerms = attestedDto.isAcceptTerms();
         //TODO: Move check for consent belonging to this user and consent signed stage to service
-        if (consentService.isConsentBelongToThisUser(consentId, patientId)
+        if (consentId != null && acceptTerms && consentService.isConsentBelongToThisUser(consentId, patientId)
                 && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
             consentService.createAttestedConsentPdf(consentId);
         } else
@@ -416,8 +417,7 @@ public class ConsentRestController {
     public byte[] getUnAttestedConsentPDF(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
 
-        if (consentService.isConsentBelongToThisUser(consentId, patientId)
-                && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
+        if (consentService.isConsentBelongToThisUser(consentId, patientId) && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
             ConsentPdfDto consentPdfDto = consentService.findConsentPdfDto(consentId);
             return consentPdfDto.getContent();
         } else
