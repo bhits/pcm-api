@@ -182,12 +182,12 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     }
 
     private PdfPTable createSectionTitle(String title){
-        PdfPTable sectionTitle = createBorderlessTable(1);
+        PdfPTable sectionTitle = iTextPdfService.createBorderlessTable(1);
 
         Font cellFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
         cellFont.setColor(BaseColor.WHITE);
 
-        PdfPCell cell = createBorderlessCell(title,cellFont);
+        PdfPCell cell = iTextPdfService.createBorderlessCell(title,cellFont);
         cell.setBackgroundColor(new BaseColor(73,89,105));
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         cell.setPaddingBottom(5);
@@ -358,20 +358,20 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     }
 
     private PdfPTable  createSigningDetailsTable(Consent consent, Boolean isSigned, Date attestedOn, Patient patientProfile){
-        PdfPTable signingDetailsTable = createBorderlessTable(1);
+        PdfPTable signingDetailsTable = iTextPdfService.createBorderlessTable(1);
 
         if(isSigned && consent != null && attestedOn != null){
             Font patientInfoFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
 
-            PdfPCell attesterEmailCell = new PdfPCell(createCellContent("Email: ", patientInfoFont, consent.getPatient().getEmail(), null));
+            PdfPCell attesterEmailCell = new PdfPCell(iTextPdfService.createCellContent("Email: ", patientInfoFont, consent.getPatient().getEmail(), null));
             attesterEmailCell.setBorder(Rectangle.NO_BORDER);
             signingDetailsTable.addCell(attesterEmailCell);
 
-            PdfPCell attesterFullNameCell = new PdfPCell(createCellContent("Attested By: ", patientInfoFont, getFullName(patientProfile), null));
+            PdfPCell attesterFullNameCell = new PdfPCell(iTextPdfService.createCellContent("Attested By: ", patientInfoFont, getFullName(patientProfile), null));
             attesterFullNameCell.setBorder(Rectangle.NO_BORDER);
             signingDetailsTable.addCell(attesterFullNameCell);
 
-            PdfPCell attesterSignDateCell = new PdfPCell(createCellContent("Attested On: ", patientInfoFont, formatDate(attestedOn), null));
+            PdfPCell attesterSignDateCell = new PdfPCell(iTextPdfService.createCellContent("Attested On: ", patientInfoFont, iTextPdfService.formatDate(attestedOn), null));
             attesterSignDateCell.setBorder(Rectangle.NO_BORDER);
             signingDetailsTable.addCell(attesterSignDateCell);
 
