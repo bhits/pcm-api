@@ -26,7 +26,6 @@
 package gov.samhsa.mhc.pcm.infrastructure;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.List;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -35,21 +34,17 @@ import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.domain.provider.AbstractProvider;
 import gov.samhsa.mhc.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.mhc.pcm.domain.provider.OrganizationalProvider;
-import gov.samhsa.mhc.pcm.domain.reference.ClinicalConceptCode;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
-import gov.samhsa.mhc.pcm.domain.reference.PurposeOfUseCode;
-import gov.samhsa.mhc.pcm.domain.reference.StateCode;
-import gov.samhsa.mhc.pcm.domain.valueobject.Address;
-import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategoryRepository;
-import gov.samhsa.mhc.pcm.infrastructure.dto.PatientDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.io.ByteArrayOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -58,11 +53,18 @@ import java.util.*;
 @Service
 public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
-    /** The value set category repository. */
+    @Autowired
+    private ITextPdfService iTextPdfService;
+
+    /**
+     * The value set category repository.
+     */
     @Autowired
     private ValueSetCategoryRepository valueSetCategoryRepository;
 
-    /** The clinical document type code repository. */
+    /**
+     * The clinical document type code repository.
+     */
     @Autowired
     private ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository;
 
@@ -87,26 +89,26 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
             // Title
             Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.BOLD);
-            document.add(createParagraphWithContent("Consent to Share My Health Information", titleFont));
+            document.add(iTextPdfService.createParagraphWithContent("Consent to Share My Health Information", titleFont));
 
             // Blank line
-            document.add( Chunk.NEWLINE );
+            document.add(Chunk.NEWLINE);
 
             // Consent Created Date
-            document.add(createParagraphWithContent("Created On: " + formatDate(consent.getCreatedDateTime()) , null));
+            document.add(iTextPdfService.createParagraphWithContent("Created On: " + iTextPdfService.formatDate(consent.getCreatedDateTime()), null));
 
             //consent Reference Number
-            document.add(createConsentReferenceNumberTable(consent));
+            document.add(iTextPdfService.createConsentReferenceNumberTable(consent));
 
             document.add(new Paragraph(" "));
 
             //Patient Name and date of birth
-            document.add(createPatientNameAndDOBTable(patientProfile));
+            document.add(iTextPdfService.createPatientNameAndDOBTable(patientProfile.getFirstName(), patientProfile.getLastName(), patientProfile.getBirthDay()));
 
             document.add(new Paragraph(" "));
 
             //Authorization to disclose section
-            document.add(createSectionTitle(" AUTHORIZATION TO DISCLOSE"));
+            document.add(iTextPdfService.createSectionTitle(" AUTHORIZATION TO DISCLOSE"));
             //Authorizes
             document.add(new Paragraph("Authorizes: "));
 
@@ -119,14 +121,14 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             document.add(new Paragraph(" "));
 
             //Health information to be disclosed section
-            document.add(createSectionTitle(" HEALTH INFORMATION TO BE DISCLOSED"));
+            document.add(iTextPdfService.createSectionTitle(" HEALTH INFORMATION TO BE DISCLOSED"));
 
             document.add(createHealthInformationToBeDisclose(consent));
 
             document.add(new Paragraph(" "));
 
             //Consent terms section
-            document.add(createSectionTitle(" CONSENT TERMS"));
+            document.add(iTextPdfService.createSectionTitle(" CONSENT TERMS"));
 
             // Consent term
             document.add(createConsentTerms(terms, patientProfile));
@@ -139,7 +141,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             document.add(new Paragraph(" "));
 
             //Signing details
-            document.add(createSigningDetailsTable(consent, isSigned, attestedOn, patientProfile));
+            document.add(iTextPdfService.createSigningDetailsTable(consent.getPatient().getFirstName(), consent.getPatient().getLastName(), consent.getPatient().getEmail(), isSigned, attestedOn));
 
             document.close();
 
@@ -154,106 +156,19 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         return pdfBytes;
     }
 
-
-
-    //Create document title
-    private Paragraph createParagraphWithContent(String title, Font font){
-        Paragraph titleParagraph = null;
-
-        if(font != null){
-            titleParagraph = new Paragraph(title, font);
-        }else{
-            titleParagraph = new Paragraph(title);
-        }
-
-        return titleParagraph;
-    }
-
-    // Create borderless table
-    private PdfPTable  createBorderlessTable(int column){
-        PdfPTable table = new PdfPTable(column);
-        table.setWidthPercentage(100);
-        table.getDefaultCell().setBorder(0);
-        return table;
-    }
-
-    private PdfPCell createBorderlessCell(String content, Font font){
-        PdfPCell cell = null;
-
-        if(font != null){
-            cell = new PdfPCell(new Paragraph(content, font));
-        }else {
-            cell = new PdfPCell(new Paragraph(content));
-        }
-        cell.setBorder(Rectangle.NO_BORDER);
-        cell.setPaddingLeft(0);
-
-        return cell;
-    }
-
-    private PdfPTable createConsentReferenceNumberTable(Consent consent){
-        PdfPTable  consentReferenceNumberTable  = createBorderlessTable(1);
-
-        if(consent != null){
-            consentReferenceNumberTable.addCell(createBorderlessCell("Consent Reference Number:", null));
-            Font consentRefNumberFont = new Font(Font.FontFamily.TIMES_ROMAN, 11);
-            consentReferenceNumberTable.addCell(createBorderlessCell(consent.getConsentReferenceId(),consentRefNumberFont));
-        }
-
-        return consentReferenceNumberTable;
-    }
-
-    private Chunk createChunkWithFont(String text, Font textFont){
-        Chunk labelChunk = null;
-        if(text != null && textFont != null ){
-            labelChunk = new Chunk(text, textFont);
-        }else if(text != null){
-            labelChunk = new Chunk(text);
-        }
-        return labelChunk;
-    }
-
-    private Paragraph createCellContent(String label, Font labelFont, String value, Font valueFont){
-        Paragraph content = new Paragraph();
-        content.add(createChunkWithFont(label, labelFont));
-        content.add(createChunkWithFont(value, valueFont));
-        return content;
-    }
-    private String getFullName(Patient patientProfile){
+    private String getFullName(Patient patientProfile) {
         return patientProfile.getFirstName() + " " + patientProfile.getLastName();
-    }
-    private PdfPTable createPatientNameAndDOBTable(Patient patientProfile) {
-        PdfPTable consentReferenceNumberTable = createBorderlessTable(2);
-
-        if (patientProfile != null) {
-            Font patientInfoFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
-            PdfPCell patientNameCell = new PdfPCell(createCellContent("Patient Name: ", null, getFullName(patientProfile), patientInfoFont));
-            patientNameCell.setBorder(Rectangle.NO_BORDER);
-
-            PdfPCell patientDOBCell = new PdfPCell(createCellContent("Patient DOB: ", null, formatDate(patientProfile.getBirthDay()), patientInfoFont));
-            patientDOBCell.setBorder(Rectangle.NO_BORDER);
-
-            consentReferenceNumberTable.addCell(patientNameCell);
-            consentReferenceNumberTable.addCell(patientDOBCell);
-        }
-
-        return consentReferenceNumberTable;
-    }
-
-    private String formatDate(Date aDate){
-        String dateFormat  = "MM/dd/yyyy";
-        return new SimpleDateFormat(dateFormat).format(aDate);
     }
 
     private PdfPTable createStartAndEndDateTable(Consent consent) {
-        PdfPTable consentStartAndEndDateTable = createBorderlessTable(3);
+        PdfPTable consentStartAndEndDateTable = iTextPdfService.createBorderlessTable(3);
 
         if (consent != null) {
             Font patientDateFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
-            PdfPCell EffectiveDateCell = new PdfPCell(createCellContent("Effective Date: ", patientDateFont, formatDate(consent.getStartDate()), patientDateFont));
+            PdfPCell EffectiveDateCell = new PdfPCell(iTextPdfService.createCellContent("Effective Date: ", patientDateFont, iTextPdfService.formatDate(consent.getStartDate()), patientDateFont));
             EffectiveDateCell.setBorder(Rectangle.NO_BORDER);
 
-            PdfPCell expirationDateCell = new PdfPCell(createCellContent("Expiration Date: ", patientDateFont,formatDate(consent.getEndDate()), patientDateFont));
+            PdfPCell expirationDateCell = new PdfPCell(iTextPdfService.createCellContent("Expiration Date: ", patientDateFont, iTextPdfService.formatDate(consent.getEndDate()), patientDateFont));
             expirationDateCell.setBorder(Rectangle.NO_BORDER);
 
             PdfPCell emptyCell = new PdfPCell();
@@ -284,112 +199,87 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     private Paragraph createConsentTerms(String terms, Patient patientProfile){
         String userNameKey = "ATTESTER_FULL_NAME";
         String termsWithAttestedName =  terms.replace(userNameKey, getFullName(patientProfile));
-        return createParagraphWithContent(termsWithAttestedName, null);
+        return iTextPdfService.createParagraphWithContent(termsWithAttestedName, null);
     }
 
-    private PdfPTable createProviderPropertyValueTable(String propertyName, String propertyValue){
-        PdfPTable providerTable = createBorderlessTable(1);
+    private PdfPTable createProviderPropertyValueTable(String propertyName, String propertyValue) {
+        PdfPTable providerTable = iTextPdfService.createBorderlessTable(1);
 
-        Font propertNameFont = new Font(Font.FontFamily.TIMES_ROMAN,10);
-        providerTable.addCell(createBorderlessCell(propertyName, propertNameFont));
-        Font valueFont = new Font(Font.FontFamily.TIMES_ROMAN,10,Font.BOLD);
-        providerTable.addCell(createBorderlessCell(propertyValue, valueFont));
+        Font propertNameFont = new Font(Font.FontFamily.TIMES_ROMAN, 10);
+        providerTable.addCell(iTextPdfService.createBorderlessCell(propertyName, propertNameFont));
+        Font valueFont = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
+        providerTable.addCell(iTextPdfService.createBorderlessCell(propertyValue, valueFont));
 
         return providerTable;
     }
 
-    private String composeAddress(AbstractProvider provider){
+    private String composeAddress(AbstractProvider provider) {
         String address = "";
-        if(provider != null){
-            if(provider.getFirstLinePracticeLocationAddress() != null){
+        if (provider != null) {
+            if (provider.getFirstLinePracticeLocationAddress() != null) {
                 address += provider.getFirstLinePracticeLocationAddress() + ", ";
             }
 
-            if(provider.getPracticeLocationAddressCityName()!= null){
+            if (provider.getPracticeLocationAddressCityName() != null) {
                 address += provider.getPracticeLocationAddressCityName() + ", ";
             }
 
-            if(provider.getPracticeLocationAddressStateName() != null && provider.getPracticeLocationAddressPostalCode() != null){
-                address += provider.getPracticeLocationAddressStateName() + " " + provider.getPracticeLocationAddressPostalCode() ;
+            if (provider.getPracticeLocationAddressStateName() != null && provider.getPracticeLocationAddressPostalCode() != null) {
+                address += provider.getPracticeLocationAddressStateName() + " " + provider.getPracticeLocationAddressPostalCode();
             }
 
         }
         return address;
     }
 
-    private void setNpiAddressState(PdfPTable providerTable, AbstractProvider provider){
+    private void setNpiAddressState(PdfPTable providerTable, AbstractProvider provider) {
         providerTable.addCell(createProviderPropertyValueTable("NPI Number", provider.getNpi()));
         providerTable.addCell(createProviderPropertyValueTable("Address", composeAddress(provider)));
         providerTable.addCell(createProviderPropertyValueTable("Phone", provider.getPracticeLocationAddressTelephoneNumber()));
     }
 
-    private PdfPTable createProviderPermittedToDiscloseTable(Consent consent){
-        PdfPTable providerTable = createBorderlessTable(4);
+    private PdfPTable createProviderPermittedToDiscloseTable(Consent consent) {
+        PdfPTable providerTable = iTextPdfService.createBorderlessTable(4);
         Set<OrganizationalProvider> ordProvidersPermittedToDisclose = getOrdProvidersPermittedToDisclose(consent);
 
-        for(OrganizationalProvider provider : ordProvidersPermittedToDisclose){
+        for (OrganizationalProvider provider : ordProvidersPermittedToDisclose) {
             providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getOrgName()));
-            setNpiAddressState(providerTable,provider);
+            setNpiAddressState(providerTable, provider);
         }
 
         Set<IndividualProvider> indProvidersPermittedToDisclose = getIndProvidersPermittedToDisclose(consent);
 
-        for(IndividualProvider provider : indProvidersPermittedToDisclose){
+        for (IndividualProvider provider : indProvidersPermittedToDisclose) {
             providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getFirstName() + " " + provider.getLastName()));
-            setNpiAddressState(providerTable,provider);
+            setNpiAddressState(providerTable, provider);
         }
 
         return providerTable;
     }
 
-    private PdfPTable createProviderDisclosureIsMadeToTable(Consent consent){
-        PdfPTable providerTable = createBorderlessTable(4);
+    private PdfPTable createProviderDisclosureIsMadeToTable(Consent consent) {
+        PdfPTable providerTable = iTextPdfService.createBorderlessTable(4);
         Set<OrganizationalProvider> ordProvidersDisclosureIsMadeTo = getOrgProvidersDisclosureIsMadeTo(consent);
 
-        for(OrganizationalProvider provider : ordProvidersDisclosureIsMadeTo){
+        for (OrganizationalProvider provider : ordProvidersDisclosureIsMadeTo) {
             providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getOrgName()));
-            setNpiAddressState(providerTable,provider);
+            setNpiAddressState(providerTable, provider);
         }
 
         Set<IndividualProvider> indProvidersDisclosureIsMadeTo = getIndProvidersDisclosureIsMadeTo(consent);
 
-        for(IndividualProvider provider : indProvidersDisclosureIsMadeTo){
+        for (IndividualProvider provider : indProvidersDisclosureIsMadeTo) {
             providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getFirstName() + " " + provider.getLastName()));
-            setNpiAddressState(providerTable,provider);
+            setNpiAddressState(providerTable, provider);
         }
 
         return providerTable;
     }
 
-    private Chunk createUnderlineText(String text){
-        Chunk underlineText = new Chunk(text);
-        underlineText.setUnderline(0.1f, -2f); //0.1 thick, -2 y-location
-        return underlineText;
-    }
-
-    private PdfPCell createEmptyBorderlessCell(){
-        PdfPCell aCell = new PdfPCell();
-        aCell.setBorder(0);
-        return aCell;
-    }
-
-    private PdfPCell createCellWithUnderlineContent(String text){
-        PdfPCell aCell = createEmptyBorderlessCell();
-        aCell.addElement(createUnderlineText(text));
-        return aCell;
-    }
-    private List createUnorderList(ArrayList<String> items){
-        List unorderedList = new List(List.UNORDERED);
-        for( String item :items){
-            unorderedList.add(new ListItem(item));
-        }
-        return unorderedList;
-    }
-
-    private Set<OrganizationalProvider> getOrdProvidersPermittedToDisclose(Consent consent){
+    private Set<OrganizationalProvider> getOrdProvidersPermittedToDisclose(Consent consent) {
         final Set<OrganizationalProvider> consentProvidersPermittedToDisclose = new HashSet<OrganizationalProvider>();
 
-        if(consent.getOrganizationalProvidersPermittedToDisclose() != null & consent.getOrganizationalProvidersPermittedToDisclose().size() >0){
+        if (consent.getOrganizationalProvidersPermittedToDisclose() != null & consent.getOrganizationalProvidersPermittedToDisclose().size() > 0) {
             for (final ConsentOrganizationalProviderPermittedToDisclose item : consent.getOrganizationalProvidersPermittedToDisclose()) {
                 consentProvidersPermittedToDisclose.add(item.getOrganizationalProvider());
             }
@@ -397,10 +287,10 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         return consentProvidersPermittedToDisclose;
     }
 
-    private Set<IndividualProvider> getIndProvidersPermittedToDisclose(Consent consent){
+    private Set<IndividualProvider> getIndProvidersPermittedToDisclose(Consent consent) {
         final Set<IndividualProvider> consentProvidersPermittedToDisclose = new HashSet<IndividualProvider>();
 
-        if(consent.getProvidersPermittedToDisclose() != null & consent.getProvidersPermittedToDisclose().size() >0) {
+        if (consent.getProvidersPermittedToDisclose() != null & consent.getProvidersPermittedToDisclose().size() > 0) {
             for (final ConsentIndividualProviderPermittedToDisclose item : consent.getProvidersPermittedToDisclose()) {
                 consentProvidersPermittedToDisclose.add(item.getIndividualProvider());
             }
@@ -408,10 +298,10 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         return consentProvidersPermittedToDisclose;
     }
 
-    private Set<OrganizationalProvider> getOrgProvidersDisclosureIsMadeTo(Consent consent){
+    private Set<OrganizationalProvider> getOrgProvidersDisclosureIsMadeTo(Consent consent) {
         final Set<OrganizationalProvider> consentProvidersDisclosureIsMadeTo = new HashSet<OrganizationalProvider>();
 
-        if(consent.getOrganizationalProvidersDisclosureIsMadeTo() != null & consent.getOrganizationalProvidersDisclosureIsMadeTo().size() >0){
+        if (consent.getOrganizationalProvidersDisclosureIsMadeTo() != null & consent.getOrganizationalProvidersDisclosureIsMadeTo().size() > 0) {
             for (final ConsentOrganizationalProviderDisclosureIsMadeTo item : consent.getOrganizationalProvidersDisclosureIsMadeTo()) {
                 consentProvidersDisclosureIsMadeTo.add(item.getOrganizationalProvider());
             }
@@ -419,10 +309,10 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         return consentProvidersDisclosureIsMadeTo;
     }
 
-    private Set<IndividualProvider> getIndProvidersDisclosureIsMadeTo(Consent consent){
+    private Set<IndividualProvider> getIndProvidersDisclosureIsMadeTo(Consent consent) {
         final Set<IndividualProvider> consentProvidersDisclosureIsMadeTo = new HashSet<IndividualProvider>();
 
-        if(consent.getProvidersDisclosureIsMadeTo() != null & consent.getProvidersDisclosureIsMadeTo().size() >0){
+        if (consent.getProvidersDisclosureIsMadeTo() != null & consent.getProvidersDisclosureIsMadeTo().size() > 0) {
             for (final ConsentIndividualProviderDisclosureIsMadeTo item : consent.getProvidersDisclosureIsMadeTo()) {
                 consentProvidersDisclosureIsMadeTo.add(item.getIndividualProvider());
             }
@@ -430,28 +320,28 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         return consentProvidersDisclosureIsMadeTo;
     }
 
-    private PdfPTable createHealthInformationToBeDisclose(Consent consent){
-        PdfPTable healthInformationToBeDisclose = createBorderlessTable(2);
+    private PdfPTable createHealthInformationToBeDisclose(Consent consent) {
+        PdfPTable healthInformationToBeDisclose = iTextPdfService.createBorderlessTable(2);
 
         // Medical Information
-        PdfPCell medicalInformation = createCellWithUnderlineContent("To SHARE the following medical information:");
-        Paragraph sensitivityCategory = createParagraphWithContent("Sensitivity Categories:", null);
+        PdfPCell medicalInformation = iTextPdfService.createCellWithUnderlineContent("To SHARE the following medical information:");
+        Paragraph sensitivityCategory = iTextPdfService.createParagraphWithContent("Sensitivity Categories:", null);
         medicalInformation.addElement(sensitivityCategory);
 
         ArrayList<String> medicalInformationList = getMedicalInformation(consent);
-        medicalInformation.addElement(createUnorderList(medicalInformationList));
+        medicalInformation.addElement(iTextPdfService.createUnorderList(medicalInformationList));
         healthInformationToBeDisclose.addCell(medicalInformation);
 
         //Purposes of use
-        PdfPCell purposeOfUseCell = createCellWithUnderlineContent("To SHARE for the following purpose(s):");
+        PdfPCell purposeOfUseCell = iTextPdfService.createCellWithUnderlineContent("To SHARE for the following purpose(s):");
         ArrayList<String> purposes = getPurposeOfUse(consent);
-        purposeOfUseCell.addElement(createUnorderList(purposes));
+        purposeOfUseCell.addElement(iTextPdfService.createUnorderList(purposes));
         healthInformationToBeDisclose.addCell(purposeOfUseCell);
 
         return healthInformationToBeDisclose;
     }
 
-    private ArrayList<String> getMedicalInformation(Consent consent){
+    private ArrayList<String> getMedicalInformation(Consent consent) {
         ArrayList<String> medicalInformationList = new ArrayList<String>();
         for (final ConsentDoNotShareSensitivityPolicyCode item : consent.getDoNotShareSensitivityPolicyCodes()) {
             medicalInformationList.add(item.getValueSetCategory().getName());
@@ -459,7 +349,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         return medicalInformationList;
     }
 
-    private ArrayList<String> getPurposeOfUse(Consent consent){
+    private ArrayList<String> getPurposeOfUse(Consent consent) {
         ArrayList<String> purposesOfUseList = new ArrayList<String>();
         for (final ConsentShareForPurposeOfUseCode purposeOfUseCode : consent.getShareForPurposeOfUseCodes()) {
             purposesOfUseList.add(purposeOfUseCode.getPurposeOfUseCode().getDisplayName());

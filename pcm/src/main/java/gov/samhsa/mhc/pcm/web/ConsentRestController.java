@@ -391,6 +391,8 @@ public class ConsentRestController {
     @RequestMapping(value = "consents/{consentId}/attested", method = RequestMethod.GET)
     public void completeConsentAttestation(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
+
+        //TODO: Move check for consent belonging to this user and consent signed stage to service
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
                 && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
             consentService.createAttestedConsentPdf(consentId);
@@ -402,6 +404,7 @@ public class ConsentRestController {
     public ConsentAttestationDto getConsentAttestationDto(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
 
+        //TODO: Move check for consent belonging to this user and consent signed stage to service
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
                 && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
             return consentService.getConsentAttestationDto(principal.getName(),consentId);
@@ -430,6 +433,28 @@ public class ConsentRestController {
             return consentService.getAttestedConsentPdf(consentId);
         } else
             throw new InternalServerErrorException("Resource Not Found");
+    }
+
+    @RequestMapping(value = "consents/{consentId}/revokeConsent", method = RequestMethod.GET)
+    public ConsentRevocationAttestationDto getConsentRevocationAttestationDto(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
+        final Long patientId = patientService.findIdByUsername(principal.getName());
+
+        //TODO: Move check for consent belonging to this user and consent signed stage to service
+        if ((consentService.isConsentBelongToThisUser(consentId, patientId)) /* && (consentService.getConsentSignedStage(consentId).equals("CONSENT_SIGNED"))*/) {
+            ConsentRevocationAttestationDto revAttestDto = consentService.getConsentRevocationAttestationDto(principal.getName(),consentId);
+            logger.info("Attested By User: " + revAttestDto.getAttestedByUser());
+            logger.info("Attester Last Name: " + revAttestDto.getAttesterLastName());
+            logger.info("Attester First Name: " + revAttestDto.getAttesterFirstName());
+            logger.info("Attester Middle Name: " + revAttestDto.getAttesterMiddleName());
+            logger.info("Attester E-Mail: " + revAttestDto.getAttesterEmail());
+            logger.info("Patient Last Name: " + revAttestDto.getPatientLastName());
+            logger.info("Patient First Name: " + revAttestDto.getPatientFirstName());
+            logger.info("Consent Reference Id: " + revAttestDto.getConsentReferenceId());
+            logger.info("Consent Revoke Terms Accepted: " + revAttestDto.isConsentRevokeTermsAccepted());
+            logger.info("Consent Revoke Terms Text: " + revAttestDto.getConsentRevokeTermsText());
+            return revAttestDto;
+        } else
+            throw new InternalServerErrorException("Consent Revocation Attestation Dto Not Found");
     }
 
     //FIXME: REWRITE THIS FUNCTION AFTER IMPLEMENTING PATIENT CHECKBOX ATTESTATION FOR SIGNING
