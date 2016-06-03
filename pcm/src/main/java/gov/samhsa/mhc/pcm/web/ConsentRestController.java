@@ -134,12 +134,9 @@ public class ConsentRestController {
     public void deleteConsent(Principal principal, @PathVariable("consentId") Long consentId) {
         final Long patientId = patientService.findIdByUsername(principal.getName());
 
-        // final Long directConsentId =
-        // accessReferenceMapper.getDirectReference(consentId);
         if (consentService.isConsentBelongToThisUser(consentId, patientId)) {
             if (consentService.deleteConsent(consentId) == false)
                 throw new CannotDeleteConsentException("Error: Unable to delete this consent.");
-
         } else {
             throw new ConsentNotBelongingToPatientException("Error: Unable to delete this consent because it is not belong to patient.");
         }
@@ -148,8 +145,6 @@ public class ConsentRestController {
 
     @RequestMapping(value = "consents/{consentId}", method = RequestMethod.GET)
     public ConsentDto getConsent(Principal principal, @PathVariable("consentId") String consentId) {
-        // Long directConsentId =
-        // accessReferenceMapper.getDirectReference(consentId);
         ConsentDto consentDto = consentService.findConsentById(principal.getName(), Long.valueOf(consentId));
         consentDto.setId(consentId);
         return consentDto;
@@ -440,7 +435,7 @@ public class ConsentRestController {
     public byte[] getAttestedConsent(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
-                && consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SIGNED)) {
+                &&( consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SIGNED) || consentService.getConsentStatus(consentId).equals(ConsentStatus.REVOCATION_REVOKED))) {
             return consentService.getAttestedConsentPdf(consentId);
         } else
             throw new InternalServerErrorException("Resource Not Found");

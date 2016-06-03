@@ -906,8 +906,7 @@ public class ConsentServiceImpl implements ConsentService {
         final ConsentPdfDto consentPdfDto = makeConsentPdfDto();
         byte[] attestedConsentPdf = null;
 
-        if (consent != null && patientDto != null && consent.getAttestedConsent() != null && consent.getAttestedConsent().getAttestedPdfConsent() != null
-                && consent.getStatus().equals(ConsentStatus.CONSENT_SIGNED)) {
+        if (consent != null && patientDto != null && consent.getAttestedConsent() != null && consent.getAttestedConsent().getAttestedPdfConsent() != null) {
             attestedConsentPdf =  consent.getAttestedConsent().getAttestedPdfConsent();
         }else{
             logger.error("Error in getting attested consent pdf.");

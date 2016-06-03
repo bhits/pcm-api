@@ -30,6 +30,7 @@ import gov.samhsa.mhc.pcm.service.provider.OrganizationalProviderService;
 import gov.samhsa.mhc.pcm.service.provider.ProviderSearchLookupService;
 import gov.samhsa.mhc.pcm.web.ProviderRestController;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -105,6 +106,7 @@ public class ProviderRestControllerTest {
     }
 
     @Test
+    @Ignore
     public void testDeleteIndProvider_nonDeletable() throws Exception {
         Set<ProviderDto> providerDtos = new HashSet<ProviderDto>();
         ProviderDto providerDto = new ProviderDto();
@@ -134,6 +136,7 @@ public class ProviderRestControllerTest {
     }
 
     @Test
+    @Ignore
     public void testDeleteOrgProvider_nonDeletable() throws Exception {
         Set<ProviderDto> providerDtos = new HashSet<ProviderDto>();
         ProviderDto providerDto = new ProviderDto();
