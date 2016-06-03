@@ -918,16 +918,18 @@ public class ConsentServiceImpl implements ConsentService {
     }
 
     @Override
-    public byte[] getAttestedConsentPdf(Long consentId) {
+    public byte[] getAttestedConsentPdf(Long consentId) throws ConsentGenException{
         final Consent consent = consentRepository.findOne(consentId);
         //Updating the patient data with data from phr api
         PatientDto patientDto = phrService.getPatientProfile();
         final ConsentPdfDto consentPdfDto = makeConsentPdfDto();
         byte[] attestedConsentPdf = null;
-        if (consent != null && patientDto != null && consent.getAttestedConsent() != null && consent.getAttestedConsent().getAttestedPdfConsent() != null) {
+        if (consent != null && patientDto != null && consent.getAttestedConsent() != null && consent.getAttestedConsent().getAttestedPdfConsent() != null
+                && consent.getStatus().equals(ConsentStatus.CONSENT_SIGNED)) {
             attestedConsentPdf =  consent.getAttestedConsent().getAttestedPdfConsent();
         }else{
-            logger.error("Error in getting attested consent");
+            throw new ConsentGenException ("Error in getting attested consent");
+          //  logger.error("Error in getting attested consent");
         }
         return attestedConsentPdf;
     }

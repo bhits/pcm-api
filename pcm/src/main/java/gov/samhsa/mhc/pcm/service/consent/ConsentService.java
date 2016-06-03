@@ -108,7 +108,7 @@ public interface ConsentService {
      * @param consentId the consent id
      * @return the consent pdf dto as byte[]
      */
-    byte[] getAttestedConsentPdf(Long consentId);
+    byte[] getAttestedConsentPdf(Long consentId) throws ConsentGenException;
 
     /**
      * Create the attested consent.

@@ -429,7 +429,6 @@ public class ConsentRestController {
         final Long patientId = patientService.findIdByUsername(principal.getName());
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
                 && consentService.getConsentSignedStage(consentId).equals("CONSENT_SAVED")) {
-            consentService.createAttestedConsentPdf(consentId);
             return consentService.getAttestedConsentPdf(consentId);
         } else
             throw new InternalServerErrorException("Resource Not Found");
