@@ -404,10 +404,9 @@ public class ConsentHelper {
 	protected boolean isConsentRevoked(Consent consent) {
 		boolean isRevoked = false;
 
-		if (consent.getSignedPdfConsent() != null
-				&& consent.getSignedPdfConsent().getDocumentSignedStatus()
-						.equals(ConsentStatus.SIGNED)
-				&& consent.getSignedPdfConsentRevoke() != null) {
+		if (consent.getAttestedConsent() != null
+				&& consent.getStatus().equals(ConsentStatus.REVOCATION_REVOKED)
+				&& consent.getAttestedConsentRevocation()!= null) {
 			isRevoked = true;
 		}
 		return isRevoked;
