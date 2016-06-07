@@ -22,6 +22,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ConsentHelperTest {
@@ -369,83 +372,6 @@ public class ConsentHelperTest {
 
     }
 
-
-    private void setConsentProvidersMatchData(Consent consent) {
-
-        // providers Permitted to disclose
-        IndividualProvider ip = new IndividualProvider();
-        ip.setNpi("1083949036");
-        ip.setFirstName("MONICA");
-        ip.setLastName("VAN DONGEN");
-        ConsentIndividualProviderPermittedToDisclose item = new ConsentIndividualProviderPermittedToDisclose(ip);
-        Set<ConsentIndividualProviderPermittedToDisclose> individualProviderPermittedToDiscloses = new HashSet<ConsentIndividualProviderPermittedToDisclose>();
-        individualProviderPermittedToDiscloses.add(item);
-
-        consent.setProvidersPermittedToDisclose(individualProviderPermittedToDiscloses);
-
-
-        // organization permitted to disclose
-        OrganizationalProvider op = new OrganizationalProvider();
-        op.setNpi("1902131865");
-        op.setOrgName("MASTER CARE, INC.");
-        ConsentOrganizationalProviderPermittedToDisclose orgItem = new ConsentOrganizationalProviderPermittedToDisclose(op);
-        Set<ConsentOrganizationalProviderPermittedToDisclose> organizationalProviderPermittedToDiscloses = new HashSet<ConsentOrganizationalProviderPermittedToDisclose>();
-        organizationalProviderPermittedToDiscloses.add(orgItem);
-
-        consent.setOrganizationalProvidersPermittedToDisclose(organizationalProviderPermittedToDiscloses);
-
-
-        // DisclosureIsMadeTo
-        IndividualProvider ip1 = new IndividualProvider();
-        ip1.setNpi("1346575297");
-        ip1.setFirstName("GEORGE");
-        ip1.setLastName("CARLSON");
-        ConsentIndividualProviderDisclosureIsMadeTo item1 = new ConsentIndividualProviderDisclosureIsMadeTo(ip1);
-        Set<ConsentIndividualProviderDisclosureIsMadeTo> providersDisclosureIsMadeTo = new HashSet<ConsentIndividualProviderDisclosureIsMadeTo>();
-        providersDisclosureIsMadeTo.add(item1);
-
-        consent.setProvidersDisclosureIsMadeTo(providersDisclosureIsMadeTo);
-
-
-        // organization disclosureIsMadeTo
-        OrganizationalProvider op1 = new OrganizationalProvider();
-        op1.setNpi("1174858088");
-        op1.setOrgName("NEVAEH LLC");
-        ConsentOrganizationalProviderDisclosureIsMadeTo orgItem1 = new ConsentOrganizationalProviderDisclosureIsMadeTo(op1);
-        Set<ConsentOrganizationalProviderDisclosureIsMadeTo> organizationalProviderDisclosureIsMadeTos = new HashSet<ConsentOrganizationalProviderDisclosureIsMadeTo>();
-        organizationalProviderDisclosureIsMadeTos.add(orgItem1);
-
-        consent.setOrganizationalProvidersDisclosureIsMadeTo(organizationalProviderDisclosureIsMadeTos);
-
-
-    }
-
-    private void setDtoProvidersMatchData(ConsentDto consentDto) {
-
-        // providers Permitted to disclose
-        Set<String> selIsMadeToNpi = new HashSet<String>();
-        selIsMadeToNpi.add("1083949036");
-        // organizations Permitted to disclose
-        Set<String> selIsMadeToOrgNpi = new HashSet<String>();
-        selIsMadeToOrgNpi.add("1902131865");
-
-        selIsMadeToNpi.addAll(selIsMadeToOrgNpi);
-
-        consentDto.setProvidersPermittedToDiscloseNpi(selIsMadeToNpi);
-
-        // providers to disclose
-        Set<String> selToDiscloseNpi = new HashSet<String>();
-        selToDiscloseNpi.add("1346575297");
-        // organizations to disclose
-        Set<String> selToDiscloseOrgNpi = new HashSet<String>();
-        selToDiscloseOrgNpi.add("1174858088");
-
-        selToDiscloseNpi.addAll(selToDiscloseOrgNpi);
-
-        consentDto.setProvidersDisclosureIsMadeToNpi(selToDiscloseNpi);
-
-    }
-
     // provider combination check
     @Test
     public void testIsProviderCombomatch_samecombo() {
@@ -695,6 +621,109 @@ public class ConsentHelperTest {
 
     }
 
+    @Test
+    public void testIsConsentRevoked_true(){
+        //Arrange
+        Consent consent = mock(Consent.class);
+        AttestedConsent attestedConsent = mock(AttestedConsent.class);
+        AttestedConsentRevocation attestedConsentRevocation = mock(AttestedConsentRevocation.class);
+
+        when(consent.getAttestedConsent())
+                .thenReturn(attestedConsent);
+        when(consent.getStatus())
+                .thenReturn(ConsentStatus.REVOCATION_REVOKED);
+        when(consent.getAttestedConsentRevocation())
+                .thenReturn(attestedConsentRevocation);
+
+        //Act
+        boolean isConsentRevoked = cst.isConsentRevoked(consent);
+
+        //Assert
+        assertTrue("expected isConsentRevoked to be true", isConsentRevoked);
+    }
+
+    @Test
+    public void testIsConsentRevokedWhenStatusIsConsentSigned_false(){
+        //Arrange
+        Consent consent = mock(Consent.class);
+        AttestedConsent attestedConsent = mock(AttestedConsent.class);
+        AttestedConsentRevocation attestedConsentRevocation = mock(AttestedConsentRevocation.class);
+
+        when(consent.getAttestedConsent())
+                .thenReturn(attestedConsent);
+        when(consent.getStatus())
+                .thenReturn(ConsentStatus.CONSENT_SIGNED);
+        when(consent.getAttestedConsentRevocation())
+                .thenReturn(attestedConsentRevocation);
+
+        //Act
+        boolean isConsentRevoked = cst.isConsentRevoked(consent);
+
+        //Assert
+        assertFalse("expected isConsentRevoked to be false", isConsentRevoked);
+    }
+
+    @Test
+    public void testIsConsentRevokedWhenStatusIsConsentSaved_false(){
+        //Arrange
+        Consent consent = mock(Consent.class);
+        AttestedConsent attestedConsent = mock(AttestedConsent.class);
+        AttestedConsentRevocation attestedConsentRevocation = mock(AttestedConsentRevocation.class);
+
+        when(consent.getAttestedConsent())
+                .thenReturn(attestedConsent);
+        when(consent.getStatus())
+                .thenReturn(ConsentStatus.CONSENT_SAVED);
+        when(consent.getAttestedConsentRevocation())
+                .thenReturn(attestedConsentRevocation);
+
+        //Act
+        boolean isConsentRevoked = cst.isConsentRevoked(consent);
+
+        //Assert
+        assertFalse("expected isConsentRevoked to be false", isConsentRevoked);
+    }
+
+    @Test
+    public void testIsConsentRevokedWhenAttestedConsentIsNull_false(){
+        //Arrange
+        Consent consent = mock(Consent.class);
+        AttestedConsentRevocation attestedConsentRevocation = mock(AttestedConsentRevocation.class);
+
+        when(consent.getAttestedConsent())
+                .thenReturn(null);
+        when(consent.getStatus())
+                .thenReturn(ConsentStatus.REVOCATION_REVOKED);
+        when(consent.getAttestedConsentRevocation())
+                .thenReturn(attestedConsentRevocation);
+
+        //Act
+        boolean isConsentRevoked = cst.isConsentRevoked(consent);
+
+        //Assert
+        assertFalse("expected isConsentRevoked to be false", isConsentRevoked);
+    }
+
+    @Test
+    public void testIsConsentRevokedWhenAttestedConsentRevocationIsNull_false(){
+        //Arrange
+        Consent consent = mock(Consent.class);
+        AttestedConsent attestedConsent = mock(AttestedConsent.class);
+
+        when(consent.getAttestedConsent())
+                .thenReturn(attestedConsent);
+        when(consent.getStatus())
+                .thenReturn(ConsentStatus.REVOCATION_REVOKED);
+        when(consent.getAttestedConsentRevocation())
+                .thenReturn(null);
+
+        //Act
+        boolean isConsentRevoked = cst.isConsentRevoked(consent);
+
+        //Assert
+        assertFalse("expected isConsentRevoked to be false", isConsentRevoked);
+    }
+
     /**
      * Test day is end of day.
      */
@@ -711,5 +740,81 @@ public class ConsentHelperTest {
         assertEquals(today.get(Calendar.HOUR_OF_DAY), 23);
         assertEquals(today.get(Calendar.MINUTE), 59);
         assertEquals(today.get(Calendar.SECOND), 59);
+    }
+
+    private void setConsentProvidersMatchData(Consent consent) {
+
+        // providers Permitted to disclose
+        IndividualProvider ip = new IndividualProvider();
+        ip.setNpi("1083949036");
+        ip.setFirstName("MONICA");
+        ip.setLastName("VAN DONGEN");
+        ConsentIndividualProviderPermittedToDisclose item = new ConsentIndividualProviderPermittedToDisclose(ip);
+        Set<ConsentIndividualProviderPermittedToDisclose> individualProviderPermittedToDiscloses = new HashSet<ConsentIndividualProviderPermittedToDisclose>();
+        individualProviderPermittedToDiscloses.add(item);
+
+        consent.setProvidersPermittedToDisclose(individualProviderPermittedToDiscloses);
+
+
+        // organization permitted to disclose
+        OrganizationalProvider op = new OrganizationalProvider();
+        op.setNpi("1902131865");
+        op.setOrgName("MASTER CARE, INC.");
+        ConsentOrganizationalProviderPermittedToDisclose orgItem = new ConsentOrganizationalProviderPermittedToDisclose(op);
+        Set<ConsentOrganizationalProviderPermittedToDisclose> organizationalProviderPermittedToDiscloses = new HashSet<ConsentOrganizationalProviderPermittedToDisclose>();
+        organizationalProviderPermittedToDiscloses.add(orgItem);
+
+        consent.setOrganizationalProvidersPermittedToDisclose(organizationalProviderPermittedToDiscloses);
+
+
+        // DisclosureIsMadeTo
+        IndividualProvider ip1 = new IndividualProvider();
+        ip1.setNpi("1346575297");
+        ip1.setFirstName("GEORGE");
+        ip1.setLastName("CARLSON");
+        ConsentIndividualProviderDisclosureIsMadeTo item1 = new ConsentIndividualProviderDisclosureIsMadeTo(ip1);
+        Set<ConsentIndividualProviderDisclosureIsMadeTo> providersDisclosureIsMadeTo = new HashSet<ConsentIndividualProviderDisclosureIsMadeTo>();
+        providersDisclosureIsMadeTo.add(item1);
+
+        consent.setProvidersDisclosureIsMadeTo(providersDisclosureIsMadeTo);
+
+
+        // organization disclosureIsMadeTo
+        OrganizationalProvider op1 = new OrganizationalProvider();
+        op1.setNpi("1174858088");
+        op1.setOrgName("NEVAEH LLC");
+        ConsentOrganizationalProviderDisclosureIsMadeTo orgItem1 = new ConsentOrganizationalProviderDisclosureIsMadeTo(op1);
+        Set<ConsentOrganizationalProviderDisclosureIsMadeTo> organizationalProviderDisclosureIsMadeTos = new HashSet<ConsentOrganizationalProviderDisclosureIsMadeTo>();
+        organizationalProviderDisclosureIsMadeTos.add(orgItem1);
+
+        consent.setOrganizationalProvidersDisclosureIsMadeTo(organizationalProviderDisclosureIsMadeTos);
+
+
+    }
+
+    private void setDtoProvidersMatchData(ConsentDto consentDto) {
+
+        // providers Permitted to disclose
+        Set<String> selIsMadeToNpi = new HashSet<String>();
+        selIsMadeToNpi.add("1083949036");
+        // organizations Permitted to disclose
+        Set<String> selIsMadeToOrgNpi = new HashSet<String>();
+        selIsMadeToOrgNpi.add("1902131865");
+
+        selIsMadeToNpi.addAll(selIsMadeToOrgNpi);
+
+        consentDto.setProvidersPermittedToDiscloseNpi(selIsMadeToNpi);
+
+        // providers to disclose
+        Set<String> selToDiscloseNpi = new HashSet<String>();
+        selToDiscloseNpi.add("1346575297");
+        // organizations to disclose
+        Set<String> selToDiscloseOrgNpi = new HashSet<String>();
+        selToDiscloseOrgNpi.add("1174858088");
+
+        selToDiscloseNpi.addAll(selToDiscloseOrgNpi);
+
+        consentDto.setProvidersDisclosureIsMadeToNpi(selToDiscloseNpi);
+
     }
 }
