@@ -647,9 +647,25 @@ public class ConsentServiceImplTest {
     @Test
     public void testGetConsentStatusWhenConsentIsSigned() {
         Consent consent = mock(Consent.class);
-        doReturn("SIGNED").when(consent).getStatus();
+        doReturn(ConsentStatus.CONSENT_SIGNED).when(consent).getStatus();
         doReturn(consent).when(consentRepository).findOne(anyLong());
-        assertEquals("SIGNED", cst.getConsentStatus((long) 1));
+        assertEquals(ConsentStatus.CONSENT_SIGNED, cst.getConsentStatus((long) 1));
+    }
+
+    @Test
+    public void testGetConsentStatusWhenConsentIsSaved() {
+        Consent consent = mock(Consent.class);
+        doReturn(ConsentStatus.CONSENT_SAVED).when(consent).getStatus();
+        doReturn(consent).when(consentRepository).findOne(anyLong());
+        assertEquals(ConsentStatus.CONSENT_SAVED, cst.getConsentStatus((long) 1));
+    }
+
+    @Test
+    public void testGetConsentStatusWhenConsentIsRevoked() {
+        Consent consent = mock(Consent.class);
+        doReturn(ConsentStatus.REVOCATION_REVOKED).when(consent).getStatus();
+        doReturn(consent).when(consentRepository).findOne(anyLong());
+        assertEquals(ConsentStatus.REVOCATION_REVOKED, cst.getConsentStatus((long) 1));
     }
 
     @Test
