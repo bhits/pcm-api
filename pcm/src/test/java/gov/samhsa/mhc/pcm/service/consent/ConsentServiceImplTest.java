@@ -10,13 +10,15 @@ import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentSectionTypeCodeReposi
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
 import gov.samhsa.mhc.pcm.domain.reference.PurposeOfUseCodeRepository;
 import gov.samhsa.mhc.pcm.domain.reference.SensitivityPolicyCodeRepository;
+import gov.samhsa.mhc.pcm.infrastructure.PhrService;
+import gov.samhsa.mhc.pcm.infrastructure.dto.PatientDto;
 import gov.samhsa.mhc.pcm.service.consentexport.ConsentExportService;
 import gov.samhsa.mhc.pcm.service.dto.ConsentDto;
 import gov.samhsa.mhc.pcm.service.dto.ConsentListDto;
 import gov.samhsa.mhc.pcm.service.dto.ConsentPdfDto;
 import gov.samhsa.mhc.pcm.service.dto.ConsentRevokationPdfDto;
+import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -95,6 +97,16 @@ public class ConsentServiceImplTest {
     Set<ConsentAssertion> consentAssertions;
     @Mock
     PolicyIdService policyIdService;
+
+    @Mock
+    PatientService patientService;
+
+    @Mock
+    PhrService phrService;
+
+    @Mock
+    ConsentTermsVersionsService consentTermsVersionsService;
+
     /**
      * The cst.
      */
@@ -437,11 +449,22 @@ public class ConsentServiceImplTest {
      * @throws Exception
      */
     @Test
-    @Ignore // FIXME fix this test it is failing
     public void testSaveConsent() throws Exception {
         // Arrange
         ConsentService cstSpy = spy(cst);
         Consent consent = mock(Consent.class);
+
+        PatientDto patientDto = mock(PatientDto.class);
+        when(phrService.getPatientProfile())
+                .thenReturn(patientDto);
+
+        ConsentTermsVersions consentTermsVersions = mock(ConsentTermsVersions.class);
+        when(consentTermsVersions.getConsentTermsText())
+                .thenReturn("TEST CONSENT TERMS TEXT");
+
+        when(consentTermsVersionsService.getEnabledConsentTermsVersion())
+                .thenReturn(consentTermsVersions);
+
         String xacmlMock = "xacmlMock";
         String policyIdMock = "policyIdMock";
         when(cstSpy.makeConsent()).thenReturn(consent);
