@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.GET, "/patients/clinicaldocuments/**").permitAll()
                         .antMatchers(HttpMethod.POST, "/patients/clinicaldocuments/**").permitAll()
                         .antMatchers(HttpMethod.DELETE, "/patients/clinicaldocuments/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/patients/audit/**").permitAll()
                         //.antMatchers(HttpMethod.GET, "/patients/clinicaldocuments/**").access(hasScope("pcm.clinicalDocument_read"))
                         //.antMatchers(HttpMethod.POST, "/patients/clinicaldocuments/**").access(hasScope("pcm.clinicalDocument_create"))
                         //.antMatchers(HttpMethod.DELETE, "/patients/clinicaldocuments/**").access(hasScope("pcm.clinicalDocument_delete"))
