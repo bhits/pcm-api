@@ -1456,6 +1456,8 @@ public class ConsentServiceImpl implements ConsentService {
             consent.setXacmlPdfConsentTo(consentExportService
                     .exportConsent2XacmlPdfConsentTo(consent).getBytes());
 
+            consent.setExportedCDAR2Consent(consentExportService.exportConsent2CDAR2ConsentDirective(consent).getBytes());
+
         } catch (final ConsentGenException e) {
             logger.error("Error in saving consent in xacml format", e);
             throw new ConsentGenException(e.getMessage());
