@@ -25,35 +25,17 @@
  ******************************************************************************/
 package gov.samhsa.mhc.pcm.web;
 
-import gov.samhsa.mhc.common.consentgen.ConsentGenException;
-import gov.samhsa.mhc.pcm.infrastructure.eventlistener.EventService;
-import gov.samhsa.mhc.pcm.infrastructure.securityevent.FileDownloadedEvent;
 import gov.samhsa.mhc.pcm.service.audit.AuditService;
-import gov.samhsa.mhc.pcm.service.consent.ConsentHelper;
-import gov.samhsa.mhc.pcm.service.consent.ConsentService;
-import gov.samhsa.mhc.pcm.service.consent.ConsentStatus;
-import gov.samhsa.mhc.pcm.service.dto.*;
-import gov.samhsa.mhc.pcm.service.exception.*;
-import gov.samhsa.mhc.pcm.service.notification.NotificationService;
+import gov.samhsa.mhc.pcm.service.dto.HistoryDto;
+import gov.samhsa.mhc.pcm.service.exception.ConsentNotBelongingToPatientException;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
-import gov.samhsa.mhc.pcm.service.reference.PurposeOfUseCodeService;
-import gov.samhsa.mhc.vss.service.ValueSetCategoryService;
-import gov.samhsa.mhc.vss.service.dto.AddConsentFieldsDto;
-import gov.samhsa.mhc.vss.service.dto.ValueSetCategoryFieldsDto;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.security.Principal;
-import java.util.*;
+import java.util.List;
 
 /**
  * The Class ConsentRestController.
@@ -62,14 +44,16 @@ import java.util.*;
 @RequestMapping("/patients")
 public class AuditController {
 
-    /** The patient audit service. */
+    /**
+     * The patient audit service.
+     */
     @Autowired
     AuditService auditService;
 
     @Autowired
     private PatientService patientService;
 
-    @RequestMapping(value = "/activity", method = RequestMethod.GET)
+    @RequestMapping(value = "/activities", method = RequestMethod.GET)
     public List<HistoryDto> activityHistory(Principal principal) throws ClassNotFoundException {
         if (patientService.findIdByUsername(principal.getName()) != null) {
             return auditService.findAllHistory(principal.getName());
