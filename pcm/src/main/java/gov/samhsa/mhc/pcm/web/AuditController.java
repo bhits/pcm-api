@@ -69,7 +69,7 @@ public class AuditController {
     @Autowired
     private PatientService patientService;
 
-    @RequestMapping(value = "/audit", method = RequestMethod.GET)
+    @RequestMapping(value = "/activity", method = RequestMethod.GET)
     public List<HistoryDto> activityHistory(Principal principal) throws ClassNotFoundException {
         if (patientService.findIdByUsername(principal.getName()) != null) {
             return auditService.findAllHistory(principal.getName());

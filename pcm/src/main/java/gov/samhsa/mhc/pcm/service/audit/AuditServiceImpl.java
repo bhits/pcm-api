@@ -224,8 +224,7 @@ public class AuditServiceImpl implements AuditService {
 		}
 
 		Long timestamp = patientRevisionEntity.getTimestamp();
-		String revdate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
-				.format(timestamp);
+		String revdate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(timestamp);
 
 		hd.setTimestamp(revdate);
 
