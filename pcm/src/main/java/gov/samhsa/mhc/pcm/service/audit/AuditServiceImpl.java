@@ -33,6 +33,7 @@ import gov.samhsa.mhc.pcm.domain.consent.Consent;
 import gov.samhsa.mhc.pcm.domain.patient.*;
 import gov.samhsa.mhc.pcm.domain.staff.StaffRepository;
 import gov.samhsa.mhc.pcm.service.dto.HistoryDto;
+import gov.samhsa.mhc.pcm.service.reference.RevisionTypeCodeService;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
@@ -76,6 +77,9 @@ public class AuditServiceImpl implements AuditService {
 	/** The staff repository. */
 	@Autowired
 	protected StaffRepository staffRepository;
+
+	@Autowired
+	RevisionTypeCodeService revisionTypeCodeService;
 
 	public AuditServiceImpl() {
 	}
@@ -212,7 +216,7 @@ public class AuditServiceImpl implements AuditService {
 			String username1 = patientRevisionEntity.getUsername();
 			if (patientRepository.findByUsername(username1) != null) {
 				Patient patientA1 = patientRepository.findByUsername(username1);
-				String changedBy = patientA1.getLastName() + ",   "
+				String changedBy = patientA1.getLastName() + ", "
 						+ patientA1.getFirstName();
 				hd.setChangedBy(changedBy);
 			}
@@ -362,28 +366,10 @@ public class AuditServiceImpl implements AuditService {
 				btype = 0;
 
 		}
-		String revType = findRevType(btype);
-		return revType;
+		return revisionTypeCodeService.findRevisionTypeCodeByCode(btype).getDisplayName();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.samhsa.consent2share.service.audit.AuditService#findRevType(java.
-	 * lang.Byte)
-	 */
-	@Override
-	public String findRevType(Byte btype) {
-		if (btype == 1)
-			return "Changed entry";
-		if (btype == 0)
-			return "Create new entry";
-		if (btype == 2)
-			return "Delete entry";
-		else
-			return null;
-	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -568,7 +554,7 @@ public class AuditServiceImpl implements AuditService {
 
 		Byte bt = modifiedEntityTypeEntitys.get(0).getRevisionType();
 
-		String revtp = findRevType(bt);
+		String revtp = revisionTypeCodeService.findRevisionTypeCodeByCode(bt).getDisplayName();
 
 		hd.setRecType(revtp);
 		hd.setType("Legal Representative Association");

@@ -114,13 +114,6 @@ public interface AuditService {
 	 */
 	String findRevType(List<ModifiedEntityTypeEntity> modifiedEntityTypeEntitys);
 
-	/**
-	 * Find rev type.
-	 *
-	 * @param btype the btype
-	 * @return the string
-	 */
-	String findRevType(Byte btype);
 
 	/**
 	 * Find rev class name.
