@@ -111,15 +111,15 @@ public class ClinicalDocumentRestController {
             @RequestParam("description") String description,
             @RequestParam("documentType") String documentTypeCode) {
         final String username = principal.getName();
-//        if (scanMultipartFile(file) == "error") {
-//            throw new InternalServerErrorException("An unknown error has occured.");
-//        } else {
-//            if (scanMultipartFile(file) == "false") {
-//                eventService.raiseSecurityEvent(new MaliciousFileDetectedEvent(request.getRemoteAddr(),
-//                        username, documentName));
-//                throw new InfectedFileException("Virus detected");
-//            }
-//        }
+        if (scanMultipartFile(file) == "error") {
+            throw new InternalServerErrorException("An unknown error has occured.");
+        } else {
+            if (scanMultipartFile(file) == "false") {
+                eventService.raiseSecurityEvent(new MaliciousFileDetectedEvent(request.getRemoteAddr(),
+                        username, documentName));
+                throw new InfectedFileException("Virus detected");
+            }
+        }
         if (clinicalDocumentService.isDocumentOversized(file))
             throw new OversizedFileException("Size over limits");
         if (!clinicalDocumentService.isDocumentExtensionPermitted(file))
