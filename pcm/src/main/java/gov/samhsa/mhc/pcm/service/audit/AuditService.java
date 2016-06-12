@@ -26,6 +26,7 @@
 package gov.samhsa.mhc.pcm.service.audit;
 
 import gov.samhsa.mhc.pcm.domain.audit.ModifiedEntityTypeEntity;
+import gov.samhsa.mhc.pcm.service.dto.ActivityHistoryListDto;
 import gov.samhsa.mhc.pcm.service.dto.HistoryDto;
 
 import java.util.List;
@@ -43,6 +44,14 @@ public interface AuditService {
 	 * @return the list
 	 */
 	List<HistoryDto> findAllHistory(String username);
+
+	/**
+	 * Pageable Find all Activity History
+	 * @param username
+	 * @param pageNumber
+     * @return
+     */
+	ActivityHistoryListDto findAllActivityHistoryPageable(String username, int pageNumber);
 
 	/**
 	 * Gets the reversed.

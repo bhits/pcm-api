@@ -26,12 +26,14 @@
 package gov.samhsa.mhc.pcm.web;
 
 import gov.samhsa.mhc.pcm.service.audit.AuditService;
+import gov.samhsa.mhc.pcm.service.dto.ActivityHistoryListDto;
 import gov.samhsa.mhc.pcm.service.dto.HistoryDto;
 import gov.samhsa.mhc.pcm.service.exception.ConsentNotBelongingToPatientException;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
@@ -60,6 +62,11 @@ public class AuditController {
         } else {
             throw new ConsentNotBelongingToPatientException("Error: cannot get audit information. Invalid patient.");
         }
+    }
+
+    @RequestMapping(value = "/activities/pageNumber", method = RequestMethod.GET)
+    public ActivityHistoryListDto activityHistory(Principal principal, @RequestParam("pageNumber") int pageNumber) {
+        return auditService.findAllActivityHistoryPageable(principal.getName(), pageNumber);
     }
 
 
