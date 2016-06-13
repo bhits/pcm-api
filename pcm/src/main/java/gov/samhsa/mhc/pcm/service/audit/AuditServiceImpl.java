@@ -167,12 +167,21 @@ public class AuditServiceImpl implements AuditService {
     @Override
     public ActivityHistoryListDto findAllActivityHistoryPageable(String username, int pageNumber) {
         try {
+            //TODO Refactor to resolve memory issue
+            /*Convert activityHistory List to Page*/
             List<HistoryDto> activityHistoryList = findAllHistory(username);
-            PageRequest pageRequest = new PageRequest(pageNumber, itemsPerPage);
-            Page<HistoryDto> pages = new PageImpl<>(activityHistoryList, pageRequest, activityHistoryList.size());
+            PageRequest pageable = new PageRequest(pageNumber, itemsPerPage);
+            int startIndex = pageable.getOffset();
+            int endIndex = (startIndex + pageable.getPageSize()) > activityHistoryList.size() ? activityHistoryList.size() : (startIndex + pageable.getPageSize());
+            List<HistoryDto> customList = Collections.emptyList();
+            if (startIndex < endIndex) {
+                customList = activityHistoryList.subList(startIndex, endIndex);
+            }
+
+            Page<HistoryDto> pages = new PageImpl<>(customList, pageable, activityHistoryList.size());
 
             ActivityHistoryListDto activityHistoryListDto = new ActivityHistoryListDto();
-            activityHistoryListDto.setHistoryDtoList(activityHistoryList);
+            activityHistoryListDto.setHistoryDtoList(pages.getContent());
             activityHistoryListDto.setCurrentPage(pages.getNumber());
             activityHistoryListDto.setTotalItems(pages.getTotalElements());
             activityHistoryListDto.setTotalPages(pages.getTotalPages());
