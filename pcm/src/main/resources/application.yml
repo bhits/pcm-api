@@ -90,6 +90,8 @@ mhc:
         esignaturePollingServicePollTaskFixedDelayInMilliseconds: 2000
       pls:
         api: https://localhost:8443/pls/providers
+      pagination:
+        itemsPerPage: 10
   vss:
     config:
       conceptCodeListPageSize: 20
