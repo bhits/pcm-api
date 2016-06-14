@@ -27,9 +27,6 @@ package gov.samhsa.mhc.pcm.web;
 
 import gov.samhsa.mhc.pcm.service.audit.AuditService;
 import gov.samhsa.mhc.pcm.service.dto.ActivityHistoryListDto;
-import gov.samhsa.mhc.pcm.service.dto.HistoryDto;
-import gov.samhsa.mhc.pcm.service.exception.ConsentNotBelongingToPatientException;
-import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,14 +34,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.List;
 
 /**
  * The Class ConsentRestController.
  */
 @RestController
 @RequestMapping("/patients")
-public class AuditController {
+public class ActivityHistoryController {
 
     /**
      * The patient audit service.
@@ -52,22 +48,8 @@ public class AuditController {
     @Autowired
     AuditService auditService;
 
-    @Autowired
-    private PatientService patientService;
-
-    @RequestMapping(value = "/activities", method = RequestMethod.GET)
-    public List<HistoryDto> activityHistory(Principal principal) throws ClassNotFoundException {
-        if (patientService.findIdByUsername(principal.getName()) != null) {
-            return auditService.findAllHistory(principal.getName());
-        } else {
-            throw new ConsentNotBelongingToPatientException("Error: cannot get audit information. Invalid patient.");
-        }
-    }
-
     @RequestMapping(value = "/activities/pageNumber", method = RequestMethod.GET)
     public ActivityHistoryListDto activityHistory(Principal principal, @RequestParam("pageNumber") int pageNumber) {
         return auditService.findAllActivityHistoryPageable(principal.getName(), pageNumber);
     }
-
-
 }

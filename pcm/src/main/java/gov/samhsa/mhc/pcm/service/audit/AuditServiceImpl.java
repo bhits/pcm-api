@@ -34,7 +34,9 @@ import gov.samhsa.mhc.pcm.domain.patient.*;
 import gov.samhsa.mhc.pcm.domain.staff.StaffRepository;
 import gov.samhsa.mhc.pcm.service.dto.ActivityHistoryListDto;
 import gov.samhsa.mhc.pcm.service.dto.HistoryDto;
+import gov.samhsa.mhc.pcm.service.exception.PatientNotFoundException;
 import gov.samhsa.mhc.pcm.service.exception.ViewActivitiesException;
+import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import gov.samhsa.mhc.pcm.service.reference.RevisionTypeCodeService;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
@@ -109,6 +111,9 @@ public class AuditServiceImpl implements AuditService {
     @Autowired
     RevisionTypeCodeService revisionTypeCodeService;
 
+    @Autowired
+    private PatientService patientService;
+
     public AuditServiceImpl() {
     }
 
@@ -147,6 +152,8 @@ public class AuditServiceImpl implements AuditService {
      */
     @Override
     public List<HistoryDto> findAllHistory(String username) {
+        // Assert patient should not be null
+        assertPatientNotNull(username);
 
         Patient patientA = patientRepository.findByUsername(username);
         Long patientId = patientA.getId();
@@ -606,5 +613,11 @@ public class AuditServiceImpl implements AuditService {
         hd.setType("Legal Representative Association");
 
         return hd;
+    }
+
+    private void assertPatientNotNull(String name) {
+        if (patientService.findIdByUsername(name) == null) {
+            throw new PatientNotFoundException("No patient record found for patient name: " + name);
+        }
     }
 }
