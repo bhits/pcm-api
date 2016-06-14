@@ -33,7 +33,9 @@ public class SecurityConfig {
                 }
                 http.authorizeRequests()
                         .antMatchers(HttpMethod.GET, "/patients/*/consents/*/obligations").permitAll()
+                        // FIXME: Change following method to protect new attest consent endpoint
                         .antMatchers(HttpMethod.GET, "/patients/consents/signConsent/**").access(hasScope("pcm.consent_sign"))
+                        // FIXME: Change following method to protect new attest consent revocation endpoint
                         .antMatchers(HttpMethod.GET, "/patients/consents/revokeConsent/**").access(hasScope("pcm.consent_revoke"))
                         .antMatchers(HttpMethod.GET, "/patients/providers/**").access(hasScope("pcm.provider_read"))
                         .antMatchers(HttpMethod.POST, "/patients/providers/**").access(hasScope("pcm.provider_create"))

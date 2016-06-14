@@ -66,6 +66,15 @@ public class AttestedConsent extends AbstractAttestedPDFDocument{
 		return attestedPdfConsent;
 	}
 
+    /**
+     * Alias for 'getContent()' method
+     *
+     * @return the pdf document content
+     */
+    public byte[] getAttestedPdfConsent() {
+		return getContent();
+	}
+
 	/* (non-Javadoc)
 	 * @see gov.samhsa.consent2share.domain.consent.BinaryContentAccessible#setContent(byte[])
 	 */
@@ -93,10 +102,6 @@ public class AttestedConsent extends AbstractAttestedPDFDocument{
 	 */
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public byte[] getAttestedPdfConsent() {
-		return attestedPdfConsent;
 	}
 
 	public void setAttestedPdfConsent(byte[] attestedPdfConsent) {

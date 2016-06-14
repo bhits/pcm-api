@@ -57,55 +57,6 @@ public interface ConsentRepository extends JpaSpecificationExecutor<Consent>,
 	Page<Consent> findByPatient(Patient patient, Pageable pageable);
 
 	/**
-	 * Find by signed pdf consent document id.
-	 *
-	 * @param documentId
-	 *            the document id
-	 * @return the consent
-	 */
-	Consent findBySignedPdfConsentDocumentId(String documentId);
-
-	/**
-	 * Find by signed pdf consent document signed status.
-	 *
-	 * @param signStatus
-	 *            the sign status
-	 * @return the list
-	 */
-	List<Consent> findAllBySignedPdfConsentDocumentSignedStatus(
-			String signStatus);
-
-	/**
-	 * Find by signed pdf consent revoke document signed status.
-	 *
-	 * @param signStatus
-	 *            the sign status
-	 * @return the list
-	 */
-	List<Consent> findAllBySignedPdfConsentRevokeDocumentSignedStatus(
-			String signStatus);
-
-	/**
-	 * Find by signed pdf consent revoke document signed status not.
-	 *
-	 * @param signStatus
-	 *            the sign status
-	 * @return the list
-	 */
-	List<Consent> findBySignedPdfConsentRevokeDocumentSignedStatusNot(
-			String signStatus);
-
-	/**
-	 * Find by signed pdf consent document signed status not.
-	 *
-	 * @param signStatus
-	 *            the sign status
-	 * @return the list
-	 */
-	List<Consent> findBySignedPdfConsentDocumentSignedStatusNot(
-			String signStatus);
-
-	/**
 	 * Find all by patient username.
 	 *
 	 * @param username

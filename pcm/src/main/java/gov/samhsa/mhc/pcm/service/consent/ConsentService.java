@@ -28,8 +28,6 @@ package gov.samhsa.mhc.pcm.service.consent;
 
 import gov.samhsa.mhc.common.consentgen.ConsentGenException;
 import gov.samhsa.mhc.pcm.domain.consent.Consent;
-import gov.samhsa.mhc.pcm.domain.consent.SignedPDFConsent;
-import gov.samhsa.mhc.pcm.domain.consent.SignedPDFConsentRevocation;
 import gov.samhsa.mhc.pcm.service.dto.*;
 
 import java.util.*;
@@ -46,13 +44,6 @@ public interface ConsentService {
      * @return the long
      */
     long countAllConsents();
-
-    /**
-     * Delete consent.
-     *
-     * @param consent the consent
-     */
-    void deleteConsent(Consent consent);
 
     /**
      * Delete consent.
@@ -206,14 +197,6 @@ public interface ConsentService {
     XacmlDto findXACMLForCCDByConsentId(Long consentId);
 
     /**
-     * Sign consent.
-     *
-     * @param consentPdfDto the consent pdf dto
-     * @return true, if successful
-     */
-    boolean signConsent(ConsentPdfDto consentPdfDto);
-
-    /**
      * Validate consent date.
      *
      * @param startDate the start date
@@ -223,25 +206,11 @@ public interface ConsentService {
     boolean validateConsentDate(Date startDate, Date endDate);
 
     /**
-     * Make SignedPdfConsent.
-     *
-     * @return the signed pdf consent
-     */
-    SignedPDFConsent makeSignedPdfConsent();
-
-    /**
      * Make ConsentPdfDto.
      *
      * @return the consent pdf dto
      */
     ConsentPdfDto makeConsentPdfDto();
-
-    /**
-     * Make signed pdf consent revocation.
-     *
-     * @return the signed pdf consent revocation
-     */
-    SignedPDFConsentRevocation makeSignedPDFConsentRevocation();
 
     /**
      * Make consent.
@@ -266,13 +235,6 @@ public interface ConsentService {
      */
     @SuppressWarnings("rawtypes")
     boolean areThereDuplicatesInTwoSets(Set set1, Set set2);
-
-    /**
-     * Revoke consent.
-     *
-     * @param consentRevokationPdfDto the consent revokation pdf dto
-     */
-    void signConsentRevokation(ConsentRevokationPdfDto consentRevokationPdfDto);
 
     /**
      * Find consent revokation pdf dto.

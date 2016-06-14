@@ -51,6 +51,8 @@ public abstract class AbstractConsentRevokationPdfGenerator {
 	 */
 	public abstract byte[] generateConsentRevokationPdf(Consent consent, Patient patient, Date attestedOnDateTime);
 
+    public abstract byte[] generateUnattestedConsentRevokationPdf(Consent consent, Patient patient);
+
 	/**
 	 * Creates the table.
 	 *

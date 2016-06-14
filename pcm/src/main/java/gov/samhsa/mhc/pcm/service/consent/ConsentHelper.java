@@ -188,16 +188,21 @@ public class ConsentHelper {
 		consentValidationDto.setSelectedConsentEndDate(formatter
 				.format(consentDto.getConsentEnd()));
 
-		// satus of the existing consent
-		if (consent.getSignedPdfConsent() != null
-				&& consent.getSignedPdfConsent().getDocumentSignedStatus()
-						.equals(ConsentStatus.SIGNED)) {
-			consentValidationDto
-					.setExistingConsentStatus(ConsentStatus.CONSENT_SIGNED);
-		} else {
-			consentValidationDto
-					.setExistingConsentStatus(ConsentStatus.CONSENT_SAVED);
-		}
+		// status of the existing consent
+        String consentStatus = consent.getStatus();
+        switch (consentStatus) {
+            case ConsentStatus.CONSENT_SIGNED:
+                consentValidationDto.setExistingConsentStatus(ConsentStatus.CONSENT_SIGNED);
+                break;
+            case ConsentStatus.CONSENT_SAVED:
+                consentValidationDto.setExistingConsentStatus(ConsentStatus.CONSENT_SAVED);
+                break;
+            case ConsentStatus.REVOCATION_REVOKED:
+                consentValidationDto.setExistingConsentStatus(ConsentStatus.REVOCATION_REVOKED);
+                break;
+            default:
+                throw new IllegalStateException("The status field of this consent object has an invalid value.");
+        }
 
 		return consentValidationDto;
 

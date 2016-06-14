@@ -165,44 +165,53 @@ public class ConsentServiceImplTest {
     }
 
     /**
-     * Test deleteConsent. Check if repository is called.
-     */
-    @Test
-    public void testDeleteConsent_Check_if_Repository_is_Called() {
-        cst.deleteConsent(mock(Consent.class));
-        verify(consentRepository).delete(any(Consent.class));
-    }
-
-    /**
      * Test deleteConsent. Check if repository and findConsent is called.
      */
     @Test
-    public void testDeleteConsent_Check_if_Repository_and_findConsent_is_called() {
+    public void testDeleteConsent_Check_if_Repository_and_findConsent_is_called_when_Consent_is_Saved() {
         ConsentService cstspy = spy(cst);
         Consent consent = mock(Consent.class);
-        when(cstspy.findConsent((long) 1)).thenReturn(consent);
-        when(consent.getSignedPdfConsent()).thenReturn(null);
+
+        when(cstspy.findConsent((long) 1))
+                .thenReturn(consent);
+        when(consent.getStatus())
+                .thenReturn(ConsentStatus.CONSENT_SAVED);
+
         boolean isDeleteSuccess = cstspy.deleteConsent((long) 1);
+
         assertTrue(isDeleteSuccess);
         verify(consentRepository).delete(any(Consent.class));
     }
 
     /**
-     * Test deleteConsent. Check if delete fails when getSignedPdfConsent is not
-     * null.
+     * Test deleteConsent. Check if delete fails when consent is signed.
      */
     @Test
-    public void testDeleteConsent_Check_if_Delete_Fails_on_SignedPdf_Not_Null() {
+    public void testDeleteConsent_Check_if_Delete_Fails_when_Consent_is_Signed() {
         ConsentService cstspy = spy(cst);
         Consent consent = mock(Consent.class);
-        SignedPDFConsent signedPDFConsent = mock(SignedPDFConsent.class);
+
         when(cstspy.findConsent((long) 1)).thenReturn(consent);
-        Byte tempByte = new Byte("5");
-        byte tempByteAry[] = {tempByte.byteValue()};
-        when(signedPDFConsent.getSignedPdfConsentContent()).thenReturn(
-                tempByteAry);
-        when(consent.getSignedPdfConsent()).thenReturn(signedPDFConsent);
+        when(consent.getStatus())
+                .thenReturn(ConsentStatus.CONSENT_SIGNED);
+
         boolean isDeleteSuccess = cstspy.deleteConsent((long) 1);
+
+        assertFalse("Expected isDeleteSuccess to be false", isDeleteSuccess);
+        verify(consentRepository, never()).delete(any(Consent.class));
+    }
+
+    @Test
+    public void testDeleteConsent_Check_if_Delete_Fails_when_Consent_is_Revoked() {
+        ConsentService cstspy = spy(cst);
+        Consent consent = mock(Consent.class);
+
+        when(cstspy.findConsent((long) 1)).thenReturn(consent);
+        when(consent.getStatus())
+                .thenReturn(ConsentStatus.REVOCATION_REVOKED);
+
+        boolean isDeleteSuccess = cstspy.deleteConsent((long) 1);
+
         assertFalse("Expected isDeleteSuccess to be false", isDeleteSuccess);
         verify(consentRepository, never()).delete(any(Consent.class));
     }
@@ -244,7 +253,8 @@ public class ConsentServiceImplTest {
      * Test signConsent. Check if necessary domain bindings are set and
      * repository is called.
      */
-    @Test
+    // FIXME: Replace this test with a test for consent attestation
+    /*@Test
     public void testSignConsent_Check_if_Necessary_Domain_Bindings_are_Set_and_Repository_is_Called() {
         Consent consent = mock(Consent.class);
         Patient patient = mock(Patient.class);
@@ -267,9 +277,10 @@ public class ConsentServiceImplTest {
         verify(signedPdfConsent).setDocumentSignedStatus(anyString());
         verify(consent).setSignedPdfConsent(signedPdfConsent);
         verify(consentRepository).save(any(Consent.class));
-    }
+    }*/
 
-    @Test
+    // FIXME: Replace this test with a test for consent revocation attestation
+    /*@Test
     public void testSignConsentRevokation() {
         Consent consent = mock(Consent.class);
         Patient patient = mock(Patient.class);
@@ -299,7 +310,7 @@ public class ConsentServiceImplTest {
                 .setDocumentSentOutForSignatureDateTime(any(Date.class));
         verify(consent).setSignedPdfConsentRevoke(signedPDFConsentRevocation);
         verify(consentRepository).save(any(Consent.class));
-    }
+    }*/
 
     /**
      * Test findAllConsentsDtoByPatient .Verify consentListDtos add exact times
@@ -351,29 +362,38 @@ public class ConsentServiceImplTest {
     @Test
     public void testFindConsentPdfDto_when_Consent_is_Signed() {
         Consent consent = mock(Consent.class);
-        SignedPDFConsent signedPDFConsent = mock(SignedPDFConsent.class);
+        AttestedConsent attestedConsent = mock(AttestedConsent.class);
         ConsentPdfDto consentPdfDto = mock(ConsentPdfDto.class);
         Patient patient = mock(Patient.class);
-        byte[] signedPdfConsentContent = new byte[]{1, 2, 3};
-        byte[] unsignedPdfConsentContent = new byte[]{4, 5, 6};
-
-        when(patient.getFirstName()).thenReturn("John");
-        when(patient.getLastName()).thenReturn("Doe");
-        when(signedPDFConsent.getSignedPdfConsentContent()).thenReturn(
-                signedPdfConsentContent);
-        when(consent.getPatient()).thenReturn(patient);
-        when(consent.getSignedPdfConsent()).thenReturn(signedPDFConsent);
-        when(consent.getUnsignedPdfConsent()).thenReturn(
-                unsignedPdfConsentContent);
-        when(consent.getName()).thenReturn("A regular consent");
-        when(consentRepository.findOne(anyLong())).thenReturn(consent);
+        byte[] attestedPdfConsentContent = new byte[]{1, 2, 3};
+        byte[] unattestedPdfConsentContent = new byte[]{4, 5, 6};
         ConsentService cstSpy = spy(cst);
-        when(cstSpy.makeConsentPdfDto()).thenReturn(consentPdfDto);
+
+        when(patient.getFirstName())
+                .thenReturn("John");
+        when(patient.getLastName())
+                .thenReturn("Doe");
+        when(attestedConsent.getAttestedPdfConsent())
+                .thenReturn(attestedPdfConsentContent);
+        when(consent.getPatient())
+                .thenReturn(patient);
+        when(consent.getAttestedConsent())
+                .thenReturn(attestedConsent);
+        when(consent.getUnAttestedPdfConsent())
+                .thenReturn(unattestedPdfConsentContent);
+        when(consent.getName())
+                .thenReturn("A regular consent");
+        when(consent.getStatus())
+                .thenReturn(ConsentStatus.CONSENT_SIGNED);
+        when(consentRepository.findOne(anyLong()))
+                .thenReturn(consent);
+        when(cstSpy.makeConsentPdfDto())
+                .thenReturn(consentPdfDto);
 
         cstSpy.findConsentPdfDto((long) 2);
 
-        verify(consentPdfDto).setContent(signedPdfConsentContent);
-        verify(consentPdfDto, never()).setContent(unsignedPdfConsentContent);
+        verify(consentPdfDto).setContent(attestedPdfConsentContent);
+        verify(consentPdfDto, never()).setContent(unattestedPdfConsentContent);
         verify(consentPdfDto).setFilename(anyString());
         verify(consentPdfDto).setConsentName("A regular consent");
         verify(consentPdfDto).setId((long) 2);
@@ -383,31 +403,39 @@ public class ConsentServiceImplTest {
      * Test find consentPdfDto when consent is unsigned.
      */
     @Test
-    public void testFindConsentPdfDto_when_Consent_is_Unsigned() {
+    public void testFindConsentPdfDto_when_Consent_is_Saved() {
         Consent consent = mock(Consent.class);
-        SignedPDFConsent signedPDFConsent = mock(SignedPDFConsent.class);
+        AttestedConsent attestedConsent = mock(AttestedConsent.class);
         ConsentPdfDto consentPdfDto = mock(ConsentPdfDto.class);
         Patient patient = mock(Patient.class);
-        byte[] signedPdfConsentContent = null;
-        byte[] unsignedPdfConsentContent = new byte[]{4, 5, 6};
+        byte[] unattestedPdfConsentContent = new byte[]{4, 5, 6};
 
-        when(patient.getFirstName()).thenReturn("John");
-        when(patient.getLastName()).thenReturn("Doe");
-        when(signedPDFConsent.getSignedPdfConsentContent()).thenReturn(
-                signedPdfConsentContent);
-        when(consent.getPatient()).thenReturn(patient);
-        when(consent.getSignedPdfConsent()).thenReturn(signedPDFConsent);
-        when(consent.getUnsignedPdfConsent()).thenReturn(
-                unsignedPdfConsentContent);
-        when(consent.getName()).thenReturn("A regular consent");
-        when(consentRepository.findOne(anyLong())).thenReturn(consent);
+        when(attestedConsent.getAttestedPdfConsent())
+                .thenReturn(null);
+        when(patient.getFirstName())
+                .thenReturn("John");
+        when(patient.getLastName())
+                .thenReturn("Doe");
+        when(consent.getPatient())
+                .thenReturn(patient);
+        when(consent.getAttestedConsent())
+                .thenReturn(attestedConsent);
+        when(consent.getStatus())
+                .thenReturn(ConsentStatus.CONSENT_SAVED);
+        when(consent.getUnAttestedPdfConsent())
+                .thenReturn(unattestedPdfConsentContent);
+        when(consent.getName())
+                .thenReturn("A regular consent");
+        when(consentRepository.findOne(anyLong()))
+                .thenReturn(consent);
         ConsentService cstSpy = spy(cst);
-        when(cstSpy.makeConsentPdfDto()).thenReturn(consentPdfDto);
+        when(cstSpy.makeConsentPdfDto())
+                .thenReturn(consentPdfDto);
 
         cstSpy.findConsentPdfDto((long) 2);
 
-        verify(consentPdfDto, never()).setContent(signedPdfConsentContent);
-        verify(consentPdfDto).setContent(unsignedPdfConsentContent);
+        verify(consentPdfDto, never()).setContent(null);
+        verify(consentPdfDto).setContent(unattestedPdfConsentContent);
         verify(consentPdfDto).setFilename(anyString());
         verify(consentPdfDto).setConsentName("A regular consent");
         verify(consentPdfDto).setId((long) 2);
@@ -502,18 +530,6 @@ public class ConsentServiceImplTest {
         // Assert
         verify(consentRepository).save(consent);
         verify(consentAssertions).forEach(any(Consumer.class));
-    }
-
-    /**
-     * Test if makeSignedPdfConsent return correct class.
-     */
-    @Test
-    public void testMakeSignedPdfConsent_return_correct_class() {
-        Object object = cst.makeSignedPdfConsent();
-        String className = object.getClass().getName();
-        assertEquals(
-                SignedPDFConsent.class.getName(),
-                className);
     }
 
     /**
@@ -623,25 +639,31 @@ public class ConsentServiceImplTest {
         ConsentService consentService = spy(cst);
         ConsentRevokationPdfDto consentRevokationPdfDto = mock(ConsentRevokationPdfDto.class);
         Consent consent = mock(Consent.class);
-        SignedPDFConsentRevocation signedPDFConsentRevocation = mock(SignedPDFConsentRevocation.class);
+        AttestedConsentRevocation attestedConsentRevocation = mock(AttestedConsentRevocation.class);
         Patient patient = mock(Patient.class);
 
-        when(consentService.makeConsentRevokationPdfDto()).thenReturn(
-                consentRevokationPdfDto);
-        when(consentRepository.findOne(anyLong())).thenReturn(consent);
-        when(consent.getSignedPdfConsentRevoke()).thenReturn(
-                signedPDFConsentRevocation);
-        when(consent.getPatient()).thenReturn(patient);
-        when(patient.getFirstName()).thenReturn("John");
-        when(patient.getLastName()).thenReturn("Doe");
-        when(signedPDFConsentRevocation.getContent()).thenReturn(
-                new byte[]{1, 2, 3});
+        when(consentService.makeConsentRevokationPdfDto())
+                .thenReturn(consentRevokationPdfDto);
+        when(consentRepository.findOne(anyLong()))
+                .thenReturn(consent);
+        when(consent.getAttestedConsentRevocation())
+                .thenReturn(attestedConsentRevocation);
+        when(consent.getPatient())
+                .thenReturn(patient);
+        when(patient.getFirstName())
+                .thenReturn("John");
+        when(patient.getLastName())
+                .thenReturn("Doe");
+        when(consent.getStatus())
+                .thenReturn(ConsentStatus.REVOCATION_REVOKED);
+        when(attestedConsentRevocation.getAttestedPdfConsentRevoke())
+                .thenReturn(new byte[]{1, 2, 3});
 
         consentService.findConsentRevokationPdfDto((long) 1);
+
         verify(consentRevokationPdfDto).setFilename(anyString());
         verify(consentRevokationPdfDto).setConsentName(anyString());
         verify(consentRevokationPdfDto).setId(anyLong());
-
     }
 
     @Test

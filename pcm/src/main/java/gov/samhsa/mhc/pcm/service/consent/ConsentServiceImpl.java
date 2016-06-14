@@ -235,8 +235,10 @@ public class ConsentServiceImpl implements ConsentService {
         } else if (revokationType.equals("NO NEVER")) {
             consent.setConsentRevokationType("NO NEVER");
         }
-        //FIXME: Temporarily added two nulls to the method call to match new method signature until this service is refactored.
-        consent.setUnsignedPdfConsentRevoke(consentRevokationPdfGenerator.generateConsentRevokationPdf(consent, null, null));
+
+        Patient patient = consent.getPatient();
+
+        consent.setUnAttestedPdfConsentRevoke(consentRevokationPdfGenerator.generateUnattestedConsentRevokationPdf(consent, patient));
         consentRepository.save(consent);
     }
 
@@ -376,16 +378,6 @@ public class ConsentServiceImpl implements ConsentService {
     /**
      * Delete consent.
      *
-     * @param consent the consent
-     */
-    @Override
-    public void deleteConsent(Consent consent) {
-        consentRepository.delete(consent);
-    }
-
-    /**
-     * Delete consent.
-     *
      * @param consentId the consent id
      * @return true, if successful
      */
@@ -401,10 +393,8 @@ public class ConsentServiceImpl implements ConsentService {
             return false;
         }
 
-        if (consent.getSignedPdfConsent() != null) {
-            if (consent.getSignedPdfConsent().getSignedPdfConsentContent() != null) {
-                return false;
-            }
+        if (!consent.getStatus().equals(ConsentStatus.CONSENT_SAVED)) {
+            return false;
         }
 
         try {
@@ -829,25 +819,20 @@ public class ConsentServiceImpl implements ConsentService {
     public AbstractPdfDto findConsentContentDto(Long consentId) {
         final Consent consent = findConsent(consentId);
         AbstractPdfDto consentPdfDto;
-        if (consent.getSignedPdfConsent() != null) {
-            if (consent.getSignedPdfConsent().getSignedPdfConsentContent() != null) {
+
+        String consentStatus = consent.getStatus();
+        switch(consentStatus){
+            case ConsentStatus.CONSENT_SAVED:
+            case ConsentStatus.CONSENT_SIGNED:
                 consentPdfDto = findConsentPdfDto(consent.getId());
-            } else {
-                consentPdfDto = findConsentPdfDto(consent.getId());
-            }
-        } else {
-            consentPdfDto = findConsentPdfDto(consent.getId());
+                break;
+            case ConsentStatus.REVOCATION_REVOKED:
+                consentPdfDto = findConsentRevokationPdfDto(consent.getId());
+                break;
+            default:
+                throw new IllegalStateException("The status field of this consent object has an invalid value.");
         }
 
-        if (consent.getSignedPdfConsentRevoke() != null) {
-            if (consent.getSignedPdfConsentRevoke()
-                    .getSignedPdfConsentRevocationContent() != null) {
-                consentPdfDto = findConsentRevokationPdfDto(consent.getId());
-            } else {
-                consentPdfDto = findConsentRevokationPdfDto(consent.getId());
-            }
-
-        }
         return consentPdfDto;
 
     }
@@ -878,16 +863,9 @@ public class ConsentServiceImpl implements ConsentService {
     public ConsentPdfDto findConsentPdfDto(Long consentId) {
         final Consent consent = consentRepository.findOne(consentId);
         final ConsentPdfDto consentPdfDto = makeConsentPdfDto();
-        if (consent.getSignedPdfConsent() != null) {
-            if (consent.getSignedPdfConsent().getSignedPdfConsentContent() != null) {
-                consentPdfDto.setContent(consent.getSignedPdfConsent()
-                        .getSignedPdfConsentContent());
-            } else {
-                consentPdfDto.setContent(consent.getUnsignedPdfConsent());
-            }
+        if (consent.getStatus().equals(ConsentStatus.CONSENT_SIGNED) || consent.getStatus().equals(ConsentStatus.REVOCATION_REVOKED)) {
+                consentPdfDto.setContent(consent.getAttestedConsent().getAttestedPdfConsent());
         } else {
-            // TODO to be removed after refactoring
-            //consentPdfDto.setContent(consent.getUnsignedPdfConsent());
             consentPdfDto.setContent(consent.getUnAttestedPdfConsent());
         }
 
@@ -1020,20 +998,14 @@ public class ConsentServiceImpl implements ConsentService {
     public ConsentRevokationPdfDto findConsentRevokationPdfDto(Long consentId) {
         final Consent consent = consentRepository.findOne(consentId);
         final ConsentRevokationPdfDto consentRevokationPdfDto = makeConsentRevokationPdfDto();
-        if (consent.getSignedPdfConsentRevoke() != null) {
-            if (consent.getSignedPdfConsentRevoke()
-                    .getSignedPdfConsentRevocationContent() != null) {
-                consentRevokationPdfDto.setContent(consent
-                        .getSignedPdfConsentRevoke()
-                        .getSignedPdfConsentRevocationContent());
-            } else {
-                consentRevokationPdfDto.setContent(consent
-                        .getUnsignedPdfConsentRevoke());
-            }
+        final String consentStatus = consent.getStatus();
+
+        if (consentStatus.equals(ConsentStatus.REVOCATION_REVOKED)) {
+            consentRevokationPdfDto.setContent(consent.getAttestedConsentRevocation().getAttestedPdfConsentRevoke());
         } else {
-            consentRevokationPdfDto.setContent(consent
-                    .getUnsignedPdfConsentRevoke());
+            throw new IllegalStateException("The status field of this consent object has an invalid value.");
         }
+
         consentRevokationPdfDto.setFilename(consent.getPatient().getFirstName()
                 + "_" + consent.getPatient().getLastName()
                 + "_ConsentRevokation" + consent.getId() + ".pdf");
@@ -1210,26 +1182,6 @@ public class ConsentServiceImpl implements ConsentService {
     @Override
     public ConsentRevokationPdfDto makeConsentRevokationPdfDto() {
         return new ConsentRevokationPdfDto();
-    }
-
-    /**
-     * Make signed pdf consent.
-     *
-     * @return the signed pdf consent
-     */
-    @Override
-    public SignedPDFConsent makeSignedPdfConsent() {
-        return new SignedPDFConsent();
-    }
-
-    /**
-     * Make signed pdf consent revocation.
-     *
-     * @return the signed pdf consent revocation
-     */
-    @Override
-    public SignedPDFConsentRevocation makeSignedPDFConsentRevocation() {
-        return new SignedPDFConsentRevocation();
     }
 
     /**
@@ -1437,9 +1389,6 @@ public class ConsentServiceImpl implements ConsentService {
                 + patient.getFirstName() + " " + patient.getLastName());
         String terms = consentTermsVersionsService.getEnabledConsentTermsVersion().getConsentTermsText();
 
-        // TODO to be removed after refactoring
-        consent.setUnsignedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, false, null, terms));
-
         consent.setUnAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, false, null, terms));
 
         try {
@@ -1468,83 +1417,6 @@ public class ConsentServiceImpl implements ConsentService {
         }
 
         return consentDto;
-    }
-
-    /**
-     * Sign consent.
-     *
-     * @param consentPdfDto the consent pdf dto
-     * @return true, if successful
-     */
-    @Override
-    public boolean signConsent(ConsentPdfDto consentPdfDto) {
-        final Consent consent = consentRepository
-                .findOne(consentPdfDto.getId());
-        if (consent == null) {
-            return false;
-        }
-        // SignConsent
-        final SignedPDFConsent signedPdfConsent = makeSignedPdfConsent();
-        final Patient patient = consent.getPatient();
-        final String patientEmail = patient.getEmail();
-
-        // Email hard-coded and to be changed
-        //FIXME: NO DOCUMENT ID AFTER REMOVING ECHOSIGN; FIND REPLACEMENT FOR DOCUMENT ID VALUE SOURCE
-        signedPdfConsent.setDocumentId(null);
-        signedPdfConsent
-                .setDocumentNameBySender(consentPdfDto.getConsentName());
-        signedPdfConsent
-                .setDocumentMessageBySender("This is a hard-coded greeting to be replaced. Hi.");
-        signedPdfConsent.setSignerEmail(patientEmail);
-        signedPdfConsent.setDocumentSignedStatus("Unsigned");
-        consent.setSignedPdfConsent(signedPdfConsent);
-        consentRepository.save(consent);
-        return true;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * gov.samhsa.consent2share.service.consent.ConsentService#signConsentRevokation
-     * (gov.samhsa.consent2share.service.dto.ConsentRevokationPdfDto)
-     */
-    @Override
-    public void signConsentRevokation(
-            ConsentRevokationPdfDto consentRevokationPdfDto) {
-        final Consent consent = consentRepository
-                .findOne(consentRevokationPdfDto.getId());
-        // SignConsentRevokation
-        final SignedPDFConsentRevocation signedPDFConsentRevocation = makeSignedPDFConsentRevocation();
-        final Patient patient = consent.getPatient();
-        final String patientEmail = patient.getEmail();
-
-        // TODO:Email and Email message hard-coded and to be changed
-        //FIXME: NO DOCUMENT ID AFTER REMOVING ECHOSIGN; FIND REPLACEMENT FOR DOCUMENT ID VALUE SOURCE
-        signedPDFConsentRevocation.setDocumentId(null);
-        signedPDFConsentRevocation
-                .setDocumentNameBySender(consentRevokationPdfDto
-                        .getConsentName());
-        signedPDFConsentRevocation
-                .setDocumentMessageBySender("This is a hard-coded greeting to be replaced. Hi.");
-        signedPDFConsentRevocation.setSignerEmail("consent2share@gmail.com");
-        signedPDFConsentRevocation.setDocumentSignedStatus("Unsigned");
-        signedPDFConsentRevocation.setDocumentCreatedBy(consent.getPatient()
-                .getLastName() + ", " + consent.getPatient().getFirstName());
-        signedPDFConsentRevocation
-                .setDocumentSentOutForSignatureDateTime(new Date());
-        consent.setConsentRevoked(true);
-        consent.setSignedPdfConsentRevoke(signedPDFConsentRevocation);
-
-        if (consentRevokationPdfDto.getRevokationType()
-                .equals("EMERGENCY ONLY")) {
-            consent.setConsentRevokationType("EMERGENCY ONLY");
-        }
-        if (consentRevokationPdfDto.getRevokationType().equals("NO NEVER")) {
-            consent.setConsentRevokationType("NO NEVER");
-        }
-
-        consentRepository.save(consent);
     }
 
     /**

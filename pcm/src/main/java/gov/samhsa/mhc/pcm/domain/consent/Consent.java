@@ -80,33 +80,10 @@ public class Consent {
 	@Size(max = 250)
 	private String description;
 
-	/** The signed pdf consent. */
-	@OneToOne(cascade = CascadeType.ALL)
-	@Basic(fetch = FetchType.LAZY)
-	private SignedPDFConsent signedPdfConsent;
-
 	/** The reference id. */
 	@NotNull
 	@Column(name = "consent_reference_id")
 	private String consentReferenceId;
-
-	/** The unsigned pdf consent revoke. */
-	@Lob
-	@Basic(fetch = FetchType.LAZY)
-	@NotAudited
-	private byte[] unsignedPdfConsentRevoke;
-
-	/** The signed pdf consent revoke. */
-	@OneToOne(cascade = CascadeType.ALL)
-	@Basic(fetch = FetchType.LAZY)
-	private SignedPDFConsentRevocation signedPdfConsentRevoke;
-
-	/** The unsigned pdf consent. */
-	@NotNull
-	@Lob
-	@Basic(fetch = FetchType.LAZY)
-	@NotAudited
-	private byte[] unsignedPdfConsent;
 
 	/** The exported CDA R2 consent. */
 	@Lob
@@ -156,12 +133,12 @@ public class Consent {
 	@NotAudited
 	private byte[] unAttestedPdfConsentRevoke;
 
-	/** The signed pdf consent. */
+	/** The attested pdf consent. */
 	@OneToOne(cascade = CascadeType.ALL)
 	@Basic(fetch = FetchType.LAZY)
 	private AttestedConsent attestedConsent;
 
-	/** The signed pdf consent. */
+	/** The attested pdf consent revocation. */
 	@OneToOne(cascade = CascadeType.ALL)
 	@Basic(fetch = FetchType.LAZY)
 	private AttestedConsentRevocation attestedConsentRevocation;
@@ -363,46 +340,6 @@ public class Consent {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	/**
-	 * Gets the signed pdf consent.
-	 *
-	 * @return the signed pdf consent
-	 */
-
-	public SignedPDFConsent getSignedPdfConsent() {
-		return this.signedPdfConsent;
-	}
-
-	/**
-	 * Sets the signed pdf consent.
-	 *
-	 * @param signedPdfConsent
-	 *            the new signed pdf consent
-	 */
-	public void setSignedPdfConsent(SignedPDFConsent signedPdfConsent) {
-		this.signedPdfConsent = signedPdfConsent;
-
-	}
-
-	/**
-	 * Gets the unsigned pdf consent.
-	 *
-	 * @return the unsigned pdf consent
-	 */
-	public byte[] getUnsignedPdfConsent() {
-		return this.unsignedPdfConsent;
-	}
-
-	/**
-	 * Sets the unsigned pdf consent.
-	 *
-	 * @param unsignedPdfConsent
-	 *            the new unsigned pdf consent
-	 */
-	public void setUnsignedPdfConsent(byte[] unsignedPdfConsent) {
-		this.unsignedPdfConsent = unsignedPdfConsent;
 	}
 
 	/**
@@ -752,47 +689,7 @@ public class Consent {
 		this.exportedXACMLConsent = exportedXACMLConsent;
 	}
 
-	/**
-	 * Gets the unsigned pdf consent revoke.
-	 *
-	 * @return the unsigned pdf consent revoke
-	 */
-	public byte[] getUnsignedPdfConsentRevoke() {
-		return unsignedPdfConsentRevoke;
-	}
-
-	/**
-	 * Sets the unsigned pdf consent revoke.
-	 *
-	 * @param unsignedPdfConsentRevoke
-	 *            the new unsigned pdf consent revoke
-	 */
-	public void setUnsignedPdfConsentRevoke(byte[] unsignedPdfConsentRevoke) {
-		this.unsignedPdfConsentRevoke = unsignedPdfConsentRevoke;
-	}
-
-	/**
-	 * Gets the signed pdf consent revoke.
-	 *
-	 * @return the signed pdf consent revoke
-	 */
-	public SignedPDFConsentRevocation getSignedPdfConsentRevoke() {
-		return signedPdfConsentRevoke;
-	}
-
-	/**
-	 * Sets the signed pdf consent revoke.
-	 *
-	 * @param signedPdfConsentRevoke
-	 *            the new signed pdf consent revoke
-	 */
-	public void setSignedPdfConsentRevoke(
-			SignedPDFConsentRevocation signedPdfConsentRevoke) {
-		this.signedPdfConsentRevoke = signedPdfConsentRevoke;
-		DomainEventManager.raise(new ConsentRevokeSubmittedEvent(id));
-	}
-
-	/**
+    /**
 	 * Gets the consent revokation type.
 	 *
 	 * @return the consent revokation type
@@ -917,6 +814,7 @@ public class Consent {
 
 	public void setAttestedConsentRevocation(AttestedConsentRevocation attestedConsentRevocation) {
 		this.attestedConsentRevocation = attestedConsentRevocation;
+		DomainEventManager.raise(new ConsentRevokeSubmittedEvent(id));
 	}
 
 	public String getStatus() {

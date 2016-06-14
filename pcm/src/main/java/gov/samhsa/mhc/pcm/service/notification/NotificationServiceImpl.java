@@ -28,6 +28,7 @@ package gov.samhsa.mhc.pcm.service.notification;
 import gov.samhsa.mhc.pcm.domain.consent.Consent;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
 import gov.samhsa.mhc.pcm.domain.patient.PatientRepository;
+import gov.samhsa.mhc.pcm.service.consent.ConsentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,10 +58,7 @@ public class NotificationServiceImpl implements NotificationService {
         int providerscount = patient.getIndividualProviders().size()
                 + patient.getOrganizationalProviders().size();
         int consentscount = patient.getConsents().size();
-        boolean consentReviewStatus = checkConsentReviewStatus(patient
-                .getConsents());
-        boolean consentSignedStatus = checkConsentSignedStatus(patient
-                .getConsents());
+        boolean consentSignedStatus = checkConsentSignedStatus(patient.getConsents());
 
         switch (consentscount) {
             case 0: {
@@ -93,11 +91,8 @@ public class NotificationServiceImpl implements NotificationService {
                     if (notify != null) {
                         if (notify.equals("add"))
                             return "notification_add_consent_successed";
-                    } else if (consentReviewStatus == false)
-                        return "notification_review_sign_consent";
-                    else {
-                        if (consentSignedStatus == false)
-                            return "notification_sign_consent";
+                    } else if (consentSignedStatus == false) {
+                        return "notification_sign_consent";
                     }
                 }
             }
@@ -105,34 +100,14 @@ public class NotificationServiceImpl implements NotificationService {
                 if (providerscount < 2)
                     return "notification_add_provider";
                 else {
-                    if (consentReviewStatus == false)
-                        return "notification_review_sign_consent";
-                    else {
-                        if (consentSignedStatus == false)
-                            return "notification_sign_consent";
+                    if (consentSignedStatus == false) {
+                        return "notification_sign_consent";
                     }
 
                     return null;
                 }
             }
         }
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see gov.samhsa.consent2share.service.notification.NotificationService#
-     * checkConsentReviewStatus(java.util.Set)
-     */
-    @Override
-    public boolean checkConsentReviewStatus(Set<Consent> consents) {
-        if (consents.size() == 0)
-            return false;
-        for (Consent consent : consents) {
-            if (consent.getSignedPdfConsent() != null)
-                return true;
-        }
-        return false;
     }
 
     /*
@@ -146,8 +121,7 @@ public class NotificationServiceImpl implements NotificationService {
         if (consents.size() == 0)
             return false;
         for (Consent consent : consents) {
-            if (consent.getSignedPdfConsent() != null) {
-                if (consent.getSignedPdfConsent().getSignedPdfConsentContent() != null)
+            if (consent.getStatus().equals(ConsentStatus.CONSENT_SIGNED) || consent.getStatus().equals(ConsentStatus.REVOCATION_REVOKED)) {
                     return true;
             }
         }

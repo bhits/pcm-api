@@ -113,4 +113,52 @@ public class ConsentRevokationPdfGeneratorImpl extends
 
         return pdfBytes;
     }
+
+    @Override
+    public byte[] generateUnattestedConsentRevokationPdf(Consent consent, Patient patient) {
+        Assert.notNull(consent, "Consent is required.");
+
+        Document document = new Document();
+
+        ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
+
+        try {
+            PdfWriter.getInstance(document, pdfOutputStream);
+
+            document.open();
+
+            // Title
+            Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.BOLD);
+            document.add(iTextPdfService.createParagraphWithContent("Withdrawal of Consent to Participate in Health Information Exchange", titleFont));
+
+            // Blank line
+            document.add(Chunk.NEWLINE);
+
+            // Consent Created Date
+            document.add(iTextPdfService.createParagraphWithContent("Created On: " + iTextPdfService.formatDate(consent.getCreatedDateTime()), null));
+
+            //consent Reference Number
+            document.add(iTextPdfService.createConsentReferenceNumberTable(consent));
+
+            document.add(new Paragraph(" "));
+
+            //Patient Name and date of birth
+            document.add(iTextPdfService.createPatientNameAndDOBTable(patient.getFirstName(), patient.getLastName(), patient.getBirthDay()));
+
+            document.add(new Paragraph(" "));
+
+            document.add(new Paragraph(consentRevocationTermsVersionsService.findDtoByLatestEnabledVersion().getConsentRevokeTermsText()));
+
+            document.close();
+
+        } catch (Throwable e) {
+            // TODO log exception
+            e.printStackTrace();
+            throw new ConsentPdfGenerationException("Exception when trying to generate pdf", e);
+        }
+
+        byte[] pdfBytes = pdfOutputStream.toByteArray();
+
+        return pdfBytes;
+    }
 }

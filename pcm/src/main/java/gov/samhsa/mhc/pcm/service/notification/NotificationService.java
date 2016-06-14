@@ -47,14 +47,6 @@ public interface NotificationService {
     String notificationStage(String username, String notify);
 
     /**
-     * Check consent review status.
-     *
-     * @param consents the consents
-     * @return true, if successful
-     */
-    boolean checkConsentReviewStatus(Set<Consent> consents);
-
-    /**
      * Check consent signed status.
      *
      * @param consents the consents
