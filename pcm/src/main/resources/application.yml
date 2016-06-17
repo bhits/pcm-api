@@ -92,6 +92,9 @@ mhc:
         api: https://localhost:8443/pls/providers
       pagination:
         itemsPerPage: 10
+      activity:
+        sql:
+          path: activity/PatientActivityHistory.sql
   vss:
     config:
       conceptCodeListPageSize: 20

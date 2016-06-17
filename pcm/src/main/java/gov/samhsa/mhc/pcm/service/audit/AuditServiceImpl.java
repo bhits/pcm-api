@@ -32,6 +32,7 @@ import gov.samhsa.mhc.pcm.domain.audit.RevisionInfoEntityRepository;
 import gov.samhsa.mhc.pcm.domain.consent.Consent;
 import gov.samhsa.mhc.pcm.domain.patient.*;
 import gov.samhsa.mhc.pcm.domain.staff.StaffRepository;
+import gov.samhsa.mhc.pcm.infrastructure.ClasspathSqlScriptProvider;
 import gov.samhsa.mhc.pcm.service.dto.ActivityHistoryListDto;
 import gov.samhsa.mhc.pcm.service.dto.HistoryDto;
 import gov.samhsa.mhc.pcm.service.exception.PatientNotFoundException;
@@ -112,7 +113,11 @@ public class AuditServiceImpl implements AuditService {
     RevisionTypeCodeService revisionTypeCodeService;
 
     @Autowired
+    private ClasspathSqlScriptProvider classpathSqlScriptProvider;
+
+    @Autowired
     private PatientService patientService;
+
 
     public AuditServiceImpl() {
     }
@@ -154,6 +159,10 @@ public class AuditServiceImpl implements AuditService {
     public List<HistoryDto> findAllHistory(String username) {
         // Assert patient should not be null
         assertPatientNotNull(username);
+
+        // How to get the sql string from the sql file.
+        String activityHistorySqlScript = classpathSqlScriptProvider.getSqlScript();
+
 
         Patient patientA = patientRepository.findByUsername(username);
         Long patientId = patientA.getId();

@@ -8,7 +8,10 @@ SELECT
   rtc.display_name AS recType,
   m.entity_class_name AS type
 FROM
-  revinfo r
+  ( SELECT *
+    FROM revinfo
+    LIMIT 10 OFFSET 0
+  ) AS r
     LEFT JOIN
   modified_entity_type_entity m ON r.rev = m.revision
     LEFT JOIN
