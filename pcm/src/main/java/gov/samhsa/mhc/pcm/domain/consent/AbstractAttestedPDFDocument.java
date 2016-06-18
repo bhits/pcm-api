@@ -27,6 +27,7 @@ package gov.samhsa.mhc.pcm.domain.consent;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.envers.Audited;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -34,6 +35,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @MappedSuperclass
+@Audited(withModifiedFlag = true)
 public abstract class AbstractAttestedPDFDocument implements BinaryContentAccessible{
 	@NotNull
 	@Column(name = "consent_reference_id")
