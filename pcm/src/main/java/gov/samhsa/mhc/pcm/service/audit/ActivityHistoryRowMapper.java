@@ -2,6 +2,7 @@ package gov.samhsa.mhc.pcm.service.audit;
 
 import gov.samhsa.mhc.pcm.service.audit.domain.ActivityHistory;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.util.Assert;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,11 +31,8 @@ public class ActivityHistoryRowMapper implements RowMapper<ActivityHistory> {
     }
 
     private String convertTimestampToDateTime(Long revtstmp) {
-        if (revtstmp == 0) {
-            return null;
-        } else {
-            return new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date(revtstmp));
-        }
+        Assert.isTrue(revtstmp > 0, "The value must be greater than zero");
+        return new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date(revtstmp));
     }
 
     private String getFullName(String lastName, String firstName) {

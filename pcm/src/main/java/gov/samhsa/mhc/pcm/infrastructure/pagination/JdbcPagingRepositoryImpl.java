@@ -39,20 +39,30 @@ public class JdbcPagingRepositoryImpl implements JdbcPagingRepository {
 
     @Override
     public <T> Page<T> findAll(Pageable pageable) {
-        SqlRebuilder sqlRebuilder = getSqlRebuilder();
-        SqlFromClause sqlFromClause = getSqlFromClause();
-        String query = sqlRebuilder.selectAll(sqlFromClause, pageable);
-
-        return new PageImpl<>(jdbcOperations.query(query, queryInfoMapping.getRowMapper()), pageable, count(sqlRebuilder, sqlFromClause));
+        Page<T> pages = null;
+        try {
+            SqlRebuilder sqlRebuilder = getSqlRebuilder();
+            SqlFromClause sqlFromClause = getSqlFromClause();
+            String query = sqlRebuilder.selectAll(sqlFromClause, pageable);
+            pages = new PageImpl<>(jdbcOperations.query(query, queryInfoMapping.getRowMapper()), pageable, count(sqlRebuilder, sqlFromClause));
+        } catch (Exception e) {
+            throw new JdbcPagingException(e);
+        }
+        return pages;
     }
 
     @Override
     public <T> Page<T> findAllByArgs(Pageable pageable, Object... args) {
-        SqlRebuilder sqlRebuilder = getSqlRebuilder();
-        SqlFromClause sqlFromClause = getSqlFromClause();
-        String query = sqlRebuilder.selectByIdPageable(sqlFromClause, pageable);
-
-        return new PageImpl<>(jdbcOperations.query(query, queryInfoMapping.getRowMapper(), args), pageable, countByArgs(sqlRebuilder, sqlFromClause, args[0]));
+        Page<T> pages = null;
+        try {
+            SqlRebuilder sqlRebuilder = getSqlRebuilder();
+            SqlFromClause sqlFromClause = getSqlFromClause();
+            String query = sqlRebuilder.selectByIdPageable(sqlFromClause, pageable);
+            pages = new PageImpl<>(jdbcOperations.query(query, queryInfoMapping.getRowMapper(), args), pageable, countByArgs(sqlRebuilder, sqlFromClause, args[0]));
+        } catch (Exception e) {
+            throw new JdbcPagingException(e);
+        }
+        return pages;
     }
 
     private long count(SqlRebuilder sqlRebuilder, SqlFromClause sqlFromClause) {

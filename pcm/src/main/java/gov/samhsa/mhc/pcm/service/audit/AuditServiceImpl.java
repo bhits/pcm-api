@@ -32,6 +32,7 @@ import gov.samhsa.mhc.pcm.domain.audit.RevisionInfoEntityRepository;
 import gov.samhsa.mhc.pcm.domain.consent.Consent;
 import gov.samhsa.mhc.pcm.domain.patient.*;
 import gov.samhsa.mhc.pcm.domain.staff.StaffRepository;
+import gov.samhsa.mhc.pcm.infrastructure.pagination.JdbcPagingException;
 import gov.samhsa.mhc.pcm.infrastructure.pagination.JdbcPagingRepository;
 import gov.samhsa.mhc.pcm.service.audit.domain.ActivityHistory;
 import gov.samhsa.mhc.pcm.service.dto.ActivityHistoryListDto;
@@ -201,6 +202,9 @@ public class AuditServiceImpl implements AuditService {
             activityHistoryListDto.setTotalPages(pages.getTotalPages());
             activityHistoryListDto.setItemsPerPage(pages.getSize());
             return activityHistoryListDto;
+        } catch (JdbcPagingException pageException){
+            logger.error(pageException.getMessage());
+            throw pageException;
         } catch (Exception e) {
             logger.error("View activity history failed: " + e.getMessage());
             throw new ViewActivitiesException();
