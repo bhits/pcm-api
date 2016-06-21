@@ -1,17 +1,13 @@
 SELECT
-  m.id AS activityId,
-  r.rev AS revisionid,
+  m.id AS activity_id,
+  r.rev AS revision_id,
   r.revtstmp AS timestamp,
-  r.username AS changedBy,
-  pa.first_name AS firstName,
-  pa.last_name AS lastName,
-  rtc.display_name AS recType,
+  pa.first_name AS first_name,
+  pa.last_name AS last_name,
+  rtc.display_name AS rec_type,
   m.entity_class_name AS type
 FROM
-  ( SELECT *
-    FROM revinfo
-    LIMIT 10 OFFSET 0
-  ) AS r
+  revinfo AS r
     LEFT JOIN
   modified_entity_type_entity m ON r.rev = m.revision
     LEFT JOIN
