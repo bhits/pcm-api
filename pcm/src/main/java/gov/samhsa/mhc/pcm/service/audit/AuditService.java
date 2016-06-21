@@ -1,17 +1,17 @@
 /*******************************************************************************
  * Open Behavioral Health Information Technology Architecture (OBHITA.org)
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the <organization> nor the
- *       names of its contributors may be used to endorse or promote products
- *       derived from this software without specific prior written permission.
- * 
+ * * Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ * * Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
+ * * Neither the name of the <organization> nor the
+ * names of its contributors may be used to endorse or promote products
+ * derived from this software without specific prior written permission.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,11 +25,7 @@
  ******************************************************************************/
 package gov.samhsa.mhc.pcm.service.audit;
 
-import gov.samhsa.mhc.pcm.domain.audit.ModifiedEntityTypeEntity;
 import gov.samhsa.mhc.pcm.service.dto.ActivityHistoryListDto;
-import gov.samhsa.mhc.pcm.service.dto.HistoryDto;
-
-import java.util.List;
 
 /**
  * The Interface AuditService.
@@ -37,100 +33,11 @@ import java.util.List;
 
 public interface AuditService {
 
-	/**
-	 * Find all history.
-	 *
-	 * @param username the username
-	 * @return the list
-	 */
-	List<HistoryDto> findAllHistory(String username);
-
-	/**
-	 * Pageable Find all Activity History
-	 * @param username
-	 * @param pageNumber
+    /**
+     * Pageable Find all Activity History
+     * @param username
+     * @param pageNumber
      * @return
      */
-	ActivityHistoryListDto findAllActivityHistoryPageable(String username, int pageNumber);
-
-	/**
-	 * Gets the reversed.
-	 *
-	 * @param original the original
-	 * @return the reversed
-	 */
-	List<HistoryDto> getReversed(List<HistoryDto> original);
-
-	/**
-	 * Find history detail.
-	 *
-	 * @param n the n
-	 * @return the history dto
-	 */
-	HistoryDto findHistoryDetail(Number n);
-
-	/**
-	 * Find history details.
-	 *
-	 * @param revisions the revisions
-	 * @return the list
-	 */
-	List<HistoryDto> findHistoryDetails(List<Number> revisions);
-
-	/**
-	 * Make history dtos.
-	 *
-	 * @return the list
-	 */
-	List<HistoryDto> makeHistoryDtos();
-
-	/**
-	 * Make history dto.
-	 *
-	 * @return the history dto
-	 */
-	HistoryDto makeHistoryDto();
-
-	/**
-	 * Find legal history by patient.
-	 *
-	 * @param patientId the patient id
-	 * @return the list
-	 */
-	List<HistoryDto> findLegalHistoryByPatient(long patientId);
-
-	/**
-	 * Find legal history details.
-	 *
-	 * @param revisions the revisions
-	 * @return the list
-	 */
-	List<HistoryDto> findLegalHistoryDetails(List<Number> revisions);
-
-	/**
-	 * Find legal history detail.
-	 *
-	 * @param n the n
-	 * @return the history dto
-	 */
-	HistoryDto findLegalHistoryDetail(Number n);
-
-	/**
-	 * Find rev type.
-	 *
-	 * @param modifiedEntityTypeEntitys the modified entity type entitys
-	 * @return the string
-	 */
-	String findRevType(List<ModifiedEntityTypeEntity> modifiedEntityTypeEntitys);
-
-
-	/**
-	 * Find rev class name.
-	 *
-	 * @param modifiedEntityTypeEntitys the modified entity type entitys
-	 * @return the string
-	 */
-	String findRevClassName(
-			List<ModifiedEntityTypeEntity> modifiedEntityTypeEntitys);
-
+    ActivityHistoryListDto findAllActivityHistoryPageable(String username, int pageNumber);
 }

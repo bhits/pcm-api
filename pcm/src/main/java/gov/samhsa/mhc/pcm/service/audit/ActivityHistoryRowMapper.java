@@ -14,16 +14,23 @@ import java.util.Date;
  */
 public class ActivityHistoryRowMapper implements RowMapper<ActivityHistory> {
 
+    private static final String ACTIVITY_ID = "activity_id";
+    private static final String REVISION_ID = "revision_id";
+    private static final String TIMESTAMP = "timestamp";
+    private static final String USERNAME = "username";
+    private static final String REC_TYPE = "rec_type";
+    private static final String TYPE = "type";
+
     @Override
     public ActivityHistory mapRow(ResultSet rs, int rowNum) throws SQLException {
         ActivityHistory activityHistory = new ActivityHistory();
 
-        activityHistory.setId(rs.getLong("activity_id"));
-        activityHistory.setRevisionid(rs.getLong("revision_id"));
-        activityHistory.setChangedDateTime(convertTimestampToDateTime(rs.getLong("timestamp")));
-        activityHistory.setChangedBy(rs.getString("username"));
-        activityHistory.setRecType(rs.getString("rec_type"));
-        activityHistory.setType(rs.getString("type"));
+        activityHistory.setId(rs.getLong(ACTIVITY_ID));
+        activityHistory.setRevisionid(rs.getLong(REVISION_ID));
+        activityHistory.setChangedDateTime(convertTimestampToDateTime(rs.getLong(TIMESTAMP)));
+        activityHistory.setChangedBy(rs.getString(USERNAME));
+        activityHistory.setRecType(rs.getString(REC_TYPE));
+        activityHistory.setType(rs.getString(TYPE));
 
         return activityHistory;
     }
