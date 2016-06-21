@@ -32,11 +32,6 @@ public class ActivityHistory implements Persistable<Long> {
     private String changedBy;
 
     /**
-     * The patient first name
-     */
-    private String userName;
-
-    /**
      * The rec type.
      */
     private String recType;
@@ -49,13 +44,13 @@ public class ActivityHistory implements Persistable<Long> {
     public ActivityHistory() {
     }
 
-    public ActivityHistory(Long id, String changedDateTime, String changedBy, String type, String recType, Long revisionid) {
+    public ActivityHistory(Long id, Long revisionid, String changedBy, String recType, String type, String changedDateTime) {
         this.id = id;
-        this.changedDateTime = changedDateTime;
-        this.changedBy = changedBy;
-        this.type = type;
-        this.recType = recType;
         this.revisionid = revisionid;
+        this.changedBy = changedBy;
+        this.recType = recType;
+        this.type = type;
+        this.changedDateTime = changedDateTime;
     }
 
     @Override
@@ -89,14 +84,6 @@ public class ActivityHistory implements Persistable<Long> {
 
     public void setChangedBy(String changedBy) {
         this.changedBy = changedBy;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getRecType() {

@@ -191,6 +191,14 @@ public class AuditServiceImpl implements AuditService {
 
             if (pages != null) {
                 activityHistoryDtoList = activityHistoryToHistoryDtoList(pages.getContent());
+                activityHistoryDtoList
+                        .stream()
+                        .forEach(
+                                a -> {
+                                    a.setChangedBy(getFullName(a.getChangedBy()));
+                                    a.setType(convertRevClassNameToType(a.getType()));
+                                });
+
             } else {
                 logger.error("No pages found for current page: " + pageNumber);
             }
@@ -202,7 +210,7 @@ public class AuditServiceImpl implements AuditService {
             activityHistoryListDto.setTotalPages(pages.getTotalPages());
             activityHistoryListDto.setItemsPerPage(pages.getSize());
             return activityHistoryListDto;
-        } catch (JdbcPagingException pageException){
+        } catch (JdbcPagingException pageException) {
             logger.error(pageException.getMessage());
             throw pageException;
         } catch (Exception e) {
@@ -639,5 +647,26 @@ public class AuditServiceImpl implements AuditService {
             historyDtoList.add(historyDto);
         }
         return historyDtoList;
+    }
+
+    private String getFullName(String userName) {
+        Patient patient = patientRepository.findByUsername(userName);
+        return patient.getLastName().concat(", ").concat(patient.getFirstName());
+    }
+
+    private String convertRevClassNameToType(String revClassName) {
+        String type = revClassName
+                .substring(revClassName.lastIndexOf('.') + 1).trim()
+                .replaceAll("(\\p{Ll})(\\p{Lu})", "$1 $2");
+
+        Set<String> providerType = new HashSet<>();
+        providerType.add("Individual Provider");
+        providerType.add("Organizational Provider");
+
+        if (providerType.contains(type)) {
+            return "Add provider";
+        } else {
+            return type;
+        }
     }
 }
