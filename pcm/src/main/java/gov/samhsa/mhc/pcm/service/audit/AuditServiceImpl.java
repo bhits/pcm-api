@@ -32,7 +32,8 @@ import gov.samhsa.mhc.pcm.domain.audit.RevisionInfoEntityRepository;
 import gov.samhsa.mhc.pcm.domain.consent.Consent;
 import gov.samhsa.mhc.pcm.domain.patient.*;
 import gov.samhsa.mhc.pcm.domain.staff.StaffRepository;
-import gov.samhsa.mhc.pcm.infrastructure.ClasspathSqlScriptProvider;
+import gov.samhsa.mhc.pcm.infrastructure.pagination.JdbcPagingRepository;
+import gov.samhsa.mhc.pcm.service.audit.domain.ActivityHistory;
 import gov.samhsa.mhc.pcm.service.dto.ActivityHistoryListDto;
 import gov.samhsa.mhc.pcm.service.dto.HistoryDto;
 import gov.samhsa.mhc.pcm.service.exception.PatientNotFoundException;
@@ -43,13 +44,14 @@ import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,9 +66,6 @@ import java.util.*;
 @Transactional
 @Service
 public class AuditServiceImpl implements AuditService {
-
-    @Value("${mhc.pcm.config.pagination.itemsPerPage}")
-    private int itemsPerPage;
 
     /**
      * The logger.
@@ -113,11 +112,16 @@ public class AuditServiceImpl implements AuditService {
     RevisionTypeCodeService revisionTypeCodeService;
 
     @Autowired
-    private ClasspathSqlScriptProvider classpathSqlScriptProvider;
-
-    @Autowired
     private PatientService patientService;
 
+    @Autowired
+    private JdbcPagingRepository jdbcPagingRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Value("${mhc.pcm.config.pagination.itemsPerPage}")
+    private int itemsPerPage;
 
     public AuditServiceImpl() {
     }
@@ -160,10 +164,6 @@ public class AuditServiceImpl implements AuditService {
         // Assert patient should not be null
         assertPatientNotNull(username);
 
-        // How to get the sql string from the sql file.
-        String activityHistorySqlScript = classpathSqlScriptProvider.getSqlScript();
-
-
         Patient patientA = patientRepository.findByUsername(username);
         Long patientId = patientA.getId();
 
@@ -183,21 +183,19 @@ public class AuditServiceImpl implements AuditService {
     @Override
     public ActivityHistoryListDto findAllActivityHistoryPageable(String username, int pageNumber) {
         try {
-            //TODO Refactor to resolve memory issue
-            /*Convert activityHistory List to Page*/
-            List<HistoryDto> activityHistoryList = findAllHistory(username);
-            PageRequest pageable = new PageRequest(pageNumber, itemsPerPage);
-            int startIndex = pageable.getOffset();
-            int endIndex = (startIndex + pageable.getPageSize()) > activityHistoryList.size() ? activityHistoryList.size() : (startIndex + pageable.getPageSize());
-            List<HistoryDto> customList = Collections.emptyList();
-            if (startIndex < endIndex) {
-                customList = activityHistoryList.subList(startIndex, endIndex);
+            List<HistoryDto> activityHistoryDtoList = new ArrayList<>();
+            PageRequest pageable = new PageRequest(pageNumber, itemsPerPage, Sort.Direction.DESC, "activity_id");
+            //TODO: Ensure args must belong to T
+            Page<ActivityHistory> pages = jdbcPagingRepository.findAllByArgs(pageable, username);
+
+            if (pages != null) {
+                activityHistoryDtoList = activityHistoryToHistoryDtoList(pages.getContent());
+            } else {
+                logger.error("No pages found for current page: " + pageNumber);
             }
 
-            Page<HistoryDto> pages = new PageImpl<>(customList, pageable, activityHistoryList.size());
-
             ActivityHistoryListDto activityHistoryListDto = new ActivityHistoryListDto();
-            activityHistoryListDto.setHistoryDtoList(pages.getContent());
+            activityHistoryListDto.setHistoryDtoList(activityHistoryDtoList);
             activityHistoryListDto.setCurrentPage(pages.getNumber());
             activityHistoryListDto.setTotalItems(pages.getTotalElements());
             activityHistoryListDto.setTotalPages(pages.getTotalPages());
@@ -297,7 +295,7 @@ public class AuditServiceImpl implements AuditService {
         Long timestamp = patientRevisionEntity.getTimestamp();
         String revdate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(timestamp);
 
-        hd.setTimestamp(revdate);
+        hd.setChangedDateTime(revdate);
 
         String revtp = findRevType(modifiedEntityTypeEntitys);
         String entityClassname = findRevClassName(modifiedEntityTypeEntitys);
@@ -340,7 +338,7 @@ public class AuditServiceImpl implements AuditService {
 
             HistoryDto historyDto = new HistoryDto();
             historyDto.setRevisionid(rif.getId());
-            historyDto.setTimestamp(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
+            historyDto.setChangedDateTime(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
                     .format(rif.getTimestamp()));
             historyDto.setRecType("Changed entry");
             historyDto.setType("Signed PDF Consent Revokation");
@@ -382,7 +380,7 @@ public class AuditServiceImpl implements AuditService {
 
             HistoryDto historyDto = new HistoryDto();
             historyDto.setRevisionid(rif.getId());
-            historyDto.setTimestamp(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
+            historyDto.setChangedDateTime(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
                     .format(rif.getTimestamp()));
             historyDto.setRecType("Changed entry");
             historyDto.setType("Signed PDF Consent");
@@ -612,7 +610,7 @@ public class AuditServiceImpl implements AuditService {
         String revdate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
                 .format(timestamp);
 
-        hd.setTimestamp(revdate);
+        hd.setChangedDateTime(revdate);
 
         Byte bt = modifiedEntityTypeEntitys.get(0).getRevisionType();
 
@@ -628,5 +626,14 @@ public class AuditServiceImpl implements AuditService {
         if (patientService.findIdByUsername(name) == null) {
             throw new PatientNotFoundException("No patient record found for patient name: " + name);
         }
+    }
+
+    private List<HistoryDto> activityHistoryToHistoryDtoList(List<ActivityHistory> listOfActivityHistory) {
+        List<HistoryDto> historyDtoList = new ArrayList<>();
+        for (ActivityHistory activityHistory : listOfActivityHistory) {
+            HistoryDto historyDto = modelMapper.map(activityHistory, HistoryDto.class);
+            historyDtoList.add(historyDto);
+        }
+        return historyDtoList;
     }
 }
