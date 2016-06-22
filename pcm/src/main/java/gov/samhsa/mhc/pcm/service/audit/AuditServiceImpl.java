@@ -46,9 +46,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * The Class AuditServiceImpl.
@@ -107,6 +105,7 @@ public class AuditServiceImpl implements AuditService {
                         .forEach(
                                 a -> {
                                     a.setChangedBy(getFullName(a.getChangedBy()));
+                                    a.setRecType(convertAttestedConsentRevType(a.getRecType(), convertRevClassNameToType(a.getType())));
                                     a.setType(convertRevClassNameToType(a.getType()));
                                 });
 
@@ -155,14 +154,28 @@ public class AuditServiceImpl implements AuditService {
                 .substring(revClassName.lastIndexOf('.') + 1).trim()
                 .replaceAll("(\\p{Ll})(\\p{Lu})", "$1 $2");
 
-        Set<String> providerType = new HashSet<>();
-        providerType.add("Individual Provider");
-        providerType.add("Organizational Provider");
-
-        if (providerType.contains(type)) {
-            return "Add provider";
-        } else {
-            return type;
+        switch (type) {
+            case "Individual Provider":
+            case "Organizational Provider":
+                type = "Add provider";
+                break;
+            default:
+                return type;
         }
+        return type;
+    }
+
+    private String convertAttestedConsentRevType(String revType, String type) {
+        switch (type) {
+            case "Attested Consent":
+                type = "Sign entry";
+                break;
+            case "Attested Consent Revocation":
+                type = "Revoke entry";
+                break;
+            default:
+                return revType;
+        }
+        return type;
     }
 }
