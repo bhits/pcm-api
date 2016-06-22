@@ -203,6 +203,7 @@ public class ConsentServiceImpl implements ConsentService {
     @Autowired
     private DocumentAccessor documentAccessor;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     private PhrService phrService;
 
@@ -912,15 +913,19 @@ public class ConsentServiceImpl implements ConsentService {
 
 
     @Override
-    public void attestConsent(Long consentId) {
+    public void attestConsent(AttestationDto attestationDto) {
+        Long consentId = attestationDto.getConsentId();
+        String attesterIdAddress = attestationDto.getAttesterIpAddress();
+
         final Consent consent = consentRepository.findOne(consentId);
         //Updating the patient data with data from phr api
         PatientDto patientDto = phrService.getPatientProfile();
 
-        if (consent != null && consent.getAttestedConsent() == null && patientDto!= null ) {
+        if (consent != null && consent.getAttestedConsent() == null && patientDto!= null && consentId != null && attesterIdAddress != null) {
             patientService.updatePatientFromPHR(patientDto);
             Patient patient = patientRepository.findByUsername(patientDto.getEmail());
 
+            // TODO: Refactor this code block so that the attester fields are populated with the data fro the currently logged in user from UAA instead of the patient from PHR/PCM
             AttestedConsent attestedConsent =  new AttestedConsent();
             ConsentTermsVersions consentTerms = consentTermsVersionsService.getEnabledConsentTermsVersion();
             attestedConsent.setConsentTermsVersions(consentTerms);
@@ -929,6 +934,7 @@ public class ConsentServiceImpl implements ConsentService {
             // Middle name not available in Patient entity to be updated
             attestedConsent.setAttesterMiddleName("");
             attestedConsent.setAttesterFirstName(patient.getFirstName());
+            attestedConsent.setAttesterIpAddress(attesterIdAddress);
 
             Date attestedOn = new Date();
             attestedConsent.setAttestedDateTime(attestedOn);
@@ -936,6 +942,8 @@ public class ConsentServiceImpl implements ConsentService {
             attestedConsent.setConsentTermsAccepted(true);
             attestedConsent.setAttesterByUser(patient.getEmail());
             attestedConsent.setConsentReferenceId(consent.getConsentReferenceId());
+
+            attestedConsent.setPatientGuid(consent.getPatient().getMedicalRecordNumber());
 
             String term = consentTerms.getConsentTermsText();
             attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, true, attestedOn, term));
@@ -951,15 +959,19 @@ public class ConsentServiceImpl implements ConsentService {
     }
 
     @Override
-    public void attestConsentRevocation(Long consentId) {
+    public void attestConsentRevocation(AttestationDto attestationDto) {
+        Long consentId = attestationDto.getConsentId();
+        String attesterIdAddress = attestationDto.getAttesterIpAddress();
+
         final Consent consent = consentRepository.findOne(consentId);
         //Updating the patient data with data from phr api
         PatientDto patientDto = phrService.getPatientProfile();
 
-        if (consent != null && consent.getAttestedConsentRevocation()== null && patientDto!= null ) {
+        if (consent != null && consent.getAttestedConsentRevocation()== null && patientDto!= null && consentId != null && attesterIdAddress != null) {
             patientService.updatePatientFromPHR(patientDto);
             Patient patient = patientRepository.findByUsername(patientDto.getEmail());
 
+            // TODO: Refactor this code block so that the attester fields are populated with the data fro the currently logged in user from UAA instead of the patient from PHR/PCM
             AttestedConsentRevocation attestedConsentRevocation =  new AttestedConsentRevocation();
             attestedConsentRevocation.setConsentRevocationTermsVersions(consentRevocationTermsVersionsService.findByLatestEnabledVersion());
             attestedConsentRevocation.setAttesterEmail(patient.getEmail());
@@ -967,6 +979,7 @@ public class ConsentServiceImpl implements ConsentService {
             // Middle name not available in Patient entity to be updated
             attestedConsentRevocation.setAttesterMiddleName("");
             attestedConsentRevocation.setAttesterFirstName(patient.getFirstName());
+            attestedConsentRevocation.setAttesterIpAddress(attesterIdAddress);
 
             Date revokedOn = new Date();
             attestedConsentRevocation.setAttestedDateTime(revokedOn);
@@ -974,6 +987,8 @@ public class ConsentServiceImpl implements ConsentService {
             attestedConsentRevocation.setConsentRevokeTermsAccepted(true);
             attestedConsentRevocation.setAttesterByUser(patient.getEmail());
             attestedConsentRevocation.setConsentReferenceId(consent.getConsentReferenceId());
+
+            attestedConsentRevocation.setPatientGuid(consent.getPatient().getMedicalRecordNumber());
 
             attestedConsentRevocation.setAttestedPdfConsentRevoke(consentRevokationPdfGenerator.generateConsentRevokationPdf(consent, patient, revokedOn));
 

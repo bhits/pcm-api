@@ -384,26 +384,38 @@ public class ConsentRestController {
     }
 
     @RequestMapping(value = "consents/{consentId}/revocation", method = RequestMethod.POST)
-    public void completeConsentRevocation(Principal principal, @RequestBody RevocationDto revocationDto) throws ConsentGenException {
+    public void completeConsentRevocation(Principal principal, @RequestBody RevocationDto revocationDto, @RequestHeader(value = "X-Forwarded-For") String xForwardedFor) throws ConsentGenException {
+        AttestationDto attestationDto = new AttestationDto();
+
         final Long patientId = patientService.findIdByUsername(principal.getName());
         Long consentId = revocationDto.getConsentId();
         boolean acceptTerms = revocationDto.isAcceptTerms();
+
+        attestationDto.setConsentId(consentId);
+        attestationDto.setAttesterIpAddress(xForwardedFor);
+
         //TODO: Move check for consent belonging to this user and consent signed stage to service
         if (consentId != null && acceptTerms && consentService.isConsentBelongToThisUser(consentId, patientId) && consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SIGNED) ){
-            consentService.attestConsentRevocation(consentId);
+            consentService.attestConsentRevocation(attestationDto);
         } else
             throw new InternalServerErrorException("Resource Not Found");
     }
 
     @RequestMapping(value = "consents/{consentId}/attested", method = RequestMethod.POST)
-    public void completeConsentAttestation(Principal principal, @RequestBody AttestedDto attestedDto) throws ConsentGenException {
+    public void completeConsentAttestation(Principal principal, @RequestBody AttestedDto attestedDto, @RequestHeader("X-Forwarded-For") String xForwardedFor) throws ConsentGenException {
+        AttestationDto attestationDto = new AttestationDto();
+
         final Long patientId = patientService.findIdByUsername(principal.getName());
         Long consentId = attestedDto.getConsentId();
         boolean acceptTerms = attestedDto.isAcceptTerms();
+
+        attestationDto.setConsentId(consentId);
+        attestationDto.setAttesterIpAddress(xForwardedFor);
+
         //TODO: Move check for consent belonging to this user and consent signed stage to service
         if (consentId != null && acceptTerms && consentService.isConsentBelongToThisUser(consentId, patientId)
                 && consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SAVED)) {
-            consentService.attestConsent(consentId);
+            consentService.attestConsent(attestationDto);
         } else
             throw new InternalServerErrorException("Resource Not Found");
     }
