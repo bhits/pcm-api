@@ -69,6 +69,10 @@ public abstract class AbstractAttestedPDFDocument implements BinaryContentAccess
     @Column(name = "patient_guid")
     private String patientGuid;
 
+    @Column(name = "attester_ip_address")
+    private String attesterIpAddress;
+
+
 	public String getConsentReferenceId() {
 		return consentReferenceId;
 	}
@@ -131,5 +135,13 @@ public abstract class AbstractAttestedPDFDocument implements BinaryContentAccess
 
     public void setPatientGuid(String patientGuid) {
         this.patientGuid = patientGuid;
+    }
+
+    public String getAttesterIpAddress() {
+        return attesterIpAddress;
+    }
+
+    public void setAttesterIpAddress(String attesterIpAddress) {
+        this.attesterIpAddress = attesterIpAddress;
     }
 }

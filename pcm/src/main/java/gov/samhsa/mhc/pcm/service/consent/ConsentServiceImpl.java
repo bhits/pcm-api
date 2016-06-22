@@ -203,6 +203,7 @@ public class ConsentServiceImpl implements ConsentService {
     @Autowired
     private DocumentAccessor documentAccessor;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     private PhrService phrService;
 
@@ -912,12 +913,15 @@ public class ConsentServiceImpl implements ConsentService {
 
 
     @Override
-    public void attestConsent(Long consentId) {
+    public void attestConsent(AttestationDto attestationDto) {
+        Long consentId = attestationDto.getConsentId();
+        String attesterIdAddress = attestationDto.getAttesterIpAddress();
+
         final Consent consent = consentRepository.findOne(consentId);
         //Updating the patient data with data from phr api
         PatientDto patientDto = phrService.getPatientProfile();
 
-        if (consent != null && consent.getAttestedConsent() == null && patientDto!= null ) {
+        if (consent != null && consent.getAttestedConsent() == null && patientDto!= null && consentId != null && attesterIdAddress != null) {
             patientService.updatePatientFromPHR(patientDto);
             Patient patient = patientRepository.findByUsername(patientDto.getEmail());
 
@@ -930,6 +934,7 @@ public class ConsentServiceImpl implements ConsentService {
             // Middle name not available in Patient entity to be updated
             attestedConsent.setAttesterMiddleName("");
             attestedConsent.setAttesterFirstName(patient.getFirstName());
+            attestedConsent.setAttesterIpAddress(attesterIdAddress);
 
             Date attestedOn = new Date();
             attestedConsent.setAttestedDateTime(attestedOn);
@@ -954,12 +959,15 @@ public class ConsentServiceImpl implements ConsentService {
     }
 
     @Override
-    public void attestConsentRevocation(Long consentId) {
+    public void attestConsentRevocation(AttestationDto attestationDto) {
+        Long consentId = attestationDto.getConsentId();
+        String attesterIdAddress = attestationDto.getAttesterIpAddress();
+
         final Consent consent = consentRepository.findOne(consentId);
         //Updating the patient data with data from phr api
         PatientDto patientDto = phrService.getPatientProfile();
 
-        if (consent != null && consent.getAttestedConsentRevocation()== null && patientDto!= null ) {
+        if (consent != null && consent.getAttestedConsentRevocation()== null && patientDto!= null && consentId != null && attesterIdAddress != null) {
             patientService.updatePatientFromPHR(patientDto);
             Patient patient = patientRepository.findByUsername(patientDto.getEmail());
 
@@ -971,6 +979,7 @@ public class ConsentServiceImpl implements ConsentService {
             // Middle name not available in Patient entity to be updated
             attestedConsentRevocation.setAttesterMiddleName("");
             attestedConsentRevocation.setAttesterFirstName(patient.getFirstName());
+            attestedConsentRevocation.setAttesterIpAddress(attesterIdAddress);
 
             Date revokedOn = new Date();
             attestedConsentRevocation.setAttestedDateTime(revokedOn);

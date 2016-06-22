@@ -112,19 +112,17 @@ public interface ConsentService {
     /**
      * Create the attested consent.
      *
-     * @param consentId the consent id
-     * @return the consent pdf dto
+     * @param attestationDto the consent id and attester's IP address
      */
-    void attestConsent(Long consentId);
+    void attestConsent(AttestationDto attestationDto);
 
 
     /**
      * Create the attested consent revocation.
      *
-     * @param consentId the consent id
-     * @return the consent pdf dto
+     * @param attestationDto the consent id and attester's IP address
      */
-    void attestConsentRevocation(Long consentId);
+    void attestConsentRevocation(AttestationDto attestationDto);
 
 
     /**
