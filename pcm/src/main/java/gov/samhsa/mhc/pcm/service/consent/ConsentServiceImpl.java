@@ -928,7 +928,7 @@ public class ConsentServiceImpl implements ConsentService {
             attestedConsent.setAttesterEmail(patient.getEmail());
             attestedConsent.setAttesterLastName(patient.getLastName());
             // Middle name not available in Patient entity to be updated
-            attestedConsent.setAttesterMiddleName("");
+            attestedConsent.setAttesterMiddleName(null);
             attestedConsent.setAttesterFirstName(patient.getFirstName());
 
             Date attestedOn = new Date();
@@ -969,7 +969,7 @@ public class ConsentServiceImpl implements ConsentService {
             attestedConsentRevocation.setAttesterEmail(patient.getEmail());
             attestedConsentRevocation.setAttesterLastName(patient.getLastName());
             // Middle name not available in Patient entity to be updated
-            attestedConsentRevocation.setAttesterMiddleName("");
+            attestedConsentRevocation.setAttesterMiddleName(null);
             attestedConsentRevocation.setAttesterFirstName(patient.getFirstName());
 
             Date revokedOn = new Date();
@@ -1410,6 +1410,8 @@ public class ConsentServiceImpl implements ConsentService {
 
             consent.setXacmlPdfConsentTo(consentExportService
                     .exportConsent2XacmlPdfConsentTo(consent).getBytes());
+
+            consent.setExportedCDAR2Consent(consentExportService.exportConsent2CDAR2ConsentDirective(consent).getBytes());
 
         } catch (final ConsentGenException e) {
             logger.error("Error in saving consent in xacml format", e);

@@ -462,10 +462,9 @@ public class ConsentRestController {
     }
 
     @RequestMapping(value = "consents/exportConsentDirective/{consentId}", method = RequestMethod.GET)
-    public Map exportConsentDirective(HttpServletRequest request, Principal principal, @PathVariable("consentId") Long consentId) {
+    public Map<String, String>  exportConsentDirective(HttpServletRequest request, Principal principal, @PathVariable("consentId") Long consentId) {
         final Long patientId = patientService.findIdByUsername(principal.getName());
-        if (consentService
-                .isConsentBelongToThisUser(consentId, patientId)) {
+        if (consentService.isConsentBelongToThisUser(consentId, patientId)) {
             final byte[] consentDirective = consentService.getConsentDirective(consentId);
 
             eventService.raiseSecurityEvent(new FileDownloadedEvent(
