@@ -35,7 +35,7 @@ import javax.persistence.*;
  * The Class SignedPDFConsent.
  */
 @Entity
-@Audited(withModifiedFlag = true)
+@Audited
 @Table(name = "attested_consent")
 public class AttestedConsent extends AbstractAttestedPDFDocument{
 

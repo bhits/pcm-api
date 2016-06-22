@@ -921,7 +921,6 @@ public class ConsentServiceImpl implements ConsentService {
             patientService.updatePatientFromPHR(patientDto);
             Patient patient = patientRepository.findByUsername(patientDto.getEmail());
 
-            // TODO: Refactor this code block so that the attester fields are populated with the data fro the currently logged in user from UAA instead of the patient from PHR/PCM
             AttestedConsent attestedConsent =  new AttestedConsent();
             ConsentTermsVersions consentTerms = consentTermsVersionsService.getEnabledConsentTermsVersion();
             attestedConsent.setConsentTermsVersions(consentTerms);
@@ -937,8 +936,6 @@ public class ConsentServiceImpl implements ConsentService {
             attestedConsent.setConsentTermsAccepted(true);
             attestedConsent.setAttesterByUser(patient.getEmail());
             attestedConsent.setConsentReferenceId(consent.getConsentReferenceId());
-
-            attestedConsent.setPatientGuid(consent.getPatient().getMedicalRecordNumber());
 
             String term = consentTerms.getConsentTermsText();
             attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, true, attestedOn, term));
@@ -963,7 +960,6 @@ public class ConsentServiceImpl implements ConsentService {
             patientService.updatePatientFromPHR(patientDto);
             Patient patient = patientRepository.findByUsername(patientDto.getEmail());
 
-            // TODO: Refactor this code block so that the attester fields are populated with the data fro the currently logged in user from UAA instead of the patient from PHR/PCM
             AttestedConsentRevocation attestedConsentRevocation =  new AttestedConsentRevocation();
             attestedConsentRevocation.setConsentRevocationTermsVersions(consentRevocationTermsVersionsService.findByLatestEnabledVersion());
             attestedConsentRevocation.setAttesterEmail(patient.getEmail());
@@ -978,8 +974,6 @@ public class ConsentServiceImpl implements ConsentService {
             attestedConsentRevocation.setConsentRevokeTermsAccepted(true);
             attestedConsentRevocation.setAttesterByUser(patient.getEmail());
             attestedConsentRevocation.setConsentReferenceId(consent.getConsentReferenceId());
-
-            attestedConsentRevocation.setPatientGuid(consent.getPatient().getMedicalRecordNumber());
 
             attestedConsentRevocation.setAttestedPdfConsentRevoke(consentRevokationPdfGenerator.generateConsentRevokationPdf(consent, patient, revokedOn));
 
