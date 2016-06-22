@@ -32,6 +32,7 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import gov.samhsa.mhc.pcm.domain.consent.Consent;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
+import gov.samhsa.mhc.pcm.infrastructure.exception.ConsentPdfGenerationException;
 import gov.samhsa.mhc.pcm.service.consent.ConsentRevocationTermsVersionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
