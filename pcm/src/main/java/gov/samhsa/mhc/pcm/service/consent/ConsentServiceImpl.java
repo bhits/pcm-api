@@ -927,7 +927,7 @@ public class ConsentServiceImpl implements ConsentService {
             attestedConsent.setAttesterEmail(patient.getEmail());
             attestedConsent.setAttesterLastName(patient.getLastName());
             // Middle name not available in Patient entity to be updated
-            attestedConsent.setAttesterMiddleName(null);
+            attestedConsent.setAttesterMiddleName("");
             attestedConsent.setAttesterFirstName(patient.getFirstName());
 
             Date attestedOn = new Date();
@@ -965,7 +965,7 @@ public class ConsentServiceImpl implements ConsentService {
             attestedConsentRevocation.setAttesterEmail(patient.getEmail());
             attestedConsentRevocation.setAttesterLastName(patient.getLastName());
             // Middle name not available in Patient entity to be updated
-            attestedConsentRevocation.setAttesterMiddleName(null);
+            attestedConsentRevocation.setAttesterMiddleName("");
             attestedConsentRevocation.setAttesterFirstName(patient.getFirstName());
 
             Date revokedOn = new Date();
