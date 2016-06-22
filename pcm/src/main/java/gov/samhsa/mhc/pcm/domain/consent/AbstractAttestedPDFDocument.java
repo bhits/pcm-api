@@ -66,6 +66,9 @@ public abstract class AbstractAttestedPDFDocument implements BinaryContentAccess
 	@Column(name = "attested_date_time")
 	private Date attestedDateTime;
 
+    @Column(name = "patient_guid")
+    private String patientGuid;
+
 	public String getConsentReferenceId() {
 		return consentReferenceId;
 	}
@@ -121,4 +124,12 @@ public abstract class AbstractAttestedPDFDocument implements BinaryContentAccess
 	public void setAttestedDateTime(Date attestedDateTime) {
 		this.attestedDateTime = attestedDateTime;
 	}
+
+    public String getPatientGuid() {
+        return patientGuid;
+    }
+
+    public void setPatientGuid(String patientGuid) {
+        this.patientGuid = patientGuid;
+    }
 }
