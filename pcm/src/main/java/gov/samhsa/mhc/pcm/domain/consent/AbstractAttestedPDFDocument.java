@@ -52,7 +52,8 @@ public abstract class AbstractAttestedPDFDocument implements BinaryContentAccess
 	@NotNull
 	@Column(name = "attester_first_name")
 	private String attesterFirstName;
-    
+
+	@NotNull
 	@Column(name = "attester_middle_name")
 	private String attesterMiddleName;
 
