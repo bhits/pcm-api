@@ -32,7 +32,6 @@ import gov.samhsa.mhc.pcm.infrastructure.pagination.JdbcPagingRepository;
 import gov.samhsa.mhc.pcm.service.audit.domain.ActivityHistory;
 import gov.samhsa.mhc.pcm.service.dto.ActivityHistoryListDto;
 import gov.samhsa.mhc.pcm.service.dto.HistoryDto;
-import gov.samhsa.mhc.pcm.service.exception.PatientNotFoundException;
 import gov.samhsa.mhc.pcm.service.exception.ViewActivitiesException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -93,7 +92,6 @@ public class AuditServiceImpl implements AuditService {
     @Override
     public ActivityHistoryListDto findAllActivityHistoryPageable(String username, int pageNumber) {
         try {
-            assertPatientNotNull(username);
             List<HistoryDto> activityHistoryDtoList = new ArrayList<>();
             PageRequest pageable = new PageRequest(pageNumber, itemsPerPage, Sort.Direction.DESC, ID_COLUMN);
             Page<ActivityHistory> pages = jdbcPagingRepository.findAllByArgs(pageable, username);
@@ -126,12 +124,6 @@ public class AuditServiceImpl implements AuditService {
         } catch (Exception e) {
             logger.error("View activity history failed: " + e.getMessage());
             throw new ViewActivitiesException();
-        }
-    }
-
-    private void assertPatientNotNull(String username) {
-        if (patientRepository.findByUsername(username) == null) {
-            throw new PatientNotFoundException("No patient record found for patient username: " + username);
         }
     }
 
