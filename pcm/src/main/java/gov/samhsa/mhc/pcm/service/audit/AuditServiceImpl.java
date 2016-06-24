@@ -149,7 +149,7 @@ public class AuditServiceImpl implements AuditService {
         switch (type) {
             case "Individual Provider":
             case "Organizational Provider":
-                type = "Add provider";
+                type = "Patient Provider";
                 break;
             default:
                 return type;
