@@ -5,7 +5,7 @@
 
     <groupId>gov.samhsa.mhc</groupId>
     <artifactId>pcm</artifactId>
-    <version>1.11.0-SNAPSHOT</version>
+    <version>1.12.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Patient Consent Management API</name>
