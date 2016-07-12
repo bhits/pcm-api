@@ -1,1 +1,0 @@
-UPDATE purpose_of_use_code SET code='HEALTHCARE_TREATMENT' WHERE id=1;
