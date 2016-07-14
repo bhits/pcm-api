@@ -99,7 +99,6 @@ public class Patient {
     private Date birthDay;
 
     /** The username. */
-    @Size(min = 3, max = 30)
     @Column(name = "username")
     private String username;
 
