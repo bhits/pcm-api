@@ -35,6 +35,7 @@ import gov.samhsa.mhc.pcm.domain.provider.AbstractProvider;
 import gov.samhsa.mhc.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.mhc.pcm.domain.provider.OrganizationalProvider;
 import gov.samhsa.mhc.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
+import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategoryRepository;
 import gov.samhsa.mhc.pcm.infrastructure.exception.ConsentPdfGenerationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +43,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.List;
 
 
 /**
@@ -343,11 +342,22 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     }
 
     private ArrayList<String> getMedicalInformation(Consent consent) {
-        ArrayList<String> medicalInformationList = new ArrayList<String>();
-        for (final ConsentDoNotShareSensitivityPolicyCode item : consent.getDoNotShareSensitivityPolicyCodes()) {
-            medicalInformationList.add(item.getValueSetCategory().getName());
+        Set<String> medicalInformationListToShare = new HashSet<String>();
+
+        List<ValueSetCategory> valueSetCategoryList = valueSetCategoryRepository
+                .findAll();
+        //All possible VSC
+        for (ValueSetCategory valueSetCategory : valueSetCategoryList) {
+            String valueSetName = valueSetCategory.getName();
+            medicalInformationListToShare.add(valueSetName);
         }
-        return medicalInformationList;
+
+        for (final ConsentDoNotShareSensitivityPolicyCode item : consent.getDoNotShareSensitivityPolicyCodes()) {
+            String vscName = item.getValueSetCategory().getName();
+            medicalInformationListToShare.remove(vscName);
+
+        }
+        return  new ArrayList<String>(medicalInformationListToShare);
     }
 
     private ArrayList<String> getPurposeOfUse(Consent consent) {

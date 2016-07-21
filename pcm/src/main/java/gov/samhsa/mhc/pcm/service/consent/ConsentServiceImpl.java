@@ -507,9 +507,16 @@ public class ConsentServiceImpl implements ConsentService {
                 consentIndividualProviderPermittedToDisclose.add(item.getIndividualProvider());
             }
 
-            final Set<String> doNotShareSensitivityPolicyDisplayName = new HashSet<String>();
+            final Set<String> shareSensitivityPolicyDisplayName = new HashSet<String>();
+            List<ValueSetCategory> valueSetCategoryList = valueSetCategoryRepository
+                    .findAll();
+            //All possible VSC
+            for (ValueSetCategory valueSetCategory : valueSetCategoryList) {
+                String valueSetName = valueSetCategory.getName();
+                shareSensitivityPolicyDisplayName.add(valueSetName);
+            }
             for (final ConsentDoNotShareSensitivityPolicyCode item : consent.getDoNotShareSensitivityPolicyCodes()) {
-                doNotShareSensitivityPolicyDisplayName.add(item.getValueSetCategory().getName());
+                shareSensitivityPolicyDisplayName.remove(item.getValueSetCategory().getName());
             }
 
             // Set fields
@@ -530,7 +537,7 @@ public class ConsentServiceImpl implements ConsentService {
             consentAttestationDto.setOrgProvidersDisclosureIsMadeTo(consentOrganizationalProviderDisclosureIsMadeTo);
             consentAttestationDto.setIndProvidersDisclosureIsMadeTo(consentIndividualProviderDisclosureIsMadeTo);
 
-            consentAttestationDto.setDoNotShareSensitivityPolicyDisplayNames(doNotShareSensitivityPolicyDisplayName);
+            consentAttestationDto.setDoNotShareSensitivityPolicyDisplayNames(shareSensitivityPolicyDisplayName);
 
             final Set<PurposeOfUseCode> purposeOfUses= new HashSet<PurposeOfUseCode>();
             for (final ConsentShareForPurposeOfUseCode purposeOfUseCode : consent.getShareForPurposeOfUseCodes()) {
