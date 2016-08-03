@@ -25,6 +25,7 @@
  ******************************************************************************/
 package gov.samhsa.mhc.pcm.web;
 
+import ca.uhn.fhir.model.dstu2.resource.Contract;
 import gov.samhsa.mhc.common.consentgen.ConsentGenException;
 import gov.samhsa.mhc.pcm.infrastructure.eventlistener.EventService;
 import gov.samhsa.mhc.pcm.infrastructure.securityevent.FileDownloadedEvent;
@@ -33,6 +34,7 @@ import gov.samhsa.mhc.pcm.service.consent.ConsentService;
 import gov.samhsa.mhc.pcm.service.consent.ConsentStatus;
 import gov.samhsa.mhc.pcm.service.dto.*;
 import gov.samhsa.mhc.pcm.service.exception.*;
+import gov.samhsa.mhc.pcm.service.fhir.FhirContractService;
 import gov.samhsa.mhc.pcm.service.notification.NotificationService;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import gov.samhsa.mhc.pcm.service.reference.PurposeOfUseCodeService;
@@ -102,6 +104,9 @@ public class ConsentRestController {
 
     @Autowired
     private ResourceServerProperties resourceServerProperties;
+
+    @Autowired
+    private FhirContractService fhirContractService;
 
     @RequestMapping(value = "consents/pageNumber/{pageNumber}")
     public ConsentsListDto listConsents(@PathVariable("pageNumber") String pageNumber) {
@@ -514,6 +519,16 @@ public class ConsentRestController {
             return consentService.findConsentRevokationPdfDto(consentId);
         }
         return consentService.findConsentPdfDto(consentId);
+    }
+
+    @RequestMapping(value = "consents/{consentId}/fhirContract", method = RequestMethod.GET)
+    public Contract getConsentFHIRContract(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
+        ConsentAttestationDto consentAttestationDto = consentService.getConsentAttestationDto(principal.getName(), consentId);
+        PatientProfileDto patientProfileDto = patientService.findPatientProfileByUsername(principal.getName());
+
+        Contract fhirConsent = fhirContractService.createFhirContract(consentAttestationDto,patientProfileDto);
+        return fhirConsent;
+
     }
 
 }

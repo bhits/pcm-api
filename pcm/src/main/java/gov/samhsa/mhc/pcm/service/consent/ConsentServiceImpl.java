@@ -1215,6 +1215,7 @@ public class ConsentServiceImpl implements ConsentService {
     public void saveConsent(Consent consent) {
         consent.setCreatedDateTime(new Date());
         consentRepository.save(consent);
+
     }
 
     /**

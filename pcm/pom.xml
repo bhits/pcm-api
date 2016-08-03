@@ -73,6 +73,7 @@
         <itextpdf.version>5.5.3</itextpdf.version>
         <logback.version>1.0.11</logback.version>
         <docker.maven.version>0.4.3</docker.maven.version>
+        <hapi.fhir.version>1.4</hapi.fhir.version>
     </properties>
 
     <dependencies>
@@ -213,7 +214,20 @@
             <artifactId>consent-gen</artifactId>
             <version>${mhc.common-libraries.version}</version>
         </dependency>
-
+        <!-- HAPI FHIR JARS -->
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-validation-resources-dstu2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-structures-dstu2</artifactId>
+        </dependency>
+        <!-- HAPI FHIR JARS -->
         <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -231,7 +245,25 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- HAPI FHIR JARS -->
+            <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-base</artifactId>
+                <version>${hapi.fhir.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-validation-resources-dstu2</artifactId>
+                <version>${hapi.fhir.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-structures-dstu2</artifactId>
+                <version>${hapi.fhir.version}</version>
+            </dependency>
+            <!-- HAPI FHIR JARS -->
         </dependencies>
+
     </dependencyManagement>
 
     <build>

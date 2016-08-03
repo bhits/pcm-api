@@ -95,6 +95,22 @@ mhc:
       activity:
         sql:
           path: activity/PatientActivityHistory.sql
+      ssn:
+        system: http://hl7.org/fhir/v2/0203
+        oid: urn:oid:2.16.840.1.113883.4.1
+        label: SSN
+      npi:
+        system: http://hl7.org/fhir/sid/us-npi
+        oid: urn:oid:2.16.840.1.113883.4.6
+        label: PRN
+      pou:
+        system: http://hl7.org/fhir/ValueSet/v3-PurposeOfUse
+        oid: urn:oid:2.16.840.1.113883.1.11.20448
+        label: PurposeOfUse
+      fhir:
+        serverUrl: https://localhost:8443/iexhub/services
+        fhirClientSocketTimeoutInMs: 768000
+
   vss:
     config:
       conceptCodeListPageSize: 20
