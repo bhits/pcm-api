@@ -60,9 +60,9 @@ public class UniqueOidProviderImpl implements UniqueOidProvider {
 		return id;
 	}
 	
-	public static void main(String[] args){
+/*	public static void main(String[] args){
 		UniqueOidProviderImpl uniqueOidProvider = new UniqueOidProviderImpl();
 		System.out.println(uniqueOidProvider.getOid());
-	}
+	}*/
 	
 }
