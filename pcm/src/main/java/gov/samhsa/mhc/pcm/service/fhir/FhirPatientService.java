@@ -8,6 +8,7 @@ import gov.samhsa.mhc.pcm.infrastructure.dto.PatientDto;
  */
 public interface FhirPatientService {
 
+  /* converts patientdto to fhir patient object */
   public Patient createFhirPatient(PatientDto patientDto);
 
 }
