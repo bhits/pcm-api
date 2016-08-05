@@ -14,10 +14,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FhirServiceConfig {
 
-    @Value("${mhc.pcm.config.fhir.serverUrl}")
+    @Value("${mhc.pcm.config.hie-connection.fhir.serverUrl}")
     String fhirServerUrl;
 
-    @Value("${mhc.pcm.config.fhir.fhirClientSocketTimeoutInMs}")
+    @Value("${mhc.pcm.config.hie-connection.fhir.ClientSocketTimeoutInMs}")
     String fhirClientSocketTimeout;
 
     // Create a context

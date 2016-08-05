@@ -46,6 +46,7 @@ import gov.samhsa.mhc.pcm.service.dto.*;
 import gov.samhsa.mhc.pcm.service.exception.AttestedConsentException;
 import gov.samhsa.mhc.pcm.service.exception.AttestedConsentRevocationException;
 import gov.samhsa.mhc.pcm.service.exception.XacmlNotFoundException;
+import gov.samhsa.mhc.pcm.service.fhir.FhirContractService;
 import gov.samhsa.mhc.pcm.service.patient.PatientService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -94,6 +95,12 @@ public class ConsentServiceImpl implements ConsentService {
      */
     @Value("${mhc.pcm.config.pid.domain.type}")
     private String pidDomainType;
+
+    /**
+     * The c2s domain id.
+     */
+    @Value("${mhc.pcm.config.hie-connection.fhir.enabled}")
+    private String hieEnable;
 
     /**
      * The consent repository.
@@ -215,6 +222,9 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Autowired
     private ConsentRevocationTermsVersionsService consentRevocationTermsVersionsService;
+
+    @Autowired
+    FhirContractService fhirContractService;
 
     /**
      * The model mapper.
@@ -927,8 +937,11 @@ public class ConsentServiceImpl implements ConsentService {
         final Consent consent = consentRepository.findOne(consentId);
         //Updating the patient data with data from phr api
         PatientDto patientDto = phrService.getPatientProfile();
+        if(null != hieEnable && hieEnable.equalsIgnoreCase("true")){
+            fhirContractService.publishFhirContractToHie(consent,patientDto);
+        }
 
-        if (consent != null && consent.getAttestedConsent() == null && patientDto!= null && consentId != null && attesterIdAddress != null) {
+ /*       if (consent != null && consent.getAttestedConsent() == null && patientDto!= null && consentId != null && attesterIdAddress != null) {
             patientService.updatePatientFromPHR(patientDto);
             Patient patient = patientRepository.findByUsername(patientDto.getEmail());
 
@@ -959,10 +972,15 @@ public class ConsentServiceImpl implements ConsentService {
             consent.setSignedDate(new Date());
             consent.setStatus(ConsentStatus.CONSENT_SIGNED);
             consentRepository.save(consent);
+
+*//*            if(null != hieEnable && hieEnable.equalsIgnoreCase("true")){
+                 fhirContractService.publishFhirContractToHie(consent,patientDto);
+            }*//*
+
         }else {
             logger.error("Error in creating attested consent");
             throw new AttestedConsentRevocationException("Error in creating attested consent");
-        }
+        }*/
     }
 
     @Override

@@ -5,18 +5,21 @@ import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.Contract;
-import ca.uhn.fhir.model.dstu2.resource.Organization;
-import ca.uhn.fhir.model.dstu2.resource.Patient;
-import ca.uhn.fhir.model.dstu2.resource.Practitioner;
+import ca.uhn.fhir.model.dstu2.resource.*;
 import ca.uhn.fhir.model.dstu2.valueset.ContractTypeCodesEnum;
+import ca.uhn.fhir.model.dstu2.valueset.ListModeEnum;
+import ca.uhn.fhir.model.dstu2.valueset.ListStatusEnum;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
+import ca.uhn.fhir.rest.client.IGenericClient;
+import gov.samhsa.mhc.pcm.domain.consent.*;
 import gov.samhsa.mhc.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.mhc.pcm.domain.provider.OrganizationalProvider;
+import gov.samhsa.mhc.pcm.domain.reference.ClinicalConceptCode;
 import gov.samhsa.mhc.pcm.domain.reference.PurposeOfUseCode;
-import gov.samhsa.mhc.pcm.service.dto.ConsentAttestationDto;
-import gov.samhsa.mhc.pcm.service.dto.PatientProfileDto;
+import gov.samhsa.mhc.pcm.infrastructure.dto.PatientDto;
+import gov.samhsa.mhc.pcm.service.dto.SensitivePolicyCodeEnum;
+import gov.samhsa.mhc.pcm.service.dto.SpecificMedicalInfoDto;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +29,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by sadhana.chandra on 8/2/2016.
@@ -44,50 +49,170 @@ public class FhirContractServiceImpl implements  FhirContractService {
     private FhirContext fhirContext;
 
     @Autowired
+    private IGenericClient fhirClient;
+
+    @Autowired
     private FhirPatientService fhirPatientService;
 
+    @Autowired
+    private UniqueOidProvider uniqueOidProvider;
+
     @Value("${mhc.pcm.config.pid.domain.id}")
-    private String pidSystem="1.3.6.1.4.1.21367.13.20.200";
+    private String pidSystem;
 
     @Value("${mhc.pcm.config.npi.system}")
-    private String npiSystem = "http://hl7.org/fhir/sid/us-npi";
+    private String npiSystem;
 
     @Value("${mhc.pcm.config.npi.label}")
-    private String npiLabel = "PRN";
+    private String npiLabel;
 
     @Value("${mhc.pcm.config.pou.system}")
-    private String pouSystem = "http://hl7.org/fhir/ValueSet/v3-PurposeOfUse";
+    private String pouSystem;
+
+    @Value("${logging.path}")
+    private String logOutputPath;
 
     // FHIR resource identifiers for inline/embedded objects
-    private static String consentId = "consentId";
-    private static String sourceOrganizationId = "sourceOrgOID";
-    private static String sourcePractitionerId = "sourcePractitionerNPI";
-    private static String recipientPractitionerId = "recipientPractitionerNPI";
-    private static String recipientOrganizationId = "recipientOrganizationId";
+    private static String CONFIDENTIALITY_CODE_CODE_SYSTEM = "urn:oid:2.16.840.1.113883.5.25";
+    private static String CODE_SYSTEM_SET_OPERATOR = "http://hl7.org/fhir/v3/SetOperator";
+    private static String SOURCE_ORG_ID = "SOURCE_ORG_ID";
+    private static String SOURCE_IND_ID = "SOURCE_IND_ID";
+    private static String RECIPIENT_ORG_ID = "RECIPIENT_ORG_ID";
+    private static String RECIPIENT_IND_ID = "RECIPIENT_IND_ID";
+    private static String INCLUDE_SENSITIVE_CODES = "INCLUDE_SENSITIVE_CODES";
+    private static String EXCLUDE_SENSITIVE_CODES = "EXClUDE_SENSITIVE_CODES";
+
+
+
+    public void publishFhirContractToHie(Contract fhirContract){
+        //  invoke Contract service
+        fhirClient.create().resource(fhirContract).execute();
+
+    }
+    public void publishFhirContractToHie(Consent consent, PatientDto patientDto){
+       // createFhirContract(consent, patientDto);
+        publishFhirContractToHie(createFhirContract(consent, patientDto));
+    }
 
     @Override
-    public Contract createFhirContract(ConsentAttestationDto consentAttestationDto,PatientProfileDto patientProfileDto) {
-        Contract contract = consentDtoToContract.apply(consentAttestationDto,patientProfileDto);
+    public Contract createFhirContract(Consent consent, PatientDto patientDto) {
+        Contract contract = consentDtoToContract.apply(consent,patientDto);
 
         return contract;
     }
 
-    BiFunction<ConsentAttestationDto, PatientProfileDto, Contract> consentDtoToContract = new BiFunction<ConsentAttestationDto, PatientProfileDto, Contract>() {
+    BiFunction<Consent, PatientDto, Contract> consentDtoToContract = new BiFunction<Consent, PatientDto, Contract>() {
         @Override
-        public Contract apply(ConsentAttestationDto consentAttestationDto, PatientProfileDto patientProfileDto) {
-            Contract contract = createBasicConsent(consentAttestationDto, patientProfileDto);
+        public Contract apply(Consent consent, PatientDto patientDto) {
+            Contract contract = createGranularConsent(consent, patientDto);
             return contract;
         }
     };
-    private Contract createBasicConsent(ConsentAttestationDto consentAttestationDto, PatientProfileDto patientProfileDto ){
+
+    private Contract createGranularConsent(Consent consent, PatientDto patientDto ){
+
+        Contract fhirContract = createBasicConsent(consent, patientDto);
+        // add granular preferences
+        ListResource includeList = new ListResource();
+        includeList.setId(new IdDt(INCLUDE_SENSITIVE_CODES));
+        includeList.setTitle("List of included Sensitive policy codes");
+        // specifies how the list items are to be used
+        CodeableConceptDt includeCodeValue = new CodeableConceptDt(CODE_SYSTEM_SET_OPERATOR, "I");
+        includeCodeValue.setText(INCLUDE_SENSITIVE_CODES);
+        includeList.setCode(includeCodeValue);
+        includeList.setStatus(ListStatusEnum.CURRENT);
+        includeList.setMode(ListModeEnum.SNAPSHOT_LIST);
+
+        ListResource excludeList = new ListResource();
+        excludeList.setId(new IdDt(EXCLUDE_SENSITIVE_CODES));
+        excludeList.setTitle("List of excluded Sensitive policy codes");
+        // specifies how the list items are to be used
+/*        CodeableConceptDt excludeCodeValue = new CodeableConceptDt(CODE_SYSTEM_SET_OPERATOR, "E");
+        excludeCodeValue.setText(EXCLUDE_SENSITIVE_CODES);
+        excludeList.setCode(excludeCodeValue);
+        excludeList.setStatus(ListStatusEnum.CURRENT);
+        excludeList.setMode(ListModeEnum.SNAPSHOT_LIST);*/
+
+
+        List<String> excludeCodes = getConsentObligations(consent);
+        Set<String> allSensitiveCodes = Stream.of(SensitivePolicyCodeEnum.values())
+                                            .map(SensitivePolicyCodeEnum::getCode)
+                                            .collect(Collectors.toSet());
+        Set<String> includeCodes = allSensitiveCodes.stream()
+                                    .filter(
+                                       e -> ( excludeCodes.stream()
+                                                .filter( d -> d.equalsIgnoreCase(e))
+                                                . count())<1)
+                                    .collect(Collectors.toSet());
+
+        for(SensitivePolicyCodeEnum codesEnum: SensitivePolicyCodeEnum.values()) {
+            for(String includeCode : includeCodes){
+                if(includeCode.equalsIgnoreCase(codesEnum.getCode())) {
+                    includeList.addEntry(getResourceEntry(codesEnum.getCode(), codesEnum.getDisplayName(), fhirContract));
+                    break;
+                }
+            }
+        }
+
+/*
+        for(SensitivePolicyCodeEnum codesEnum: SensitivePolicyCodeEnum.values()) {
+            for (String excludeCode : excludeCodes) {
+                if (excludeCode.equalsIgnoreCase(codesEnum.getCode())) {
+                    excludeList.addEntry(getResourceEntry(codesEnum.getCode(), codesEnum.getDisplayName(), fhirContract));
+                    break;
+                }
+            }
+        }
+*/
+
+
+        // add list to contract
+        fhirContract.getTerm().get(0).getSubject().setReference("#" + includeList.getId());
+        fhirContract.getContained().getContainedResources().add(includeList);
+/*
+        fhirContract.getTerm().get(0).getSubject().setReference("#" + excludeList.getId());
+        fhirContract.getContained().getContainedResources().add(excludeList);
+*/
+
+        //TODO : write log only in debug mode
+        createContracttoLogMessage(fhirContract,"GranularConsent");
+        return fhirContract;
+
+    }
+
+    private ListResource.Entry getResourceEntry(String sensitivePolicyCode, String description,Contract fhirContract) {
+        // add discharge summary document type
+        ListResource.Entry resourceSummaryEntry = new ListResource.Entry();
+        // use list item flag to specify a category and the item to specify an
+        // instance (e.g. DocumentReference)
+        CodeableConceptDt codeableConceptDt = new CodeableConceptDt(CONFIDENTIALITY_CODE_CODE_SYSTEM, sensitivePolicyCode);
+        // dischargeSummaryCode
+        codeableConceptDt.setText(description);
+        resourceSummaryEntry.setDeleted(false);
+        // dischargeSummaryEntry.setFlag(dischargeSummaryCode);
+        Basic basicItem = new Basic();
+        basicItem.setId(new IdDt(sensitivePolicyCode));
+        basicItem.setCode(codeableConceptDt);
+
+        // add items as Basic resources
+        fhirContract.getContained().getContainedResources().add(basicItem);
+
+        ResourceReferenceDt resourceReferenceDt = new ResourceReferenceDt("#" + basicItem.getId());
+        resourceSummaryEntry.setItem(resourceReferenceDt);
+
+        return resourceSummaryEntry;
+    }
+
+
+    private Contract createBasicConsent(Consent consent, PatientDto patientDto ){
         Contract contract = new Contract();
 
         // set the id as a concatenated "OID.consentId"
-        contract.setId(new IdDt(consentAttestationDto.getConsentReferenceNumber()));
+        contract.setId(new IdDt(consent.getConsentReferenceId()));
 
         // add local reference to patient
-        Patient fhirPatient = fhirPatientService.createFhirPatient(patientProfileDto);
-        ResourceReferenceDt patientReference = new ResourceReferenceDt("#" + patientProfileDto.getMedicalRecordNumber());
+        Patient fhirPatient = fhirPatientService.createFhirPatient(patientDto);
+        ResourceReferenceDt patientReference = new ResourceReferenceDt("#" + patientDto.getMedicalRecordNumber());
         contract.getSubject().add(patientReference);
         contract.getSignerFirstRep().setType(new CodingDt("http://hl7.org/fhir/contractsignertypecodes","1.2.840.10065.1.12.1.7"));
         contract.getSignerFirstRep().setSignature(fhirPatient.getNameFirstRep().getNameAsSingleString());
@@ -95,74 +220,91 @@ public class FhirContractServiceImpl implements  FhirContractService {
         //add test patient as a contained resource rather than external reference
         contract.getContained().getContainedResources().add(fhirPatient);
 
+        // Specify Authors
+        // specify the authorized to disclose
+        Set<OrganizationalProvider> sourceOrgPermittedTo = new HashSet<OrganizationalProvider>();
+        for(ConsentOrganizationalProviderPermittedToDisclose orgPermittedTo : consent.getOrganizationalProvidersPermittedToDisclose()){
+            sourceOrgPermittedTo.add(orgPermittedTo.getOrganizationalProvider());
+        }
+        Organization sourceOrganizationResource = setOrganizationProvider(sourceOrgPermittedTo, SOURCE_ORG_ID);
+        contract.getContained().getContainedResources().add(sourceOrganizationResource);
+        contract.addAuthority().setReference("#" + sourceOrganizationResource.getId());
+
+        if(null == sourceOrganizationResource) {
+            Set<IndividualProvider> sourceindPermittedTo = new HashSet<IndividualProvider>();
+            for(ConsentIndividualProviderPermittedToDisclose indPermittedTo : consent.getProvidersPermittedToDisclose()){
+                sourceindPermittedTo.add(indPermittedTo.getIndividualProvider());
+            }
+            Practitioner sourcePractitioner = setPractitionerProvider(sourceindPermittedTo, SOURCE_IND_ID);
+            contract.getTermFirstRep().addActor().getEntity().setReference("#" + sourcePractitioner.getId() );
+            contract.getContained().getContainedResources().add(sourcePractitioner);
+        }
 
         // specify the covered entity authorized to disclose
         // add source resource and authority reference
-        Organization sourceOrganizationResource = setOrganizationProvider(consentAttestationDto.getOrgProvidersDisclosureIsMadeTo());
-        sourceOrganizationResource.addIdentifier().setValue("Source Organization Details");
-        contract.getContained().getContainedResources().add(sourceOrganizationResource);
-        contract.addAuthority().setReference("#" + sourceOrganizationResource.getId());
+        Set<OrganizationalProvider> recipientOrgMadeTo = new HashSet<OrganizationalProvider>();
+        for(ConsentOrganizationalProviderDisclosureIsMadeTo orgMadeTo : consent.getOrganizationalProvidersDisclosureIsMadeTo()){
+            recipientOrgMadeTo.add(orgMadeTo.getOrganizationalProvider());
+        }
+        Organization recipientOrganization = setOrganizationProvider(recipientOrgMadeTo, RECIPIENT_ORG_ID);
+        contract.getContained().getContainedResources().add(recipientOrganization);
+        contract.addAuthority().setReference("#" + recipientOrganization.getId());
 
         //This is required if the organization was not already added as a "contained" resource reference by the Patient
         //contract.getContained().getContainedResources().add(sourceOrganizationResource);
         // specify the provider who authored the data
-        if(null == sourceOrganizationResource) {
-            Practitioner sourcePractitioner = setPractitionerProvider(consentAttestationDto.getIndProvidersDisclosureIsMadeTo());
-            contract.addActor().getEntity().setReference("#" + sourcePractitioner.getId());
-            contract.getContained().getContainedResources().add(sourcePractitioner);
-        }
-
-
-        // list all recipients
-        Organization recipientOrganization = setOrganizationProvider(consentAttestationDto.getOrgProvidersPermittedToDisclosure());
-        contract.getContained().getContainedResources().add(recipientOrganization);
-        contract.addAuthority().setReference("#" + recipientOrganization.getId());
-
         if(null == recipientOrganization) {
-            Practitioner recipientPractitioner = setPractitionerProvider(consentAttestationDto.getIndProvidersPermittedToDisclosure());
-            contract.getTermFirstRep().addActor().getEntity().setReference("#" + recipientPractitioner.getId() );
+            Set<IndividualProvider> recipientindPermittedTo = new HashSet<IndividualProvider>();
+            for(ConsentIndividualProviderDisclosureIsMadeTo indPermittedTo : consent.getProvidersDisclosureIsMadeTo()){
+                recipientindPermittedTo.add(indPermittedTo.getIndividualProvider());
+            }
+            Practitioner recipientPractitioner = setPractitionerProvider(recipientindPermittedTo, RECIPIENT_IND_ID);
+            contract.addActor().getEntity().setReference("#" + recipientPractitioner.getId());
             contract.getContained().getContainedResources().add(recipientPractitioner);
         }
 
+
         // set POU
-       for(PurposeOfUseCode pou: consentAttestationDto.getPurposeOfUseCodes())
-           contract.getActionReason().add(new CodeableConceptDt(pouSystem, pou.getCode()));
+       for(ConsentShareForPurposeOfUseCode pou: consent.getShareForPurposeOfUseCodes())
+           contract.getActionReason().add(new CodeableConceptDt(pouSystem, getPurposeOfUseCode.apply(pou.getPurposeOfUseCode())));
 
         // set terms of consent and intended recipient(s)
         contract.getTermFirstRep().setText("description of the consent terms");
         PeriodDt applicablePeriod = new PeriodDt();
-        applicablePeriod.setEnd(new DateTimeDt(consentAttestationDto.getConsentEnd()));
-        applicablePeriod.setStart(new DateTimeDt(consentAttestationDto.getConsentStart()));
+        applicablePeriod.setEnd(new DateTimeDt(consent.getEndDate()));
+        applicablePeriod.setStart(new DateTimeDt(consent.getStartDate()));
         contract.getTermFirstRep().setApplies(applicablePeriod);
 
 
-        contract.getIdentifier().setSystem(pidSystem).setValue(consentAttestationDto.getConsentReferenceNumber());
+       // contract.getIdentifier().setSystem(pidSystem).setValue(consent.getConsentReferenceId());
+        final String xdsDocumentEntryUniqueId = uniqueOidProvider.getOid();
+
+        contract.getIdentifier().setSystem(pidSystem).setValue(xdsDocumentEntryUniqueId);
         contract.getType().setValueAsEnum(ContractTypeCodesEnum.DISCLOSURE);
 
         DateTimeDt issuedDateTime = new DateTimeDt();
         issuedDateTime.setValue(Calendar.getInstance().getTime());
-        contract.setIssued(new DateTimeDt(consentAttestationDto.getConsentTermsVersions().getAddedDateTime()));
-
-
+        contract.setIssued(issuedDateTime);
         //TODO : write log only in debug mode
-        createContracttoLogMessage(contract);
-
+        createContracttoLogMessage(contract,"BasicConsent");
         return contract;
     }
 
 
 
-    private Organization setOrganizationProvider(Set<OrganizationalProvider> orgProviders) {
+
+
+    private Organization setOrganizationProvider(Set<OrganizationalProvider> orgProviders, String orgIdName) {
         Organization sourceOrganizationResource = new Organization();
 
         //Set<OrganizationalProvider> orgProvidersDisclosureIsMadeTo = consentAttestationDto.getOrgProvidersDisclosureIsMadeTo();
 
         orgProviders.forEach((OrganizationalProvider organizationalProvider) ->
         {
-            sourceOrganizationResource.setId(new IdDt(organizationalProvider.getId()));
+            sourceOrganizationResource.setId(new IdDt(orgIdName));
             sourceOrganizationResource.addIdentifier().setSystem(npiSystem).setValue(organizationalProvider.getNpi());
             sourceOrganizationResource.setName(organizationalProvider.getOrgName());
-            sourceOrganizationResource.addAddress().addLine(organizationalProvider.getFirstLineMailingAddress())
+            sourceOrganizationResource.addAddress().addLine(organizationalProvider.getFirstLinePracticeLocationAddress())
                     .setCity(organizationalProvider.getMailingAddressCityName())
                     .setState(organizationalProvider.getMailingAddressStateName())
                     .setPostalCode(organizationalProvider.getMailingAddressPostalCode());
@@ -170,14 +312,14 @@ public class FhirContractServiceImpl implements  FhirContractService {
         return sourceOrganizationResource;
     }
 
-    private Practitioner setPractitionerProvider( Set<IndividualProvider> individualProviders) {
+    private Practitioner setPractitionerProvider( Set<IndividualProvider> individualProviders, String practIdName) {
         Practitioner sourcePractitionerResource = new Practitioner();
 
         // Set<IndividualProvider> indProvidersDisclosureIsMadeTo = consentAttestationDto.getIndProvidersDisclosureIsMadeTo();
 
         individualProviders.forEach((IndividualProvider individualProvider) ->
         {
-            sourcePractitionerResource.setId(new IdDt(individualProvider.getId()));
+            sourcePractitionerResource.setId(new IdDt(practIdName));
             sourcePractitionerResource.addIdentifier().setSystem(npiSystem).setValue(individualProvider.getNpi());
             // sourceOrganizationResource.setName(individualProvider.getn());
             sourcePractitionerResource.addAddress().addLine(individualProvider.getFirstLineMailingAddress())
@@ -191,20 +333,64 @@ public class FhirContractServiceImpl implements  FhirContractService {
     }
 
 
-    private void createContracttoLogMessage( Contract contract) {
-        String testResourcesPath = "src/test/resources/";
-        String currentTest = "BasicConsent";
-        String xmlEncodedGranularConsent = fhirContext.newXmlParser().setPrettyPrint(true)
+    Function<PurposeOfUseCode, String> getPurposeOfUseCode = new Function<PurposeOfUseCode, String>() {
+        //TODO : Replace with FHIR ENUM class once FHIR version migrate to DSTU3.
+        @Override
+        public String apply(PurposeOfUseCode pou) {
+            String codeString = pou.getCode();
+            if (codeString != null && !"".equals(codeString) || codeString != null && !"".equals(codeString)) {
+                if ("TREATMENT".equalsIgnoreCase(codeString) ) {
+                    return "TREAT";
+                } else if ("PAYMENT".equalsIgnoreCase(codeString)) {
+                    return "HPAYMT";
+                } else if ("RESEARCH".equalsIgnoreCase(codeString)) {
+                    return "HRESCH";
+                } else {
+                    throw new IllegalArgumentException("Unknown Purpose of Use code \'" + codeString + "\'");
+                }
+            } else {
+                return "";
+            }
+        }
+    };
+
+    private void createContracttoLogMessage( Contract contract, String currentTest) {
+         String xmlEncodedGranularConsent = fhirContext.newXmlParser().setPrettyPrint(true)
                 .encodeResourceToString(contract);
         try {
-            FileUtils.writeStringToFile(new File(testResourcesPath + "/XML/" + currentTest + ".xml"), xmlEncodedGranularConsent);
+            FileUtils.writeStringToFile(new File(logOutputPath + "/XML/" + currentTest + ".xml"), xmlEncodedGranularConsent);
             String jsonEncodedGranularConsent = fhirContext.newJsonParser().setPrettyPrint(true)
                     .encodeResourceToString(contract);
-            FileUtils.writeStringToFile(new File(testResourcesPath + "/JSON/" + currentTest + ".json"), jsonEncodedGranularConsent);
+            FileUtils.writeStringToFile(new File(logOutputPath + "/JSON/" + currentTest + ".json"), jsonEncodedGranularConsent);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public List<String> getConsentObligations(Consent consent) {
+         final Set<String> obligationCodes = new HashSet<String>();
+
+        for (final ConsentDoNotShareClinicalDocumentTypeCode item : consent
+                .getDoNotShareClinicalDocumentTypeCodes()) {
+            obligationCodes.add(item
+                    .getClinicalDocumentTypeCode().getCode());
+        }
+
+        for (final ConsentDoNotShareSensitivityPolicyCode item : consent
+                .getDoNotShareSensitivityPolicyCodes()) {
+            obligationCodes.add(item
+                    .getValueSetCategory().getCode());
+        }
+
+        final Set<String> consentDoNotShareClinicalConceptCodes = new HashSet<String>();
+        for (final ClinicalConceptCode item : consent
+                .getDoNotShareClinicalConceptCodes()) {
+            final SpecificMedicalInfoDto specificMedicalInfoDto = new SpecificMedicalInfoDto();
+            consentDoNotShareClinicalConceptCodes
+                    .add(item.getCode());
+        }
+
+        return new ArrayList<String>(obligationCodes);
+    }
 
 }

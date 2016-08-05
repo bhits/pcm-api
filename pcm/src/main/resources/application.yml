@@ -2,6 +2,7 @@ server:
   port: 8446
 logging:
   file: /java/MHC_LOGS/pcm/pcm.log
+  path: /java/MHC_LOGS/pcm
 info:
   component: PCM API
 eureka:
@@ -107,9 +108,11 @@ mhc:
         system: http://hl7.org/fhir/ValueSet/v3-PurposeOfUse
         oid: urn:oid:2.16.840.1.113883.1.11.20448
         label: PurposeOfUse
-      fhir:
-        serverUrl: https://localhost:8443/iexhub/services
-        fhirClientSocketTimeoutInMs: 768000
+      hie-connection:
+        fhir:
+          enabled: true
+          serverUrl: https://localhost:8443/iexhub/services
+          ClientSocketTimeoutInMs: 768000
 
   vss:
     config:

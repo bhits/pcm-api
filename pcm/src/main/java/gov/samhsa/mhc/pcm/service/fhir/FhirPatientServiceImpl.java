@@ -7,7 +7,7 @@ import ca.uhn.fhir.model.dstu2.valueset.ContactPointSystemEnum;
 import ca.uhn.fhir.model.dstu2.valueset.IdentifierUseEnum;
 import ca.uhn.fhir.model.primitive.DateDt;
 import ca.uhn.fhir.model.primitive.IdDt;
-import gov.samhsa.mhc.pcm.service.dto.PatientProfileDto;
+import gov.samhsa.mhc.pcm.infrastructure.dto.PatientDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -28,48 +28,48 @@ public class FhirPatientServiceImpl implements FhirPatientService {
 
 
     @Override
-    public Patient createFhirPatient(PatientProfileDto patientProfileDto) {
-        Patient patient = patientProfileDtoToPatient.apply(patientProfileDto);
+    public Patient createFhirPatient(PatientDto patientDto) {
+        Patient patient = patientDtoToPatient.apply(patientDto);
         return patient;
     }
 
-    Function<PatientProfileDto, Patient> patientProfileDtoToPatient = new Function<PatientProfileDto, Patient>() {
+    Function<PatientDto, Patient> patientDtoToPatient = new Function<PatientDto, Patient>() {
         @Override
-        public Patient apply(PatientProfileDto patientProfileDto) {
+        public Patient apply(PatientDto patientDto) {
             // set patient information
             Patient fhirPatient = new Patient();
 
             //setting mandatory fields
-            fhirPatient.setId(new IdDt(patientProfileDto.getMedicalRecordNumber()));
-            fhirPatient.addName().addFamily(patientProfileDto.getLastName()).addGiven(patientProfileDto.getFirstName());
-            fhirPatient.addTelecom().setValue(patientProfileDto.getEmail()).setSystem(ContactPointSystemEnum.EMAIL);
-            fhirPatient.setBirthDate(new DateDt(patientProfileDto.getBirthDate()));
-            fhirPatient.setGender(getPatientGender.apply(patientProfileDto.getAdministrativeGenderCode()));
+            fhirPatient.setId(new IdDt(patientDto.getMedicalRecordNumber()));
+            fhirPatient.addName().addFamily(patientDto.getLastName()).addGiven(patientDto.getFirstName());
+            fhirPatient.addTelecom().setValue(patientDto.getEmail()).setSystem(ContactPointSystemEnum.EMAIL);
+            fhirPatient.setBirthDate(new DateDt(patientDto.getBirthDate()));
+            fhirPatient.setGender(getPatientGender.apply(patientDto.getGenderCode()));
             fhirPatient.setActive(true);
 
             //Add an Identifier
-            setIdentifiers(fhirPatient, patientProfileDto);
+            setIdentifiers(fhirPatient, patientDto);
 
             //optional fields
-            fhirPatient.addAddress().addLine(patientProfileDto.getAddressStreetAddressLine()).setCity(patientProfileDto.getAddressCity()).setState(patientProfileDto.getAddressStateCode()).setPostalCode(patientProfileDto.getAddressPostalCode());
+            fhirPatient.addAddress().addLine(patientDto.getAddress()).setCity(patientDto.getCity()).setState(patientDto.getStateCode()).setPostalCode(patientDto.getZip());
             return fhirPatient;
         }
     };
 
 
-    private void setIdentifiers(Patient patient, PatientProfileDto patientProfileDto) {
+    private void setIdentifiers(Patient patient, PatientDto patientDto) {
 
         //setting patient mrn
         patient.addIdentifier().setSystem(pidSystem)
-                .setUse(IdentifierUseEnum.OFFICIAL).setValue(patientProfileDto.getMedicalRecordNumber());
+                .setUse(IdentifierUseEnum.OFFICIAL).setValue(patientDto.getMedicalRecordNumber());
 
         // setting ssn value
-        if(null != patientProfileDto.getSocialSecurityNumber() && ! patientProfileDto.getSocialSecurityNumber().isEmpty())
+        if(null != patientDto.getSocialSecurityNumber() && ! patientDto.getSocialSecurityNumber().isEmpty())
             patient.addIdentifier().setSystem(ssnSystem)
-                    .setValue(patientProfileDto.getSocialSecurityNumber()).setSystem(ssnLabel);
+                    .setValue(patientDto.getSocialSecurityNumber()).setSystem(ssnLabel);
 
-        if(null != patientProfileDto.getTelephoneTelephone() && ! patientProfileDto.getTelephoneTelephone().isEmpty())
-            patient.addTelecom().setValue(patientProfileDto.getTelephoneTelephone()).setSystem(ContactPointSystemEnum.PHONE);
+        if(null != patientDto.getTelephone() && ! patientDto.getTelephone().isEmpty())
+            patient.addTelecom().setValue(patientDto.getTelephone()).setSystem(ContactPointSystemEnum.PHONE);
 
 
 
