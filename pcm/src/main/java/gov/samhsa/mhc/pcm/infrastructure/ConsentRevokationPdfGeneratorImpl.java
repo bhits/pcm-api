@@ -25,17 +25,13 @@
  ******************************************************************************/
 package gov.samhsa.mhc.pcm.infrastructure;
 
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
-import gov.samhsa.mhc.pcm.domain.consent.*;
+import gov.samhsa.mhc.pcm.domain.consent.Consent;
 import gov.samhsa.mhc.pcm.domain.patient.Patient;
-import gov.samhsa.mhc.pcm.domain.provider.AbstractProvider;
-import gov.samhsa.mhc.pcm.domain.provider.IndividualProvider;
-import gov.samhsa.mhc.pcm.domain.provider.OrganizationalProvider;
-import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategory;
-import gov.samhsa.mhc.pcm.domain.valueset.ValueSetCategoryRepository;
 import gov.samhsa.mhc.pcm.infrastructure.exception.ConsentPdfGenerationException;
 import gov.samhsa.mhc.pcm.service.consent.ConsentRevocationTermsVersionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +39,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.io.ByteArrayOutputStream;
-import java.util.*;
-import java.util.List;
+import java.util.Date;
 
 /**
  * The Class ConsentRevokationPdfGeneratorImpl.
@@ -56,15 +51,8 @@ public class ConsentRevokationPdfGeneratorImpl extends
     @Autowired
     private ITextPdfService iTextPdfService;
 
-    /**
-     * The value set category repository.
-     */
-    @Autowired
-    private ValueSetCategoryRepository valueSetCategoryRepository;
-
     @Autowired
     private ConsentRevocationTermsVersionsService consentRevocationTermsVersionsService;
-    private ByteArrayOutputStream pdfOutputStream;
 
     /*
      * (non-Javadoc)
@@ -80,7 +68,7 @@ public class ConsentRevokationPdfGeneratorImpl extends
 
         Document document = new Document();
 
-        ByteArrayOutputStream pdfOutputStream =  new ByteArrayOutputStream();
+        ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
 
         try {
             PdfWriter.getInstance(document, pdfOutputStream);
@@ -107,50 +95,7 @@ public class ConsentRevokationPdfGeneratorImpl extends
 
             document.add(new Paragraph(" "));
 
-            //Consent Terms text
-            String fullText = consentRevocationTermsVersionsService.findDtoByLatestEnabledVersion().getConsentRevokeTermsText();
-            int index = fullText.indexOf("By withdrawing", 0);
-            String part1RevocationTermsText = fullText.substring(0, index);
-            String part2RevocationTermsText = fullText.substring(index);
-
-            document.add(new Paragraph(part1RevocationTermsText));
-
-            document.add(new Paragraph(" "));
-
-            //Authorization to disclose section
-            document.add(iTextPdfService.createSectionTitle(" AUTHORIZATION TO DISCLOSE"));
-
-            //Authorizes
-            document.add(new Paragraph("Authorizes: "));
-
-            document.add(createProviderPermittedToDiscloseTable(consent));
-
-            //To disclose to
-            document.add(new Paragraph("To disclose to: "));
-
-            document.add(createProviderDisclosureIsMadeToTable(consent));
-
-            document.add(new Paragraph(" "));
-
-            //Health information to be disclosed section
-            document.add(iTextPdfService.createSectionTitle(" HEALTH INFORMATION TO BE DISCLOSED"));
-
-            document.add(createHealthInformationToBeDisclose(consent));
-
-            document.add(new Paragraph(" "));
-
-            // Consent effective and expiration date
-            document.add(createStartAndEndDateTable(consent));
-
-            document.add(new Paragraph(" "));
-
-            //Move rest of the contents to Page 2
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph(" "));
-
-            //Revocation Part 2
-            document.add(new Paragraph(part2RevocationTermsText));
+            document.add(new Paragraph(consentRevocationTermsVersionsService.findDtoByLatestEnabledVersion().getConsentRevokeTermsText()));
 
             document.add(new Paragraph(" "));
 
@@ -216,192 +161,5 @@ public class ConsentRevokationPdfGeneratorImpl extends
         byte[] pdfBytes = pdfOutputStream.toByteArray();
 
         return pdfBytes;
-    }
-
-    private PdfPTable createProviderDisclosureIsMadeToTable(Consent consent) {
-        PdfPTable providerTable = iTextPdfService.createBorderlessTable(4);
-        Set<OrganizationalProvider> ordProvidersDisclosureIsMadeTo = getOrgProvidersDisclosureIsMadeTo(consent);
-
-        for (OrganizationalProvider provider : ordProvidersDisclosureIsMadeTo) {
-            providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getOrgName()));
-            setNpiAddressState(providerTable, provider);
-        }
-
-        Set<IndividualProvider> indProvidersDisclosureIsMadeTo = getIndProvidersDisclosureIsMadeTo(consent);
-
-        for (IndividualProvider provider : indProvidersDisclosureIsMadeTo) {
-            providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getFirstName() + " " + provider.getLastName()));
-            setNpiAddressState(providerTable, provider);
-        }
-
-        return providerTable;
-    }
-
-    private Set<OrganizationalProvider> getOrgProvidersDisclosureIsMadeTo(Consent consent) {
-        final Set<OrganizationalProvider> consentProvidersDisclosureIsMadeTo = new HashSet<OrganizationalProvider>();
-
-        if (consent.getOrganizationalProvidersDisclosureIsMadeTo() != null & consent.getOrganizationalProvidersDisclosureIsMadeTo().size() > 0) {
-            for (final ConsentOrganizationalProviderDisclosureIsMadeTo item : consent.getOrganizationalProvidersDisclosureIsMadeTo()) {
-                consentProvidersDisclosureIsMadeTo.add(item.getOrganizationalProvider());
-            }
-        }
-        return consentProvidersDisclosureIsMadeTo;
-    }
-
-    private PdfPTable createProviderPropertyValueTable(String propertyName, String propertyValue) {
-        PdfPTable providerTable = iTextPdfService.createBorderlessTable(1);
-
-        Font propertNameFont = new Font(Font.FontFamily.TIMES_ROMAN, 10);
-        providerTable.addCell(iTextPdfService.createBorderlessCell(propertyName, propertNameFont));
-        Font valueFont = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
-        providerTable.addCell(iTextPdfService.createBorderlessCell(propertyValue, valueFont));
-
-        return providerTable;
-    }
-
-    private void setNpiAddressState(PdfPTable providerTable, AbstractProvider provider) {
-        providerTable.addCell(createProviderPropertyValueTable("NPI Number", provider.getNpi()));
-        providerTable.addCell(createProviderPropertyValueTable("Address", composeAddress(provider)));
-        providerTable.addCell(createProviderPropertyValueTable("Phone", provider.getPracticeLocationAddressTelephoneNumber()));
-    }
-
-    private Set<IndividualProvider> getIndProvidersDisclosureIsMadeTo(Consent consent) {
-        final Set<IndividualProvider> consentProvidersDisclosureIsMadeTo = new HashSet<IndividualProvider>();
-
-        if (consent.getProvidersDisclosureIsMadeTo() != null & consent.getProvidersDisclosureIsMadeTo().size() > 0) {
-            for (final ConsentIndividualProviderDisclosureIsMadeTo item : consent.getProvidersDisclosureIsMadeTo()) {
-                consentProvidersDisclosureIsMadeTo.add(item.getIndividualProvider());
-            }
-        }
-        return consentProvidersDisclosureIsMadeTo;
-    }
-
-    private String composeAddress(AbstractProvider provider) {
-        String address = "";
-        if (provider != null) {
-            if (provider.getFirstLinePracticeLocationAddress() != null) {
-                address += provider.getFirstLinePracticeLocationAddress() + ", ";
-            }
-
-            if (provider.getPracticeLocationAddressCityName() != null) {
-                address += provider.getPracticeLocationAddressCityName() + ", ";
-            }
-
-            if (provider.getPracticeLocationAddressStateName() != null && provider.getPracticeLocationAddressPostalCode() != null) {
-                address += provider.getPracticeLocationAddressStateName() + " " + provider.getPracticeLocationAddressPostalCode();
-            }
-
-        }
-        return address;
-    }
-
-    private PdfPTable createProviderPermittedToDiscloseTable(Consent consent) {
-        PdfPTable providerTable = iTextPdfService.createBorderlessTable(4);
-        Set<OrganizationalProvider> ordProvidersPermittedToDisclose = getOrdProvidersPermittedToDisclose(consent);
-
-        for (OrganizationalProvider provider : ordProvidersPermittedToDisclose) {
-            providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getOrgName()));
-            setNpiAddressState(providerTable, provider);
-        }
-
-        Set<IndividualProvider> indProvidersPermittedToDisclose = getIndProvidersPermittedToDisclose(consent);
-
-        for (IndividualProvider provider : indProvidersPermittedToDisclose) {
-            providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getFirstName() + " " + provider.getLastName()));
-            setNpiAddressState(providerTable, provider);
-        }
-
-        return providerTable;
-    }
-
-    private Set<OrganizationalProvider> getOrdProvidersPermittedToDisclose(Consent consent) {
-        final Set<OrganizationalProvider> consentProvidersPermittedToDisclose = new HashSet<OrganizationalProvider>();
-
-        if (consent.getOrganizationalProvidersPermittedToDisclose() != null & consent.getOrganizationalProvidersPermittedToDisclose().size() > 0) {
-            for (final ConsentOrganizationalProviderPermittedToDisclose item : consent.getOrganizationalProvidersPermittedToDisclose()) {
-                consentProvidersPermittedToDisclose.add(item.getOrganizationalProvider());
-            }
-        }
-        return consentProvidersPermittedToDisclose;
-    }
-
-    private Set<IndividualProvider> getIndProvidersPermittedToDisclose(Consent consent) {
-        final Set<IndividualProvider> consentProvidersPermittedToDisclose = new HashSet<IndividualProvider>();
-
-        if (consent.getProvidersPermittedToDisclose() != null & consent.getProvidersPermittedToDisclose().size() > 0) {
-            for (final ConsentIndividualProviderPermittedToDisclose item : consent.getProvidersPermittedToDisclose()) {
-                consentProvidersPermittedToDisclose.add(item.getIndividualProvider());
-            }
-        }
-        return consentProvidersPermittedToDisclose;
-    }
-
-    private PdfPTable createHealthInformationToBeDisclose(Consent consent) {
-        PdfPTable healthInformationToBeDisclose = iTextPdfService.createBorderlessTable(2);
-
-        // Medical Information
-        PdfPCell medicalInformation = iTextPdfService.createCellWithUnderlineContent("To SHARE the following medical information:");
-        Paragraph sensitivityCategory = iTextPdfService.createParagraphWithContent("Sensitivity Categories:", null);
-        medicalInformation.addElement(sensitivityCategory);
-
-        ArrayList<String> medicalInformationList = getMedicalInformation(consent);
-        medicalInformation.addElement(iTextPdfService.createUnorderList(medicalInformationList));
-        healthInformationToBeDisclose.addCell(medicalInformation);
-
-        //Purposes of use
-        PdfPCell purposeOfUseCell = iTextPdfService.createCellWithUnderlineContent("To SHARE for the following purpose(s):");
-        ArrayList<String> purposes = getPurposeOfUse(consent);
-        purposeOfUseCell.addElement(iTextPdfService.createUnorderList(purposes));
-        healthInformationToBeDisclose.addCell(purposeOfUseCell);
-
-        return healthInformationToBeDisclose;
-    }
-
-    private ArrayList<String> getMedicalInformation(Consent consent) {
-        Set<String> medicalInformationListToShare = new HashSet<String>();
-
-        List<ValueSetCategory> valueSetCategoryList = valueSetCategoryRepository
-                .findAll();
-        //All possible VSC
-        for (ValueSetCategory valueSetCategory : valueSetCategoryList) {
-            String valueSetName = valueSetCategory.getName();
-            medicalInformationListToShare.add(valueSetName);
-        }
-
-        for (final ConsentDoNotShareSensitivityPolicyCode item : consent.getDoNotShareSensitivityPolicyCodes()) {
-            String vscName = item.getValueSetCategory().getName();
-            medicalInformationListToShare.remove(vscName);
-
-        }
-        return  new ArrayList<String>(medicalInformationListToShare);
-    }
-
-    private ArrayList<String> getPurposeOfUse(Consent consent) {
-        ArrayList<String> purposesOfUseList = new ArrayList<String>();
-        for (final ConsentShareForPurposeOfUseCode purposeOfUseCode : consent.getShareForPurposeOfUseCodes()) {
-            purposesOfUseList.add(purposeOfUseCode.getPurposeOfUseCode().getDisplayName());
-        }
-        return purposesOfUseList;
-    }
-
-    private PdfPTable createStartAndEndDateTable(Consent consent) {
-        PdfPTable consentStartAndEndDateTable = iTextPdfService.createBorderlessTable(3);
-
-        if (consent != null) {
-            Font patientDateFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
-            PdfPCell EffectiveDateCell = new PdfPCell(iTextPdfService.createCellContent("Effective Date: ", patientDateFont, iTextPdfService.formatDate(consent.getStartDate()), patientDateFont));
-            EffectiveDateCell.setBorder(Rectangle.NO_BORDER);
-
-            PdfPCell expirationDateCell = new PdfPCell(iTextPdfService.createCellContent("Expiration Date: ", patientDateFont, iTextPdfService.formatDate(consent.getEndDate()), patientDateFont));
-            expirationDateCell.setBorder(Rectangle.NO_BORDER);
-
-            PdfPCell emptyCell = new PdfPCell();
-            emptyCell.setBorder(Rectangle.NO_BORDER);
-
-            consentStartAndEndDateTable.addCell(EffectiveDateCell);
-            consentStartAndEndDateTable.addCell(expirationDateCell);
-            consentStartAndEndDateTable.addCell(emptyCell);
-        }
-        return consentStartAndEndDateTable;
     }
 }
