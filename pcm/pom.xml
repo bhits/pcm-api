@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>gov.samhsa.mhc</groupId>
+    <groupId>gov.samhsa.c2s</groupId>
     <artifactId>pcm</artifactId>
     <version>1.13.0-SNAPSHOT</version>
     <packaging>jar</packaging>
