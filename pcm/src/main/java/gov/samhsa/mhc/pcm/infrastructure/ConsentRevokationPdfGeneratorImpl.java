@@ -108,6 +108,9 @@ public class ConsentRevokationPdfGeneratorImpl extends
             document.add(new Paragraph(" "));
 
             //Consent Terms text
+            //TODO: The following is an incorrect way to divide the text into 2 parts
+            //TODO: Because, when the text changes, it could affect the contents of Withdraw Consent PDF
+            //TODO: Need to come up with a good solution
             String fullText = consentRevocationTermsVersionsService.findDtoByLatestEnabledVersion().getConsentRevokeTermsText();
             int index = fullText.indexOf("By withdrawing", 0);
             String part1RevocationTermsText = fullText.substring(0, index);
