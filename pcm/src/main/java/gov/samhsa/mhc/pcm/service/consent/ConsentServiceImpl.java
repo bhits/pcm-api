@@ -937,11 +937,12 @@ public class ConsentServiceImpl implements ConsentService {
         final Consent consent = consentRepository.findOne(consentId);
         //Updating the patient data with data from phr api
         PatientDto patientDto = phrService.getPatientProfile();
+
         if(null != hieEnable && hieEnable.equalsIgnoreCase("true")){
             fhirContractService.publishFhirContractToHie(consent,patientDto);
         }
 
- /*       if (consent != null && consent.getAttestedConsent() == null && patientDto!= null && consentId != null && attesterIdAddress != null) {
+        if (consent != null && consent.getAttestedConsent() == null && patientDto!= null && consentId != null && attesterIdAddress != null) {
             patientService.updatePatientFromPHR(patientDto);
             Patient patient = patientRepository.findByUsername(patientDto.getEmail());
 
@@ -972,15 +973,10 @@ public class ConsentServiceImpl implements ConsentService {
             consent.setSignedDate(new Date());
             consent.setStatus(ConsentStatus.CONSENT_SIGNED);
             consentRepository.save(consent);
-
-*//*            if(null != hieEnable && hieEnable.equalsIgnoreCase("true")){
-                 fhirContractService.publishFhirContractToHie(consent,patientDto);
-            }*//*
-
         }else {
             logger.error("Error in creating attested consent");
             throw new AttestedConsentRevocationException("Error in creating attested consent");
-        }*/
+        }
     }
 
     @Override
