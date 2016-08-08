@@ -11,6 +11,7 @@ public enum SensitivePolicyCodeEnum {
     PSYCHIATRIC("PSY", "Psychiatry information sensitivity", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
     SEXUAL_ASSAULT("SDV", "Sexual assault, abuse, or domestic violence information sensitivity", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
     SEXUALITY("SEX", "Sexuality and reproductive health information sensitivity", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
+    ALCOHOLIC("ALC", "Alcohol use and Alcoholism Information", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
     SEXUALLY_TRANSMITTED("STD", "Sexually transmitted disease information sensitivity", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true);
 
     private String code;

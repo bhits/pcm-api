@@ -113,7 +113,7 @@ mhc:
           enabled: true
           serverUrl: https://localhost:8443/iexhub/services
           ClientSocketTimeoutInMs: 768000
-
+          keepExcludeList: false
   vss:
     config:
       conceptCodeListPageSize: 20
