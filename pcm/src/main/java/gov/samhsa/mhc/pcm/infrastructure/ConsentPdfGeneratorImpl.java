@@ -325,12 +325,20 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
         // Medical Information
         PdfPCell medicalInformation = iTextPdfService.createCellWithUnderlineContent("To SHARE the following medical information:");
-        Paragraph sensitivityCategory = iTextPdfService.createParagraphWithContent("Sensitivity Categories:", null);
-        medicalInformation.addElement(sensitivityCategory);
 
         ArrayList<String> medicalInformationList = getMedicalInformation(consent);
-        medicalInformation.addElement(iTextPdfService.createUnorderList(medicalInformationList));
-        healthInformationToBeDisclose.addCell(medicalInformation);
+
+        if(medicalInformationList.size() < 1){
+            Paragraph sensitivityCategory = iTextPdfService.createParagraphWithContent("Sensitivity Categories: None", null);
+            medicalInformation.addElement(sensitivityCategory);
+            healthInformationToBeDisclose.addCell(medicalInformation);
+        } else {
+            Paragraph sensitivityCategory = iTextPdfService.createParagraphWithContent("Sensitivity Categories:", null);
+            medicalInformation.addElement(sensitivityCategory);
+
+            medicalInformation.addElement(iTextPdfService.createUnorderList(medicalInformationList));
+            healthInformationToBeDisclose.addCell(medicalInformation);
+        }
 
         //Purposes of use
         PdfPCell purposeOfUseCell = iTextPdfService.createCellWithUnderlineContent("To SHARE for the following purpose(s):");
