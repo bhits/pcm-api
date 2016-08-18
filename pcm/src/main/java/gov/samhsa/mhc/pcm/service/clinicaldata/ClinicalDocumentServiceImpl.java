@@ -366,7 +366,7 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
     @Override
     public boolean isDocumentExtensionPermitted(MultipartFile file) {
         boolean result = false;
-        int indexOfDot = file.getOriginalFilename().indexOf(".");
+        int indexOfDot = file.getOriginalFilename().lastIndexOf(".");
         if (indexOfDot >= 0) {
             String extension = file.getOriginalFilename().substring(
                     indexOfDot + 1);
