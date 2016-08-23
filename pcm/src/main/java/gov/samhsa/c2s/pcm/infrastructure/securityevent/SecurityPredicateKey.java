@@ -1,6 +1,6 @@
 package gov.samhsa.c2s.pcm.infrastructure.securityevent;
 
-import gov.samhsa.mhc.common.audit.PredicateKey;
+import gov.samhsa.c2s.common.audit.PredicateKey;
 
 public enum SecurityPredicateKey implements PredicateKey {
     IP_ADDRESS;

@@ -1,7 +1,7 @@
 package gov.samhsa.c2s.pcm.service.consentexport;
 
 import gov.samhsa.c2s.pcm.domain.consent.*;
-import gov.samhsa.mhc.common.consentgen.*;
+import gov.samhsa.c2s.common.consentgen.*;
 import gov.samhsa.c2s.pcm.domain.reference.ClinicalConceptCode;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;

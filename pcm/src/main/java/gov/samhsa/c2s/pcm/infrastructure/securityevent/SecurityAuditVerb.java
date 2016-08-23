@@ -1,6 +1,6 @@
 package gov.samhsa.c2s.pcm.infrastructure.securityevent;
 
-import gov.samhsa.mhc.common.audit.AuditVerb;
+import gov.samhsa.c2s.common.audit.AuditVerb;
 
 public enum SecurityAuditVerb implements AuditVerb {
     FAILED_ATTEMPTS_TO_LOGIN_AS,

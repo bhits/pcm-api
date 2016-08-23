@@ -1,12 +1,12 @@
 package gov.samhsa.c2s.pcm.config;
 
 import gov.samhsa.c2s.pcm.domain.consent.ConsentRepository;
-import gov.samhsa.mhc.common.document.transformer.XmlTransformer;
-import gov.samhsa.mhc.common.consentgen.ConsentBuilder;
-import gov.samhsa.mhc.common.consentgen.ConsentBuilderImpl;
-import gov.samhsa.mhc.common.consentgen.ConsentDtoFactory;
-import gov.samhsa.mhc.common.consentgen.XacmlXslUrlProvider;
-import gov.samhsa.mhc.common.consentgen.pg.XacmlXslUrlProviderImpl;
+import gov.samhsa.c2s.common.document.transformer.XmlTransformer;
+import gov.samhsa.c2s.common.consentgen.ConsentBuilder;
+import gov.samhsa.c2s.common.consentgen.ConsentBuilderImpl;
+import gov.samhsa.c2s.common.consentgen.ConsentDtoFactory;
+import gov.samhsa.c2s.common.consentgen.XacmlXslUrlProvider;
+import gov.samhsa.c2s.common.consentgen.pg.XacmlXslUrlProviderImpl;
 import gov.samhsa.c2s.pcm.service.consentexport.ConsentDtoFactoryImpl;
 import gov.samhsa.c2s.pcm.service.consentexport.ConsentExportMapper;
 import org.modelmapper.ModelMapper;

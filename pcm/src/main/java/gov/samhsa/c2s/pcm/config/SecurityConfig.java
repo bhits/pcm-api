@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 
-import static gov.samhsa.mhc.common.oauth2.OAuth2ScopeUtils.hasScope;
+import static gov.samhsa.c2s.common.oauth2.OAuth2ScopeUtils.hasScope;
 
 @Configuration
 public class SecurityConfig {

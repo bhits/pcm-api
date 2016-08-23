@@ -35,7 +35,7 @@ import gov.samhsa.c2s.pcm.service.patient.PatientService;
 import gov.samhsa.c2s.pcm.service.reference.PurposeOfUseCodeService;
 import gov.samhsa.c2s.vss.service.ValueSetCategoryService;
 import gov.samhsa.c2s.vss.service.dto.AddConsentFieldsDto;
-import gov.samhsa.mhc.common.consentgen.ConsentGenException;
+import gov.samhsa.c2s.common.consentgen.ConsentGenException;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.FileDownloadedEvent;
 import gov.samhsa.c2s.pcm.service.fhir.FhirContractService;
 import gov.samhsa.c2s.pcm.service.notification.NotificationService;

@@ -9,8 +9,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
-import gov.samhsa.mhc.common.consentgen.*;
-import gov.samhsa.mhc.common.document.transformer.XmlTransformer;
+import gov.samhsa.c2s.common.consentgen.*;
+import gov.samhsa.c2s.common.document.transformer.XmlTransformer;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

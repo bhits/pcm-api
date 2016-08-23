@@ -28,8 +28,8 @@ package gov.samhsa.c2s.pcm.service.consentexport;
 
 
 import gov.samhsa.c2s.pcm.domain.consent.Consent;
-import gov.samhsa.mhc.common.consentgen.ConsentBuilder;
-import gov.samhsa.mhc.common.consentgen.ConsentGenException;
+import gov.samhsa.c2s.common.consentgen.ConsentBuilder;
+import gov.samhsa.c2s.common.consentgen.ConsentGenException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

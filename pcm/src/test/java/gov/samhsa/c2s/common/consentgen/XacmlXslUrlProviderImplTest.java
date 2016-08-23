@@ -2,8 +2,8 @@ package gov.samhsa.c2s.common.consentgen;
 
 import static org.junit.Assert.assertEquals;
 
-import gov.samhsa.mhc.common.consentgen.XacmlXslUrlProviderImpl;
-import gov.samhsa.mhc.common.consentgen.XslResource;
+import gov.samhsa.c2s.common.consentgen.XacmlXslUrlProviderImpl;
+import gov.samhsa.c2s.common.consentgen.XslResource;
 import org.junit.Ignore;
 import org.junit.Test;
 

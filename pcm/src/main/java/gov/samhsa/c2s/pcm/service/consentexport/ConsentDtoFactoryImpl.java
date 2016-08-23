@@ -2,8 +2,8 @@ package gov.samhsa.c2s.pcm.service.consentexport;
 
 import gov.samhsa.c2s.pcm.domain.consent.Consent;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentRepository;
-import gov.samhsa.mhc.common.consentgen.ConsentDto;
-import gov.samhsa.mhc.common.consentgen.ConsentDtoFactory;
+import gov.samhsa.c2s.common.consentgen.ConsentDto;
+import gov.samhsa.c2s.common.consentgen.ConsentDtoFactory;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

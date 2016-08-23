@@ -5,8 +5,8 @@ import gov.samhsa.c2s.pcm.domain.SecurityEvent;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.MaliciousFileDetectedEvent;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.SecurityAuditVerb;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.SecurityPredicateKey;
-import gov.samhsa.mhc.common.audit.AuditService;
-import gov.samhsa.mhc.common.audit.PredicateKey;
+import gov.samhsa.c2s.common.audit.AuditService;
+import gov.samhsa.c2s.common.audit.PredicateKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

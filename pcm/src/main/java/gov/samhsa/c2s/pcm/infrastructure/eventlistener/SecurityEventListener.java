@@ -1,7 +1,7 @@
 package gov.samhsa.c2s.pcm.infrastructure.eventlistener;
 
 import gov.samhsa.c2s.pcm.domain.SecurityEvent;
-import gov.samhsa.mhc.common.audit.AuditService;
+import gov.samhsa.c2s.common.audit.AuditService;
 
 /**
  * The listener interface for receiving securityEvent events. The class that is

@@ -2,7 +2,7 @@ package gov.samhsa.c2s.pcm.service.consent;
 
 import gov.samhsa.c2s.pcm.domain.consent.ConsentRepository;
 import gov.samhsa.c2s.pcm.service.dto.ConsentDto;
-import gov.samhsa.mhc.common.util.UniqueValueGenerator;
+import gov.samhsa.c2s.common.util.UniqueValueGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -27,7 +27,7 @@ package gov.samhsa.c2s.pcm.service.consent;
 
 
 import gov.samhsa.c2s.pcm.service.dto.*;
-import gov.samhsa.mhc.common.consentgen.ConsentGenException;
+import gov.samhsa.c2s.common.consentgen.ConsentGenException;
 import gov.samhsa.c2s.pcm.domain.consent.Consent;
 
 import java.util.*;

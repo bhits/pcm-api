@@ -26,7 +26,7 @@
 package gov.samhsa.c2s.pcm.service.patient;
 
 import gov.samhsa.c2s.pcm.domain.patient.PatientRepository;
-import gov.samhsa.mhc.common.util.UniqueValueGenerator;
+import gov.samhsa.c2s.common.util.UniqueValueGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,7 +1,7 @@
 package gov.samhsa.c2s.pcm.service.consent;
 
 import gov.samhsa.c2s.pcm.service.consent.PolicyIdServiceImpl;
-import gov.samhsa.mhc.common.util.UniqueValueGeneratorException;
+import gov.samhsa.c2s.common.util.UniqueValueGeneratorException;
 import gov.samhsa.c2s.pcm.domain.consent.Consent;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentRepository;
 import gov.samhsa.c2s.pcm.service.dto.ConsentDto;

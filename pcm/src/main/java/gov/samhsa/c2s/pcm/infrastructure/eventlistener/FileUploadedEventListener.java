@@ -1,8 +1,8 @@
 package gov.samhsa.c2s.pcm.infrastructure.eventlistener;
 
 import ch.qos.logback.audit.AuditException;
-import gov.samhsa.mhc.common.audit.AuditService;
-import gov.samhsa.mhc.common.audit.PredicateKey;
+import gov.samhsa.c2s.common.audit.AuditService;
+import gov.samhsa.c2s.common.audit.PredicateKey;
 import gov.samhsa.c2s.pcm.domain.SecurityEvent;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.FileUploadedEvent;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.SecurityAuditVerb;
