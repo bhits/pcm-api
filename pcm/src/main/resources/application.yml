@@ -1,8 +1,8 @@
 server:
   port: 8446
 logging:
-  file: /java/MHC_LOGS/pcm/pcm.log
-  path: /java/MHC_LOGS/pcm
+  file: /java/C2S_LOGS/pcm/pcm.log
+  path: /java/C2S_LOGS/pcm
 info:
   component: PCM API
 eureka:
@@ -69,7 +69,7 @@ security:
       user-info-uri: https://localhost:8443/uaa/userinfo
     client:
       client-id: pcm
-mhc:
+c2s:
   pcm:
     config:
       clinicaldata:
@@ -140,17 +140,17 @@ server:
 spring:
   profiles: docker
   datasource:
-    url: jdbc:mysql://pcm-db.mhc.com:3306/pcm?autoReconnect=true
-mhc.pcm.config:
-  pls.api: https://pls.mhc.com:8443/pls/providers
-  clamd.host: clamd.mhc.com
+    url: jdbc:mysql://pcm-db.c2s.com:3306/pcm?autoReconnect=true
+c2s.pcm.config:
+  pls.api: https://pls.c2s.com:8443/pls/providers
+  clamd.host: clamd.c2s.com
 security:
   oauth2:
     resource:
-      user-info-uri: https://uaa.mhc.com:8443/uaa/userinfo
+      user-info-uri: https://uaa.c2s.com:8443/uaa/userinfo
 eureka:
   client:
     service-url:
-      defaultZone: https://discovery-server.mhc.com:8761/eureka/
+      defaultZone: https://discovery-server.c2s.com:8761/eureka/
   instance:
     prefer-ip-address: true
