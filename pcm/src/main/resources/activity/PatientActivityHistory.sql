@@ -11,7 +11,7 @@ FROM
   from modified_entity_type_entity m
   where
     case
-      when m.entity_class_name = "gov.samhsa.mhc.pcm.domain.patient.Patient" or m.entity_class_name = "gov.samhsa.mhc.pcm.domain.consent.Consent"
+      when m.entity_class_name = "gov.samhsa.c2s.pcm.domain.patient.Patient" or m.entity_class_name = "gov.samhsa.c2s.pcm.domain.consent.Consent"
       then m.revision_type <> 1
       else true
     end
