@@ -63,13 +63,13 @@ public class Patient {
     /** The first name. */
     @NotNull
     @Size(min = 2, max = 30)
-    @Pattern(regexp ="^[a-zA-ZÀ-ÿ ]*$", message = "The First Name contains invalid characters. Please try again.")
+    @Pattern(regexp ="^[a-zA-ZÀ-ÿ- ]*$", message = "The First Name contains invalid characters. Please try again.")
     private String firstName;
 
     /** The last name. */
     @NotNull
     @Size(min = 2, max = 30)
-    @Pattern(regexp ="^[a-zA-ZÀ-ÿ ]*$", message = "The Last Name contains invalid characters. Please try again.")
+    @Pattern(regexp ="^[a-zA-ZÀ-ÿ- ]*$", message = "The Last Name contains invalid characters. Please try again.")
     private String lastName;
 
     /** The prefix. */
