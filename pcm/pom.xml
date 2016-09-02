@@ -5,7 +5,7 @@
 
     <groupId>gov.samhsa.c2s</groupId>
     <artifactId>pcm</artifactId>
-    <version>1.14.0-SNAPSHOT</version>
+    <version>1.15.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Patient Consent Management API</name>
@@ -61,7 +61,7 @@
         <java.version>1.8</java.version>
         <spring.cloud.version>Brixton.M4</spring.cloud.version>
         <!-- C2S Common Libraries' version -->
-        <c2s.common-libraries.version>1.6.0</c2s.common-libraries.version>
+        <c2s.common-libraries.version>1.7.0</c2s.common-libraries.version>
         <!-- Third-party library versions -->
         <adobe-echosign.version>20</adobe-echosign.version>
         <apache.commons.version>3.3.2</apache.commons.version>

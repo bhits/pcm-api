@@ -77,7 +77,7 @@ public class ConsentRevokationPdfGeneratorImpl extends
 
             // Title
             Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.BOLD);
-            document.add(iTextPdfService.createParagraphWithContent("Withdrawal of Consent to Participate in Health Information Exchange", titleFont));
+            document.add(iTextPdfService.createParagraphWithContent("Revocation of Consent to Participate in Health Information Exchange", titleFont));
 
             // Blank line
             document.add(Chunk.NEWLINE);
@@ -130,7 +130,7 @@ public class ConsentRevokationPdfGeneratorImpl extends
 
             // Title
             Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.BOLD);
-            document.add(iTextPdfService.createParagraphWithContent("Withdrawal of Consent to Participate in Health Information Exchange", titleFont));
+            document.add(iTextPdfService.createParagraphWithContent("Revocation of Consent to Participate in Health Information Exchange", titleFont));
 
             // Blank line
             document.add(Chunk.NEWLINE);
