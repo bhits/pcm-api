@@ -386,11 +386,11 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             attesterEmailCell.setBorder(Rectangle.NO_BORDER);
             signingDetailsTable.addCell(attesterEmailCell);
 
-            PdfPCell attesterFullNameCell = new PdfPCell(iTextPdfService.createCellContent("Attested By: ", patientInfoFont, getFullName(patientProfile), null));
+            PdfPCell attesterFullNameCell = new PdfPCell(iTextPdfService.createCellContent("Signed By: ", patientInfoFont, getFullName(patientProfile), null));
             attesterFullNameCell.setBorder(Rectangle.NO_BORDER);
             signingDetailsTable.addCell(attesterFullNameCell);
 
-            PdfPCell attesterSignDateCell = new PdfPCell(iTextPdfService.createCellContent("Attested On: ", patientInfoFont, iTextPdfService.formatDate(attestedOn), null));
+            PdfPCell attesterSignDateCell = new PdfPCell(iTextPdfService.createCellContent("Signed On: ", patientInfoFont, iTextPdfService.formatDate(attestedOn), null));
             attesterSignDateCell.setBorder(Rectangle.NO_BORDER);
             signingDetailsTable.addCell(attesterSignDateCell);
 

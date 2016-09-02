@@ -143,7 +143,7 @@ public class ITextPdfServiceImpl implements ITextPdfService {
         if (isSigned && StringUtils.hasText(firstName) && StringUtils.hasText(lastName) && StringUtils.hasText(email) && Objects.nonNull(attestedOn)) {
             Font patientInfoFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
 
-            PdfPCell attesterName = new PdfPCell(createCellContent("Attested by: ", patientInfoFont, getFullName(firstName, lastName), null));
+            PdfPCell attesterName = new PdfPCell(createCellContent("Signed by: ", patientInfoFont, getFullName(firstName, lastName), null));
             attesterName.setBorder(Rectangle.NO_BORDER);
             signingDetailsTable.addCell(attesterName);
 
@@ -151,7 +151,7 @@ public class ITextPdfServiceImpl implements ITextPdfService {
             attesterEmailCell.setBorder(Rectangle.NO_BORDER);
             signingDetailsTable.addCell(attesterEmailCell);
 
-            PdfPCell attesterSignDateCell = new PdfPCell(createCellContent("Attested on: ", patientInfoFont, formatDate(attestedOn), null));
+            PdfPCell attesterSignDateCell = new PdfPCell(createCellContent("Signed on: ", patientInfoFont, formatDate(attestedOn), null));
             attesterSignDateCell.setBorder(Rectangle.NO_BORDER);
             signingDetailsTable.addCell(attesterSignDateCell);
         }
