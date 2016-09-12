@@ -40,12 +40,12 @@
         <repository>
             <id>deployment</id>
             <name>Internal Releases</name>
-            <url>http://${maven.nexus.servername}/nexus/content/repositories/releases/</url>
+            <url>http://${maven.nexus.servername}/repository/releases/</url>
         </repository>
         <snapshotRepository>
             <id>deployment</id>
             <name>Internal Releases</name>
-            <url>http://${maven.nexus.servername}/nexus/content/repositories/snapshots/</url>
+            <url>http://${maven.nexus.servername}/repository/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
