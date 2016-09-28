@@ -1,8 +1,6 @@
 package gov.samhsa.c2s.pcm.infrastructure.security;
 
-import net.taldius.clamav.ClamAVScanner;
-import net.taldius.clamav.ClamAVScannerFactory;
-import net.taldius.clamav.ScannerException;
+import fi.solita.clamav.ClamAVClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -39,7 +38,7 @@ public class ClamAVService {
     /**
      * The scanner.
      */
-    private ClamAVScanner scanner;
+    private ClamAVClient scanner;
 
     /**
      * Gets the clamd host.
@@ -102,23 +101,16 @@ public class ClamAVService {
      * org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
      */
     @PostConstruct
-    public void afterPropertiesSet() throws Exception {
-        ClamAVScannerFactory.setClamdHost(clamdHost);
-
-        ClamAVScannerFactory.setClamdPort(clamdPort);
-
-        if (connTimeOut > 0) {
-            ClamAVScannerFactory.setConnectionTimeout(connTimeOut);
-        }
-        this.scanner = ClamAVScannerFactory.getScanner();
+    public void afterPropertiesSet() {
+        this.scanner = new ClamAVClient(clamdHost, clamdPort, connTimeOut);
     }
 
     /**
-     * Gets the clam av scanner.
+     * Gets the clam av scanner client.
      *
-     * @return the clam av scanner
+     * @return the clam av scanner client
      */
-    public ClamAVScanner getClamAVScanner() {
+    public ClamAVClient getClamAVScanner() {
         return scanner;
     }
 
@@ -127,10 +119,11 @@ public class ClamAVService {
      *
      * @param destFilePath file path
      * @return true, if successful
-     * @throws Exception the exception
+     * @throws IOException thrown if fileInputStream encounters an IOException
+     * @throws ClamAVClientNotAvailableException thrown if the ClamAV client cannot connect successfully to the remote ClamAV Server scanner,
+     * or if the remote server aborts the connection
      */
-    public boolean fileScanner(String destFilePath) throws Exception {
-
+    public boolean fileScanner(String destFilePath) throws IOException, ClamAVClientNotAvailableException {
         return fileScanner(new FileInputStream(destFilePath));
     }
 
@@ -139,26 +132,32 @@ public class ClamAVService {
      *
      * @param fileInputStream the file input stream
      * @return true, if successful
-     * @throws Exception the exception
+     * @throws IOException thrown if fileInputStream encounters an IOException
+     * @throws ClamAVClientNotAvailableException thrown if the ClamAV client cannot connect successfully to the remote ClamAV Server scanner,
+     * or if the remote server aborts the connection
      */
-    public boolean fileScanner(InputStream fileInputStream) throws ClamAVClientNotAvailableException, Exception {
-
-        boolean resScan = false;
+    public boolean fileScanner(InputStream fileInputStream) throws IOException, ClamAVClientNotAvailableException {
+        boolean resScan;
         afterPropertiesSet();
 
         if (fileInputStream != null) {
+            byte[] scannerReply;
+
             try {
-                resScan = scanner.performScan(fileInputStream);
-            } catch (ScannerException e) {
+                scannerReply = scanner.scan(fileInputStream);
+            } catch (Exception e) {
                 logger.error(e.getMessage(), e);
-                throw new ClamAVClientNotAvailableException(
-                        "ClamAV service not available.");
+                throw new ClamAVClientNotAvailableException("ClamAV service not available or server aborted connection.");
+            } finally {
+                //Close the file input stream
+                fileInputStream.close();
             }
 
+            resScan = ClamAVClient.isCleanReply(scannerReply);
         } else {
-
-            throw new Exception();
+            throw new IOException("fileInputStream passed to ClamAVServer fileScanner was null.");
         }
+
         return resScan;
     }
 }
