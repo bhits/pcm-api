@@ -142,15 +142,15 @@ spring:
   datasource:
     url: jdbc:mysql://pcm-db.c2s.com:3306/pcm?autoReconnect=true
 c2s.pcm.config:
-  pls.api: https://pls.c2s.com:8443/pls/providers
+  pls.api: http://pls.c2s.com:8080/pls/providers
   clamd.host: clamd.c2s.com
 security:
   oauth2:
     resource:
-      user-info-uri: https://uaa.c2s.com:8443/uaa/userinfo
+      user-info-uri: http://uaa.c2s.com:8080/uaa/userinfo
 eureka:
   client:
     service-url:
-      defaultZone: https://discovery-server.c2s.com:8761/eureka/
+      defaultZone: http://discovery-server.c2s.com:8761/eureka/
   instance:
     prefer-ip-address: true
