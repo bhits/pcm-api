@@ -14,7 +14,8 @@ eureka:
     healthcheck:
       enabled: true
     service-url:
-      defaultZone: https://localhost:8761/eureka/
+      # endpoint for discovery-server, pass '--eureka.client.protocol=https' if discovery-server is running on https
+      defaultZone: ${eureka.client.protocol:http}://localhost:8761/eureka/
 # TODO: enable feign hystrix back when PHR API is refactored to a service that can be called by this API without OAuth2 token
 feign.hystrix.enabled: false
 spring:
@@ -66,7 +67,7 @@ security:
                          jfj9Cw2QICsc5+Pwf21fP+hzf+1WSRHbnYv8uanRO0gZ8ekGaghM/2H6gqJbo2nI
                          JwIDAQAB
                          -----END PUBLIC KEY-----
-      user-info-uri: https://localhost:8443/uaa/userinfo
+      user-info-uri: http://localhost:8080/uaa/userinfo
     client:
       client-id: pcm
 c2s:
@@ -85,12 +86,8 @@ c2s:
           type: ISO
         org: C2S Health
         prefix: C2S
-      echosign:
-        echoSignDocumentServiceEndpointAddress: https://secure.echosign.com/services/EchoSignDocumentService20
-        echoSignApiKey: SBC5B7XK5A7Y5V
-        esignaturePollingServicePollTaskFixedDelayInMilliseconds: 2000
       pls:
-        api: https://localhost:8443/pls/providers
+        api: http://localhost:8080/pls/providers
       pagination:
         itemsPerPage: 10
       activity:
@@ -110,8 +107,8 @@ c2s:
         label: PurposeOfUse
       hie-connection:
         fhir:
-          enabled: true
-          serverUrl: https://localhost:8443/iexhub/services
+          enabled: false
+          serverUrl: http://localhost:8080/iexhub/services
           ClientSocketTimeoutInMs: 768000
           keepExcludeList: false
   vss:
@@ -142,15 +139,15 @@ spring:
   datasource:
     url: jdbc:mysql://pcm-db.c2s.com:3306/pcm?autoReconnect=true
 c2s.pcm.config:
-  pls.api: https://pls.c2s.com:8443/pls/providers
+  pls.api: http://pls.c2s.com:8080/pls/providers
   clamd.host: clamd.c2s.com
 security:
   oauth2:
     resource:
-      user-info-uri: https://uaa.c2s.com:8443/uaa/userinfo
+      user-info-uri: http://uaa.c2s.com:8080/uaa/userinfo
 eureka:
   client:
     service-url:
-      defaultZone: https://discovery-server.c2s.com:8761/eureka/
+      defaultZone: ${eureka.client.protocol:http}://discovery-server.c2s.com:8761/eureka/
   instance:
     prefer-ip-address: true
