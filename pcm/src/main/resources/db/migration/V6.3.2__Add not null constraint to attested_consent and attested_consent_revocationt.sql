@@ -1,0 +1,12 @@
+ALTER TABLE `pcm`.`attested_consent` MODIFY  `attested_date_time` datetime(6) NOT NULL;
+ALTER TABLE `pcm`.`attested_consent` MODIFY  `attested_pdf_consent` LONGBLOB NOT NULL;
+ALTER TABLE `pcm`.`attested_consent` MODIFY  `consent_terms_accepted` BIT(1) NOT NULL;
+ALTER TABLE `pcm`.`attested_consent` MODIFY  `consent_terms_versions` BIGINT NOT NULL;
+ALTER TABLE `pcm`.`attested_consent` MODIFY  `attester_ip_address` VARCHAR(255) NOT NULL;
+ALTER TABLE `pcm`.`attested_consent` MODIFY  `patient_guid` VARCHAR(255) NOT NULL;
+ALTER TABLE `pcm`.`attested_consent_revocation` MODIFY  `attested_date_time` datetime(6) NOT NULL;
+ALTER TABLE `pcm`.`attested_consent_revocation` MODIFY  `attested_pdf_consent_revoke` LONGBLOB NOT NULL;
+ALTER TABLE `pcm`.`attested_consent_revocation` MODIFY  `consent_revoke_terms_accepted` BIT(1) NOT NULL;
+ALTER TABLE `pcm`.`attested_consent_revocation` MODIFY  `consent_revocation_terms_versions` BIGINT NOT NULL;
+ALTER TABLE `pcm`.`attested_consent_revocation` MODIFY  `attester_ip_address` VARCHAR(255) NOT NULL;
+ALTER TABLE `pcm`.`attested_consent_revocation` MODIFY  `patient_guid` VARCHAR(255) NOT NULL;

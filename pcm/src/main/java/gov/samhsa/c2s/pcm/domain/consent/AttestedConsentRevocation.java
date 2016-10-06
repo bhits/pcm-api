@@ -30,6 +30,7 @@ import gov.samhsa.c2s.pcm.domain.consent.event.ConsentSignedEvent;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * The Class SignedPDFConsent.
@@ -47,14 +48,17 @@ public class AttestedConsentRevocation extends AbstractAttestedPDFDocument{
 
 	/** The attested pdf consent content. */
 	@Lob
+	@NotNull
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "attested_pdf_consent_revoke")
     private byte[] attestedPdfConsentRevoke;
 
+	@NotNull
 	@Column(name = "consent_revoke_terms_accepted")
 	private boolean consentRevokeTermsAccepted;
 
 	@OneToOne
+	@NotNull
 	@Basic(fetch = FetchType.LAZY)
 	private ConsentRevocationTermsVersions consentRevocationTermsVersions;
 
