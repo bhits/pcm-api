@@ -32,7 +32,6 @@ public class SecurityConfig {
                     http.requiresChannel().anyRequest().requiresSecure();
                 }
                 http.authorizeRequests()
-                        .antMatchers(HttpMethod.GET, "/patients/*/consents/*/obligations").permitAll()
                         // FIXME: Change following method to protect new attest consent endpoint
                         .antMatchers(HttpMethod.GET, "/patients/consents/signConsent/**").access(hasScope("pcm.consent_sign"))
                         // FIXME: Change following method to protect new attest consent revocation endpoint
@@ -49,7 +48,7 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.POST, "/patients/clinicaldocuments/**").access(hasScope("pcm.clinicalDocument_create"))
                         .antMatchers(HttpMethod.DELETE, "/patients/clinicaldocuments/**").access(hasScope("pcm.clinicalDocument_delete"))
                         .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .antMatchers(HttpMethod.GET, "/patients/purposeOfUse", "/patients/medicalSection","/patients/sensitivityPolicy").authenticated()
+                        .antMatchers(HttpMethod.GET, "/patients/purposeOfUse", "/patients/medicalSection", "/patients/sensitivityPolicy").authenticated()
                         // TODO (BU): remove this permission after VSS is separated
                         .antMatchers(HttpMethod.GET, "/lookupService/**").permitAll()
                         .antMatchers(HttpMethod.POST, "/lookupService/**").permitAll()
