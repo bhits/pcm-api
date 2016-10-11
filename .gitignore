@@ -30,6 +30,9 @@ out/
 # Ignore .css files
 *.css
 
+# Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
+!maven-wrapper.jar
+
 
 # CUSTOM .GITIGNORE FILE BASED ON Node.gitignore TEMPLATE
 
