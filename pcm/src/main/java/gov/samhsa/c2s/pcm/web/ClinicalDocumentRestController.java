@@ -28,17 +28,17 @@ package gov.samhsa.c2s.pcm.web;
 import gov.samhsa.c2s.pcm.infrastructure.eventlistener.EventService;
 import gov.samhsa.c2s.pcm.infrastructure.security.ClamAVClientNotAvailableException;
 import gov.samhsa.c2s.pcm.infrastructure.security.ClamAVService;
+import gov.samhsa.c2s.pcm.infrastructure.security.InfectedFileException;
+import gov.samhsa.c2s.pcm.infrastructure.securityevent.FileDownloadedEvent;
+import gov.samhsa.c2s.pcm.infrastructure.securityevent.FileUploadedEvent;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.MaliciousFileDetectedEvent;
+import gov.samhsa.c2s.pcm.service.clinicaldata.ClinicalDocumentService;
 import gov.samhsa.c2s.pcm.service.dto.CCDDto;
 import gov.samhsa.c2s.pcm.service.dto.ClinicalDocumentDto;
 import gov.samhsa.c2s.pcm.service.dto.LookupDto;
 import gov.samhsa.c2s.pcm.service.exception.*;
 import gov.samhsa.c2s.pcm.service.patient.PatientService;
 import gov.samhsa.c2s.pcm.service.reference.ClinicalDocumentTypeCodeService;
-import gov.samhsa.c2s.pcm.infrastructure.security.InfectedFileException;
-import gov.samhsa.c2s.pcm.infrastructure.securityevent.FileDownloadedEvent;
-import gov.samhsa.c2s.pcm.infrastructure.securityevent.FileUploadedEvent;
-import gov.samhsa.c2s.pcm.service.clinicaldata.ClinicalDocumentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -207,12 +207,6 @@ public class ClinicalDocumentRestController {
     @RequestMapping(value = "clinicaldocuments/ccd/{documentId}", method = RequestMethod.GET)
     public CCDDto getClinicalDocument(Principal principal, @PathVariable("documentId") Long documentId) {
         return clinicalDocumentService.findCCDDto(principal.getName(), documentId);
-    }
-
-    //FIXME
-    @RequestMapping(value = "clinicaldocuments/ccd/{patientUserName}/{documentId}", method = RequestMethod.GET)
-    public CCDDto getClinicalDocumentByUserName(@PathVariable("patientUserName") String patientUserName, @PathVariable("documentId") Long documentId) {
-        return clinicalDocumentService.findCCDDto(patientUserName, documentId);
     }
 
     String scanMultipartFile(MultipartFile file) {
