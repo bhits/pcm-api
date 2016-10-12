@@ -10,31 +10,38 @@
 
     <name>Patient Consent Management API</name>
     <description>Patient Consent Management API</description>
-    <ciManagement>
-        <system>Jenkins</system>
-        <url>http://BhitsBuild03/</url>
-    </ciManagement>
+    <url>${project.scm.url}</url>
 
-    <!-- Since buildnumber-maven-plugin uses git command, git command must in
-        path. i.e. need set git in the path Environment variable -->
-    <scm>
-        <url>https://github.com/FEISystems/pcm-api</url>
-        <connection>scm:git:https://github.com/FEISystems/pcm-api.git</connection>
-        <developerConnection>scm:git:https://github.com/FEISystems/pcm-api.git</developerConnection>
-    </scm>
+    <organization>
+        <name>SAMHSA</name>
+        <url>http://www.samhsa.gov/</url>
+    </organization>
 
     <developers>
         <developer>
-            <id>Bhits.Java</id>
-            <name>Bhits Java</name>
-            <email>Bhits.Java@feisystems.com</email>
+            <id>BHITS Team</id>
+            <name>BHITS Team</name>
             <organization>FEi Systems</organization>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>-5</timezone>
         </developer>
     </developers>
+
+    <licenses>
+        <license>
+            <name>See license in LICENSE.md</name>
+            <url>${project.scm.url}/blob/master/LICENSE.md</url>
+        </license>
+    </licenses>
+
+    <ciManagement>
+        <system>CI</system>
+        <url>http://BhitsBuild03/</url>
+    </ciManagement>
+
+    <scm>
+        <url>https://github.com/bhits/pcm-api</url>
+        <connection>scm:git:${project.scm.url}.git</connection>
+        <developerConnection>scm:git:${project.scm.url}.git</developerConnection>
+    </scm>
 
     <distributionManagement>
         <repository>
