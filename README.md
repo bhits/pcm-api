@@ -1,8 +1,6 @@
 # Patient Consent Management API
 
-Patient Consent Management API (pcm) is the core module of C2S system. It contains patient consent management services and value set services (VSS).
-Consent is an electronic agreement of a patient regarding what of his/her medical information can be send to other health service providers. This module contains consent related services including, consent creation, consent Audit, consent eSign, consent export and health service provider lookup service.
-Value set is a set of codes, mapping to different health issues, downloaded from [VSAC](https://vsac.nlm.nih.gov/) and later be used to generate part of the consent.
+Patient Consent Management API (PCM) is the core module of C2S system. It contains patient consent management services and Value Set Services (VSS). An electronic patient consent is digital agreement created and electronically signed by the patient to (1) select what sensitive categories of health information he or she wishes to share, (2) what purposes the medical information may be used (3) identify the provider from whom the information can be disclosed, (4) identify the provider to whom the information can be disclosed, (5) the date when the consent goes into effect, and (6) an expiration date. This module contains consent related services that includes consent creation, consent audit, consent eSignature, consent export and health service provider lookup service. Value Sets, downloaded from [VSAC](https://vsac.nlm.nih.gov/), are a set of concept codes mapped to various sensitive category codes that are intended for use by organizations exchanging personally identifiable protected health information to perform data segmentation based on the patient’s privacy preferences in his/her consent.
 
 ## Build
 
