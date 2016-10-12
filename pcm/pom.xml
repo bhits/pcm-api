@@ -65,13 +65,10 @@
         <!-- Third-party library versions -->
         <adobe-echosign.version>20</adobe-echosign.version>
         <apache.commons.version>3.3.2</apache.commons.version>
-        <commons-io.version>2.4</commons-io.version>
         <modelmapper.version>0.7.5</modelmapper.version>
-        <poi.version>3.11</poi.version>
         <poi-ooxml.version>3.11</poi-ooxml.version>
         <libclamav.version>1.0</libclamav.version>
         <itextpdf.version>5.5.3</itextpdf.version>
-        <logback.version>1.0.11</logback.version>
         <docker.maven.version>0.4.3</docker.maven.version>
         <hapi.fhir.version>1.4</hapi.fhir.version>
         <clamav-client.version>1.0.1</clamav-client.version>
@@ -89,10 +86,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
         <dependency>
@@ -102,10 +95,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-ribbon</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -135,11 +124,6 @@
             <version>${logback.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${apache.commons.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>${modelmapper.version}</version>
@@ -148,16 +132,6 @@
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
             <version>${itextpdf.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>${poi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -173,11 +147,6 @@
         <dependency>
             <groupId>gov.samhsa.c2s</groupId>
             <artifactId>xml-validation</artifactId>
-            <version>${c2s.common-libraries.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>gov.samhsa.c2s</groupId>
-            <artifactId>document-transformer</artifactId>
             <version>${c2s.common-libraries.version}</version>
         </dependency>
         <dependency>
@@ -198,11 +167,6 @@
         <dependency>
             <groupId>gov.samhsa.c2s</groupId>
             <artifactId>common-util</artifactId>
-            <version>${c2s.common-libraries.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>gov.samhsa.c2s</groupId>
-            <artifactId>resource-url</artifactId>
             <version>${c2s.common-libraries.version}</version>
         </dependency>
         <dependency>
