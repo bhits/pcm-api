@@ -1,6 +1,6 @@
 # Patient Consent Management API
 
-Patient Consent Management API (PCM) is the core module of Consent2Share (C2S) system. It contains patient consent management services and Value Set Services (VSS). An electronic patient consent is digital agreement created and electronically signed by the patient to (1) select what sensitive categories of health information he or she wishes to share, (2) what purposes the medical information may be used (3) identify the provider from whom the information can be disclosed, (4) identify the provider to whom the information can be disclosed, (5) record the date when the consent goes into effect and the expiration date. This module contains consent related services that includes consent creation, consent audit, consent eSignature, consent export and health service provider lookup service. Value Sets, downloaded from [VSAC](https://vsac.nlm.nih.gov/), are a set of concept codes mapped to various sensitive category codes that are intended for use by organizations exchanging personally identifiable protected health information to perform data segmentation based on the patient’s privacy preferences in his/her consent.
+Patient Consent Management API (PCM) is the core module of the Consent2Share (C2S) system. It contains patient consent management services and value set services (VSS). An electronic patient consent is digital agreement created and electronically signed by the patient to (1) select which sensitive categories of health information he or she wishes to share, (2) the purposes for which the medical information may be used (3) identify the provider from whom the information can be disclosed, (4) identify the provider to whom the information can be disclosed, (5) record the date when the consent goes into effect and (6) identify the expiration date. This module contains consent related services that includes consent creation, consent audit, consent eSignature, consent export, and health service provider lookup service. Value sets, downloaded from [VSAC](https://vsac.nlm.nih.gov/), are a set of concept codes mapped to various sensitive category codes that are intended for use by organizations exchanging personally identifiable protected health information to perform data segmentation based on the patient’s privacy preferences in his or her consent.
 
 ## Build
 
@@ -30,7 +30,7 @@ This API uses *[MySQL](https://www.mysql.com/)* for persistence and *[Flyway](ht
 
 ### Commands
 
-This is a [Spring Boot](https://projects.spring.io/spring-boot/) project and serves the API via an embedded Tomcat instance, therefore there is no need for a separate application server to run this service.
+This is a [Spring Boot](https://projects.spring.io/spring-boot/) project and serves the API via an embedded Tomcat instance. Therefore, there is no need for a separate application server to run this service.
 + Run as a JAR file: `java -jar pcm-x.x.x-SNAPSHOT.jar <additional program arguments>`
 + Run as a Docker Container: `docker run -d bhits/pcm:latest <additional program arguments>`
 
@@ -94,7 +94,7 @@ services:
 
 Java has a default CA Certificates Store that allows it to trust well-known certificate authorities. For development and testing purposes, one might want to trust additional self-signed certificates. In order to override the default Java CA Certificates Store in a Docker container, one can mount a custom `cacerts` file over the default one in the Docker image as `docker run -d -v "/path/on/dockerhost/to/custom/cacerts:/etc/ssl/certs/java/cacerts" bhits/pcm:latest`
 
-*NOTE: The `cacerts` references given in the both sides of volume mapping above are files, not directories.*
+*NOTE: The `cacerts` references given in the volume mapping above are files, not directories.*
 
 [//]: # (## API Documentation)
 
