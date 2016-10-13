@@ -87,8 +87,6 @@ public class ValueSetLookupRestController {
             @RequestBody ValueSetQueryListDto valueSetQueryListDtos) {
 
         logger.debug("Rendering Concept Code list page");
-        // Set<ValueSetQueryDto> valueSetQueryDtos =
-        // valueSetQueryListDtos.getValueSetQueryDtos();
         try {
             valueSetQueryListDtos = lookupService
                     .restfulValueSetCategories(valueSetQueryListDtos);

@@ -153,31 +153,6 @@ public abstract class AbstractLocalDBLookupCodedConcept {
 		this.originalText = originalText;
 	}
 
-	/*
-	 * public String toJson() { return new
-	 * JSONSerializer().exclude("*.class").deepSerialize(this); }
-	 * 
-	 * public static AbstractLocalDBLookupCodedConcept
-	 * fromJsonToAbstractLocalDBLookupCodedConcept(String json) { return new
-	 * JSONDeserializer<AbstractLocalDBLookupCodedConcept>().use(null,
-	 * AbstractLocalDBLookupCodedConcept.class).deserialize(json); }
-	 * 
-	 * public static String
-	 * toJsonArray(Collection<AbstractLocalDBLookupCodedConcept> collection) {
-	 * return new JSONSerializer().exclude("*.class").deepSerialize(collection);
-	 * }
-	 * 
-	 * public static Collection<AbstractLocalDBLookupCodedConcept>
-	 * fromJsonArrayToAbstractLocalDBLookupCodedConcepts(String json) { return
-	 * new JSONDeserializer<List<AbstractLocalDBLookupCodedConcept>>().use(null,
-	 * ArrayList.class).use("values",
-	 * AbstractLocalDBLookupCodedConcept.class).deserialize(json); }
-	 * 
-	 * public String toString() { return
-	 * ReflectionToStringBuilder.toString(this,
-	 * ToStringStyle.SHORT_PREFIX_STYLE); }
-	 */
-
 	/** The id. */
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "idgener")

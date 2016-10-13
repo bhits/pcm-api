@@ -55,10 +55,4 @@ public class FhirServiceConfig {
         FhirValidator fhirValidator = fhirContext.newValidator();
         return fhirValidator;
     }
-
-/*    @Bean
-    public FhirPaResourceConverter fhirResourceConverter(){
-        FhirResourceConverter fhirResourceConverter = new FhirResourceConverter();
-        return fhirResourceConverter;
-    }*/
 }

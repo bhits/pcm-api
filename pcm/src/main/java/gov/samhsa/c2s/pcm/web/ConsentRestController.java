@@ -114,7 +114,6 @@ public class ConsentRestController {
         ConsentsListDto consentsListDto = new ConsentsListDto(consentService
                 .findAllConsentsDtoByPatientAndPage(patientId, pageNumber));
         // using directId
-        // accessReferenceMapper.setupAccessReferenceMap(consentsListDto.getConsentList());
         return consentsListDto;
     }
 
@@ -159,12 +158,6 @@ public class ConsentRestController {
                                @RequestParam(value = "ICD9", required = false) HashSet<String> icd9)
             throws ConsentGenException, IOException {
         consentDto.setUsername(principal.getName());
-        /*
-         * if (consentDto.getId() != null) { final String directConsentId =
-		 * String.valueOf(accessReferenceMapper
-		 * .getDirectReference(consentDto.getId()));
-		 * consentDto.setId(directConsentId); }
-		 */
 
         final Set<String> isMadeTo = new HashSet<String>();
         final Set<String> isMadeFrom = new HashSet<String>();
@@ -249,12 +242,7 @@ public class ConsentRestController {
                 if (null != obj && obj instanceof ConsentValidationDto) {
 
                     final ConsentValidationDto conDto = (ConsentValidationDto) obj;
-                    /*
-                     * final String indirRef = accessReferenceMapper
-					 * .getIndirectReference(conDto.getExistingConsentId());
-					 * 
-					 * conDto.setExistingConsentId(indirRef);
-					 */
+
                     // duplicate policy found
                     final ObjectMapper mapper = new ObjectMapper();
                     String errorMessage = null;
@@ -277,12 +265,6 @@ public class ConsentRestController {
             throws ConsentGenException, IOException {
 
         consentDto.setUsername(principal.getName());
-        /*
-         * if (consentDto.getId() != null) { final String directConsentId =
-		 * String.valueOf(accessReferenceMapper
-		 * .getDirectReference(consentDto.getId()));
-		 * consentDto.setId(directConsentId); }
-		 */
 
         final Set<String> isMadeTo = new HashSet<String>();
         final Set<String> isMadeFrom = new HashSet<String>();
@@ -366,12 +348,7 @@ public class ConsentRestController {
                 if (null != obj && obj instanceof ConsentValidationDto) {
 
                     final ConsentValidationDto conDto = (ConsentValidationDto) obj;
-                    /*
-                     * final String indirRef = accessReferenceMapper
-					 * .getIndirectReference(conDto.getExistingConsentId());
-					 * 
-					 * conDto.setExistingConsentId(indirRef);
-					 */
+
                     // duplicate policy found
                     final ObjectMapper mapper = new ObjectMapper();
                     String errorMessage = null;
@@ -494,7 +471,6 @@ public class ConsentRestController {
             Map<String, String> map = new HashMap<String, String>();
             map.put("data", new String(consentDirective));
             return map;
-            //return new ResponseEntity<byte[]>(consentDirective,headers, HttpStatus.OK);
         } else
             throw new InternalServerErrorException("Resource Not Found");
 

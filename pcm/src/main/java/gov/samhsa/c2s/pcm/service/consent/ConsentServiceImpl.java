@@ -530,8 +530,6 @@ public class ConsentServiceImpl implements ConsentService {
             }
 
             // Set fields
-            // isMadeToName.addAll(isMadeToOrgName);
-            // toDiscloseName.addAll(toDiscloseOrgName);
             consentAttestationDto.setConsentId(String.valueOf(consent.getId()));
             consentAttestationDto.setUsername(consent.getPatient().getUsername());
 
@@ -719,8 +717,6 @@ public class ConsentServiceImpl implements ConsentService {
             }
 
             // Set fields
-            // isMadeToName.addAll(isMadeToOrgName);
-            // toDiscloseName.addAll(toDiscloseOrgName);
             consentDto
                     .setDoNotShareClinicalConceptCodes(consentDoNotShareClinicalConceptCodes);
             consentDto.setId(String.valueOf(consent.getId()));

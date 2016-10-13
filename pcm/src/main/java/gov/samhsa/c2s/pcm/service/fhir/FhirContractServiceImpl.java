@@ -91,7 +91,6 @@ public class FhirContractServiceImpl implements FhirContractService {
     }
 
     public void publishFhirContractToHie(Consent consent, PatientDto patientDto) {
-        // createFhirContract(consent, patientDto);
         publishFhirContractToHie(createFhirContract(consent, patientDto));
     }
 
@@ -121,15 +120,6 @@ public class FhirContractServiceImpl implements FhirContractService {
                 "List of Excluded Sensitive policy codes");
 
         List<String> excludeCodes = getConsentObligations(consent);
-/*        Set<String> allSensitiveCodes = Stream.of(SensitivePolicyCodeEnum.values())
-                .map(SensitivePolicyCodeEnum::getCode)
-                .collect(Collectors.toSet());
-        Set<String> includeCodes = allSensitiveCodes.stream()
-                .filter(
-                        e -> (excludeCodes.stream()
-                                .filter(d -> d.equalsIgnoreCase(e))
-                                .count()) < 1)
-                .collect(Collectors.toSet());*/
 
         // go over full list and add obligation as exclusions
         for (SensitivePolicyCodeEnum codesEnum : SensitivePolicyCodeEnum.values()) {
@@ -175,10 +165,8 @@ public class FhirContractServiceImpl implements FhirContractService {
         // use list item flag to specify a category and the item to specify an
         // instance (e.g. DocumentReference)
         CodeableConceptDt codeableConceptDt = new CodeableConceptDt(CONFIDENTIALITY_CODE_CODE_SYSTEM, sensitivePolicyCode);
-        // dischargeSummaryCode
         codeableConceptDt.setText(description);
         resourceSummaryEntry.setDeleted(false);
-        // dischargeSummaryEntry.setFlag(dischargeSummaryCode);
         Basic basicItem = new Basic();
         basicItem.setId(new IdDt(sensitivePolicyCode));
         basicItem.setCode(codeableConceptDt);
@@ -239,8 +227,6 @@ public class FhirContractServiceImpl implements FhirContractService {
         contract.getContained().getContainedResources().add(recipientOrganization);
         contract.addAuthority().setReference("#" + recipientOrganization.getId());
 
-        //This is required if the organization was not already added as a "contained" resource reference by the Patient
-        //contract.getContained().getContainedResources().add(sourceOrganizationResource);
         // specify the provider who authored the data
         if (null == recipientOrganization) {
             Set<IndividualProvider> recipientindPermittedTo = new HashSet<IndividualProvider>();
@@ -264,8 +250,6 @@ public class FhirContractServiceImpl implements FhirContractService {
         applicablePeriod.setStart(new DateTimeDt(consent.getStartDate()));
         contract.getTermFirstRep().setApplies(applicablePeriod);
 
-
-        // contract.getIdentifier().setSystem(pidSystem).setValue(consent.getConsentReferenceId());
         final String xdsDocumentEntryUniqueId = uniqueOidProvider.getOid();
 
         contract.getIdentifier().setSystem(pidSystem).setValue(xdsDocumentEntryUniqueId);
@@ -283,8 +267,6 @@ public class FhirContractServiceImpl implements FhirContractService {
     private Organization setOrganizationProvider(Set<OrganizationalProvider> orgProviders, String orgIdName) {
         Organization sourceOrganizationResource = new Organization();
 
-        //Set<OrganizationalProvider> orgProvidersDisclosureIsMadeTo = consentAttestationDto.getOrgProvidersDisclosureIsMadeTo();
-
         orgProviders.forEach((OrganizationalProvider organizationalProvider) ->
         {
             sourceOrganizationResource.setId(new IdDt(orgIdName));
@@ -301,13 +283,10 @@ public class FhirContractServiceImpl implements FhirContractService {
     private Practitioner setPractitionerProvider(Set<IndividualProvider> individualProviders, String practIdName) {
         Practitioner sourcePractitionerResource = new Practitioner();
 
-        // Set<IndividualProvider> indProvidersDisclosureIsMadeTo = consentAttestationDto.getIndProvidersDisclosureIsMadeTo();
-
         individualProviders.forEach((IndividualProvider individualProvider) ->
         {
             sourcePractitionerResource.setId(new IdDt(practIdName));
             sourcePractitionerResource.addIdentifier().setSystem(npiSystem).setValue(individualProvider.getNpi());
-            // sourceOrganizationResource.setName(individualProvider.getn());
             sourcePractitionerResource.addAddress().addLine(individualProvider.getFirstLineMailingAddress())
                     .setCity(individualProvider.getMailingAddressCityName())
                     .setState(individualProvider.getMailingAddressStateName())

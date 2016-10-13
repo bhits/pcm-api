@@ -499,7 +499,6 @@ public class ValueSetMgmtHelper {
      */
     public ValueSetLookUpDto convertSetToDto(Set<String> catCodes) {
         ValueSetLookUpDto lookUpDto = new ValueSetLookUpDto();
-        // lookUpDto.setCatCode("ETH");
         return lookUpDto;
 
     }
