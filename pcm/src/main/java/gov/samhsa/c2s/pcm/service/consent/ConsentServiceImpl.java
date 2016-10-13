@@ -737,14 +737,14 @@ public class ConsentServiceImpl implements ConsentService {
                 consentDto.setConsentStart(formatter.parse(today));
             } catch (final ParseException e) {
                 consentDto.setConsentStart(consent.getStartDate());
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
             try {
                 today = formatter.format(consent.getEndDate());
                 consentDto.setConsentEnd(formatter.parse(today));
             } catch (final ParseException e) {
                 consentDto.setConsentEnd(consent.getEndDate());
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
 
             // TODO: Cleanup: combine name and npi into one object
@@ -1627,9 +1627,7 @@ public class ConsentServiceImpl implements ConsentService {
             try {
                 xacmlFile = new String(xacmlByte, "UTF-8");
             } catch (final UnsupportedEncodingException e) {
-                logger.error("Error while converting xacml byte[] to string "
-                        + e.getMessage());
-                e.printStackTrace();
+                logger.error("Error while converting xacml byte[] to string " + e.getMessage(), e);
             }
 
         }

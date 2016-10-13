@@ -41,7 +41,7 @@ public class FhirContractServiceImpl implements FhirContractService {
     /**
      * The logger.
      */
-    final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private FhirContext fhirContext;
@@ -349,7 +349,7 @@ public class FhirContractServiceImpl implements FhirContractService {
                     .encodeResourceToString(contract);
             FileUtils.writeStringToFile(new File(logOutputPath + "/JSON/" + currentTest + ".json"), jsonEncodedGranularConsent);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
     }
 

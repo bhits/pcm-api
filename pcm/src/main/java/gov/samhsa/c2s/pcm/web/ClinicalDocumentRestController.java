@@ -66,7 +66,7 @@ public class ClinicalDocumentRestController {
     /**
      * The logger.
      */
-    final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     /**
      * The clinical document service.
      */
@@ -154,7 +154,7 @@ public class ClinicalDocumentRestController {
             eventService.raiseSecurityEvent(new FileUploadedEvent(request
                     .getRemoteAddr(), username, documentName));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 

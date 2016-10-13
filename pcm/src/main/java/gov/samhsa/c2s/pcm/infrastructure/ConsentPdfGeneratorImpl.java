@@ -38,6 +38,8 @@ import gov.samhsa.c2s.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
 import gov.samhsa.c2s.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.c2s.pcm.domain.valueset.ValueSetCategoryRepository;
 import gov.samhsa.c2s.pcm.infrastructure.exception.ConsentPdfGenerationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -52,6 +54,11 @@ import java.util.List;
  */
 @Service
 public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
+
+    /**
+     * The logger.
+     */
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private ITextPdfService iTextPdfService;
@@ -146,8 +153,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             document.close();
 
         } catch (Throwable e) {
-            // TODO log exception
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             throw new ConsentPdfGenerationException("Exception when trying to generate pdf", e);
         }
 

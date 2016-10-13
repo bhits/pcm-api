@@ -35,12 +35,21 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @MappedSuperclass
 public abstract class AbstractVersion {
+	/**
+	 * The logger.
+	 */
+	@Transient
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
 	protected Date creationTime;
@@ -59,7 +68,7 @@ public abstract class AbstractVersion {
 		try {
 			res = sdt.format(dt);
 		} catch (Exception ex2) {
-			ex2.printStackTrace();
+			logger.error(ex2.getMessage(), ex2);
 		}
 
 		return sdt.parse(res);
