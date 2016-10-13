@@ -741,7 +741,7 @@ public class ValueSetMgmtHelper {
      * @return the concept code list page size
      */
     public int getConceptCodeListPageSize() {
-        System.out.println("Page size: " + conceptCodeListPageSize);
+        logger.debug("conceptCodeListPageSize: " + conceptCodeListPageSize);
 
         return conceptCodeListPageSize;
     }
