@@ -109,7 +109,7 @@ public class ConsentRestController {
 
     @RequestMapping(value = "consents/pageNumber/{pageNumber}")
     public ConsentsListDto listConsents(@PathVariable("pageNumber") String pageNumber) {
-        // FIXME: remove this line when patient creation concept in PCM is finalized
+        // FIXME (#7): remove this line when patient creation concept in PCM is finalized
         final Long patientId = patientService.createNewPatientWithOAuth2AuthenticationIfNotExists();
         ConsentsListDto consentsListDto = new ConsentsListDto(consentService
                 .findAllConsentsDtoByPatientAndPage(patientId, pageNumber));
@@ -375,7 +375,7 @@ public class ConsentRestController {
         attestationDto.setConsentId(consentId);
         attestationDto.setAttesterIpAddress(xForwardedFor);
 
-        //TODO: Move check for consent belonging to this user and consent signed stage to service
+        //TODO (#8): Move check for consent belonging to this user and consent signed stage to service
         if (consentId != null && acceptTerms && consentService.isConsentBelongToThisUser(consentId, patientId) && consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SIGNED) ){
             consentService.attestConsentRevocation(attestationDto);
         } else
@@ -393,7 +393,7 @@ public class ConsentRestController {
         attestationDto.setConsentId(consentId);
         attestationDto.setAttesterIpAddress(xForwardedFor);
 
-        //TODO: Move check for consent belonging to this user and consent signed stage to service
+        //TODO (#9): Move check for consent belonging to this user and consent signed stage to service
         if (consentId != null && acceptTerms && consentService.isConsentBelongToThisUser(consentId, patientId)
                 && consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SAVED)) {
             consentService.attestConsent(attestationDto);
@@ -406,7 +406,7 @@ public class ConsentRestController {
     public ConsentAttestationDto getConsentAttestationDto(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
 
-        //TODO: Move check for consent belonging to this user and consent signed stage to service
+        //TODO (#10): Move check for consent belonging to this user and consent signed stage to service
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
                 && consentService.getConsentStatus(consentId).equals("CONSENT_SAVED")) {
             return consentService.getConsentAttestationDto(principal.getName(),consentId);
@@ -448,7 +448,7 @@ public class ConsentRestController {
     @RequestMapping(value = "consents/{consentId}/revokeConsent", method = RequestMethod.GET)
     public ConsentRevocationAttestationDto getConsentRevocationAttestationDto(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
-        //TODO: Move check for consent belonging to this user and consent signed stage to service
+        //TODO (#11): Move check for consent belonging to this user and consent signed stage to service
         if ((consentService.isConsentBelongToThisUser(consentId, patientId)) /* && (consentService.getConsentSignedStage(consentId).equals("CONSENT_SIGNED"))*/) {
             return consentService.getConsentRevocationAttestationDto(principal.getName(),consentId);
         } else

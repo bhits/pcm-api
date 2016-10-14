@@ -311,7 +311,7 @@ public class ValueSetMgmtHelper {
         if (null != valueSets && valueSets.size() > 0) {
             valueSetCategoryDto.setDeletable(false);
         }
-        // TODO check if consents are created with not to share these categories
+        // TODO (#31): check if consents are created with not to share these categories
         List<Consent> consentS = consentRepository
                 .findAllByDoNotShareSensitivityPolicyCodesValueSetCategory(valueSetCategory);
         if (null != consentS && consentS.size() > 0) {

@@ -92,7 +92,7 @@ public class ClinicalDocumentRestController {
      */
     @RequestMapping(value = "clinicaldocuments", method = RequestMethod.GET)
     public List<ClinicalDocumentDto> listClinicalDocuments() {
-        // FIXME: remove this line when patient creation concept in PCM is finalized
+        // FIXME (#6): remove this line when patient creation concept in PCM is finalized
         final Long patientId = patientService.createNewPatientWithOAuth2AuthenticationIfNotExists();
         List<ClinicalDocumentDto> clinicaldocumentDtos = clinicalDocumentService
                 .findClinicalDocumentDtoByPatientId(patientId);

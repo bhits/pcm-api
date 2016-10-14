@@ -16,7 +16,7 @@ eureka:
     service-url:
       # endpoint for discovery-server, pass '--eureka.client.protocol=https' if discovery-server is running on https
       defaultZone: ${eureka.client.protocol:http}://localhost:8761/eureka/
-# TODO: enable feign hystrix back when PHR API is refactored to a service that can be called by this API without OAuth2 token
+# TODO (#3): enable feign hystrix back when PHR API is refactored to a service that can be called by this API without OAuth2 token
 feign.hystrix.enabled: false
 spring:
   datasource:

@@ -30,7 +30,7 @@ public class SqlRebuilder {
         return SELECT + "COUNT(*) " + FROM + fromClause.getFromClause();
     }
 
-    //TODO: Refactor
+    //TODO (#30): Refactor
     public String countByArgs(SqlFromClause fromClause, Object arg) {
         StringBuilder whereClause = new StringBuilder(WHERE);
         for (String s : fromClause.getIdColumns()) {

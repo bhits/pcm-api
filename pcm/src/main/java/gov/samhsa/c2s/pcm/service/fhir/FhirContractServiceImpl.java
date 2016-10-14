@@ -140,7 +140,7 @@ public class FhirContractServiceImpl implements FhirContractService {
             fhirContract.getTerm().get(0).getSubject().setReference("#" + incudeListResource.getId());
             fhirContract.getContained().getContainedResources().add(incudeListResource);
         }
-       //TODO : write log only in debug mode
+       //TODO (#19): write log only in debug mode
         createContracttoLogMessage(fhirContract, "GranularConsent");
         return fhirContract;
 
@@ -258,7 +258,7 @@ public class FhirContractServiceImpl implements FhirContractService {
         DateTimeDt issuedDateTime = new DateTimeDt();
         issuedDateTime.setValue(Calendar.getInstance().getTime());
         contract.setIssued(issuedDateTime);
-        //TODO : write log only in debug mode
+        //TODO (#20): write log only in debug mode
         createContracttoLogMessage(contract, "BasicConsent");
         return contract;
     }
@@ -299,7 +299,7 @@ public class FhirContractServiceImpl implements FhirContractService {
 
 
     Function<PurposeOfUseCode, String> getPurposeOfUseCode = new Function<PurposeOfUseCode, String>() {
-        //TODO : Replace with FHIR ENUM class once FHIR version migrate to DSTU3.
+        //TODO (#21): Replace with FHIR ENUM class once FHIR version migrate to DSTU3.
         @Override
         public String apply(PurposeOfUseCode pou) {
             String codeString = pou.getCode();
