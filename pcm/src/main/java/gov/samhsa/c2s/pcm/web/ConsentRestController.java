@@ -113,7 +113,6 @@ public class ConsentRestController {
         final Long patientId = patientService.createNewPatientWithOAuth2AuthenticationIfNotExists();
         ConsentsListDto consentsListDto = new ConsentsListDto(consentService
                 .findAllConsentsDtoByPatientAndPage(patientId, pageNumber));
-        // using directId
         return consentsListDto;
     }
 
