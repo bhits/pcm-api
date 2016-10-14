@@ -59,14 +59,17 @@ public abstract class AbstractAttestedPDFDocument implements BinaryContentAccess
 	@Column(name = "attester_by_user")
 	private String attesterByUser;
 
+	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "MM/dd/yyyy hh:mm:ss")
 	@Column(name = "attested_date_time")
 	private Date attestedDateTime;
 
+	@NotNull
     @Column(name = "patient_guid")
     private String patientGuid;
 
+	@NotNull
     @Column(name = "attester_ip_address")
     private String attesterIpAddress;
 

@@ -137,7 +137,7 @@ server:
 spring:
   profiles: docker
   datasource:
-    url: jdbc:mysql://pcm-db.c2s.com:3306/pcm?autoReconnect=true
+    url: jdbc:mysql://${C2S_DB_HOST:pcm-db.c2s.com}:${C2S_DB_PORT:3306}/pcm?autoReconnect=true
 c2s.pcm.config:
   pls.api: http://pls.c2s.com:8080/pls/providers
   clamd.host: clamd.c2s.com
@@ -151,3 +151,6 @@ eureka:
       defaultZone: ${eureka.client.protocol:http}://discovery-server.c2s.com:8761/eureka/
   instance:
     prefer-ip-address: true
+logging:
+  file: /java/C2S_LOGS/pcm/pcm.log
+  path: /java/C2S_LOGS/pcm
