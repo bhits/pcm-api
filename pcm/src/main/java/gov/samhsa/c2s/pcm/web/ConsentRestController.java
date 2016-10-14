@@ -407,7 +407,7 @@ public class ConsentRestController {
 
         //TODO (#10): Move check for consent belonging to this user and consent signed stage to service
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
-                && consentService.getConsentStatus(consentId).equals("CONSENT_SAVED")) {
+                && consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SAVED)) {
             return consentService.getConsentAttestationDto(principal.getName(),consentId);
         } else
             throw new InternalServerErrorException("Consent Attestation Dto Not Found");
@@ -417,7 +417,7 @@ public class ConsentRestController {
     public byte[] getUnAttestedConsentPDF(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
 
-        if (consentService.isConsentBelongToThisUser(consentId, patientId) && consentService.getConsentStatus(consentId).equals("CONSENT_SAVED")) {
+        if (consentService.isConsentBelongToThisUser(consentId, patientId) && consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SAVED)) {
             ConsentPdfDto consentPdfDto = consentService.findConsentPdfDto(consentId);
             return consentPdfDto.getContent();
         } else
