@@ -448,7 +448,7 @@ public class ConsentRestController {
     public ConsentRevocationAttestationDto getConsentRevocationAttestationDto(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
         //TODO (#11): Move check for consent belonging to this user and consent signed stage to service
-        if ((consentService.isConsentBelongToThisUser(consentId, patientId)) /* && (consentService.getConsentSignedStage(consentId).equals("CONSENT_SIGNED"))*/) {
+        if ((consentService.isConsentBelongToThisUser(consentId, patientId))) {
             return consentService.getConsentRevocationAttestationDto(principal.getName(),consentId);
         } else
             throw new InternalServerErrorException("Consent Revocation Attestation Dto Not Found");
