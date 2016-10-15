@@ -39,7 +39,6 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-// TODO (#18): Auto-generated Javadoc
 /**
  * The Class EmailToken.
  */
