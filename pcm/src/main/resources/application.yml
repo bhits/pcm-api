@@ -2,7 +2,6 @@ server:
   port: 8446
 logging:
   file: /java/C2S_LOGS/pcm/pcm.log
-  path: /java/C2S_LOGS/pcm
 info:
   component: PCM API
 eureka:
