@@ -33,9 +33,6 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-/**
- * Created by sadhana.chandra on 8/2/2016.
- */
 @Service
 public class FhirContractServiceImpl implements FhirContractService {
     /**

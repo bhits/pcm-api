@@ -3,9 +3,6 @@ package gov.samhsa.c2s.pcm.service.dto;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Jiahao.Li on 6/12/2016.
- */
 public class ActivityHistoryListDto {
     private List<HistoryDto> historyDtoList;
     private long totalItems;

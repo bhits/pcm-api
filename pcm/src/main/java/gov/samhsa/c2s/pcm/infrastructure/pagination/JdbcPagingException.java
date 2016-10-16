@@ -1,8 +1,5 @@
 package gov.samhsa.c2s.pcm.infrastructure.pagination;
 
-/**
- * Created by Jiahao.Li on 6/20/2016.
- */
 public class JdbcPagingException extends RuntimeException {
     public JdbcPagingException(String message) {
         super(message);

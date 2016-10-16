@@ -1,8 +1,5 @@
 package gov.samhsa.c2s.pcm.service.dto;
 
-/**
- * Created by tomson.ngassa on 6/3/2016.
- */
 public class RevocationDto {
     private Long consentId;
     private boolean acceptTerms;

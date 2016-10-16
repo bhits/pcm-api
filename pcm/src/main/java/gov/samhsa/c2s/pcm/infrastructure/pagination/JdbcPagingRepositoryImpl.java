@@ -13,9 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by Jiahao.Li on 6/19/2016.
- */
 @Service
 public class JdbcPagingRepositoryImpl implements JdbcPagingRepository {
 

@@ -5,10 +5,6 @@ import gov.samhsa.c2s.pcm.infrastructure.SqlScriptProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Created by Jiahao.Li on 6/19/2016.
- */
-
 @Configuration
 public class ApplicationContextConfig {
 
