@@ -1,9 +1,29 @@
+# SSL is disabled by default for the PCM application.
+#
+# To enable SSL for PCM:
+#   1) Activate the 'ssl' spring profile by passing in the following program argument:
+#          a) --spring.profiles.active=ssl
+#   2) Set the appropriate values for the 'server.ssl.key-store' and 'server.ssl.key-store-password' properties.
+#          a) You can override/set these properties by setting them in an externalzied application.yml file.
+#               EXAMPLE:
+#                  server:
+#                     ssl:
+#                        key-store: /ssl_keystore.keystore
+#                        key-store-password: changeit
+#          b) Alternatively, you can pass the properties in using the following program arguments:
+#                 i) --server.ssl.key-store=path-to-file/filename
+#                ii) --server.ssl.key-store-password=your-keystore-password
 info:
   component: PCM API
 server:
   port: 8446
 logging:
+  # The 'file' property specifies the file which PCM will write its log events to.
   file: /java/C2S_LOGS/pcm/pcm.log
+  # The 'path' property specifies the file system location where the 'FhirContractServiceImpl' class will log
+  #   FHIR Contracts for debugging purposes. It is is ONLY for Fhir Contract logging, and it is not related to
+  #   the pcm.log file in the 'file' property above. The 'path' property can point to any valid file system
+  #   directory which PCM can access.
   path: /java/C2S_LOGS/pcm
 eureka:
   instance:
@@ -39,8 +59,11 @@ security:
 feign.hystrix.enabled: false
 spring:
   datasource:
+  # PCM will utilize the database configured in this section
     url: jdbc:mysql://localhost:3306/pcm?autoReconnect=true
+    # DO NOT USE THE FOLLOWING DEFAULT USERNAME OUTSIDE OF DEVELOPMENT ENVIRONMENTS!
     username: root
+    # DO NOT USE THE FOLLOWING DEFAULT PASSWORD OUTSIDE OF DEVELOPMENT ENVIRONMENTS!
     password: admin
     driver-class-name: com.mysql.jdbc.Driver
     validation-query: select 1
@@ -60,6 +83,8 @@ spring:
       ddl-auto: none
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
   mail:
+  # PCM will use the e-mail server configured in this section to send e-mails
+    # The properties configured below are to connect to Gmail's SMTP server, however you can configure any valid e-mail server here instead.
     host: smtp.gmail.com
     port: 587
     protocol: smtp
@@ -115,6 +140,8 @@ c2s:
     config:
       conceptCodeListPageSize: 20
 ---
+# If the ssl spring profile below is enabled, you must follow the instructions at
+# the top of this file to set the key-store and key-store-password properties as well.
 spring.profiles: ssl
 server:
   port: 8446
