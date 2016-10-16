@@ -43,6 +43,7 @@
         <developerConnection>scm:git:${project.scm.url}.git</developerConnection>
     </scm>
 
+    <!-- Comment out the below distributionManagement if you couldn't connect to FEi Nexus repository manager to upload dependencies when you run 'mvn deploy' command -->
     <distributionManagement>
         <repository>
             <id>deployment</id>
@@ -62,21 +63,6 @@
         <version>1.3.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-
-    <!-- Comment out the below distributionManagement if you couldn't connect to FEi Nexus repository manager to upload dependencies when you run 'mvn deploy' command -->
-
-    <distributionManagement>
-        <repository>
-            <id>deployment</id>
-            <name>Internal Releases</name>
-            <url>http://${maven.nexus.servername}/repository/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>deployment</id>
-            <name>Internal Releases</name>
-            <url>http://${maven.nexus.servername}/repository/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
