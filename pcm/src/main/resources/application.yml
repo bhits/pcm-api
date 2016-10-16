@@ -1,10 +1,10 @@
+info:
+  component: PCM API
 server:
   port: 8446
 logging:
   file: /java/C2S_LOGS/pcm/pcm.log
   path: /java/C2S_LOGS/pcm
-info:
-  component: PCM API
 eureka:
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.value}}
@@ -16,6 +16,25 @@ eureka:
     service-url:
       # endpoint for discovery-server, pass '--eureka.client.protocol=https' if discovery-server is running on https
       defaultZone: ${eureka.client.protocol:http}://localhost:8761/eureka/
+security:
+  basic:
+    enabled: false
+  oauth2:
+    client:
+      client-id: pcm
+    resource:
+      user-info-uri: http://localhost:8080/uaa/userinfo
+      jwt:
+        keyValue:
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0m59l2u9iDnMbrXHfqkO
+          rn2dVQ3vfBJqcDuFUK03d+1PZGbVlNCqnkpIJ8syFppW8ljnWweP7+LiWpRoz0I7
+          fYb3d8TjhV86Y997Fl4DBrxgM6KTJOuE/uxnoDhZQ14LgOU2ckXjOzOdTsnGMKQB
+          LCl0vpcXBtFLMaSbpv1ozi8h7DJyVZ6EnFQZUWGdgTMhDrmqevfx95U/16c5WBDO
+          kqwIn7Glry9n9Suxygbf8g5AzpWcusZgDLIIZ7JTUldBb8qU2a0Dl4mvLZOn4wPo
+          jfj9Cw2QICsc5+Pwf21fP+hzf+1WSRHbnYv8uanRO0gZ8ekGaghM/2H6gqJbo2nI
+          JwIDAQAB
+          -----END PUBLIC KEY-----
 # TODO (#3): enable feign hystrix back when PHR API is refactored to a service that can be called by this API without OAuth2 token
 feign.hystrix.enabled: false
 spring:
@@ -51,25 +70,6 @@ spring:
       mail.smtp.starttls.enable: true
   messages:
     basename: i18n/messages
-security:
-  basic:
-    enabled: false
-  oauth2:
-    resource:
-      jwt:
-        keyValue:
-                         -----BEGIN PUBLIC KEY-----
-                         MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0m59l2u9iDnMbrXHfqkO
-                         rn2dVQ3vfBJqcDuFUK03d+1PZGbVlNCqnkpIJ8syFppW8ljnWweP7+LiWpRoz0I7
-                         fYb3d8TjhV86Y997Fl4DBrxgM6KTJOuE/uxnoDhZQ14LgOU2ckXjOzOdTsnGMKQB
-                         LCl0vpcXBtFLMaSbpv1ozi8h7DJyVZ6EnFQZUWGdgTMhDrmqevfx95U/16c5WBDO
-                         kqwIn7Glry9n9Suxygbf8g5AzpWcusZgDLIIZ7JTUldBb8qU2a0Dl4mvLZOn4wPo
-                         jfj9Cw2QICsc5+Pwf21fP+hzf+1WSRHbnYv8uanRO0gZ8ekGaghM/2H6gqJbo2nI
-                         JwIDAQAB
-                         -----END PUBLIC KEY-----
-      user-info-uri: http://localhost:8080/uaa/userinfo
-    client:
-      client-id: pcm
 c2s:
   pcm:
     config:
@@ -138,9 +138,6 @@ spring:
   profiles: docker
   datasource:
     url: jdbc:mysql://${C2S_DB_HOST:pcm-db.c2s.com}:${C2S_DB_PORT:3306}/pcm?autoReconnect=true
-c2s.pcm.config:
-  pls.api: http://pls.c2s.com:8080/pls/providers
-  clamd.host: clamd.c2s.com
 security:
   oauth2:
     resource:
@@ -151,3 +148,10 @@ eureka:
       defaultZone: ${eureka.client.protocol:http}://discovery-server.c2s.com:8761/eureka/
   instance:
     prefer-ip-address: true
+c2s:
+  pcm:
+    config:
+      pls:
+        api: http://pls.c2s.com:8080/pls/providers
+  clamd:
+    host: clamd.c2s.com
