@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -14,8 +15,8 @@ public class ObligationRestController {
     @Autowired
     private ConsentService consentService;
 
-    @RequestMapping("/patients/{patientUserName}/consents/{consentId}/obligations")
-    public List<String> getConsentObligations(@PathVariable("patientUserName") String patientUserName, @PathVariable("consentId") Long consentId){
-         return consentService.findObligationsConsentById(patientUserName, consentId);
+    @RequestMapping("/patients/consents/{consentId}/obligations")
+    public List<String> getConsentObligations(Principal principal, @PathVariable("consentId") Long consentId) {
+        return consentService.findObligationsConsentById(principal.getName(), consentId);
     }
 }
