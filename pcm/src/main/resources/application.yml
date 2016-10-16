@@ -43,6 +43,8 @@ security:
     client:
       client-id: pcm
     resource:
+      # If SSL is turned on in the UAA application, you must change/override the 'user-info-uri' property below
+      #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
       user-info-uri: http://localhost:8080/uaa/userinfo
       jwt:
         keyValue:
@@ -112,6 +114,8 @@ c2s:
         org: C2S Health
         prefix: C2S
       pls:
+        # If SSL is turned on in the PLS application, you must change/override the 'api' property below
+        #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
         api: http://localhost:8080/pls/providers
       pagination:
         itemsPerPage: 10
@@ -133,6 +137,8 @@ c2s:
       hie-connection:
         fhir:
           enabled: false
+          # If SSL is turned on in the IExHub application, you must change/override the 'serverUrl' property below
+          #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
           serverUrl: http://localhost:8080/iexhub/services
           ClientSocketTimeoutInMs: 768000
           keepExcludeList: false
@@ -141,7 +147,7 @@ c2s:
       conceptCodeListPageSize: 20
 ---
 # If the ssl spring profile below is enabled, you must follow the instructions at
-# the top of this file to set the key-store and key-store-password properties as well.
+#   the top of this file to set the key-store and key-store-password properties as well.
 spring.profiles: ssl
 server:
   port: 8446
@@ -168,6 +174,8 @@ spring:
 security:
   oauth2:
     resource:
+      # If SSL is turned on in the UAA application, you must change/override the 'user-info-uri' property below
+      #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
       user-info-uri: http://uaa.c2s.com:8080/uaa/userinfo
 eureka:
   client:
@@ -179,6 +187,8 @@ c2s:
   pcm:
     config:
       pls:
+        # If SSL is turned on in the PLS application, you must change/override the 'api' property below
+        #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
         api: http://pls.c2s.com:8080/pls/providers
   clamd:
     host: clamd.c2s.com
