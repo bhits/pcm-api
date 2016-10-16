@@ -151,6 +151,3 @@ eureka:
       defaultZone: ${eureka.client.protocol:http}://discovery-server.c2s.com:8761/eureka/
   instance:
     prefer-ip-address: true
-logging:
-  file: /java/C2S_LOGS/pcm/pcm.log
-  path: /java/C2S_LOGS/pcm
