@@ -158,8 +158,6 @@ spring.profiles: ssl
 server:
   port: 8446
   ssl:
-    key-store: /ssl_keystore.keystore
-    key-store-password: changeit
     ciphers: "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA"
     enabledProtocols: "TLSv1.1,TLSv1.2"
 eureka:
