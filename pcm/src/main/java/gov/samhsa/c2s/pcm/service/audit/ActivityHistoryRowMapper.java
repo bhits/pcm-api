@@ -9,9 +9,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by Jiahao.Li on 6/17/2016.
- */
 public class ActivityHistoryRowMapper implements RowMapper<ActivityHistory> {
 
     private static final String ACTIVITY_ID = "activity_id";

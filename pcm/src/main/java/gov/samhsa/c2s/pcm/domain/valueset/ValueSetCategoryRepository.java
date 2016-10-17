@@ -33,12 +33,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ValueSetCategoryRepository extends
 		JpaRepository<ValueSetCategory, Long> {
 
-	/*
-	 * @Query(
-	 * "SELECT vsc.name FROM ValueSetCategory vsc JOIN vsc.valueSetCategory  WHERE  "
-	 * ) public String getValueSetCategoryName();
-	 */
-
 	/**
 	 * Find by name.
 	 * 

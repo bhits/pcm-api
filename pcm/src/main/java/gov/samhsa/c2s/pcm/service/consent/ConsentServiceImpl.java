@@ -530,8 +530,6 @@ public class ConsentServiceImpl implements ConsentService {
             }
 
             // Set fields
-            // isMadeToName.addAll(isMadeToOrgName);
-            // toDiscloseName.addAll(toDiscloseOrgName);
             consentAttestationDto.setConsentId(String.valueOf(consent.getId()));
             consentAttestationDto.setUsername(consent.getPatient().getUsername());
 
@@ -719,8 +717,6 @@ public class ConsentServiceImpl implements ConsentService {
             }
 
             // Set fields
-            // isMadeToName.addAll(isMadeToOrgName);
-            // toDiscloseName.addAll(toDiscloseOrgName);
             consentDto
                     .setDoNotShareClinicalConceptCodes(consentDoNotShareClinicalConceptCodes);
             consentDto.setId(String.valueOf(consent.getId()));
@@ -737,17 +733,17 @@ public class ConsentServiceImpl implements ConsentService {
                 consentDto.setConsentStart(formatter.parse(today));
             } catch (final ParseException e) {
                 consentDto.setConsentStart(consent.getStartDate());
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
             try {
                 today = formatter.format(consent.getEndDate());
                 consentDto.setConsentEnd(formatter.parse(today));
             } catch (final ParseException e) {
                 consentDto.setConsentEnd(consent.getEndDate());
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
 
-            // TODO: Cleanup: combine name and npi into one object
+            // TODO (#12): Cleanup: combine name and npi into one object
             // populate consent dto with selected options
             consentDto
                     .setOrganizationalProvidersDisclosureIsMadeTo(isMadeToOrgName);
@@ -946,7 +942,7 @@ public class ConsentServiceImpl implements ConsentService {
             patientService.updatePatientFromPHR(patientDto);
             Patient patient = patientRepository.findByUsername(patientDto.getEmail());
 
-            // TODO: Refactor this code block so that the attester fields are populated with the data fro the currently logged in user from UAA instead of the patient from PHR/PCM
+            // TODO (#13): Refactor this code block so that the attester fields are populated with the data fro the currently logged in user from UAA instead of the patient from PHR/PCM
             AttestedConsent attestedConsent =  new AttestedConsent();
             ConsentTermsVersions consentTerms = consentTermsVersionsService.getEnabledConsentTermsVersion();
             attestedConsent.setConsentTermsVersions(consentTerms);
@@ -992,7 +988,7 @@ public class ConsentServiceImpl implements ConsentService {
             patientService.updatePatientFromPHR(patientDto);
             Patient patient = patientRepository.findByUsername(patientDto.getEmail());
 
-            // TODO: Refactor this code block so that the attester fields are populated with the data fro the currently logged in user from UAA instead of the patient from PHR/PCM
+            // TODO (#14): Refactor this code block so that the attester fields are populated with the data fro the currently logged in user from UAA instead of the patient from PHR/PCM
             AttestedConsentRevocation attestedConsentRevocation =  new AttestedConsentRevocation();
             attestedConsentRevocation.setConsentRevocationTermsVersions(consentRevocationTermsVersionsService.findByLatestEnabledVersion());
             attestedConsentRevocation.setAttesterEmail(patient.getEmail());
@@ -1627,9 +1623,7 @@ public class ConsentServiceImpl implements ConsentService {
             try {
                 xacmlFile = new String(xacmlByte, "UTF-8");
             } catch (final UnsupportedEncodingException e) {
-                logger.error("Error while converting xacml byte[] to string "
-                        + e.getMessage());
-                e.printStackTrace();
+                logger.error("Error while converting xacml byte[] to string " + e.getMessage(), e);
             }
 
         }

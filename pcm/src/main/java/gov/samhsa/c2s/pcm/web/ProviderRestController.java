@@ -109,7 +109,7 @@ public class ProviderRestController {
      */
     @RequestMapping(value = "providers", method = RequestMethod.GET)
     public Set<ProviderDto> listProviders() {
-        // FIXME: remove this line when patient creation concept in PCM is finalized
+        // FIXME (#26): remove this line when patient creation concept in PCM is finalized
         final Long patientId = patientService.createNewPatientWithOAuth2AuthenticationIfNotExists();
         Set<ProviderDto> providerDtos = patientService.findProvidersByPatientId(patientId);
         return providerDtos;

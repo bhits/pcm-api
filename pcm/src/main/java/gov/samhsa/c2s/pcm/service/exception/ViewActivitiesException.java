@@ -3,9 +3,6 @@ package gov.samhsa.c2s.pcm.service.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-/**
- * Created by Jiahao.Li on 6/12/2016.
- */
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class ViewActivitiesException extends RuntimeException {
     public ViewActivitiesException() {

@@ -4,9 +4,6 @@ import gov.samhsa.c2s.pcm.infrastructure.pagination.SetQueryInfoMapping;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
-/**
- * Created by Jiahao.Li on 6/19/2016.
- */
 @Component("SetQueryInfoMapping")
 public class ActivityHistoryQueryInfo implements SetQueryInfoMapping {
     @Override

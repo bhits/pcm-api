@@ -311,7 +311,7 @@ public class ValueSetMgmtHelper {
         if (null != valueSets && valueSets.size() > 0) {
             valueSetCategoryDto.setDeletable(false);
         }
-        // TODO check if consents are created with not to share these categories
+        // TODO (#31): check if consents are created with not to share these categories
         List<Consent> consentS = consentRepository
                 .findAllByDoNotShareSensitivityPolicyCodesValueSetCategory(valueSetCategory);
         if (null != consentS && consentS.size() > 0) {
@@ -499,7 +499,6 @@ public class ValueSetMgmtHelper {
      */
     public ValueSetLookUpDto convertSetToDto(Set<String> catCodes) {
         ValueSetLookUpDto lookUpDto = new ValueSetLookUpDto();
-        // lookUpDto.setCatCode("ETH");
         return lookUpDto;
 
     }
@@ -741,7 +740,7 @@ public class ValueSetMgmtHelper {
      * @return the concept code list page size
      */
     public int getConceptCodeListPageSize() {
-        System.out.println("Page size: " + conceptCodeListPageSize);
+        logger.debug("conceptCodeListPageSize: " + conceptCodeListPageSize);
 
         return conceptCodeListPageSize;
     }

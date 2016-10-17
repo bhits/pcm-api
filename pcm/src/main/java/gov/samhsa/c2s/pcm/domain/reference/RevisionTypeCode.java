@@ -2,9 +2,6 @@ package gov.samhsa.c2s.pcm.domain.reference;
 
 import javax.persistence.*;
 
-/**
- * Created by tomson.ngassa on 6/10/2016.
- */
 @Entity
 @Table(name = "revision_type_code")
 public class RevisionTypeCode {

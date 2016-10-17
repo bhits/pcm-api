@@ -34,6 +34,8 @@ import gov.samhsa.c2s.pcm.domain.patient.Patient;
 import gov.samhsa.c2s.pcm.domain.consent.Consent;
 import gov.samhsa.c2s.pcm.infrastructure.exception.ConsentPdfGenerationException;
 import gov.samhsa.c2s.pcm.service.consent.ConsentRevocationTermsVersionsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -47,6 +49,11 @@ import java.util.Date;
 @Service
 public class ConsentRevokationPdfGeneratorImpl extends
         AbstractConsentRevokationPdfGenerator {
+
+    /**
+     * The logger.
+     */
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private ITextPdfService iTextPdfService;
@@ -105,8 +112,7 @@ public class ConsentRevokationPdfGeneratorImpl extends
             document.close();
 
         } catch (Throwable e) {
-            // TODO log exception
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             throw new ConsentPdfGenerationException("Exception when trying to generate pdf", e);
         }
 
@@ -153,8 +159,7 @@ public class ConsentRevokationPdfGeneratorImpl extends
             document.close();
 
         } catch (Throwable e) {
-            // TODO log exception
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             throw new ConsentPdfGenerationException("Exception when trying to generate pdf", e);
         }
 

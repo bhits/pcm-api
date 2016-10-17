@@ -36,5 +36,5 @@ public interface UniqueOidProvider {
 	 * 
 	 * @return the oid
 	 */
-	public String getOid();
+	String getOid();
 }

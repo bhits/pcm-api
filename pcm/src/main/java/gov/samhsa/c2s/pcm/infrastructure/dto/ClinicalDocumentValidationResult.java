@@ -1,8 +1,5 @@
 package gov.samhsa.c2s.pcm.infrastructure.dto;
 
-/**
- * Created by Jiahao.Li on 5/29/2016.
- */
 public class ClinicalDocumentValidationResult {
     private String documentType;
     private boolean isValidDocument;

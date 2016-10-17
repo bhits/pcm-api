@@ -220,9 +220,7 @@ public class ConceptCodeServiceImpl implements ConceptCodeService {
         // set the selected ones back to concept code
         conceptCode.setValueSets(selCodeValueSets);
 
-        // conceptCodeValueSetRepository.save(selCodeValueSets);
         return valueSetMgmtHelper.createConceptCodeDtoFromEntity(conceptCode);
-        // return null;
     }
 
     /*
@@ -429,7 +427,6 @@ public class ConceptCodeServiceImpl implements ConceptCodeService {
         for (Long valueSetId : selVsIds) {
 
             // STEP:2 :-Get valueset Object from DB
-            // Long valueSetId = created.getValueSetId();
             ValueSet selectedVs = valueSetRepository.findOne(valueSetId);
             if (selectedVs == null) {
                 logger.debug("No valueSet found with an id: " + valueSetId);
@@ -468,7 +465,6 @@ public class ConceptCodeServiceImpl implements ConceptCodeService {
                     // exists
                     logger.debug("Code and Code with VS association exists: "
                             + created);
-                    // isVSPresent = true;
                 }
 
             } else {
