@@ -1,13 +1,13 @@
 # Patient Consent Management API
 
-Patient Consent Management (PCM) API is one of the core components of the Consent2Share (C2S) system. PCM provides APIs for patients to manage their electronic consents including consent creation, consent audit, consent eSignature, consent export, and patient provider list management. An electronic patient consent is a digital agreement created and electronically signed by the patient to select:
+The Patient Consent Management (PCM) API is one of the core components of the Consent2Share (C2S) application. The PCM provides APIs for patients to manage their electronic consents including consent creation, consent audit, consent eSignature, consent export, and patient provider list management. An electronic patient consent is a digital agreement created and electronically signed by the patient to do the following:
 
-1. which *sensitive categories* of health information he or she wishes to share,
-2. which *purposes* the medical information may be used,
-3. identify the provider *from* whom the information can be disclosed,
-4. identify the provider *to* whom the information can be disclosed,
-5. record the date when the consent *goes into effect*,
-6. identify the *expiration date*.
+1. Select which *sensitive categories* of health information he or she wishes to share
+2. Select the *purposes* for which the medical information may be used
+3. Identify the provider *from* whom the information can be disclosed
+4. Identify the provider *to* whom the information can be disclosed
+5. Record the date when the consent *goes into effect*
+6. Identify the *expiration date* of the consent
 
 The value sets, downloaded from [VSAC](https://vsac.nlm.nih.gov/), are a set of concept codes mapped to various *sensitive categories* that are intended for use by organizations exchanging personally identifiable protected health information to perform data segmentation based on the patient’s privacy preferences in his or her consent.
 
@@ -109,7 +109,7 @@ Java has a default CA Certificates Store that allows it to trust well-known cert
 
 ## Notes
 
-Currently, the Value Set Service (VSS) domain and APIs are a part of PCM API. The VSS is planned to be refactored as a separate C2S microservice in the future.
+Currently, the Value Set Service (VSS) domain and APIs are a part of PCM API. The VSS is planned to be refactored as a separate Consent2Share microservice in the future.
 
 [//]: # (## Contribute)
 
