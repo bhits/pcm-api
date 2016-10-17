@@ -150,30 +150,6 @@ public abstract class AbstractProvider {
     @NotNull
     @Size(max = 255)
     private String providerTaxonomyDescription;
-    
-    /*
-
-	public String toJson() {
-        return new JSONSerializer().exclude("*.class").deepSerialize(this);
-    }
-
-	public static AbstractProvider fromJsonToAbstractProvider(String json) {
-        return new JSONDeserializer<AbstractProvider>().use(null, AbstractProvider.class).deserialize(json);
-    }
-
-	public static String toJsonArray(Collection<AbstractProvider> collection) {
-        return new JSONSerializer().exclude("*.class").deepSerialize(collection);
-    }
-
-	public static Collection<AbstractProvider> fromJsonArrayToAbstractProviders(String json) {
-        return new JSONDeserializer<List<AbstractProvider>>().use(null, ArrayList.class).use("values", AbstractProvider.class).deserialize(json);
-    }
-
-	public String toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
-    
-    */
 
 	/**
      * Gets the npi.

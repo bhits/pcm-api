@@ -1,10 +1,30 @@
+# SSL is disabled by default for the PCM application.
+#
+# To enable SSL for PCM:
+#   1) Activate the 'ssl' spring profile by passing in the following program argument:
+#          a) --spring.profiles.active=ssl
+#   2) Set the appropriate values for the 'server.ssl.key-store' and 'server.ssl.key-store-password' properties.
+#          a) You can override/set these properties by setting them in an externalzied application.yml file.
+#               EXAMPLE:
+#                  server:
+#                     ssl:
+#                        key-store: /ssl_keystore.keystore
+#                        key-store-password: changeit
+#          b) Alternatively, you can pass the properties in using the following program arguments:
+#                 i) --server.ssl.key-store=path-to-file/filename
+#                ii) --server.ssl.key-store-password=your-keystore-password
+info:
+  component: PCM API
 server:
   port: 8446
 logging:
+  # The 'file' property specifies the file which PCM will write its log events to.
   file: /java/C2S_LOGS/pcm/pcm.log
+  # The 'path' property specifies the file system location where the 'FhirContractServiceImpl' class will log
+  #   FHIR Contracts for debugging purposes. It is is ONLY for Fhir Contract logging, and it is not related to
+  #   the pcm.log file in the 'file' property above. The 'path' property can point to any valid file system
+  #   directory which PCM can access.
   path: /java/C2S_LOGS/pcm
-info:
-  component: PCM API
 eureka:
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.value}}
@@ -16,12 +36,36 @@ eureka:
     service-url:
       # endpoint for discovery-server, pass '--eureka.client.protocol=https' if discovery-server is running on https
       defaultZone: ${eureka.client.protocol:http}://localhost:8761/eureka/
-# TODO: enable feign hystrix back when PHR API is refactored to a service that can be called by this API without OAuth2 token
+security:
+  basic:
+    enabled: false
+  oauth2:
+    client:
+      client-id: pcm
+    resource:
+      # If SSL is turned on in the UAA application, you must change/override the 'user-info-uri' property below
+      #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
+      user-info-uri: http://localhost:8080/uaa/userinfo
+      jwt:
+        keyValue:
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0m59l2u9iDnMbrXHfqkO
+          rn2dVQ3vfBJqcDuFUK03d+1PZGbVlNCqnkpIJ8syFppW8ljnWweP7+LiWpRoz0I7
+          fYb3d8TjhV86Y997Fl4DBrxgM6KTJOuE/uxnoDhZQ14LgOU2ckXjOzOdTsnGMKQB
+          LCl0vpcXBtFLMaSbpv1ozi8h7DJyVZ6EnFQZUWGdgTMhDrmqevfx95U/16c5WBDO
+          kqwIn7Glry9n9Suxygbf8g5AzpWcusZgDLIIZ7JTUldBb8qU2a0Dl4mvLZOn4wPo
+          jfj9Cw2QICsc5+Pwf21fP+hzf+1WSRHbnYv8uanRO0gZ8ekGaghM/2H6gqJbo2nI
+          JwIDAQAB
+          -----END PUBLIC KEY-----
+# TODO (#3): enable feign hystrix back when PHR API is refactored to a service that can be called by this API without OAuth2 token
 feign.hystrix.enabled: false
 spring:
   datasource:
+  # PCM will utilize the database configured in this section
     url: jdbc:mysql://localhost:3306/pcm?autoReconnect=true
+    # DO NOT USE THE FOLLOWING DEFAULT USERNAME OUTSIDE OF DEVELOPMENT ENVIRONMENTS!
     username: root
+    # DO NOT USE THE FOLLOWING DEFAULT PASSWORD OUTSIDE OF DEVELOPMENT ENVIRONMENTS!
     password: admin
     driver-class-name: com.mysql.jdbc.Driver
     validation-query: select 1
@@ -41,6 +85,8 @@ spring:
       ddl-auto: none
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
   mail:
+  # PCM will use the e-mail server configured in this section to send e-mails
+    # The properties configured below are to connect to Gmail's SMTP server, however you can configure any valid e-mail server here instead.
     host: smtp.gmail.com
     port: 587
     protocol: smtp
@@ -51,42 +97,31 @@ spring:
       mail.smtp.starttls.enable: true
   messages:
     basename: i18n/messages
-security:
-  basic:
-    enabled: false
-  oauth2:
-    resource:
-      jwt:
-        keyValue:
-                         -----BEGIN PUBLIC KEY-----
-                         MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0m59l2u9iDnMbrXHfqkO
-                         rn2dVQ3vfBJqcDuFUK03d+1PZGbVlNCqnkpIJ8syFppW8ljnWweP7+LiWpRoz0I7
-                         fYb3d8TjhV86Y997Fl4DBrxgM6KTJOuE/uxnoDhZQ14LgOU2ckXjOzOdTsnGMKQB
-                         LCl0vpcXBtFLMaSbpv1ozi8h7DJyVZ6EnFQZUWGdgTMhDrmqevfx95U/16c5WBDO
-                         kqwIn7Glry9n9Suxygbf8g5AzpWcusZgDLIIZ7JTUldBb8qU2a0Dl4mvLZOn4wPo
-                         jfj9Cw2QICsc5+Pwf21fP+hzf+1WSRHbnYv8uanRO0gZ8ekGaghM/2H6gqJbo2nI
-                         JwIDAQAB
-                         -----END PUBLIC KEY-----
-      user-info-uri: http://localhost:8080/uaa/userinfo
-    client:
-      client-id: pcm
 c2s:
   pcm:
     config:
       clinicaldata:
+        # Max allowed file size in bytes for clinical document files uploaded to PCM
         maximumUploadFileSize: 10000000
+        # Comma separated list of permitted file extensions for clinical document files uploaded to PCM
         extensionsPermittedToUpload: xml,txt
       clamd:
+        # Host name or IP address of server instance of ClamAV to use for virus scanning uploaded clinical document files
         host: 172.20.139.101
+        # Port number to connect to on host server instance of ClamAV to use for virus scanning uploaded clinical document files
         port: 3310
+        # Time in seconds to wait before timing out when sending a clinical document file to ClamAV server.
         connTimeOut: 90
       pid:
         domain:
+          # PCM's PID
           id: 1.3.6.1.4.1.21367.13.20.200
           type: ISO
         org: C2S Health
         prefix: C2S
       pls:
+        # If SSL is turned on in the PLS application, you must change/override the 'api' property below
+        #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
         api: http://localhost:8080/pls/providers
       pagination:
         itemsPerPage: 10
@@ -108,6 +143,8 @@ c2s:
       hie-connection:
         fhir:
           enabled: false
+          # If SSL is turned on in the IExHub application, you must change/override the 'serverUrl' property below
+          #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
           serverUrl: http://localhost:8080/iexhub/services
           ClientSocketTimeoutInMs: 768000
           keepExcludeList: false
@@ -115,12 +152,14 @@ c2s:
     config:
       conceptCodeListPageSize: 20
 ---
+# If the ssl spring profile below is enabled, you must follow the instructions at
+#   the top of this file to set the key-store and key-store-password properties as well.
 spring.profiles: ssl
 server:
   port: 8446
   ssl:
-    key-store: /ssl_keystore.keystore
-    key-store-password: changeit
+    ciphers: "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA"
+    enabledProtocols: "TLSv1.1,TLSv1.2"
 eureka:
   instance:
     secure-port: ${server.port}
@@ -138,12 +177,11 @@ spring:
   profiles: docker
   datasource:
     url: jdbc:mysql://${C2S_DB_HOST:pcm-db.c2s.com}:${C2S_DB_PORT:3306}/pcm?autoReconnect=true
-c2s.pcm.config:
-  pls.api: http://pls.c2s.com:8080/pls/providers
-  clamd.host: clamd.c2s.com
 security:
   oauth2:
     resource:
+      # If SSL is turned on in the UAA application, you must change/override the 'user-info-uri' property below
+      #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
       user-info-uri: http://uaa.c2s.com:8080/uaa/userinfo
 eureka:
   client:
@@ -151,6 +189,12 @@ eureka:
       defaultZone: ${eureka.client.protocol:http}://discovery-server.c2s.com:8761/eureka/
   instance:
     prefer-ip-address: true
-logging:
-  file: /java/C2S_LOGS/pcm/pcm.log
-  path: /java/C2S_LOGS/pcm
+c2s:
+  pcm:
+    config:
+      pls:
+        # If SSL is turned on in the PLS application, you must change/override the 'api' property below
+        #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
+        api: http://pls.c2s.com:8080/pls/providers
+  clamd:
+    host: clamd.c2s.com

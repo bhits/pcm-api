@@ -109,12 +109,10 @@ public class ConsentRestController {
 
     @RequestMapping(value = "consents/pageNumber/{pageNumber}")
     public ConsentsListDto listConsents(@PathVariable("pageNumber") String pageNumber) {
-        // FIXME: remove this line when patient creation concept in PCM is finalized
+        // FIXME (#7): remove this line when patient creation concept in PCM is finalized
         final Long patientId = patientService.createNewPatientWithOAuth2AuthenticationIfNotExists();
         ConsentsListDto consentsListDto = new ConsentsListDto(consentService
                 .findAllConsentsDtoByPatientAndPage(patientId, pageNumber));
-        // using directId
-        // accessReferenceMapper.setupAccessReferenceMap(consentsListDto.getConsentList());
         return consentsListDto;
     }
 
@@ -159,12 +157,6 @@ public class ConsentRestController {
                                @RequestParam(value = "ICD9", required = false) HashSet<String> icd9)
             throws ConsentGenException, IOException {
         consentDto.setUsername(principal.getName());
-        /*
-         * if (consentDto.getId() != null) { final String directConsentId =
-		 * String.valueOf(accessReferenceMapper
-		 * .getDirectReference(consentDto.getId()));
-		 * consentDto.setId(directConsentId); }
-		 */
 
         final Set<String> isMadeTo = new HashSet<String>();
         final Set<String> isMadeFrom = new HashSet<String>();
@@ -249,12 +241,7 @@ public class ConsentRestController {
                 if (null != obj && obj instanceof ConsentValidationDto) {
 
                     final ConsentValidationDto conDto = (ConsentValidationDto) obj;
-                    /*
-                     * final String indirRef = accessReferenceMapper
-					 * .getIndirectReference(conDto.getExistingConsentId());
-					 * 
-					 * conDto.setExistingConsentId(indirRef);
-					 */
+
                     // duplicate policy found
                     final ObjectMapper mapper = new ObjectMapper();
                     String errorMessage = null;
@@ -277,12 +264,6 @@ public class ConsentRestController {
             throws ConsentGenException, IOException {
 
         consentDto.setUsername(principal.getName());
-        /*
-         * if (consentDto.getId() != null) { final String directConsentId =
-		 * String.valueOf(accessReferenceMapper
-		 * .getDirectReference(consentDto.getId()));
-		 * consentDto.setId(directConsentId); }
-		 */
 
         final Set<String> isMadeTo = new HashSet<String>();
         final Set<String> isMadeFrom = new HashSet<String>();
@@ -366,12 +347,7 @@ public class ConsentRestController {
                 if (null != obj && obj instanceof ConsentValidationDto) {
 
                     final ConsentValidationDto conDto = (ConsentValidationDto) obj;
-                    /*
-                     * final String indirRef = accessReferenceMapper
-					 * .getIndirectReference(conDto.getExistingConsentId());
-					 * 
-					 * conDto.setExistingConsentId(indirRef);
-					 */
+
                     // duplicate policy found
                     final ObjectMapper mapper = new ObjectMapper();
                     String errorMessage = null;
@@ -398,7 +374,7 @@ public class ConsentRestController {
         attestationDto.setConsentId(consentId);
         attestationDto.setAttesterIpAddress(xForwardedFor);
 
-        //TODO: Move check for consent belonging to this user and consent signed stage to service
+        //TODO (#8): Move check for consent belonging to this user and consent signed stage to service
         if (consentId != null && acceptTerms && consentService.isConsentBelongToThisUser(consentId, patientId) && consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SIGNED) ){
             consentService.attestConsentRevocation(attestationDto);
         } else
@@ -416,7 +392,7 @@ public class ConsentRestController {
         attestationDto.setConsentId(consentId);
         attestationDto.setAttesterIpAddress(xForwardedFor);
 
-        //TODO: Move check for consent belonging to this user and consent signed stage to service
+        //TODO (#9): Move check for consent belonging to this user and consent signed stage to service
         if (consentId != null && acceptTerms && consentService.isConsentBelongToThisUser(consentId, patientId)
                 && consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SAVED)) {
             consentService.attestConsent(attestationDto);
@@ -429,9 +405,9 @@ public class ConsentRestController {
     public ConsentAttestationDto getConsentAttestationDto(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
 
-        //TODO: Move check for consent belonging to this user and consent signed stage to service
+        //TODO (#10): Move check for consent belonging to this user and consent signed stage to service
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
-                && consentService.getConsentStatus(consentId).equals("CONSENT_SAVED")) {
+                && consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SAVED)) {
             return consentService.getConsentAttestationDto(principal.getName(),consentId);
         } else
             throw new InternalServerErrorException("Consent Attestation Dto Not Found");
@@ -441,7 +417,7 @@ public class ConsentRestController {
     public byte[] getUnAttestedConsentPDF(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
 
-        if (consentService.isConsentBelongToThisUser(consentId, patientId) && consentService.getConsentStatus(consentId).equals("CONSENT_SAVED")) {
+        if (consentService.isConsentBelongToThisUser(consentId, patientId) && consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SAVED)) {
             ConsentPdfDto consentPdfDto = consentService.findConsentPdfDto(consentId);
             return consentPdfDto.getContent();
         } else
@@ -471,8 +447,8 @@ public class ConsentRestController {
     @RequestMapping(value = "consents/{consentId}/revokeConsent", method = RequestMethod.GET)
     public ConsentRevocationAttestationDto getConsentRevocationAttestationDto(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
-        //TODO: Move check for consent belonging to this user and consent signed stage to service
-        if ((consentService.isConsentBelongToThisUser(consentId, patientId)) /* && (consentService.getConsentSignedStage(consentId).equals("CONSENT_SIGNED"))*/) {
+        //TODO (#11): Move check for consent belonging to this user and consent signed stage to service
+        if ((consentService.isConsentBelongToThisUser(consentId, patientId))) {
             return consentService.getConsentRevocationAttestationDto(principal.getName(),consentId);
         } else
             throw new InternalServerErrorException("Consent Revocation Attestation Dto Not Found");
@@ -494,7 +470,6 @@ public class ConsentRestController {
             Map<String, String> map = new HashMap<String, String>();
             map.put("data", new String(consentDirective));
             return map;
-            //return new ResponseEntity<byte[]>(consentDirective,headers, HttpStatus.OK);
         } else
             throw new InternalServerErrorException("Resource Not Found");
 

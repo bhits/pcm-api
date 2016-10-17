@@ -50,14 +50,6 @@ public class EducationMaterial {
     /** The filename. */
     @NotNull
     private String filename;
-    
-    //TODO Type byte[] not supported by Roo. Replace content field with the following
-    /*
-        @NotNull
-        @Lob
-        @Basic(fetch = FetchType.LAZY)
-        private byte[] content;
-    */
 
     /** The content. */
     @NotNull

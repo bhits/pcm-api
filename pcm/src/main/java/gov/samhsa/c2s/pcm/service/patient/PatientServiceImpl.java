@@ -683,7 +683,7 @@ public class PatientServiceImpl implements PatientService {
         return patients;
     }
 
-    // FIXME: remove this block when patient creation concept in PCM is finalized
+    // FIXME (#25): remove this block when patient creation concept in PCM is finalized
     @Override
     @Transactional
     public Long createNewPatientWithOAuth2AuthenticationIfNotExists() {

@@ -1,8 +1,5 @@
 package gov.samhsa.c2s.pcm.service.dto;
 
-/**
- * Created by michael.hadjiosif on 6/22/2016.
- */
 public class AttestationDto {
     private Long consentId;
     private String attesterIpAddress;

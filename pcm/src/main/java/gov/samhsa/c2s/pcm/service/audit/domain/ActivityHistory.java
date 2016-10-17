@@ -4,9 +4,6 @@ import groovy.transform.EqualsAndHashCode;
 import groovy.transform.ToString;
 import org.springframework.data.domain.Persistable;
 
-/**
- * Created by Jiahao.Li on 6/16/2016.
- */
 @ToString
 @EqualsAndHashCode
 public class ActivityHistory implements Persistable<Long> {

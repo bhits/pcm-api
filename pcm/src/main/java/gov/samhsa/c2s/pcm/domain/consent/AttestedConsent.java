@@ -86,7 +86,7 @@ public class AttestedConsent extends AbstractAttestedPDFDocument{
 	public void setContent(byte[] content, Long consentId) {
 		this.attestedPdfConsent=content;
 
-		//TODO: It is really bad to put the following line in this weird method: need refactor the consent domain
+		//TODO (#4): It is really bad to put the following line in this weird method: need refactor the consent domain
 		DomainEventManager.raise(new ConsentSignedEvent(consentId));
 	}
 

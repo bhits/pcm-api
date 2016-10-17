@@ -254,7 +254,7 @@ public class ConsentServiceImplTest {
      * Test signConsent. Check if necessary domain bindings are set and
      * repository is called.
      */
-    // FIXME: Replace this test with a test for consent attestation
+    // FIXME (#15): Replace this test with a test for consent attestation
     /*@Test
     public void testSignConsent_Check_if_Necessary_Domain_Bindings_are_Set_and_Repository_is_Called() {
         Consent consent = mock(Consent.class);
@@ -280,7 +280,7 @@ public class ConsentServiceImplTest {
         verify(consentRepository).save(any(Consent.class));
     }*/
 
-    // FIXME: Replace this test with a test for consent revocation attestation
+    // FIXME (#16): Replace this test with a test for consent revocation attestation
     /*@Test
     public void testSignConsentRevokation() {
         Consent consent = mock(Consent.class);

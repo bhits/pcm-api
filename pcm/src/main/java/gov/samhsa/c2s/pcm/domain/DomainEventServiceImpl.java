@@ -46,11 +46,7 @@ public class DomainEventServiceImpl implements DomainEventService {
 	 */
 	@Override
 	public <T extends DomainEvent> void raise(T event) {
-		// TODO: SpringContext is in infrastructure, shouldn't be used here.
-		// Should create an DI container abstraction to be used here
-		// Or we could think that Spring DI is our core which can be referenced
-		// in Domain. 
-		// The 2nd options may be better.
+		// TODO (#17): SpringContext is in infrastructure, shouldn't be used here. Should create an DI container abstraction to be used here. Or we could think that Spring DI is our core which can be referenced in Domain. The 2nd options may be better.
 		ApplicationContext applicationContext = SpringContext
 				.getApplicationContext();
 

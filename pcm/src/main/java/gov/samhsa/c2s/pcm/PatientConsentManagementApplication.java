@@ -15,7 +15,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @EntityScan(basePackageClasses = PcmDomainBasePackageMarkerInterface.class)
 @EnableJpaRepositories(basePackageClasses = PcmDomainBasePackageMarkerInterface.class)
 @EnableResourceServer
-// TODO (BU): remove component scan when VSS is separated from PCM
+// TODO (#23)(BU): remove component scan when VSS is separated from PCM
 @ComponentScan(basePackageClasses = {PatientConsentManagementApplication.class, VssBasePackageMarkerInterface.class})
 @EnableDiscoveryClient
 @EnableFeignClients

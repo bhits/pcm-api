@@ -223,7 +223,7 @@ public interface PatientService {
      */
     PatientProfileDto findByUsername(String username);
 
-    // FIXME: remove this block when patient creation concept in PCM is finalized
+    // FIXME (#24): remove this block when patient creation concept in PCM is finalized
     Long createNewPatientWithOAuth2AuthenticationIfNotExists();
 
     void updatePatientFromPHR(PatientDto patientDto);

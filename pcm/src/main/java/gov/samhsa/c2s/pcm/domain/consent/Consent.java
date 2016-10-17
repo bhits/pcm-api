@@ -179,7 +179,6 @@ public class Consent {
 	@CollectionTable(name = "ConsentDoNotShareClinicalDocumentTypeCode", joinColumns = @JoinColumn(name = "CONSENT_ID"))
 	@Basic(fetch = FetchType.EAGER)
 	@NotAudited
-	// @Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 	private Set<ConsentDoNotShareClinicalDocumentTypeCode> doNotShareClinicalDocumentTypeCodes = new HashSet<ConsentDoNotShareClinicalDocumentTypeCode>();
 
 	/** The do not share clinical concept codes. */

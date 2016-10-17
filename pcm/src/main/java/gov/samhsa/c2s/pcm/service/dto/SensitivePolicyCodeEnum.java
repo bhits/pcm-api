@@ -1,8 +1,5 @@
 package gov.samhsa.c2s.pcm.service.dto;
 
-/**
- * Created by sadhana.chandra on 8/5/2016.
- */
 public enum SensitivePolicyCodeEnum {
 
     SUBSTANCE_ABUSE("ETH", "Substance abuse information sensitivity", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),

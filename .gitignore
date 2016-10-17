@@ -1,44 +1,11 @@
-# Eclipse Artifacts #
-.settings
-.project
-.classpath
-.metadata
-.springBeans
-# Generated Artifacts #
-target
-bin
-*.class
-.sass-cache
-# Package Files #
-*.jar
-*.war
-*.ear
-# IDEA files/directories #
-.idea/
-.idea_modules/
-*.ipr
-*.iml
-*.iws
-# IntelliJ #
-out/
-# Others #
-*.roo
-*.tmp
-*.zip
-*.DS_Store
+# CUSTOM .GITIGNORE FILE BASED ON github/gitignore TEMPLATES
 
-# Ignore .css files
-*.css
+# Original .gitignore templates obtained from: https://github.com/github/gitignore
+# This custom .gitignore file has been modified from the original .gitignore templates.
 
+# Original .gitignore templates licensed under the MIT license:
 
-# CUSTOM .GITIGNORE FILE BASED ON Node.gitignore TEMPLATE
-
-# Original Node.gitignore template obtained from: https://github.com/github/gitignore/blob/master/Node.gitignore
-# This custom .gitignore file has been modified from the original Node.gitignore template.
-
-# Original Node.gitignore template licensed under the MIT license:
-
-# 		Copyright (c) 2014 GitHub, Inc.
+# 		Copyright (c) 2015 GitHub, Inc.
 
 # 		Permission is hereby granted,  free of charge,  to any person obtaining a
 # 		copy of this software and associated documentation files (the "Software"),
@@ -59,9 +26,63 @@ out/
 # 		DEALINGS IN THE SOFTWARE.
 
 
+
+# Java #
+##################################
+
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+
+# Maven #
+##################################
+
+target
+
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
+!maven-wrapper.jar
+
+# Gradle #
+##################################
+
+.gradle
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+
+# Node #
+##################################
+
 # Logs
 logs
 *.log
+npm-debug.log*
 
 # Runtime data
 pids
@@ -84,9 +105,130 @@ coverage
 build/Release
 
 # Dependency directory
-# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git-
+# https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
 node_modules
 node
 
-# Debug log from npm
-npm-debug.log
+# Bower components directory
+bower_components
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+
+# SASS #
+##################################
+
+.sass-cache/
+*.css.map
+
+
+
+
+######################################################
+## Global/System Specific Ignore Patterns ##
+######################################################
+
+
+# JetBrains #
+##################################
+
+*.iml
+
+## Directory-based project format:
+.idea/
+
+## File-based project format:
+*.ipr
+*.iws
+
+## Plugin-specific files:
+
+# IntelliJ
+/out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+
+# Eclipse #
+##################################
+
+*.pydevproject
+.metadata
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings
+.loadpath
+
+# Eclipse Core
+.project
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# CDT-specific
+.cproject
+
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+# Java annotation processor (APT)
+.factorypath
+
+# PDT-specific
+.buildpath
+
+# sbteclipse plugin
+.target
+
+# TeXlipse plugin
+.texlipse
+
+# STS (Spring Tool Suite)
+.springBeans
+
+
+# NetBeans #
+##################################
+
+nbproject/private/
+nbbuild/
+nbdist/
+nbactions.xml
+.nb-gradle/
+
+
+# TortoiseGit #
+##################################
+# Project-level settings
+/.tgitconfig
+
+
+# Miscellaneous #
+##################################
+build/
+dist/
+tmp/
+bin
+*.roo
+*.tmp
+*.zip
+*.DS_Store
