@@ -5,7 +5,7 @@ PCM provides APIs to manage patient provider lists and enables patients to manag
 
 # Supported Tags and Respective `Dockerfile` Links
 
-[`1.16.0`](https://github.com/bhits/pcm-api/blob/master/pcm/src/main/docker/Dockerfile),[`latest`](https://github.com/bhits/pcm-api/blob/master/pcm/src/main/docker/Dockerfile)[(1.16.0/Dockerfile)](https://github.com/bhits/pcm-api/blob/master/pcm/src/main/docker/Dockerfile)
+[`1.18.0`](https://github.com/bhits/pcm-api/blob/master/pcm/src/main/docker/Dockerfile),[`latest`](https://github.com/bhits/pcm-api/blob/master/pcm/src/main/docker/Dockerfile)[(1.18.0/Dockerfile)](https://github.com/bhits/pcm-api/blob/master/pcm/src/main/docker/Dockerfile)
 
 For more information about this image, the source code, and its history, please see the [GitHub repository](https://github.com/bhits/pcm-api).
 
@@ -33,7 +33,7 @@ Be sure to familiarize yourself with the repository's [README.md](https://github
 
 `docker run  --name pcm -d bhits/pcm:latest <additional program arguments>`
 
-*NOTE: In order for this API to fully function as a microservice in the Consent2Share application, it is required to setup the dependency microservices and support level infrastructure. Please refer to the [Consent2Share Deployment Guide]() for instructions to setup the Consent2Share infrastructure.*
+*NOTE: In order for this API to fully function as a microservice in the Consent2Share application, it is required to setup the dependency microservices and support level infrastructure. Please refer to the [Consent2Share Deployment Guide](https://github.com/bhits/consent2share/releases/download/2.0.0/c2s-deployment-guide.pdf) for instructions to setup the Consent2Share infrastructure.*
 
 
 ## Configure
@@ -82,7 +82,7 @@ Please see the [Docker installation documentation](https://docs.docker.com/engin
 
 # License
 
-View [license]() information for the software contained in this image.
+View [license](https://github.com/bhits/pcm-api/blob/master/LICENSE) information for the software contained in this image.
 
 # User Feedback
 
