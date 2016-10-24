@@ -86,15 +86,17 @@ spring:
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
   mail:
   # PCM will use the e-mail server configured in this section to send e-mails
-    # The properties configured below are to connect to Gmail's SMTP server, however you can configure any valid e-mail server here instead.
-    host: smtp.gmail.com
-    port: 587
+    # Please configure valid e-mail server below to connect to SMTP server
+    # Configure host, port, username and password per environment
+    host: mail_host
+    port: 25
     protocol: smtp
-    username: consent2share@gmail.com
-    password: fei@columbia
+    username: mail_username
+    password: mail_password
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
+      mail.smtp.ssl.trust: mail_host
   messages:
     basename: i18n/messages
 c2s:
