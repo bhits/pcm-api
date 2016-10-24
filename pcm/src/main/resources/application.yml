@@ -196,5 +196,5 @@ c2s:
         # If SSL is turned on in the PLS application, you must change/override the 'api' property below
         #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
         api: http://pls.c2s.com:8080/pls/providers
-  clamd:
-    host: clamd.c2s.com
+      clamd:
+        host: clamd.c2s.com
