@@ -115,7 +115,7 @@ Currently, the Value Set Service (VSS) domain and APIs are a part of PCM API. Th
 
 ## Contact
 
-If you have any questions, comments, or concerns please see [Consent2Share]() project site.
+If you have any questions, comments, or concerns please see [Consent2Share](https://bhits.github.io/consent2share/) project site.
 
 ## Report Issues
 
