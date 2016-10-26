@@ -108,8 +108,9 @@ c2s:
         # Comma separated list of permitted file extensions for clinical document files uploaded to PCM
         extensionsPermittedToUpload: xml,txt
       clamd:
+        # Please configure valid server information below to connect to ClamAV server
         # Host name or IP address of server instance of ClamAV to use for virus scanning uploaded clinical document files
-        host: 172.20.139.101
+        host: localhost
         # Port number to connect to on host server instance of ClamAV to use for virus scanning uploaded clinical document files
         port: 3310
         # Time in seconds to wait before timing out when sending a clinical document file to ClamAV server.
