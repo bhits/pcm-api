@@ -35,7 +35,7 @@ To build the project, navigate to the folder that contains `pom.xml` file using 
 
 ### Prerequisites
 
-This API uses *[MySQL](https://www.mysql.com/)* for persistence and *[Flyway](https://flywaydb.org/)* for database migration. It requires having a database user account with Object and DDL Rights to a schema with default name `pcm`. Please see [Configure](#configure) section for details of configuring the data source.
+This API uses *[MySQL](https://www.mysql.com/)* for persistence and *[Flyway](https://flywaydb.org/)* for database migration. It requires having a database user account with Object and DDL Rights to a schema with default name `pcm`. Please see [Configure](#configure) section for details of configuring the data source. This API also uses *[ClamAV](http://www.clamav.net/)* anti-virus engine to scan clinical documents. It can be setup by using *[docker-clamavd](https://hub.docker.com/r/dinkel/clamavd/)* and also can be installed on server. Please see *[Installing ClamAV](http://www.clamav.net/documents/installing-clamav)* for details
 
 ### Commands
 
