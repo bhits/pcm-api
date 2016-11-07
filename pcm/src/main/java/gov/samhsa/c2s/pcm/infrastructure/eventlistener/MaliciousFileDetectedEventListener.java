@@ -5,7 +5,7 @@ import gov.samhsa.c2s.pcm.domain.SecurityEvent;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.MaliciousFileDetectedEvent;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.SecurityAuditVerb;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.SecurityPredicateKey;
-import gov.samhsa.c2s.common.audit.AuditService;
+import gov.samhsa.c2s.common.audit.AuditClient;
 import gov.samhsa.c2s.common.audit.PredicateKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +34,11 @@ public class MaliciousFileDetectedEventListener extends SecurityEventListener {
      * Instantiates a new malicious file detected event listener.
      *
      * @param eventService the event service
-     * @param auditService the audit service
+     * @param auditClient the audit service
      */
     public MaliciousFileDetectedEventListener(EventService eventService,
-                                              AuditService auditService) {
-        super(eventService, auditService);
+                                              AuditClient auditClient) {
+        super(eventService, auditClient);
     }
 
     /*
@@ -77,11 +77,11 @@ public class MaliciousFileDetectedEventListener extends SecurityEventListener {
     @Override
     public void audit(SecurityEvent event) {
         MaliciousFileDetectedEvent maliciousFileDetectedEvent = (MaliciousFileDetectedEvent) event;
-        Map<PredicateKey, String> predicateMap = auditService
+        Map<PredicateKey, String> predicateMap = auditClient
                 .createPredicateMap();
         predicateMap.put(SecurityPredicateKey.IP_ADDRESS, event.getIpAddress());
         try {
-            auditService.audit("MaliciousFileDetectedEventListener",
+            auditClient.audit("MaliciousFileDetectedEventListener",
                     maliciousFileDetectedEvent.getUserName(),
                     SecurityAuditVerb.UPLOADS_MALICIOUS_FILE,
                     maliciousFileDetectedEvent.getFileName(), predicateMap);

@@ -1,7 +1,7 @@
 package gov.samhsa.c2s.pcm.infrastructure.eventlistener;
 
 import gov.samhsa.c2s.pcm.domain.SecurityEvent;
-import gov.samhsa.c2s.common.audit.AuditService;
+import gov.samhsa.c2s.common.audit.AuditClient;
 
 /**
  * The listener interface for receiving securityEvent events. The class that is
@@ -18,18 +18,18 @@ public abstract class SecurityEventListener extends EventListener {
     /**
      * The audit service.
      */
-    protected AuditService auditService;
+    protected AuditClient auditClient;
 
     /**
      * Instantiates a new security event listener.
      *
      * @param eventService the event service
-     * @param auditService the audit service
+     * @param auditClient the audit service
      */
     public SecurityEventListener(EventService eventService,
-                                 AuditService auditService) {
+                                 AuditClient  auditClient) {
         super(eventService);
-        this.auditService = auditService;
+        this.auditClient = auditClient;
     }
 
     /*

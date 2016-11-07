@@ -5,7 +5,7 @@ import gov.samhsa.c2s.pcm.domain.SecurityEvent;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.AuthenticationFailedEvent;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.SecurityAuditVerb;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.SecurityPredicateKey;
-import gov.samhsa.c2s.common.audit.AuditService;
+import gov.samhsa.c2s.common.audit.AuditClient;
 import gov.samhsa.c2s.common.audit.PredicateKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +34,11 @@ public class AuthenticationFailedEventListener extends SecurityEventListener {
      * Instantiates a new authentication failed event listener.
      *
      * @param eventService the event service
-     * @param auditService the audit service
+     * @param auditClient the audit service
      */
     public AuthenticationFailedEventListener(EventService eventService,
-                                             AuditService auditService) {
-        super(eventService, auditService);
+                                             AuditClient auditClient ) {
+        super(eventService, auditClient);
     }
 
     /*
@@ -75,11 +75,11 @@ public class AuthenticationFailedEventListener extends SecurityEventListener {
     @Override
     public void audit(SecurityEvent event) {
         AuthenticationFailedEvent authenticationFailedEvent = (AuthenticationFailedEvent) event;
-        Map<PredicateKey, String> predicateMap = auditService
+        Map<PredicateKey, String> predicateMap = auditClient
                 .createPredicateMap();
         predicateMap.put(SecurityPredicateKey.IP_ADDRESS, event.getIpAddress());
         try {
-            auditService.audit("AuthenticationFailedEventListener",
+            auditClient.audit("AuthenticationFailedEventListener",
                     authenticationFailedEvent.getIpAddress(),
                     SecurityAuditVerb.FAILED_ATTEMPTS_TO_LOGIN_AS,
                     authenticationFailedEvent.getUserName(), predicateMap);

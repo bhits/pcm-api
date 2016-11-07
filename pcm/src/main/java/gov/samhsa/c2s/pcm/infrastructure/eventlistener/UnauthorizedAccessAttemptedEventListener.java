@@ -2,7 +2,7 @@ package gov.samhsa.c2s.pcm.infrastructure.eventlistener;
 
 import ch.qos.logback.audit.AuditException;
 import gov.samhsa.c2s.pcm.domain.SecurityEvent;
-import gov.samhsa.c2s.common.audit.AuditService;
+import gov.samhsa.c2s.common.audit.AuditClient;
 import gov.samhsa.c2s.common.audit.PredicateKey;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.SecurityAuditVerb;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.SecurityPredicateKey;
@@ -35,11 +35,11 @@ public class UnauthorizedAccessAttemptedEventListener extends
      * Instantiates a new unauthorized access attempted event listener.
      *
      * @param eventService the event service
-     * @param auditService the audit service
+     * @param auditClient the audit service
      */
     public UnauthorizedAccessAttemptedEventListener(EventService eventService,
-                                                    AuditService auditService) {
-        super(eventService, auditService);
+                                                    AuditClient auditClient) {
+        super(eventService, auditClient);
     }
 
     /*
@@ -76,11 +76,11 @@ public class UnauthorizedAccessAttemptedEventListener extends
     @Override
     public void audit(SecurityEvent event) {
         UnauthorizedAccessAttemptedEvent unauthorizedAccessAttemptedEvent = (UnauthorizedAccessAttemptedEvent) event;
-        Map<PredicateKey, String> predicateMap = auditService
+        Map<PredicateKey, String> predicateMap = auditClient
                 .createPredicateMap();
         predicateMap.put(SecurityPredicateKey.IP_ADDRESS, event.getIpAddress());
         try {
-            auditService.audit("UnauthorizedAccessAttemptedEventListener",
+            auditClient.audit("UnauthorizedAccessAttemptedEventListener",
                     unauthorizedAccessAttemptedEvent.getUserName(),
                     SecurityAuditVerb.ATTEMPTS_TO_ACCESS_UNAUTHORIZED_RESOURCE,
                     "Unauthorized Page", predicateMap);
