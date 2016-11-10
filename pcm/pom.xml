@@ -70,7 +70,7 @@
         <java.version>1.8</java.version>
         <spring.cloud.version>Camden.SR2</spring.cloud.version>
         <!-- C2S Common Libraries' version -->
-        <c2s.common-libraries.version>1.7.0</c2s.common-libraries.version>
+        <c2s.common-libraries.version>1.9.0</c2s.common-libraries.version>
         <!-- Third-party library versions -->
         <adobe-echosign.version>20</adobe-echosign.version>
         <apache.commons.version>3.3.2</apache.commons.version>
@@ -170,7 +170,7 @@
         </dependency>
         <dependency>
             <groupId>gov.samhsa.c2s</groupId>
-            <artifactId>audit-service</artifactId>
+            <artifactId>audit-client</artifactId>
             <version>${c2s.common-libraries.version}</version>
         </dependency>
         <dependency>

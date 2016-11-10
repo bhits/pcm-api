@@ -3,7 +3,7 @@ package gov.samhsa.c2s.pcm.infrastructure.eventlistener;
 import java.util.Map;
 
 import gov.samhsa.c2s.pcm.infrastructure.eventlistener.UnauthorizedAccessAttemptedEventListener;
-import gov.samhsa.c2s.common.audit.AuditService;
+import gov.samhsa.c2s.common.audit.AuditClient;
 import gov.samhsa.c2s.common.audit.PredicateKey;
 import gov.samhsa.c2s.pcm.domain.SecurityEvent;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.SecurityAuditVerb;
@@ -24,7 +24,7 @@ public class UnauthorizedAccessAttemptedEventListenerTest {
     final static String USER_NAME = "user1";
 
     @Mock
-    AuditService auditService;
+    AuditClient auditClient;
 
     @InjectMocks
     UnauthorizedAccessAttemptedEventListener listener;
@@ -33,12 +33,12 @@ public class UnauthorizedAccessAttemptedEventListenerTest {
     public void testAudit() throws AuditException {
         @SuppressWarnings("unchecked")
         Map<PredicateKey, String> predicateMap = (Map<PredicateKey, String>) mock(Map.class);
-        doReturn(predicateMap).when(auditService).createPredicateMap();
+        doReturn(predicateMap).when(auditClient).createPredicateMap();
 
         SecurityEvent event = new UnauthorizedAccessAttemptedEvent(IP_ADDRESS,
                 USER_NAME);
         listener.audit(event);
-        verify(auditService).audit("UnauthorizedAccessAttemptedEventListener",
+        verify(auditClient).audit("UnauthorizedAccessAttemptedEventListener",
                 USER_NAME, SecurityAuditVerb.ATTEMPTS_TO_ACCESS_UNAUTHORIZED_RESOURCE,
                 "Unauthorized Page", predicateMap);
     }

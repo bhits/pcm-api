@@ -3,7 +3,7 @@ package gov.samhsa.c2s.pcm.infrastructure.eventlistener;
 import java.util.Map;
 
 import gov.samhsa.c2s.pcm.infrastructure.eventlistener.MaliciousFileDetectedEventListener;
-import gov.samhsa.c2s.common.audit.AuditService;
+import gov.samhsa.c2s.common.audit.AuditClient;
 import gov.samhsa.c2s.common.audit.PredicateKey;
 import gov.samhsa.c2s.pcm.domain.SecurityEvent;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.MaliciousFileDetectedEvent;
@@ -25,7 +25,7 @@ public class MaliciousFileDetectedEventListenerTest {
     final static String FILE_UPLOADED = "file1";
 
     @Mock
-    AuditService auditService;
+    AuditClient auditClient;
 
     @InjectMocks
     MaliciousFileDetectedEventListener listener;
@@ -34,12 +34,12 @@ public class MaliciousFileDetectedEventListenerTest {
     public void test() throws AuditException {
         @SuppressWarnings("unchecked")
         Map<PredicateKey, String> predicateMap = (Map<PredicateKey, String>) mock(Map.class);
-        doReturn(predicateMap).when(auditService).createPredicateMap();
+        doReturn(predicateMap).when(auditClient).createPredicateMap();
 
         SecurityEvent event = new MaliciousFileDetectedEvent(IP_ADDRESS,
                 USER_NAME, FILE_UPLOADED);
         listener.audit(event);
-        verify(auditService).audit("MaliciousFileDetectedEventListener",
+        verify(auditClient).audit("MaliciousFileDetectedEventListener",
                 USER_NAME, SecurityAuditVerb.UPLOADS_MALICIOUS_FILE,
                 FILE_UPLOADED, predicateMap);
     }

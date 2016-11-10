@@ -3,7 +3,7 @@ package gov.samhsa.c2s.pcm.infrastructure.eventlistener;
 import ch.qos.logback.audit.AuditException;
 import gov.samhsa.c2s.pcm.infrastructure.eventlistener.AuthenticationFailedEventListener;
 import gov.samhsa.c2s.pcm.infrastructure.eventlistener.EventService;
-import gov.samhsa.c2s.common.audit.AuditService;
+import gov.samhsa.c2s.common.audit.AuditClient;
 import gov.samhsa.c2s.common.audit.PredicateKey;
 import gov.samhsa.c2s.pcm.domain.SecurityEvent;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.AuthenticationFailedEvent;
@@ -26,7 +26,7 @@ public class AuthenticationFailedEventListenerTest {
     final static String USER_NAME = "user1";
 
     @Mock
-    AuditService auditService;
+    AuditClient auditClient;
     @Mock
     EventService eventService;
 
@@ -38,11 +38,11 @@ public class AuthenticationFailedEventListenerTest {
     public void testAudit() throws AuditException {
         @SuppressWarnings("unchecked")
         Map<PredicateKey, String> predicateMap = (Map<PredicateKey, String>) mock(Map.class);
-        doReturn(predicateMap).when(auditService).createPredicateMap();
+        doReturn(predicateMap).when(auditClient).createPredicateMap();
 
         SecurityEvent event = new AuthenticationFailedEvent(IP_ADDRESS, USER_NAME);
         listener.audit(event);
-        verify(auditService).audit("AuthenticationFailedEventListener", IP_ADDRESS, SecurityAuditVerb.FAILED_ATTEMPTS_TO_LOGIN_AS, USER_NAME, predicateMap);
+        verify(auditClient).audit("AuthenticationFailedEventListener", IP_ADDRESS, SecurityAuditVerb.FAILED_ATTEMPTS_TO_LOGIN_AS, USER_NAME, predicateMap);
 
     }
 

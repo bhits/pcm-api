@@ -2,7 +2,7 @@ package gov.samhsa.c2s.pcm.infrastructure.eventlistener;
 
 import ch.qos.logback.audit.AuditException;
 import gov.samhsa.c2s.pcm.domain.SecurityEvent;
-import gov.samhsa.c2s.common.audit.AuditService;
+import gov.samhsa.c2s.common.audit.AuditClient;
 import gov.samhsa.c2s.common.audit.PredicateKey;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.FileDownloadedEvent;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.SecurityAuditVerb;
@@ -34,11 +34,11 @@ public class FileDownloadedEventListener extends SecurityEventListener {
      * Instantiates a new file downloaded event listener.
      *
      * @param eventService the event service
-     * @param auditService the audit service
+     * @param auditClient  the audit service
      */
     public FileDownloadedEventListener(EventService eventService,
-                                       AuditService auditService) {
-        super(eventService, auditService);
+                                       AuditClient  auditClient ) {
+        super(eventService, auditClient );
     }
 
     /*
@@ -76,11 +76,11 @@ public class FileDownloadedEventListener extends SecurityEventListener {
     @Override
     public void audit(SecurityEvent event) {
         FileDownloadedEvent fileDownloadedEvent = (FileDownloadedEvent) event;
-        Map<PredicateKey, String> predicateMap = auditService
+        Map<PredicateKey, String> predicateMap = auditClient
                 .createPredicateMap();
         predicateMap.put(SecurityPredicateKey.IP_ADDRESS, event.getIpAddress());
         try {
-            auditService.audit("FileDownloadedEventListener",
+            auditClient.audit("FileDownloadedEventListener",
                     fileDownloadedEvent.getUserName(),
                     SecurityAuditVerb.DOWNLOADS_FILE,
                     fileDownloadedEvent.getFileDownloaded(), predicateMap);
