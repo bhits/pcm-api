@@ -17,7 +17,7 @@ FROM
     end
 ) as m
     LEFT JOIN
-  revinfo AS r ON r.rev = m.revision
+  revinfo AS r ON r.rev = m.revision_rev
     LEFT JOIN
   revision_type_code rtc ON m.revision_type = rtc.code
     LEFT JOIN
