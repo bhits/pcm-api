@@ -26,10 +26,12 @@
 package gov.samhsa.c2s.pcm.service.provider;
 
 
+import gov.samhsa.c2s.pcm.infrastructure.PlsService;
 import gov.samhsa.c2s.pcm.service.dto.LookupDto;
 import gov.samhsa.c2s.pcm.service.reference.StateCodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
@@ -49,6 +51,9 @@ public class ProviderSearchLookupServiceImpl implements
      * The logger.
      */
     final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    PlsService plsService;
 
     /**
      * The provider search url.
@@ -156,9 +161,13 @@ public class ProviderSearchLookupServiceImpl implements
      */
     @Override
     public String providerSearchByNpi(String npi) {
-        StringBuffer query = new StringBuffer(getProviderSearchURL());
+/*        StringBuffer query = new StringBuffer(getProviderSearchURL());
         query.append("/pageNumber/0/").append(npi);
-        return callProviderSearch(query.toString());
+        return callProviderSearch(query.toString());*/
+        plsService.getProvider(npi);
+        System.out.println("Here is pls: "+ plsService.getProvider(npi));
+        System.out.println("dfsfsdfsf");
+        return null;
     }
 
     /*
