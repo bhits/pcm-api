@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.samhsa.c2s.pcm.service.dto.ProviderDto;
 import gov.samhsa.c2s.pcm.service.patient.MrnService;
 import gov.samhsa.c2s.pcm.service.patient.PatientService;
-import gov.samhsa.c2s.pcm.service.provider.HashMapResultToProviderDtoConverter;
 import gov.samhsa.c2s.pcm.service.provider.IndividualProviderService;
 import gov.samhsa.c2s.pcm.service.provider.OrganizationalProviderService;
 import gov.samhsa.c2s.pcm.service.provider.ProviderSearchLookupService;
@@ -47,9 +46,6 @@ public class ProviderRestControllerTest {
 
     @Mock
     HashMap<String, String> Result;
-
-    @Mock
-    HashMapResultToProviderDtoConverter hashMapResultToProviderDtoConverter;
 
     @Mock
     private ObjectMapper objectMapper;

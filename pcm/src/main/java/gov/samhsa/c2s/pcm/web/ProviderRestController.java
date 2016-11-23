@@ -25,17 +25,14 @@
  ******************************************************************************/
 package gov.samhsa.c2s.pcm.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProvider;
 import gov.samhsa.c2s.pcm.domain.reference.EntityType;
 import gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto;
 import gov.samhsa.c2s.pcm.service.exception.CannotDeleteProviderException;
-import gov.samhsa.c2s.pcm.service.exception.CannotDeserializeProviderResultException;
 import gov.samhsa.c2s.pcm.service.exception.ProviderAlreadyInUseException;
 import gov.samhsa.c2s.pcm.service.exception.ProviderNotFoundException;
 import gov.samhsa.c2s.pcm.service.patient.PatientService;
-import gov.samhsa.c2s.pcm.service.provider.HashMapResultToProviderDtoConverter;
 import gov.samhsa.c2s.pcm.service.provider.IndividualProviderService;
 import gov.samhsa.c2s.pcm.service.provider.OrganizationalProviderService;
 import gov.samhsa.c2s.pcm.service.provider.ProviderSearchLookupService;
@@ -47,9 +44,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.Set;
 
 /**
@@ -90,15 +85,6 @@ public class ProviderRestController {
      */
     @Autowired
     private ProviderSearchLookupService providerSearchLookupService;
-
-    /**
-     * The hash map result to provider dto converter.
-     */
-    @Autowired
-    private HashMapResultToProviderDtoConverter hashMapResultToProviderDtoConverter;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     /**
      * List providers.
@@ -158,38 +144,6 @@ public class ProviderRestController {
         boolean isOrgProvider = false;
 
         if (npi.length() == NPI_LENGTH && npi.matches("[0-9]+")) {
-           /* String providerDtoJSON = providerSearchLookupService.providerSearchByNpi(npi);
-
-            HashMap<String, String> result = deserializeResult(providerDtoJSON);
-
-            if ((EntityType.valueOf(result.get("entityType")) == EntityType.Organization)) {
-                isOrgProvider = true;
-                OrganizationalProviderDto providerDto = new OrganizationalProviderDto();
-                hashMapResultToProviderDtoConverter.setProviderDto(providerDto, result);
-                providerDto.setOrgName(result.get("providerOrganizationName"));
-                providerDto.setAuthorizedOfficialLastName(result.get("authorizedOfficialLastName"));
-                providerDto.setAuthorizedOfficialFirstName(result.get("authorizedOfficialFirstName"));
-                providerDto.setAuthorizedOfficialTitle(result.get("authorizedOfficialTitleorPosition"));
-                providerDto.setAuthorizedOfficialNamePrefix(result.get("authorizedOfficialNamePrefixText"));
-                providerDto.setAuthorizedOfficialTelephoneNumber(result.get("authorizedOfficialTelephoneNumber"));
-                providerDto.setUsername(username);
-
-                organizationalProviderReturned = organizationalProviderService
-                        .addNewOrganizationalProvider(providerDto);
-            } else {
-                isOrgProvider = false;
-                IndividualProviderDto providerDto = new IndividualProviderDto();
-                hashMapResultToProviderDtoConverter.setProviderDto(providerDto, result);
-                providerDto.setFirstName(result.get("providerFirstName"));
-                providerDto.setMiddleName(result.get("providerMiddleName"));
-                providerDto.setLastName(result.get("providerLastName"));
-                providerDto.setNamePrefix(result.get("providerNamePrefixText"));
-                providerDto.setNameSuffix(result.get("providerNameSuffixText"));
-                providerDto.setCredential(result.get("providerCredentialText"));
-                providerDto.setUsername(username);
-
-                individualProviderReturned = individualProviderService.addNewIndividualProvider(providerDto);
-            }*/
 
             ProviderDto providerDto = providerSearchLookupService.providerSearchByNpi(npi);
 
@@ -211,16 +165,6 @@ public class ProviderRestController {
             }
         } else {
             throw new ProviderNotFoundException("Error:The provider could not be added because the specified NPI could not be found.");
-        }
-
-    }
-
-    private HashMap<String, String> deserializeResult(String providerDtoJSON) {
-        try {
-            return objectMapper.readValue(providerDtoJSON, HashMap.class);
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-            throw new CannotDeserializeProviderResultException(e.getMessage(), e);
         }
     }
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Open Behavioral Health Information Technology Architecture (OBHITA.org)
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above copyright
@@ -11,7 +11,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -31,143 +31,6 @@ import gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto;
  * The Interface ProviderSearchLookupService.
  */
 public interface ProviderSearchLookupService {
-
-	/**
-	 * Gets the provider search url.
-	 *
-	 * @return the provider search url
-	 */
-	public String getProviderSearchURL();
-
-	/**
-	 * Sets the provider search url.
-	 *
-	 * @param providerSearchURL
-	 *            the new provider search url
-	 */
-	public void setProviderSearchURL(String providerSearchURL);
-
-	/**
-	 * Provider search.
-	 *
-	 * @param usstate
-	 *            the usstate
-	 * @param city
-	 *            the city
-	 * @param zipcode
-	 *            the zipcode
-	 * @param gender
-	 *            the gender
-	 * @param specialty
-	 *            the specialty
-	 * @param phone
-	 *            the phone
-	 * @param firstname
-	 *            the firstname
-	 * @param lastname
-	 *            the lastname
-	 * @param facilityName
-	 *            the facility name
-	 * @param pageNumber
-	 *            the page number
-	 * @return the string
-	 */
-	public String providerSearch(String usstate, String city, String zipcode,
-								 String gender, String specialty, String phone, String firstname,
-								 String lastname, String facilityName, int pageNumber);
-
-	/**
-	 * Provider search.
-	 *
-	 * @param usstate
-	 *            the usstate
-	 * @param city
-	 *            the city
-	 * @param zipcode
-	 *            the zipcode
-	 * @param gender
-	 *            the gender
-	 * @param specialty
-	 *            the specialty
-	 * @param phone
-	 *            the phone
-	 * @param firstname
-	 *            the firstname
-	 * @param lastnameOrFacilityName
-	 *            the lastname or facility name
-	 * @param pageNumber
-	 *            the page number
-	 * @return the string
-	 */
-	public String providerSearch(String usstate, String city, String zipcode,
-								 String gender, String specialty, String phone, String firstname,
-								 String lastnameOrFacilityName, int pageNumber);
-
-	/**
-	 * Generate provider search url.
-	 *
-	 * @param usstate
-	 *            the usstate
-	 * @param city
-	 *            the city
-	 * @param zipcode
-	 *            the zipcode
-	 * @param gender
-	 *            the gender
-	 * @param specialty
-	 *            the specialty
-	 * @param phone
-	 *            the phone
-	 * @param firstname
-	 *            the firstname
-	 * @param lastname
-	 *            the lastname
-	 * @param facilityName
-	 *            the facility name
-	 * @param pageNumber
-	 *            the page number
-	 * @return the string
-	 */
-	public String generateProviderSearchURL(String usstate, String city,
-											String zipcode, String gender, String specialty, String phone,
-											String firstname, String lastname, String facilityName,
-											int pageNumber);
-
-	/**
-	 * Generate provider search url.
-	 *
-	 * @param usstate
-	 *            the usstate
-	 * @param city
-	 *            the city
-	 * @param zipcode
-	 *            the zipcode
-	 * @param gender
-	 *            the gender
-	 * @param specialty
-	 *            the specialty
-	 * @param phone
-	 *            the phone
-	 * @param firstname
-	 *            the firstname
-	 * @param lastnameOrFacilityName
-	 *            the lastname or facility name
-	 * @param pageNumber
-	 *            the page number
-	 * @return the string
-	 */
-	public String generateProviderSearchURL(String usstate, String city,
-											String zipcode, String gender, String specialty, String phone,
-											String firstname, String lastnameOrFacilityName, int pageNumber);
-
-	/**
-	 * Call provider search.
-	 *
-	 * @param query
-	 *            the query
-	 * @return the string
-	 */
-	public String callProviderSearch(String query);
 
 	/**
 	 * Checks if is validated search.
