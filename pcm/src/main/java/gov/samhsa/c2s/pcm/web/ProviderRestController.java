@@ -29,8 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProvider;
 import gov.samhsa.c2s.pcm.domain.reference.EntityType;
-import gov.samhsa.c2s.pcm.service.dto.IndividualProviderDto;
-import gov.samhsa.c2s.pcm.service.dto.OrganizationalProviderDto;
+import gov.samhsa.c2s.pcm.infrastructure.dto.Provider;
 import gov.samhsa.c2s.pcm.service.dto.ProviderDto;
 import gov.samhsa.c2s.pcm.service.exception.CannotDeleteProviderException;
 import gov.samhsa.c2s.pcm.service.exception.CannotDeserializeProviderResultException;
@@ -160,7 +159,7 @@ public class ProviderRestController {
         boolean isOrgProvider = false;
 
         if (npi.length() == NPI_LENGTH && npi.matches("[0-9]+")) {
-            String providerDtoJSON = providerSearchLookupService.providerSearchByNpi(npi);
+           /* String providerDtoJSON = providerSearchLookupService.providerSearchByNpi(npi);
 
             HashMap<String, String> result = deserializeResult(providerDtoJSON);
 
@@ -191,6 +190,17 @@ public class ProviderRestController {
                 providerDto.setUsername(username);
 
                 individualProviderReturned = individualProviderService.addNewIndividualProvider(providerDto);
+            }*/
+
+            Provider provider = providerSearchLookupService.providerSearchByNpi(npi);
+
+            if ((EntityType.valueOf(provider.getEntityType().getDisplayName()) == EntityType.Organization)) {
+                isOrgProvider = true;
+                organizationalProviderReturned = organizationalProviderService
+                        .addNewOrganizationalProvider(provider, username);
+            } else {
+                isOrgProvider = false;
+                individualProviderReturned = individualProviderService.addNewIndividualProvider(provider, username);
             }
 
             if (isOrgProvider == true) {

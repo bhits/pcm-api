@@ -27,10 +27,11 @@ package gov.samhsa.c2s.pcm.service.provider;
 
 
 import gov.samhsa.c2s.pcm.domain.patient.Patient;
-import gov.samhsa.c2s.pcm.domain.provider.IndividualProviderRepository;
-import gov.samhsa.c2s.pcm.service.dto.IndividualProviderDto;
 import gov.samhsa.c2s.pcm.domain.patient.PatientRepository;
 import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
+import gov.samhsa.c2s.pcm.domain.provider.IndividualProviderRepository;
+import gov.samhsa.c2s.pcm.infrastructure.dto.Provider;
+import gov.samhsa.c2s.pcm.service.dto.IndividualProviderDto;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +72,9 @@ public class IndividualProviderServiceImpl implements IndividualProviderService 
      */
     @Autowired
     private PatientRepository patientRepository;
+
+    @Autowired
+    private MapProviderResultToProviderDtoConverter mapProviderResultToProviderDtoConverter;
 
     /*
      * (non-Javadoc)
@@ -332,7 +336,21 @@ public class IndividualProviderServiceImpl implements IndividualProviderService 
      */
     @Override
     public IndividualProvider addNewIndividualProvider(
-            IndividualProviderDto individualProviderDto) {
+            Provider provider, String username) {
+
+        IndividualProviderDto individualProviderDto = new IndividualProviderDto();
+
+        mapProviderResultToProviderDtoConverter.setProviderDto(individualProviderDto, provider);
+
+        individualProviderDto.setFirstName(provider.getFirstName() == null ? "" : provider.getFirstName());
+        individualProviderDto.setMiddleName(provider.getMiddleName() == null ? "" : provider.getMiddleName());
+        individualProviderDto.setLastName(provider.getLastName() == null ? "" : provider.getLastName());
+        individualProviderDto.setUsername(username);
+
+        //TODO: Remove
+        individualProviderDto.setNamePrefix("");
+        individualProviderDto.setNameSuffix("");
+        individualProviderDto.setCredential("");
 
         Patient patient;
         String inNPI = individualProviderDto.getNpi();

@@ -30,6 +30,7 @@ import gov.samhsa.c2s.pcm.domain.patient.Patient;
 import gov.samhsa.c2s.pcm.domain.patient.PatientRepository;
 import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProvider;
 import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProviderRepository;
+import gov.samhsa.c2s.pcm.infrastructure.dto.Provider;
 import gov.samhsa.c2s.pcm.service.dto.OrganizationalProviderDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,9 @@ public class OrganizationalProviderServiceImpl implements
      */
     @Autowired
     private OrganizationalProviderRepository organizationalProviderRepository;
+
+    @Autowired
+    private MapProviderResultToProviderDtoConverter mapProviderResultToProviderDtoConverter;
 
     /*
      * (non-Javadoc)
@@ -362,7 +366,21 @@ public class OrganizationalProviderServiceImpl implements
      */
     @Override
     public OrganizationalProvider addNewOrganizationalProvider(
-            OrganizationalProviderDto organizationalProviderDto) {
+            Provider provider, String username) {
+
+        OrganizationalProviderDto organizationalProviderDto = new OrganizationalProviderDto();
+
+        mapProviderResultToProviderDtoConverter.setProviderDto(organizationalProviderDto, provider);
+
+        organizationalProviderDto.setOrgName(provider.getOrganizationName() == null ? "" : provider.getOrganizationName());
+        organizationalProviderDto.setUsername(username);
+
+        //TODO: Remove
+        organizationalProviderDto.setAuthorizedOfficialLastName("");
+        organizationalProviderDto.setAuthorizedOfficialFirstName("");
+        organizationalProviderDto.setAuthorizedOfficialTitle("");
+        organizationalProviderDto.setAuthorizedOfficialNamePrefix("");
+        organizationalProviderDto.setAuthorizedOfficialTelephoneNumber("");
 
         Patient patient;
         String inNPI = organizationalProviderDto.getNpi();
