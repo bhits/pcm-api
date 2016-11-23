@@ -27,7 +27,7 @@ package gov.samhsa.c2s.pcm.service.provider;
 
 
 import gov.samhsa.c2s.pcm.infrastructure.PlsService;
-import gov.samhsa.c2s.pcm.infrastructure.dto.Provider;
+import gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto;
 import gov.samhsa.c2s.pcm.service.dto.LookupDto;
 import gov.samhsa.c2s.pcm.service.reference.StateCodeService;
 import org.slf4j.Logger;
@@ -161,7 +161,7 @@ public class ProviderSearchLookupServiceImpl implements
      * #providerSearchByNpi(java.lang.String)
      */
     @Override
-    public Provider providerSearchByNpi(String npi) {
+    public ProviderDto providerSearchByNpi(String npi) {
 /*        StringBuffer query = new StringBuffer(getProviderSearchURL());
         query.append("/pageNumber/0/").append(npi);
         return callProviderSearch(query.toString());*/

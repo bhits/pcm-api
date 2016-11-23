@@ -29,8 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProvider;
 import gov.samhsa.c2s.pcm.domain.reference.EntityType;
-import gov.samhsa.c2s.pcm.infrastructure.dto.Provider;
-import gov.samhsa.c2s.pcm.service.dto.ProviderDto;
+import gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto;
 import gov.samhsa.c2s.pcm.service.exception.CannotDeleteProviderException;
 import gov.samhsa.c2s.pcm.service.exception.CannotDeserializeProviderResultException;
 import gov.samhsa.c2s.pcm.service.exception.ProviderAlreadyInUseException;
@@ -107,10 +106,10 @@ public class ProviderRestController {
      * @return the sets the
      */
     @RequestMapping(value = "providers", method = RequestMethod.GET)
-    public Set<ProviderDto> listProviders() {
+    public Set<gov.samhsa.c2s.pcm.service.dto.ProviderDto> listProviders() {
         // FIXME (#26): remove this line when patient creation concept in PCM is finalized
         final Long patientId = patientService.createNewPatientWithOAuth2AuthenticationIfNotExists();
-        Set<ProviderDto> providerDtos = patientService.findProvidersByPatientId(patientId);
+        Set<gov.samhsa.c2s.pcm.service.dto.ProviderDto> providerDtos = patientService.findProvidersByPatientId(patientId);
         return providerDtos;
     }
 
@@ -122,9 +121,9 @@ public class ProviderRestController {
     @RequestMapping(value = "providers/{npi}", method = RequestMethod.DELETE)
     public void deleteProvider(Principal principal, @PathVariable("npi") String npi) {
 
-        Set<ProviderDto> providerDtos = patientService.findProvidersByUsername(principal.getName());
+        Set<gov.samhsa.c2s.pcm.service.dto.ProviderDto> providerDtos = patientService.findProvidersByUsername(principal.getName());
         try {
-            ProviderDto providerDto = providerDtos.stream().filter(t -> t.getNpi().equals(npi)).findAny().orElseThrow(() -> new ProviderNotFoundException("This patient doesn't have this provider"));
+            gov.samhsa.c2s.pcm.service.dto.ProviderDto providerDto = providerDtos.stream().filter(t -> t.getNpi().equals(npi)).findAny().orElseThrow(() -> new ProviderNotFoundException("This patient doesn't have this provider"));
 
             if (providerDto == null)
                 new CannotDeleteProviderException("ERROR: Unable to delete this provider.");
@@ -192,15 +191,15 @@ public class ProviderRestController {
                 individualProviderReturned = individualProviderService.addNewIndividualProvider(providerDto);
             }*/
 
-            Provider provider = providerSearchLookupService.providerSearchByNpi(npi);
+            ProviderDto providerDto = providerSearchLookupService.providerSearchByNpi(npi);
 
-            if ((EntityType.valueOf(provider.getEntityType().getDisplayName()) == EntityType.Organization)) {
+            if ((EntityType.valueOf(providerDto.getEntityType().getDisplayName()) == EntityType.Organization)) {
                 isOrgProvider = true;
                 organizationalProviderReturned = organizationalProviderService
-                        .addNewOrganizationalProvider(provider, username);
+                        .addNewOrganizationalProvider(providerDto, username);
             } else {
                 isOrgProvider = false;
-                individualProviderReturned = individualProviderService.addNewIndividualProvider(provider, username);
+                individualProviderReturned = individualProviderService.addNewIndividualProvider(providerDto, username);
             }
 
             if (isOrgProvider == true) {

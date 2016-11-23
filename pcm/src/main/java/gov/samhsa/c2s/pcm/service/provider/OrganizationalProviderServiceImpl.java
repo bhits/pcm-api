@@ -30,7 +30,7 @@ import gov.samhsa.c2s.pcm.domain.patient.Patient;
 import gov.samhsa.c2s.pcm.domain.patient.PatientRepository;
 import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProvider;
 import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProviderRepository;
-import gov.samhsa.c2s.pcm.infrastructure.dto.Provider;
+import gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto;
 import gov.samhsa.c2s.pcm.service.dto.OrganizationalProviderDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -366,13 +366,13 @@ public class OrganizationalProviderServiceImpl implements
      */
     @Override
     public OrganizationalProvider addNewOrganizationalProvider(
-            Provider provider, String username) {
+            ProviderDto providerDto, String username) {
 
         OrganizationalProviderDto organizationalProviderDto = new OrganizationalProviderDto();
 
-        mapProviderResultToProviderDtoConverter.setProviderDto(organizationalProviderDto, provider);
+        mapProviderResultToProviderDtoConverter.setProviderDto(organizationalProviderDto, providerDto);
 
-        organizationalProviderDto.setOrgName(provider.getOrganizationName() == null ? "" : provider.getOrganizationName());
+        organizationalProviderDto.setOrgName(providerDto.getOrganizationName() == null ? "" : providerDto.getOrganizationName());
         organizationalProviderDto.setUsername(username);
 
         //TODO: Remove

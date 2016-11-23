@@ -30,7 +30,7 @@ import gov.samhsa.c2s.pcm.domain.patient.Patient;
 import gov.samhsa.c2s.pcm.domain.patient.PatientRepository;
 import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.c2s.pcm.domain.provider.IndividualProviderRepository;
-import gov.samhsa.c2s.pcm.infrastructure.dto.Provider;
+import gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto;
 import gov.samhsa.c2s.pcm.service.dto.IndividualProviderDto;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -336,15 +336,15 @@ public class IndividualProviderServiceImpl implements IndividualProviderService 
      */
     @Override
     public IndividualProvider addNewIndividualProvider(
-            Provider provider, String username) {
+            ProviderDto providerDto, String username) {
 
         IndividualProviderDto individualProviderDto = new IndividualProviderDto();
 
-        mapProviderResultToProviderDtoConverter.setProviderDto(individualProviderDto, provider);
+        mapProviderResultToProviderDtoConverter.setProviderDto(individualProviderDto, providerDto);
 
-        individualProviderDto.setFirstName(provider.getFirstName() == null ? "" : provider.getFirstName());
-        individualProviderDto.setMiddleName(provider.getMiddleName() == null ? "" : provider.getMiddleName());
-        individualProviderDto.setLastName(provider.getLastName() == null ? "" : provider.getLastName());
+        individualProviderDto.setFirstName(providerDto.getFirstName() == null ? "" : providerDto.getFirstName());
+        individualProviderDto.setMiddleName(providerDto.getMiddleName() == null ? "" : providerDto.getMiddleName());
+        individualProviderDto.setLastName(providerDto.getLastName() == null ? "" : providerDto.getLastName());
         individualProviderDto.setUsername(username);
 
         //TODO: Remove

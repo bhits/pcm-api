@@ -14,4 +14,3 @@ public class EntityType {
     private String code;
     private String displayName;
 }
-

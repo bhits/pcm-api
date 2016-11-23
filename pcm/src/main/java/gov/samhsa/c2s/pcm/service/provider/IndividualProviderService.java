@@ -26,7 +26,7 @@
 package gov.samhsa.c2s.pcm.service.provider;
 
 
-import gov.samhsa.c2s.pcm.infrastructure.dto.Provider;
+import gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto;
 import gov.samhsa.c2s.pcm.service.dto.IndividualProviderDto;
 import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
 
@@ -160,10 +160,10 @@ public interface IndividualProviderService {
      * Returns in_individualProviderReturned if added successfully; Returns null
      * if add fails (e.g. if added provider already exists)
      *
-     * @param provider
-     *            the individual provider dto
+     * @param providerDto
+     *            the individual providerDto dto
      * @return IndividualProvider in_individualProviderReturned
      */
     public abstract IndividualProvider addNewIndividualProvider(
-            Provider provider, String username);
+            ProviderDto providerDto, String username);
 }

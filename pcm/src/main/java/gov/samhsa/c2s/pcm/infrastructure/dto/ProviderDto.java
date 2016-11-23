@@ -7,7 +7,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
-public class Provider {
+public class ProviderDto {
     @NotNull
     @Size(max = 10)
     private String npi;
@@ -68,6 +68,4 @@ public class Provider {
     private String enumerationDate;
 
     private String lastUpdateDate;
-
-
 }

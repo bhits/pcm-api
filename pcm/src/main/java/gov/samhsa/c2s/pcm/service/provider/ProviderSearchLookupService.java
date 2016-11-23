@@ -25,7 +25,7 @@
  ******************************************************************************/
 package gov.samhsa.c2s.pcm.service.provider;
 
-import gov.samhsa.c2s.pcm.infrastructure.dto.Provider;
+import gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto;
 
 /**
  * The Interface ProviderSearchLookupService.
@@ -203,5 +203,5 @@ public interface ProviderSearchLookupService {
 	 *            the npi
 	 * @return the string
 	 */
-	public Provider providerSearchByNpi(String npi);
+	public ProviderDto providerSearchByNpi(String npi);
 }

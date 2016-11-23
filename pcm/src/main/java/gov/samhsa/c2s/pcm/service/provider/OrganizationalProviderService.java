@@ -27,7 +27,7 @@ package gov.samhsa.c2s.pcm.service.provider;
 
 
 import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProvider;
-import gov.samhsa.c2s.pcm.infrastructure.dto.Provider;
+import gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto;
 import gov.samhsa.c2s.pcm.service.dto.OrganizationalProviderDto;
 
 import java.util.List;
@@ -111,7 +111,7 @@ public interface OrganizationalProviderService {
      * @return OrganizationalProvider in_organizationalProviderReturned
      */
     public abstract OrganizationalProvider addNewOrganizationalProvider(
-            Provider provider, String username);
+            ProviderDto providerDto, String username);
 
     /**
      * Find all organizational providers.
