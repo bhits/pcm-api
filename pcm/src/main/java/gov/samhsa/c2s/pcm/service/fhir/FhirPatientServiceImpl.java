@@ -1,13 +1,9 @@
 package gov.samhsa.c2s.pcm.service.fhir;
 
 
-import ca.uhn.fhir.model.dstu2.resource.Patient;
-import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
-import ca.uhn.fhir.model.dstu2.valueset.ContactPointSystemEnum;
-import ca.uhn.fhir.model.dstu2.valueset.IdentifierUseEnum;
-import ca.uhn.fhir.model.primitive.DateDt;
-import ca.uhn.fhir.model.primitive.IdDt;
 import gov.samhsa.c2s.pcm.infrastructure.dto.PatientDto;
+import org.hl7.fhir.dstu3.model.*;
+import org.hl7.fhir.dstu3.model.Enumerations.AdministrativeGender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +25,7 @@ public class FhirPatientServiceImpl implements FhirPatientService {
 
     @Override
     public Patient createFhirPatient(PatientDto patientDto) {
-        Patient patient = patientDtoToPatient.apply(patientDto);
-        return patient;
+        return patientDtoToPatient.apply(patientDto);
     }
 
     Function<PatientDto, Patient> patientDtoToPatient = new Function<PatientDto, Patient>() {
@@ -40,10 +35,10 @@ public class FhirPatientServiceImpl implements FhirPatientService {
             Patient fhirPatient = new Patient();
 
             //setting mandatory fields
-            fhirPatient.setId(new IdDt(patientDto.getMedicalRecordNumber()));
+            fhirPatient.setId(new IdType(patientDto.getMedicalRecordNumber()));
             fhirPatient.addName().addFamily(patientDto.getLastName()).addGiven(patientDto.getFirstName());
-            fhirPatient.addTelecom().setValue(patientDto.getEmail()).setSystem(ContactPointSystemEnum.EMAIL);
-            fhirPatient.setBirthDate(new DateDt(patientDto.getBirthDate()));
+            fhirPatient.addTelecom().setValue(patientDto.getEmail()).setSystem(ContactPoint.ContactPointSystem.EMAIL);
+            fhirPatient.setBirthDate(patientDto.getBirthDate());
             fhirPatient.setGender(getPatientGender.apply(patientDto.getGenderCode()));
             fhirPatient.setActive(true);
 
@@ -61,7 +56,7 @@ public class FhirPatientServiceImpl implements FhirPatientService {
 
         //setting patient mrn
         patient.addIdentifier().setSystem(pidSystem)
-                .setUse(IdentifierUseEnum.OFFICIAL).setValue(patientDto.getMedicalRecordNumber());
+                .setUse(Identifier.IdentifierUse.OFFICIAL).setValue(patientDto.getMedicalRecordNumber());
 
         // setting ssn value
         if(null != patientDto.getSocialSecurityNumber() && ! patientDto.getSocialSecurityNumber().isEmpty())
@@ -69,24 +64,24 @@ public class FhirPatientServiceImpl implements FhirPatientService {
                     .setValue(patientDto.getSocialSecurityNumber()).setSystem(ssnLabel);
 
         if(null != patientDto.getTelephone() && ! patientDto.getTelephone().isEmpty())
-            patient.addTelecom().setValue(patientDto.getTelephone()).setSystem(ContactPointSystemEnum.PHONE);
+            patient.addTelecom().setValue(patientDto.getTelephone()).setSystem(ContactPoint.ContactPointSystem.PHONE);
 
 
 
     }
 
-    Function<String, AdministrativeGenderEnum> getPatientGender = new Function<String, AdministrativeGenderEnum>() {
+    Function<String, Enumerations.AdministrativeGender> getPatientGender = new Function<String, AdministrativeGender>() {
         @Override
-        public AdministrativeGenderEnum apply(String codeString) {
+        public AdministrativeGender apply(String codeString) {
             if (codeString != null && !"".equals(codeString) || codeString != null && !"".equals(codeString)) {
                 if ("male".equalsIgnoreCase(codeString) || "M".equalsIgnoreCase(codeString)) {
-                    return AdministrativeGenderEnum.MALE;
+                    return AdministrativeGender.MALE;
                 } else if ("female".equalsIgnoreCase(codeString) || "F".equalsIgnoreCase(codeString)) {
-                    return AdministrativeGenderEnum.FEMALE;
+                    return Enumerations.AdministrativeGender.FEMALE;
                 } else if ("other".equalsIgnoreCase(codeString) || "O".equalsIgnoreCase(codeString)) {
-                    return AdministrativeGenderEnum.OTHER;
+                    return AdministrativeGender.OTHER;
                 } else if ("unknown".equalsIgnoreCase(codeString) || "UN".equalsIgnoreCase(codeString)) {
-                    return AdministrativeGenderEnum.UNKNOWN;
+                    return AdministrativeGender.UNKNOWN;
                 } else {
                     throw new IllegalArgumentException("Unknown AdministrativeGender code \'" + codeString + "\'");
                 }
