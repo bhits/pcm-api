@@ -132,7 +132,7 @@ c2s:
         sql:
           path: activity/PatientActivityHistory.sql
       ssn:
-        system: http://hl7.org/fhir/v2/0203
+        system: http://hl7.org/fhir/sid/us-ssn
         oid: urn:oid:2.16.840.1.113883.4.1
         label: SSN
       npi:
@@ -140,7 +140,7 @@ c2s:
         oid: urn:oid:2.16.840.1.113883.4.6
         label: PRN
       pou:
-        system: http://hl7.org/fhir/ValueSet/v3-PurposeOfUse
+        system: http://hl7.org/fhir/v3/ActReason
         oid: urn:oid:2.16.840.1.113883.1.11.20448
         label: PurposeOfUse
       hie-connection:
