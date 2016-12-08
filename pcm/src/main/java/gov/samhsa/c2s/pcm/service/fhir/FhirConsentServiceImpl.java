@@ -5,11 +5,14 @@ import ca.uhn.fhir.rest.client.IGenericClient;
 import gov.samhsa.c2s.pcm.domain.consent.*;
 import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProvider;
+import gov.samhsa.c2s.pcm.domain.reference.ClinicalConceptCode;
 import gov.samhsa.c2s.pcm.domain.reference.PurposeOfUseCode;
 import gov.samhsa.c2s.pcm.infrastructure.dto.PatientDto;
+import gov.samhsa.c2s.pcm.service.dto.SensitivePolicyCodeEnum;
 import org.apache.commons.io.FileUtils;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.Consent;
+import org.hl7.fhir.dstu3.model.codesystems.V3ActReason;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +21,12 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 /**
  * Created by Sadhana.chandra on 12/2/2016.
+ * Implementatin for FHIR Consent Service
  */
 
 @Service
@@ -63,19 +65,13 @@ public class FhirConsentServiceImpl implements FhirConsentService {
     private String keepExcludeList;
 
     // FHIR resource identifiers for inline/embedded objects
-    private static String CONFIDENTIALITY_CODE_CODE_SYSTEM = "urn:oid:2.16.840.1.113883.5.25";
-    private static String CODE_SYSTEM_SET_OPERATOR = "http://hl7.org/fhir/v3/SetOperator";
-    private static String SOURCE_ORG_ID = "SOURCE_ORG_ID";
-    private static String SOURCE_IND_ID = "SOURCE_IND_ID";
-    private static String RECIPIENT_ORG_ID = "RECIPIENT_ORG_ID";
-    private static String RECIPIENT_IND_ID = "RECIPIENT_IND_ID";
-    private static String INCLUDE_SENSITIVE_CODES = "INCLUDE_SENSITIVE_CODES";
-    private static String EXCLUDE_SENSITIVE_CODES = "EXClUDE_SENSITIVE_CODES";
+    private String CONFIDENTIALITY_CODE_CODE_SYSTEM = "urn:oid:2.16.840.1.113883.5.25";
+    private String CODE_SYSTEM_SET_OPERATOR = "http://hl7.org/fhir/v3/SetOperator";
 
     @Override
     public void publishFhirConsentToHie(Consent fhirConsent) {
         //  invoke Consent service
-        fhirClient.create().resource(fhirConsent).execute();
+       fhirClient.create().resource(fhirConsent).execute();
 
     }
 
@@ -86,11 +82,28 @@ public class FhirConsentServiceImpl implements FhirConsentService {
 
     @Override
     public Consent createFhirConsent(gov.samhsa.c2s.pcm.domain.consent.Consent consent, PatientDto patientDto) {
-        return createBasicConsent(consent, patientDto);
+        return createGranularConsent(consent, patientDto);
     }
 
+    // TODO :: Need to Retrieve Patient object from FHIR Server and add to consent object
+/*    private Patient getFhirPatient(PatientDto patientDto){
+        Patient foundPatient = null;
+        Bundle results = fhirClient.search().forResource(Patient.class)
+                //.where(Patient.IDENTIFIER.exactly().systemAndCode()systemAndIdentifier("system", pidSystem))
+                .where(new TokenClientParam("email").exactly().code(patientDto.getEmail()))
+                .and(new TokenClientParam("family").exactly().code(patientDto.getLastName()))
+                .and(new TokenClientParam("given").exactly().code(patientDto.getFirstName()))
+
+                //  .and(Patient.IDENTIFIER.exactly().systemAndValues("value",patientDto.getMedicalRecordNumber()))
+                .returnBundle(Bundle.class)
+                  .execute();
+        if(results.getEntry().get(0) != null)
+          foundPatient = (Patient) results.getEntry().get(0).getResource();
+        return foundPatient;
+    }*/
 
     private Consent createBasicConsent(gov.samhsa.c2s.pcm.domain.consent.Consent c2sConsent, PatientDto patientDto) {
+
 
         Consent fhirConsent = new Consent();
 
@@ -103,63 +116,69 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         fhirConsent.getContained().add(fhirPatient);
 
         // Consent signature details
-        Reference consentor = fhirConsent.getConsentor().get(0);
-        consentor.setDisplay(fhirPatient.getNameFirstRep().getNameAsSingleString());
-        fhirConsent.getConsentor().add(consentor);
+        Reference consentSignature = new Reference();
+        consentSignature.setDisplay(fhirPatient.getNameFirstRep().getNameAsSingleString());
+        fhirConsent.getConsentor().add(consentSignature);
 
         // consent status
         fhirConsent.setStatus(Consent.ConsentStatus.ACTIVE);
 
         // Specify Authors, the providers authorizes to disclose
         // Author :: Organizational Provider
-        Set<OrganizationalProvider> sourceOrgPermittedTo = new HashSet<>();
+        Organization sourceOrganizationResource = null;
         for (ConsentOrganizationalProviderPermittedToDisclose orgPermittedTo : c2sConsent.getOrganizationalProvidersPermittedToDisclose()) {
+            Set<OrganizationalProvider> sourceOrgPermittedTo = new HashSet<>();
             sourceOrgPermittedTo.add(orgPermittedTo.getOrganizationalProvider());
+            sourceOrganizationResource = setOrganizationProvider(sourceOrgPermittedTo, orgPermittedTo.getOrganizationalProvider().getOrgName());
         }
-        Organization sourceOrganizationResource = setOrganizationProvider(sourceOrgPermittedTo, SOURCE_ORG_ID);
 
         if (null != sourceOrganizationResource) {
             fhirConsent.getContained().add(sourceOrganizationResource);
             fhirConsent.getOrganization().setReference("#" + sourceOrganizationResource.getId());
         } else {
             //// Author :: Individual Provider
-            Set<IndividualProvider> sourceindPermittedTo = new HashSet<>();
+            Practitioner sourcePractitioner = null;
             for (ConsentIndividualProviderPermittedToDisclose indPermittedTo : c2sConsent.getProvidersPermittedToDisclose()) {
+                Set<IndividualProvider> sourceindPermittedTo = new HashSet<>();
                 sourceindPermittedTo.add(indPermittedTo.getIndividualProvider());
+                sourcePractitioner = setPractitionerProvider(sourceindPermittedTo, indPermittedTo.getIndividualProvider().getNpi());
             }
-            Practitioner sourcePractitioner = setPractitionerProvider(sourceindPermittedTo, SOURCE_IND_ID);
-
-            fhirConsent.getContained().add(sourcePractitioner);
-            fhirConsent.getOrganization().setReference("#" + sourcePractitioner.getId());
+            if (null != sourcePractitioner) {
+                fhirConsent.getContained().add(sourcePractitioner);
+                fhirConsent.getOrganization().setReference("#" + sourcePractitioner.getId());
+            }
         }
 
         // Specify Recipients, the providers disclosure is made to
         // Recipient :: Organizational Provider
-        Set<OrganizationalProvider> recipientOrgMadeTo = new HashSet<>();
+        Organization recipientOrganization = null;
         for (ConsentOrganizationalProviderDisclosureIsMadeTo orgMadeTo : c2sConsent.getOrganizationalProvidersDisclosureIsMadeTo()) {
+            Set<OrganizationalProvider> recipientOrgMadeTo = new HashSet<>();
             recipientOrgMadeTo.add(orgMadeTo.getOrganizationalProvider());
+            recipientOrganization = setOrganizationProvider(recipientOrgMadeTo, orgMadeTo.getOrganizationalProvider().getOrgName());
         }
-        Organization recipientOrganization = setOrganizationProvider(recipientOrgMadeTo, RECIPIENT_ORG_ID);
         if (null != recipientOrganization) {
             fhirConsent.getContained().add(recipientOrganization);
             fhirConsent.getRecipient().get(0).setReference("#" + recipientOrganization.getId());
         } else {
             // Recipient :: Individual Provider
-            Set<IndividualProvider> recipientindPermittedTo = new HashSet<>();
+            Practitioner recipientPractitioner = null;
             for (ConsentIndividualProviderDisclosureIsMadeTo indPermittedTo : c2sConsent.getProvidersDisclosureIsMadeTo()) {
-                recipientindPermittedTo.add(indPermittedTo.getIndividualProvider());
+                Set<IndividualProvider> recipientIndPermittedTo = new HashSet<>();
+                recipientIndPermittedTo.add(indPermittedTo.getIndividualProvider());
+                recipientPractitioner = setPractitionerProvider(recipientIndPermittedTo, indPermittedTo.getIndividualProvider().getNpi());
             }
-            Practitioner recipientPractitioner = setPractitionerProvider(recipientindPermittedTo, RECIPIENT_IND_ID);
-
-            fhirConsent.getContained().add(recipientPractitioner);
-            fhirConsent.getRecipient().get(0).setReference("#" + recipientPractitioner.getId());
+            if(null != recipientPractitioner) {
+                fhirConsent.getContained().add(recipientPractitioner);
+                fhirConsent.getRecipient().add(new Reference().setReference("#" + recipientPractitioner.getId()));
+            }
         }
 
 
         // set POU
         for (ConsentShareForPurposeOfUseCode pou : c2sConsent.getShareForPurposeOfUseCodes()) {
             String fhirPou = getPurposeOfUseCode.apply(pou.getPurposeOfUseCode());
-            Coding coding = new Coding(pouSystem, fhirPou, fhirPou);
+            Coding coding = new Coding(pouSystem, fhirPou, pou.getPurposeOfUseCode().getCode());
             fhirConsent.getPurpose().add(coding);
         }
 
@@ -167,7 +186,7 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         fhirConsent.getPeriod().setStart(c2sConsent.getStartDate());
         fhirConsent.getPeriod().setEnd(c2sConsent.getEndDate());
         // consent sign time
-        fhirConsent.getDateTime().setTime(Calendar.getInstance().getTimeInMillis());
+        fhirConsent.setDateTime(new Date());
 
         // final String xdsDocumentEntryUniqueId = uniqueOidProvider.getOid();
         // fhirConsent.getIdentifier().setSystem(pidSystem).setValue(xdsDocumentEntryUniqueId);
@@ -179,7 +198,7 @@ public class FhirConsentServiceImpl implements FhirConsentService {
 
 
         //TODO (#20): write log only in debug mode
-        createConsentToLogMessage(fhirConsent, "BasicConsent" + fhirConsent.getId());
+       // createConsentToLogMessage(fhirConsent, "BasicConsent" + fhirPatient.getId());
         return fhirConsent;
     }
 
@@ -206,6 +225,14 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         {
             sourcePractitionerResource.setId(new IdType(practIdName));
             sourcePractitionerResource.addIdentifier().setSystem(npiSystem).setValue(individualProvider.getNpi());
+            //setting the name element
+            HumanName indName = new HumanName();
+            indName.addFamily(individualProvider.getLastName());
+            indName.addGiven(individualProvider.getFirstName());
+            indName.addPrefix(individualProvider.getNamePrefix());
+            indName.addSuffix(individualProvider.getNameSuffix());
+            sourcePractitionerResource.addName(indName);
+            //setting the address
             sourcePractitionerResource.addAddress().addLine(individualProvider.getFirstLineMailingAddress())
                     .setCity(individualProvider.getMailingAddressCityName())
                     .setState(individualProvider.getMailingAddressStateName())
@@ -217,17 +244,16 @@ public class FhirConsentServiceImpl implements FhirConsentService {
     }
 
     private Function<PurposeOfUseCode, String> getPurposeOfUseCode = new Function<PurposeOfUseCode, String>() {
-        //TODO (#21): Replace with FHIR ENUM class once FHIR version migrate to DSTU3.
-        @Override
+         @Override
         public String apply(PurposeOfUseCode pou) {
             String codeString = pou.getCode();
             if (codeString != null && !"".equals(codeString) || codeString != null && !"".equals(codeString)) {
                 if ("TREATMENT".equalsIgnoreCase(codeString)) {
-                    return "TREAT";
+                    return  V3ActReason.TREAT.toString();
                 } else if ("PAYMENT".equalsIgnoreCase(codeString)) {
-                    return "HPAYMT";
+                    return  V3ActReason.HPAYMT.toString();
                 } else if ("RESEARCH".equalsIgnoreCase(codeString)) {
-                    return "HRESCH";
+                    return  V3ActReason.HRESCH.toString();
                 } else {
                     throw new IllegalArgumentException("Unknown Purpose of Use code \'" + codeString + "\'");
                 }
@@ -236,6 +262,72 @@ public class FhirConsentServiceImpl implements FhirConsentService {
             }
         }
     };
+
+    private Consent createGranularConsent(gov.samhsa.c2s.pcm.domain.consent.Consent c2sConsent, PatientDto patientDto) {
+
+        Consent fhirConsent = createBasicConsent(c2sConsent, patientDto);
+        // add granular preferences
+
+        // get obligations from consent
+        List<String> excludeCodes = getConsentObligations(c2sConsent);
+
+        List<Coding> excludeCodingList = new ArrayList<>();
+        List<Coding> includeCodingList = new ArrayList<>();
+        // go over full list and add obligation as exclusions
+        for (SensitivePolicyCodeEnum codesEnum : SensitivePolicyCodeEnum.values()) {
+            if (excludeCodes.contains(codesEnum.getCode())) {
+                // exclude it
+                 excludeCodingList.add(new Coding(codesEnum.getCodeSystem(), codesEnum.getCode(), codesEnum.getDisplayName()));
+              } else {
+                // include it
+                includeCodingList.add(new Coding(codesEnum.getCodeSystem(), codesEnum.getCode(), codesEnum.getDisplayName()));
+             }
+        }
+
+        // add list to consent
+        Consent.ExceptComponent exceptComponent = new Consent.ExceptComponent();
+
+        if(keepExcludeList.equalsIgnoreCase("true")) {
+            //List of Excluded Sensitive policy codes
+            exceptComponent.setType(Consent.ConsentExceptType.DENY);
+            exceptComponent.setSecurityLabel(excludeCodingList);
+        } else {
+            //List of included Sensitive policy codes
+            exceptComponent.setSecurityLabel(includeCodingList);
+            exceptComponent.setType(Consent.ConsentExceptType.PERMIT);
+         }
+        fhirConsent.setExcept(Arrays.asList(exceptComponent));
+
+        createConsentToLogMessage(fhirConsent, "GranularConsent"+patientDto.getMedicalRecordNumber());
+        return fhirConsent;
+
+    }
+
+    private List<String> getConsentObligations(gov.samhsa.c2s.pcm.domain.consent.Consent  consent) {
+        final Set<String> obligationCodes = new HashSet<>();
+
+        for (final ConsentDoNotShareClinicalDocumentTypeCode item : consent
+                .getDoNotShareClinicalDocumentTypeCodes()) {
+            obligationCodes.add(item
+                    .getClinicalDocumentTypeCode().getCode());
+        }
+
+        for (final ConsentDoNotShareSensitivityPolicyCode item : consent
+                .getDoNotShareSensitivityPolicyCodes()) {
+            obligationCodes.add(item
+                    .getValueSetCategory().getCode());
+        }
+
+        for (final ClinicalConceptCode item : consent
+                .getDoNotShareClinicalConceptCodes()) {
+            obligationCodes.add(item.getCode());
+        }
+        return new ArrayList<>(obligationCodes);
+    }
+
+
+
+
 
     private void createConsentToLogMessage(Consent fhirConsent, String currentTest) {
         String xmlEncodedGranularConsent = fhirContext.newXmlParser().setPrettyPrint(true)

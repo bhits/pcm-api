@@ -1,15 +1,16 @@
 package gov.samhsa.c2s.pcm.service.dto;
 
+//TODO::  Need to dynamically create from value set category table
 public enum SensitivePolicyCodeEnum {
 
-    SUBSTANCE_ABUSE("ETH", "Substance abuse information sensitivity", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
-    GENETIC_DISEASE("GDIS", "Genetic disease information sensitivity", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
-    HIV("HIV", "HIV/AIDS information sensitivity", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
-    PSYCHIATRIC("PSY", "Psychiatry information sensitivity", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
-    SEXUAL_ASSAULT("SDV", "Sexual assault, abuse, or domestic violence information sensitivity", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
-    SEXUALITY("SEX", "Sexuality and reproductive health information sensitivity", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
+    DRUG_ABUSE("ETH", "Drug use information", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
+    GENETIC_DISEASE("GDIS", "Genetic disease information", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
+    HIV("HIV", "HIV/AIDS information'", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
+    PSYCHIATRIC("PSY", "Mental health information", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
+    COM_DISEASE("COM", "Communicable disease information", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
+    SEX("SEX", "Sexuality and reproductive health information", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
     ALCOHOLIC("ALC", "Alcohol use and Alcoholism Information", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true),
-    SEXUALLY_TRANSMITTED("STD", "Sexually transmitted disease information sensitivity", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true);
+    ADDICTION("ADD", "Addictions information", "ActInformationSensitivityPolicy", "2.16.840.1.113883.1.11.20428", true);
 
     private String code;
     private String displayName;
