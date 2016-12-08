@@ -159,8 +159,8 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         }
         if (null != recipientOrganization) {
             fhirConsent.getContained().add(recipientOrganization);
-            fhirConsent.getRecipient().get(0).setReference("#" + recipientOrganization.getId());
-        } else {
+            fhirConsent.getRecipient().add(new Reference().setReference("#" + recipientOrganization.getId()));
+         } else {
             // Recipient :: Individual Provider
             Practitioner recipientPractitioner = null;
             for (ConsentIndividualProviderDisclosureIsMadeTo indPermittedTo : c2sConsent.getProvidersDisclosureIsMadeTo()) {
