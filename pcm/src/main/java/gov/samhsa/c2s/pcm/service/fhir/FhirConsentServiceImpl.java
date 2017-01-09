@@ -4,7 +4,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.IGenericClient;
 import ca.uhn.fhir.validation.FhirValidator;
 import ca.uhn.fhir.validation.ValidationResult;
-import gov.samhsa.c2s.pcm.config.FHIRIdentifierProperties;
+import gov.samhsa.c2s.pcm.config.FHIRProperties;
 import gov.samhsa.c2s.pcm.domain.consent.*;
 import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProvider;
@@ -56,7 +56,7 @@ public class FhirConsentServiceImpl implements FhirConsentService {
     private UniqueOidProvider uniqueOidProvider;
 
     @Autowired
-    private FHIRIdentifierProperties fhirIdentifierProperties;
+    private FHIRProperties fhirProperties;
 
     @Value("${logging.path}")
     private String logOutputPath;
@@ -199,7 +199,7 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         // set POU
         for (ConsentShareForPurposeOfUseCode pou : c2sConsent.getShareForPurposeOfUseCodes()) {
             String fhirPou = getPurposeOfUseCode.apply(pou.getPurposeOfUseCode());
-            Coding coding = new Coding(fhirIdentifierProperties.getPou().getSystem(), fhirPou, pou.getPurposeOfUseCode().getCode());
+            Coding coding = new Coding(fhirProperties.getPou().getSystem(), fhirPou, pou.getPurposeOfUseCode().getCode());
             fhirConsent.getPurpose().add(coding);
         }
 
@@ -210,14 +210,14 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         fhirConsent.setDateTime(new Date());
 
          // set identifier for this consent
-        fhirConsent.getIdentifier().setSystem(fhirIdentifierProperties.getPid().getDomain().getSystem()).setValue(c2sConsent.getConsentReferenceId());
+        fhirConsent.getIdentifier().setSystem(fhirProperties.getPid().getDomain().getSystem()).setValue(c2sConsent.getConsentReferenceId());
 
         //set category
         CodeableConcept categoryConcept = new CodeableConcept();
         //TODO need to replace DISL from enum value
-        categoryConcept.addCoding(new Coding().setCode(fhirIdentifierProperties.getConsentType().getCode())
-                                              .setSystem(fhirIdentifierProperties.getConsentType().getSystem())
-                                              .setDisplay(fhirIdentifierProperties.getConsentType().getLabel()));
+        categoryConcept.addCoding(new Coding().setCode(fhirProperties.getConsentType().getCode())
+                                              .setSystem(fhirProperties.getConsentType().getSystem())
+                                              .setDisplay(fhirProperties.getConsentType().getLabel()));
         fhirConsent.getCategory().add(categoryConcept);
 
          if(logger.isDebugEnabled())
@@ -232,7 +232,7 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         orgProviders.forEach((OrganizationalProvider organizationalProvider) ->
         {
             sourceOrganizationResource.setId(new IdType(organizationalProvider.getNpi()));
-            sourceOrganizationResource.addIdentifier().setSystem(fhirIdentifierProperties.getNpi().getSystem()).setValue(organizationalProvider.getNpi());
+            sourceOrganizationResource.addIdentifier().setSystem(fhirProperties.getNpi().getSystem()).setValue(organizationalProvider.getNpi());
             sourceOrganizationResource.setName(organizationalProvider.getOrgName());
             sourceOrganizationResource.addAddress().addLine(organizationalProvider.getFirstLinePracticeLocationAddress())
                     .setCity(organizationalProvider.getMailingAddressCityName())
@@ -248,7 +248,7 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         individualProviders.forEach((IndividualProvider individualProvider) ->
         {
             sourcePractitionerResource.setId(new IdType(individualProvider.getNpi()));
-            sourcePractitionerResource.addIdentifier().setSystem(fhirIdentifierProperties.getNpi().getSystem()).setValue(individualProvider.getNpi());
+            sourcePractitionerResource.addIdentifier().setSystem(fhirProperties.getNpi().getSystem()).setValue(individualProvider.getNpi());
             //setting the name element
             HumanName indName = new HumanName();
             indName.setFamily(individualProvider.getLastName());
@@ -311,7 +311,7 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         // add list to consent
         Consent.ExceptComponent exceptComponent = new Consent.ExceptComponent();
 
-        if(fhirIdentifierProperties.getKeepExcludeList().equalsIgnoreCase("true")) {
+        if(fhirProperties.getKeepExcludeList().equalsIgnoreCase("true")) {
             //List of Excluded Sensitive policy codes
             exceptComponent.setType(Consent.ConsentExceptType.DENY);
             exceptComponent.setSecurityLabel(excludeCodingList);
@@ -354,14 +354,14 @@ public class FhirConsentServiceImpl implements FhirConsentService {
 
 
 
-    private void createConsentToLogMessage(Consent fhirConsent, String currentTest) {
+    private void createConsentToLogMessage(Consent fhirConsent, String fileName) {
         String xmlEncodedGranularConsent = fhirContext.newXmlParser().setPrettyPrint(true)
                 .encodeResourceToString(fhirConsent);
         try {
-            FileUtils.writeStringToFile(new File(logOutputPath + "/XML/" + currentTest + ".xml"), xmlEncodedGranularConsent);
+            FileUtils.writeStringToFile(new File(logOutputPath + "/XML/" + fileName + ".xml"), xmlEncodedGranularConsent);
             String jsonEncodedGranularConsent = fhirContext.newJsonParser().setPrettyPrint(true)
                     .encodeResourceToString(fhirConsent);
-            FileUtils.writeStringToFile(new File(logOutputPath + "/JSON/" + currentTest + ".json"), jsonEncodedGranularConsent);
+            FileUtils.writeStringToFile(new File(logOutputPath + "/JSON/" + fileName + ".json"), jsonEncodedGranularConsent);
         } catch (IOException e) {
             logger.warn(e.getMessage(), e);
         }

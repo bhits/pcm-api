@@ -1,10 +1,11 @@
 package gov.samhsa.c2s.pcm.service.fhir;
 
 
+import gov.samhsa.c2s.pcm.config.FHIRProperties;
 import gov.samhsa.c2s.pcm.infrastructure.dto.PatientDto;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.Enumerations.AdministrativeGender;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
@@ -12,14 +13,9 @@ import java.util.function.Function;
 @Service
 public class FhirPatientServiceImpl implements FhirPatientService {
 
-    @Value("${c2s.pcm.config.pid.domain.id}")
-    private String pidSystem="1.3.6.1.4.1.21367.13.20.200";
+    @Autowired
+    private FHIRProperties fhirProperties;
 
-    @Value("${c2s.pcm.config.ssn.system}")
-    private String ssnSystem = "http://hl7.org/fhir/sid/us-ssn";
-
-    @Value("${c2s.pcm.config.ssn.label}")
-    private String ssnLabel = "SSN";
 
 
     @Override
@@ -54,12 +50,12 @@ public class FhirPatientServiceImpl implements FhirPatientService {
     private void setIdentifiers(Patient patient, PatientDto patientDto) {
 
         //setting patient mrn
-        patient.addIdentifier().setSystem(pidSystem)
+        patient.addIdentifier().setSystem(fhirProperties.getPid().getDomain().getSystem())
                 .setUse(Identifier.IdentifierUse.OFFICIAL).setValue(patientDto.getMedicalRecordNumber());
 
         // setting ssn value
         if(null != patientDto.getSocialSecurityNumber() && ! patientDto.getSocialSecurityNumber().isEmpty())
-            patient.addIdentifier().setSystem(ssnSystem)
+            patient.addIdentifier().setSystem(fhirProperties.getSsn().getSystem())
                     .setValue(patientDto.getSocialSecurityNumber());
 
         if(null != patientDto.getTelephone() && ! patientDto.getTelephone().isEmpty())

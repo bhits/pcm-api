@@ -7,12 +7,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "c2s.pcm.config")
 @Data
-public class FHIRIdentifierProperties {
+public class FHIRProperties {
 
     private Pid pid;
     private Pou pou;
     private ConsentType consentType;
     private Npi npi;
+    private Ssn ssn;
     private String keepExcludeList;
 
     @Data
@@ -26,6 +27,9 @@ public class FHIRIdentifierProperties {
     public static class ConsentType extends Coding{
         private String code;
     }
+
+    @Data
+    public static class Ssn extends Coding{ }
 
     @Data
     public static class Npi extends Coding{ }
