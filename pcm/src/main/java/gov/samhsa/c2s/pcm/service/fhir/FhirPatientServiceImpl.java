@@ -16,11 +16,10 @@ public class FhirPatientServiceImpl implements FhirPatientService {
     private String pidSystem="1.3.6.1.4.1.21367.13.20.200";
 
     @Value("${c2s.pcm.config.ssn.system}")
-    private String ssnSystem = "http://hl7.org/fhir/v2/0203";
+    private String ssnSystem = "http://hl7.org/fhir/sid/us-ssn";
 
     @Value("${c2s.pcm.config.ssn.label}")
     private String ssnLabel = "SSN";
-
 
 
     @Override
@@ -36,7 +35,7 @@ public class FhirPatientServiceImpl implements FhirPatientService {
 
             //setting mandatory fields
             fhirPatient.setId(new IdType(patientDto.getMedicalRecordNumber()));
-            fhirPatient.addName().addFamily(patientDto.getLastName()).addGiven(patientDto.getFirstName());
+            fhirPatient.addName().setFamily(patientDto.getLastName()).addGiven(patientDto.getFirstName());
             fhirPatient.addTelecom().setValue(patientDto.getEmail()).setSystem(ContactPoint.ContactPointSystem.EMAIL);
             fhirPatient.setBirthDate(patientDto.getBirthDate());
             fhirPatient.setGender(getPatientGender.apply(patientDto.getGenderCode()));
@@ -61,7 +60,7 @@ public class FhirPatientServiceImpl implements FhirPatientService {
         // setting ssn value
         if(null != patientDto.getSocialSecurityNumber() && ! patientDto.getSocialSecurityNumber().isEmpty())
             patient.addIdentifier().setSystem(ssnSystem)
-                    .setValue(patientDto.getSocialSecurityNumber()).setSystem(ssnLabel);
+                    .setValue(patientDto.getSocialSecurityNumber());
 
         if(null != patientDto.getTelephone() && ! patientDto.getTelephone().isEmpty())
             patient.addTelecom().setValue(patientDto.getTelephone()).setSystem(ContactPoint.ContactPointSystem.PHONE);
