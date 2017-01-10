@@ -102,9 +102,9 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         fhirConsent.setId(new IdType(xdsDocumentEntryUniqueId));
 
         // Set patient reference and add patient as contained resource
-        // TODO :: Need to Retrieve Patient object from FHIR Server and add to consent object
         Patient fhirPatient = fhirPatientService.createFhirPatient(patientDto);
         fhirConsent.getPatient().setReference("#" + patientDto.getMedicalRecordNumber());
+        // TODO :: Need to Retrieve Patient object from FHIR Server and add to consent object
         fhirConsent.getContained().add(fhirPatient);
 
         // Consent signature details
@@ -130,7 +130,7 @@ public class FhirConsentServiceImpl implements FhirConsentService {
             fhirConsent.getOrganization().setReference("#" + sourceOrganizationResource.getId());
             // TODO :: Need to add source organization details to patient object
         } else {
-            //// Author :: Individual Provider
+            // Author :: Individual Provider
             Practitioner sourcePractitioner = null;
             for (ConsentIndividualProviderPermittedToDisclose indPermittedTo : c2sConsent.getProvidersPermittedToDisclose()) {
                 Set<IndividualProvider> sourceindPermittedTo = new HashSet<>();
@@ -179,7 +179,7 @@ public class FhirConsentServiceImpl implements FhirConsentService {
             fhirConsent.getPurpose().add(coding);
         }
 
-        /* set terms of consent and intended recipient(s) */
+        // set terms of consent and intended recipient(s)
         fhirConsent.getPeriod().setStart(c2sConsent.getStartDate());
         fhirConsent.getPeriod().setEnd(c2sConsent.getEndDate());
         // consent sign time
@@ -265,7 +265,6 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         // get basic consent details
         Consent fhirConsent = createBasicConsent(c2sConsent, patientDto);
 
-        // add granular preferences
         // get obligations from consent
         List<String> excludeCodes = getConsentObligations(c2sConsent);
 
