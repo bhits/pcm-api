@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * Created by Sadhana.chandra on 12/2/2016.
+ * Created on 12/2/2016.
  * Implementation for FHIR Consent Service
  */
 
@@ -76,8 +76,8 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         Invoke the server create method (and send pretty-printed JSON
         encoding to the server
         instead of the default which is non-pretty printed XML)
+        invoke Consent service
         */
-        //  invoke Consent service
        fhirClient.create().resource(fhirConsent).execute();
 
     }
@@ -144,12 +144,10 @@ public class FhirConsentServiceImpl implements FhirConsentService {
             }
         }
 
-        // Specify Policy
-        // Reference the "default" OAuth2 policy that covers the related information
+        // Specify Policy - Reference the "default" OAuth2 policy that covers the related information
         fhirConsent.setPolicy(c2sConsent.getConsentReferenceId());
 
-        // Specify Recipients, the providers disclosure is made to
-        // Recipient :: Organizational Provider
+        // Specify Recipients, the providers disclosure is made to Recipient :: Organizational Provider
         Organization recipientOrganization = null;
         for (ConsentOrganizationalProviderDisclosureIsMadeTo orgMadeTo : c2sConsent.getOrganizationalProvidersDisclosureIsMadeTo()) {
             Set<OrganizationalProvider> recipientOrgMadeTo = new HashSet<>();
