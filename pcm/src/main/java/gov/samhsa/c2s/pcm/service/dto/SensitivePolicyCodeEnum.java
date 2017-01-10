@@ -3,14 +3,13 @@ package gov.samhsa.c2s.pcm.service.dto;
 //TODO::  Need to dynamically create from value set category table
 public enum SensitivePolicyCodeEnum {
 
+    /* Removed the sensitive categories of Genetic and Addiction, which don't have any value sets */
     DRUG_ABUSE("ETH", "Drug use information", "v3 Code System ActCode", "http://hl7.org/fhir/v3/ActCode", true),
-    GENETIC_DISEASE("GDIS", "Genetic disease information", "v3 Code System ActCode", "http://hl7.org/fhir/v3/ActCode", true),
     HIV("HIV", "HIV/AIDS information'", "v3 Code System ActCode", "http://hl7.org/fhir/v3/ActCode", true),
     PSYCHIATRIC("PSY", "Mental health information", "v3 Code System ActCode", "http://hl7.org/fhir/v3/ActCode", true),
     COM_DISEASE("COM", "Communicable disease information", "v3 Code System ActCode", "http://hl7.org/fhir/v3/ActCode", true),
     SEX("SEX", "Sexuality and reproductive health information", "v3 Code System ActCode", "http://hl7.org/fhir/v3/ActCode", true),
-    ALCOHOLIC("ALC", "Alcohol use and Alcoholism Information", "v3 Code System ActCode", "http://hl7.org/fhir/v3/ActCode", true),
-    ADDICTION("ADD", "Addictions information", "v3 Code System ActCode", "http://hl7.org/fhir/v3/ActCode", true);
+    ALCOHOLIC("ALC", "Alcohol use and Alcoholism Information", "v3 Code System ActCode", "http://hl7.org/fhir/v3/ActCode", true);
 
     private String code;
     private String displayName;
