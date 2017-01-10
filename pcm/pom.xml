@@ -81,7 +81,7 @@
         <docker.maven.version>0.4.3</docker.maven.version>
         <hapi.fhir.version>2.2</hapi.fhir.version>
         <clamav-client.version>1.0.1</clamav-client.version>
-		<lombok.version>1.16.6</lombok.version>
+        <lombok.version>1.16.6</lombok.version>
     </properties>
 
     <dependencies>
@@ -246,13 +246,12 @@
                 <artifactId>hapi-fhir-structures-dstu3</artifactId>
                 <version>${hapi.fhir.version}</version>
             </dependency>
-			<dependency>
-				<groupId>org.projectlombok</groupId>
-				<artifactId>lombok</artifactId>
-				<version>${lombok.version}</version>
-			</dependency>			
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
             <!-- HAPI FHIR JARS -->
-
         </dependencies>
 
     </dependencyManagement>
