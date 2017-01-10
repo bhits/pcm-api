@@ -4,6 +4,8 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.IGenericClient;
 import ca.uhn.fhir.validation.FhirValidator;
 import ca.uhn.fhir.validation.ValidationResult;
+import gov.samhsa.c2s.common.log.Logger;
+import gov.samhsa.c2s.common.log.LoggerFactory;
 import gov.samhsa.c2s.pcm.config.FHIRProperties;
 import gov.samhsa.c2s.pcm.domain.consent.*;
 import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
@@ -12,24 +14,18 @@ import gov.samhsa.c2s.pcm.domain.reference.ClinicalConceptCode;
 import gov.samhsa.c2s.pcm.domain.reference.PurposeOfUseCode;
 import gov.samhsa.c2s.pcm.infrastructure.dto.PatientDto;
 import gov.samhsa.c2s.pcm.service.dto.SensitivePolicyCodeEnum;
-import org.apache.commons.io.FileUtils;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.Consent;
 import org.hl7.fhir.dstu3.model.codesystems.V3ActReason;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 
 /**
  * Created by Sadhana.chandra on 12/2/2016.
- * Implementatin for FHIR Consent Service
+ * Implementation for FHIR Consent Service
  */
 
 @Service
@@ -58,8 +54,6 @@ public class FhirConsentServiceImpl implements FhirConsentService {
     @Autowired
     private FHIRProperties fhirProperties;
 
-    @Value("${logging.path}")
-    private String logOutputPath;
 
 
     // FHIR resource identifiers for inline/embedded objects
@@ -214,14 +208,12 @@ public class FhirConsentServiceImpl implements FhirConsentService {
 
         //set category
         CodeableConcept categoryConcept = new CodeableConcept();
+
         //TODO need to replace DISL from enum value
         categoryConcept.addCoding(new Coding().setCode(fhirProperties.getConsentType().getCode())
                                               .setSystem(fhirProperties.getConsentType().getSystem())
                                               .setDisplay(fhirProperties.getConsentType().getLabel()));
         fhirConsent.getCategory().add(categoryConcept);
-
-         if(logger.isDebugEnabled())
-            createConsentToLogMessage(fhirConsent, "BasicConsent" + fhirPatient.getId());
 
         return fhirConsent;
     }
@@ -322,8 +314,9 @@ public class FhirConsentServiceImpl implements FhirConsentService {
          }
         fhirConsent.setExcept(Collections.singletonList(exceptComponent));
 
-        if(logger.isDebugEnabled())
-            createConsentToLogMessage(fhirConsent, "GranularConsent"+patientDto.getMedicalRecordNumber());
+        //logs FHIRConsent into json and xml format in debug mode
+        logFHIRConsent(fhirConsent);
+
         return fhirConsent;
 
     }
@@ -351,19 +344,11 @@ public class FhirConsentServiceImpl implements FhirConsentService {
     }
 
 
-
-
-
-    private void createConsentToLogMessage(Consent fhirConsent, String fileName) {
-        String xmlEncodedGranularConsent = fhirContext.newXmlParser().setPrettyPrint(true)
-                .encodeResourceToString(fhirConsent);
-        try {
-            FileUtils.writeStringToFile(new File(logOutputPath + "/XML/" + fileName + ".xml"), xmlEncodedGranularConsent);
-            String jsonEncodedGranularConsent = fhirContext.newJsonParser().setPrettyPrint(true)
-                    .encodeResourceToString(fhirConsent);
-            FileUtils.writeStringToFile(new File(logOutputPath + "/JSON/" + fileName + ".json"), jsonEncodedGranularConsent);
-        } catch (IOException e) {
-            logger.warn(e.getMessage(), e);
-        }
+    private void logFHIRConsent(Consent fhirConsent) {
+        logger.debug(() -> fhirContext.newXmlParser().setPrettyPrint(true)
+                .encodeResourceToString(fhirConsent));
+        logger.debug(() -> fhirContext.newJsonParser().setPrettyPrint(true)
+                .encodeResourceToString(fhirConsent));
     }
+
 }
