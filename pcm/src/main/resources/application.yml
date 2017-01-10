@@ -25,8 +25,6 @@ logging:
   #   the pcm.log file in the 'file' property above. The 'path' property can point to any valid file system
   #   directory which PCM can access.
   path: /java/C2S_LOGS/pcm
-  level:
-    gov.samhsa.c2s.pcm.service: DEBUG
 eureka:
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.value}}
@@ -154,7 +152,7 @@ c2s:
       keepExcludeList: false
       hie-connection:
         fhir:
-          enabled: true
+          enabled: false
           # If SSL is turned on in the IExHub application, you must change/override the 'serverUrl' property below
           #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
           serverUrl: http://fhirtest.uhn.ca/baseDstu3
