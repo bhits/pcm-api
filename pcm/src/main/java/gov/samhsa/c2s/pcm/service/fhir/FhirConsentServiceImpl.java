@@ -92,23 +92,6 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         return createGranularConsent(consent, patientDto);
     }
 
-    // TODO :: Need to Retrieve Patient object from FHIR Server and add to consent object
-/*    private Patient getFhirPatient(PatientDto patientDto){
-        Patient foundPatient = null;
-        Bundle results = fhirClient.search().forResource(Patient.class)
-                //.where(Patient.IDENTIFIER.exactly().systemAndCode()systemAndIdentifier("system", pidSystem))
-                .where(new TokenClientParam("email").exactly().code(patientDto.getEmail()))
-                .and(new TokenClientParam("family").exactly().code(patientDto.getLastName()))
-                .and(new TokenClientParam("given").exactly().code(patientDto.getFirstName()))
-
-                //  .and(Patient.IDENTIFIER.exactly().systemAndValues("value",patientDto.getMedicalRecordNumber()))
-                .returnBundle(Bundle.class)
-                  .execute();
-        if(results.getEntry().get(0) != null)
-          foundPatient = (Patient) results.getEntry().get(0).getResource();
-        return foundPatient;
-    }*/
-
     private Consent createBasicConsent(gov.samhsa.c2s.pcm.domain.consent.Consent c2sConsent, PatientDto patientDto) {
 
 
@@ -119,6 +102,7 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         fhirConsent.setId(new IdType(xdsDocumentEntryUniqueId));
 
         // Set patient reference and add patient as contained resource
+        // TODO :: Need to Retrieve Patient object from FHIR Server and add to consent object
         Patient fhirPatient = fhirPatientService.createFhirPatient(patientDto);
         fhirConsent.getPatient().setReference("#" + patientDto.getMedicalRecordNumber());
         fhirConsent.getContained().add(fhirPatient);
@@ -144,7 +128,7 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         if (null != sourceOrganizationResource) {
             fhirConsent.getContained().add(sourceOrganizationResource);
             fhirConsent.getOrganization().setReference("#" + sourceOrganizationResource.getId());
-            //fhirPatient.getManagingOrganization().setReference("#" + sourceOrganizationResource.getId());
+            // TODO :: Need to add source organization details to patient object
         } else {
             //// Author :: Individual Provider
             Practitioner sourcePractitioner = null;
@@ -156,7 +140,7 @@ public class FhirConsentServiceImpl implements FhirConsentService {
             if (null != sourcePractitioner) {
                 fhirConsent.getContained().add(sourcePractitioner);
                 fhirConsent.getOrganization().setReference("#" + sourcePractitioner.getId());
-               // fhirPatient.getManagingOrganization().setReference("#" + sourcePractitioner.getId());
+                // TODO :: Need to add source organization details to patient object
             }
         }
 
@@ -280,10 +264,10 @@ public class FhirConsentServiceImpl implements FhirConsentService {
     };
 
     private Consent createGranularConsent(gov.samhsa.c2s.pcm.domain.consent.Consent c2sConsent, PatientDto patientDto) {
-
+        // get basic consent details
         Consent fhirConsent = createBasicConsent(c2sConsent, patientDto);
-        // add granular preferences
 
+        // add granular preferences
         // get obligations from consent
         List<String> excludeCodes = getConsentObligations(c2sConsent);
 
@@ -303,7 +287,7 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         // add list to consent
         Consent.ExceptComponent exceptComponent = new Consent.ExceptComponent();
 
-        if(fhirProperties.getKeepExcludeList().equalsIgnoreCase("true")) {
+        if(fhirProperties.isKeepExcludeList()) {
             //List of Excluded Sensitive policy codes
             exceptComponent.setType(Consent.ConsentExceptType.DENY);
             exceptComponent.setSecurityLabel(excludeCodingList);

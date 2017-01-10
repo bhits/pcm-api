@@ -14,7 +14,7 @@ public class FHIRProperties {
     private ConsentType consentType;
     private Npi npi;
     private Ssn ssn;
-    private String keepExcludeList;
+    private boolean keepExcludeList;
 
     @Data
     public static class Coding{
