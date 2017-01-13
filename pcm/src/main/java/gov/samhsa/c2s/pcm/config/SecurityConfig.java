@@ -32,6 +32,8 @@ public class SecurityConfig {
                     http.requiresChannel().anyRequest().requiresSecure();
                 }
                 http.authorizeRequests()
+                        .antMatchers(HttpMethod.GET, "/management/**").access(hasScope("pcm.management"))
+                        .antMatchers(HttpMethod.POST, "/management/**").access(hasScope("pcm.management"))
                         // FIXME (#27): Change following method to protect new attest consent endpoint
                         .antMatchers(HttpMethod.GET, "/patients/consents/signConsent/**").access(hasScope("pcm.consent_sign"))
                         // FIXME (#28): Change following method to protect new attest consent revocation endpoint
