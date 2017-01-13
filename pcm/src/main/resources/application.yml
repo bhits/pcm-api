@@ -25,38 +25,10 @@ logging:
   #   the pcm.log file in the 'file' property above. The 'path' property can point to any valid file system
   #   directory which PCM can access.
   path: /java/C2S_LOGS/pcm
-eureka:
-  instance:
-    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.value}}
-    secure-port-enabled: false
-    non-secure-port-enabled: true
-  client:
-    healthcheck:
-      enabled: true
-    service-url:
-      # endpoint for discovery-server, pass '--eureka.client.protocol=https' if discovery-server is running on https
-      defaultZone: ${eureka.client.protocol:http}://localhost:8761/eureka/
 security:
-  basic:
-    enabled: false
   oauth2:
     client:
       client-id: pcm
-    resource:
-      # If SSL is turned on in the UAA application, you must change/override the 'user-info-uri' property below
-      #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
-      user-info-uri: http://localhost:8080/uaa/userinfo
-      jwt:
-        keyValue:
-          -----BEGIN PUBLIC KEY-----
-          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0m59l2u9iDnMbrXHfqkO
-          rn2dVQ3vfBJqcDuFUK03d+1PZGbVlNCqnkpIJ8syFppW8ljnWweP7+LiWpRoz0I7
-          fYb3d8TjhV86Y997Fl4DBrxgM6KTJOuE/uxnoDhZQ14LgOU2ckXjOzOdTsnGMKQB
-          LCl0vpcXBtFLMaSbpv1ozi8h7DJyVZ6EnFQZUWGdgTMhDrmqevfx95U/16c5WBDO
-          kqwIn7Glry9n9Suxygbf8g5AzpWcusZgDLIIZ7JTUldBb8qU2a0Dl4mvLZOn4wPo
-          jfj9Cw2QICsc5+Pwf21fP+hzf+1WSRHbnYv8uanRO0gZ8ekGaghM/2H6gqJbo2nI
-          JwIDAQAB
-          -----END PUBLIC KEY-----
 # TODO (#3): enable feign hystrix back when PHR API is refactored to a service that can be called by this API without OAuth2 token
 feign.hystrix.enabled: false
 spring:
@@ -67,23 +39,6 @@ spring:
     username: root
     # DO NOT USE THE FOLLOWING DEFAULT PASSWORD OUTSIDE OF DEVELOPMENT ENVIRONMENTS!
     password: admin
-    driver-class-name: com.mysql.jdbc.Driver
-    validation-query: select 1
-    test-on-borrow: true
-    test-on-return: true
-    test-while-idle: true
-    time-between-eviction-runs-millis: 1800000
-    num-tests-per-eviction-run: 3
-    min-evictable-idle-time-millis: 1800000
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-        hbm2ddl:
-          auto: validate
-    hibernate:
-      ddl-auto: none
-      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
   mail:
   # PCM will use the e-mail server configured in this section to send e-mails
     # Please configure valid e-mail server below to connect to SMTP server
@@ -166,15 +121,10 @@ c2s:
 #   the top of this file to set the key-store and key-store-password properties as well.
 spring.profiles: ssl
 server:
-  port: 8446
+  # configure keystore and keystore password for ssl per environment
   ssl:
-    ciphers: "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA"
-    enabledProtocols: "TLSv1.1,TLSv1.2"
-eureka:
-  instance:
-    secure-port: ${server.port}
-    secure-port-enabled: true
-    non-secure-port-enabled: false
+    key-store: /ssl_keystore.keystore
+    key-store-password: changeit
 ---
 spring.profiles: standalone-ssl
 spring:
@@ -193,12 +143,6 @@ security:
       # If SSL is turned on in the UAA application, you must change/override the 'user-info-uri' property below
       #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
       user-info-uri: http://uaa.c2s.com:8080/uaa/userinfo
-eureka:
-  client:
-    service-url:
-      defaultZone: ${eureka.client.protocol:http}://discovery-server.c2s.com:8761/eureka/
-  instance:
-    prefer-ip-address: true
 c2s:
   pcm:
     config:
