@@ -274,21 +274,6 @@ public class OrganizationalProviderServiceImpl implements
             organizationalProvider = new OrganizationalProvider();
         organizationalProvider.setOrgName(organizationalProviderDto
                 .getOrgName());
-        organizationalProvider
-                .setAuthorizedOfficialFirstName(organizationalProviderDto
-                        .getAuthorizedOfficialFirstName());
-        organizationalProvider
-                .setAuthorizedOfficialLastName(organizationalProviderDto
-                        .getAuthorizedOfficialLastName());
-        organizationalProvider
-                .setAuthorizedOfficialTitle(organizationalProviderDto
-                        .getAuthorizedOfficialTitle());
-        organizationalProvider
-                .setAuthorizedOfficialNamePrefix(organizationalProviderDto
-                        .getAuthorizedOfficialNamePrefix());
-        organizationalProvider
-                .setAuthorizedOfficialTelephoneNumber(organizationalProviderDto
-                        .getAuthorizedOfficialTelephoneNumber());
         organizationalProvider.setNpi(organizationalProviderDto.getNpi());
         organizationalProvider.setEntityType(organizationalProviderDto
                 .getEntityType());
@@ -344,12 +329,6 @@ public class OrganizationalProviderServiceImpl implements
                 .getEnumerationDate());
         organizationalProvider.setLastUpdateDate(organizationalProviderDto
                 .getLastUpdateDate());
-        organizationalProvider
-                .setProviderTaxonomyCode(organizationalProviderDto
-                        .getProviderTaxonomyCode());
-        organizationalProvider
-                .setProviderTaxonomyDescription(organizationalProviderDto
-                        .getProviderTaxonomyDescription());
         organizationalProviders.add(organizationalProvider);
         patient.setOrganizationalProviders(organizationalProviders);
 
@@ -412,21 +391,6 @@ public class OrganizationalProviderServiceImpl implements
 
             organizationalProvider.setOrgName(organizationalProviderDto
                     .getOrgName());
-            organizationalProvider
-                    .setAuthorizedOfficialFirstName(organizationalProviderDto
-                            .getAuthorizedOfficialFirstName());
-            organizationalProvider
-                    .setAuthorizedOfficialLastName(organizationalProviderDto
-                            .getAuthorizedOfficialLastName());
-            organizationalProvider
-                    .setAuthorizedOfficialTitle(organizationalProviderDto
-                            .getAuthorizedOfficialTitle());
-            organizationalProvider
-                    .setAuthorizedOfficialNamePrefix(organizationalProviderDto
-                            .getAuthorizedOfficialNamePrefix());
-            organizationalProvider
-                    .setAuthorizedOfficialTelephoneNumber(organizationalProviderDto
-                            .getAuthorizedOfficialTelephoneNumber());
             organizationalProvider.setNpi(organizationalProviderDto.getNpi());
             organizationalProvider.setEntityType(organizationalProviderDto
                     .getEntityType());
@@ -482,12 +446,6 @@ public class OrganizationalProviderServiceImpl implements
                     .getEnumerationDate());
             organizationalProvider.setLastUpdateDate(organizationalProviderDto
                     .getLastUpdateDate());
-            organizationalProvider
-                    .setProviderTaxonomyCode(organizationalProviderDto
-                            .getProviderTaxonomyCode());
-            organizationalProvider
-                    .setProviderTaxonomyDescription(organizationalProviderDto
-                            .getProviderTaxonomyDescription());
             organizationalProviders.add(organizationalProvider);
             patient.setOrganizationalProviders(organizationalProviders);
 

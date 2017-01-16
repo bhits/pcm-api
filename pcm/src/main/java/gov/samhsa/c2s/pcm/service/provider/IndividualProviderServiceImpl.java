@@ -114,9 +114,6 @@ public class IndividualProviderServiceImpl implements IndividualProviderService 
         individualProvider.setFirstName(individualProviderDto.getFirstName());
         individualProvider.setMiddleName(individualProviderDto.getMiddleName());
         individualProvider.setLastName(individualProviderDto.getLastName());
-        individualProvider.setNamePrefix(individualProviderDto.getNamePrefix());
-        individualProvider.setNameSuffix(individualProviderDto.getNameSuffix());
-        individualProvider.setCredential(individualProviderDto.getCredential());
         individualProvider.setNpi(individualProviderDto.getNpi());
         individualProvider.setEntityType(individualProviderDto.getEntityType());
         individualProvider.setFirstLineMailingAddress(individualProviderDto
@@ -164,10 +161,6 @@ public class IndividualProviderServiceImpl implements IndividualProviderService 
                 .getEnumerationDate());
         individualProvider.setLastUpdateDate(individualProviderDto
                 .getLastUpdateDate());
-        individualProvider.setProviderTaxonomyCode(individualProviderDto
-                .getProviderTaxonomyCode());
-        individualProvider.setProviderTaxonomyDescription(individualProviderDto
-                .getProviderTaxonomyDescription());
         individualProviders.add(individualProvider);
         patient.setIndividualProviders(individualProviders);
 
@@ -385,12 +378,6 @@ public class IndividualProviderServiceImpl implements IndividualProviderService 
             individualProvider.setMiddleName(individualProviderDto
                     .getMiddleName());
             individualProvider.setLastName(individualProviderDto.getLastName());
-            individualProvider.setNamePrefix(individualProviderDto
-                    .getNamePrefix());
-            individualProvider.setNameSuffix(individualProviderDto
-                    .getNameSuffix());
-            individualProvider.setCredential(individualProviderDto
-                    .getCredential());
             individualProvider.setNpi(individualProviderDto.getNpi());
             individualProvider.setEntityType(individualProviderDto
                     .getEntityType());
@@ -442,11 +429,6 @@ public class IndividualProviderServiceImpl implements IndividualProviderService 
                     .getEnumerationDate());
             individualProvider.setLastUpdateDate(individualProviderDto
                     .getLastUpdateDate());
-            individualProvider.setProviderTaxonomyCode(individualProviderDto
-                    .getProviderTaxonomyCode());
-            individualProvider
-                    .setProviderTaxonomyDescription(individualProviderDto
-                            .getProviderTaxonomyDescription());
             individualProviders.add(individualProvider);
             patient.setIndividualProviders(individualProviders);
 
