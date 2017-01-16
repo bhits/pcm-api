@@ -7,26 +7,39 @@ import ca.uhn.fhir.validation.ValidationResult;
 import gov.samhsa.c2s.common.log.Logger;
 import gov.samhsa.c2s.common.log.LoggerFactory;
 import gov.samhsa.c2s.pcm.config.FHIRProperties;
-import gov.samhsa.c2s.pcm.domain.consent.*;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentDoNotShareClinicalDocumentTypeCode;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentDoNotShareSensitivityPolicyCode;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentIndividualProviderDisclosureIsMadeTo;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentIndividualProviderPermittedToDisclose;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentOrganizationalProviderDisclosureIsMadeTo;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentOrganizationalProviderPermittedToDisclose;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentShareForPurposeOfUseCode;
 import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProvider;
 import gov.samhsa.c2s.pcm.domain.reference.ClinicalConceptCode;
 import gov.samhsa.c2s.pcm.domain.reference.PurposeOfUseCode;
 import gov.samhsa.c2s.pcm.infrastructure.dto.PatientDto;
 import gov.samhsa.c2s.pcm.service.dto.SensitivePolicyCodeEnum;
-import org.hl7.fhir.dstu3.model.*;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.Consent;
+import org.hl7.fhir.dstu3.model.HumanName;
+import org.hl7.fhir.dstu3.model.IdType;
+import org.hl7.fhir.dstu3.model.Organization;
+import org.hl7.fhir.dstu3.model.Patient;
+import org.hl7.fhir.dstu3.model.Practitioner;
+import org.hl7.fhir.dstu3.model.Reference;
 import org.hl7.fhir.dstu3.model.codesystems.V3ActReason;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
-
-/**
- * Created on 12/2/2016.
- * Implementation for FHIR Consent Service
- */
 
 @Service
 public class FhirConsentServiceImpl implements FhirConsentService {
@@ -104,7 +117,6 @@ public class FhirConsentServiceImpl implements FhirConsentService {
         // Set patient reference and add patient as contained resource
         Patient fhirPatient = fhirPatientService.createFhirPatient(patientDto);
         fhirConsent.getPatient().setReference("#" + patientDto.getMedicalRecordNumber());
-        // TODO :: Need to Retrieve Patient object from FHIR Server and add to consent object
         fhirConsent.getContained().add(fhirPatient);
 
         // Consent signature details
@@ -209,9 +221,9 @@ public class FhirConsentServiceImpl implements FhirConsentService {
             sourceOrganizationResource.addIdentifier().setSystem(fhirProperties.getNpi().getSystem()).setValue(organizationalProvider.getNpi());
             sourceOrganizationResource.setName(organizationalProvider.getOrgName());
             sourceOrganizationResource.addAddress().addLine(organizationalProvider.getFirstLinePracticeLocationAddress())
-                    .setCity(organizationalProvider.getMailingAddressCityName())
-                    .setState(organizationalProvider.getMailingAddressStateName())
-                    .setPostalCode(organizationalProvider.getMailingAddressPostalCode());
+                    .setCity(organizationalProvider.getPracticeLocationAddressCityName())
+                    .setState(organizationalProvider.getPracticeLocationAddressStateName())
+                    .setPostalCode(organizationalProvider.getPracticeLocationAddressPostalCode());
         });
         return sourceOrganizationResource;
     }
@@ -231,10 +243,10 @@ public class FhirConsentServiceImpl implements FhirConsentService {
             indName.addSuffix(individualProvider.getNameSuffix());
             sourcePractitionerResource.addName(indName);
             //setting the address
-            sourcePractitionerResource.addAddress().addLine(individualProvider.getFirstLineMailingAddress())
-                    .setCity(individualProvider.getMailingAddressCityName())
-                    .setState(individualProvider.getMailingAddressStateName())
-                    .setPostalCode(individualProvider.getMailingAddressPostalCode());
+            sourcePractitionerResource.addAddress().addLine(individualProvider.getFirstLinePracticeLocationAddress())
+                    .setCity(individualProvider.getPracticeLocationAddressCityName())
+                    .setState(individualProvider.getPracticeLocationAddressStateName())
+                    .setPostalCode(individualProvider.getPracticeLocationAddressPostalCode());
 
         });
 
