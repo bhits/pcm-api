@@ -25,6 +25,7 @@
  ******************************************************************************/
 package gov.samhsa.c2s.pcm.service.audit;
 
+import gov.samhsa.c2s.pcm.config.PcmProperties;
 import gov.samhsa.c2s.pcm.domain.patient.Patient;
 import gov.samhsa.c2s.pcm.domain.patient.PatientRepository;
 import gov.samhsa.c2s.pcm.infrastructure.pagination.JdbcPagingException;
@@ -37,7 +38,6 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -73,8 +73,8 @@ public class AuditServiceImpl implements AuditService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Value("${c2s.pcm.config.pagination.itemsPerPage}")
-    private int itemsPerPage;
+    @Autowired
+    private PcmProperties pcmProperties;
 
     public AuditServiceImpl() {
     }
@@ -93,7 +93,7 @@ public class AuditServiceImpl implements AuditService {
     public ActivityHistoryListDto findAllActivityHistoryPageable(String username, int pageNumber) {
         try {
             List<HistoryDto> activityHistoryDtoList = new ArrayList<>();
-            PageRequest pageable = new PageRequest(pageNumber, itemsPerPage, Sort.Direction.DESC, ID_COLUMN);
+            PageRequest pageable = new PageRequest(pageNumber, pcmProperties.getPagination().getItemsPerPage(), Sort.Direction.DESC, ID_COLUMN);
             Page<ActivityHistory> pages = jdbcPagingRepository.findAllByArgs(pageable, username);
 
             if (pages != null) {

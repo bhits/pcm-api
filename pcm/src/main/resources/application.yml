@@ -56,66 +56,63 @@ spring:
     basename: i18n/messages
 c2s:
   pcm:
-    config:
-      clinicaldata:
-        # Max allowed file size in bytes for clinical document files uploaded to PCM
-        maximumUploadFileSize: 10000000
-        # Comma separated list of permitted file extensions for clinical document files uploaded to PCM
-        extensionsPermittedToUpload: xml,txt
-      clamd:
-        # Please configure valid server information below to connect to ClamAV server
-        # Host name or IP address of server instance of ClamAV to use for virus scanning uploaded clinical document files
-        host: localhost
-        # Port number to connect to on host server instance of ClamAV to use for virus scanning uploaded clinical document files
-        port: 3310
-        # Time in seconds to wait before timing out when sending a clinical document file to ClamAV server.
-        connTimeOut: 90
-      pid:
-        domain:
-          # PCM's PID
-          id: 1.3.6.1.4.1.21367.13.20.200
-          system: https://bhits.github.io/consent2share/
-          type: ISO
-        org: C2S Health
-        prefix: C2S
-      pls:
-        # If SSL is turned on in the PLS application, you must change/override the 'api' property below
+    clinicaldata:
+      # Max allowed file size in bytes for clinical document files uploaded to PCM
+      maximumUploadFileSize: 10000000
+      # Comma separated list of permitted file extensions for clinical document files uploaded to PCM
+      extensionsPermittedToUpload: xml,txt
+    clamd:
+      # Please configure valid server information below to connect to ClamAV server
+      # Host name or IP address of server instance of ClamAV to use for virus scanning uploaded clinical document files
+      host: localhost
+      # Port number to connect to on host server instance of ClamAV to use for virus scanning uploaded clinical document files
+      port: 3310
+      # Time in seconds to wait before timing out when sending a clinical document file to ClamAV server.
+      connTimeOut: 90
+    pid:
+      domain:
+        # PCM's PID
+        id: 1.3.6.1.4.1.21367.13.20.200
+        system: https://bhits.github.io/consent2share/
+        type: ISO
+      org: C2S Health
+      prefix: C2S
+    pls:
+      # If SSL is turned on in the PLS application, you must change/override the 'api' property below
+      #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
+      api: http://localhost:8080/pls/providers
+    pagination:
+      itemsPerPage: 10
+    activity:
+      sql:
+        path: activity/PatientActivityHistory.sql
+    ssn:
+      system: http://hl7.org/fhir/sid/us-ssn
+      oid: urn:oid:2.16.840.1.113883.4.1
+      label: SSN
+    npi:
+      system: http://hl7.org/fhir/sid/us-npi
+      oid: urn:oid:2.16.840.1.113883.4.6
+      label: PRN
+    pou:
+      system: http://hl7.org/fhir/v3/ActReason
+      oid: urn:oid:2.16.840.1.113883.1.11.20448
+      label: PurposeOfUse
+    consentType:
+      system: http://hl7.org/fhir/ValueSet/v3-ActConsentType
+      oid: urn:oid:2.16.840.1.113883.1.11.19897
+      label: information disclosure
+      code: IDSCL
+    keepExcludeList: false
+    hie-connection:
+      fhir:
+        enabled: false
+        # If SSL is turned on in the IExHub application, you must change/override the 'serverUrl' property below
         #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
-        api: http://localhost:8080/pls/providers
-      pagination:
-        itemsPerPage: 10
-      activity:
-        sql:
-          path: activity/PatientActivityHistory.sql
-      ssn:
-        system: http://hl7.org/fhir/sid/us-ssn
-        oid: urn:oid:2.16.840.1.113883.4.1
-        label: SSN
-      npi:
-        system: http://hl7.org/fhir/sid/us-npi
-        oid: urn:oid:2.16.840.1.113883.4.6
-        label: PRN
-      pou:
-        system: http://hl7.org/fhir/v3/ActReason
-        oid: urn:oid:2.16.840.1.113883.1.11.20448
-        label: PurposeOfUse
-      consentType:
-        system: http://hl7.org/fhir/ValueSet/v3-ActConsentType
-        oid: urn:oid:2.16.840.1.113883.1.11.19897
-        label: information disclosure
-        code: IDSCL
-      keepExcludeList: false
-      hie-connection:
-        fhir:
-          enabled: false
-          # If SSL is turned on in the IExHub application, you must change/override the 'serverUrl' property below
-          #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
-          serverUrl: http://fhirtest.uhn.ca/baseDstu3
-          ClientSocketTimeoutInMs: 768000
-
+        serverUrl: http://fhirtest.uhn.ca/baseDstu3
+        ClientSocketTimeoutInMs: 768000
   vss:
-    config:
-      conceptCodeListPageSize: 20
+    conceptCodeListPageSize: 20
 ---
 # If the ssl spring profile below is enabled, you must follow the instructions at
 #   the top of this file to set the key-store and key-store-password properties as well.
@@ -145,10 +142,9 @@ security:
       user-info-uri: http://uaa.c2s.com:8080/uaa/userinfo
 c2s:
   pcm:
-    config:
-      pls:
-        # If SSL is turned on in the PLS application, you must change/override the 'api' property below
-        #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
-        api: http://pls.c2s.com:8080/pls/providers
-      clamd:
-        host: clamd.c2s.com
+    pls:
+      # If SSL is turned on in the PLS application, you must change/override the 'api' property below
+      #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
+      api: http://pls.c2s.com:8080/pls/providers
+    clamd:
+      host: clamd.c2s.com

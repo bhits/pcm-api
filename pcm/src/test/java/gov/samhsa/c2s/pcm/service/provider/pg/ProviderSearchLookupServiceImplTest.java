@@ -1,22 +1,19 @@
 package gov.samhsa.c2s.pcm.service.provider.pg;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import gov.samhsa.c2s.pcm.service.dto.LookupDto;
 import gov.samhsa.c2s.pcm.service.provider.ProviderSearchLookupService;
-import gov.samhsa.c2s.pcm.service.provider.pg.ProviderSearchLookupServiceImpl;
 import gov.samhsa.c2s.pcm.service.reference.pg.StateCodeServicePg;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProviderSearchLookupServiceImplTest {
@@ -26,9 +23,6 @@ public class ProviderSearchLookupServiceImplTest {
 
     @InjectMocks
     ProviderSearchLookupServiceImpl providerSearchLookupServiceImpl;
-
-    // @Value("${ProviderSearchURL}")
-    // String providerSearchURL;
 
     @Test
     public void testGenerateProviderSearchURL_When_State_and_City_Given() {

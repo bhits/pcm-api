@@ -71,13 +71,13 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
     /**
      * The max file size.
      */
-    @Value("${c2s.pcm.config.clinicaldata.maximumUploadFileSize}")
+    @Value("${c2s.pcm.clinicaldata.maximumUploadFileSize}")
     private Long maxFileSize;
 
     /**
      * The permitted extensions.
      */
-    @Value("${c2s.pcm.config.clinicaldata.extensionsPermittedToUpload}")
+    @Value("${c2s.pcm.clinicaldata.extensionsPermittedToUpload}")
     private String permittedExtensions;
 
     /**

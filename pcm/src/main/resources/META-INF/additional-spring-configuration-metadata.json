@@ -1,37 +1,37 @@
 {
   "properties": [
     {
-      "name": "c2s.pcm.config.clinicaldata.maximumUploadFileSize",
+      "name": "c2s.pcm.clinicaldata.maximumUploadFileSize",
       "type": "java.lang.String",
       "description": "Max allowed file size in bytes for clinical document files uploaded to PCM directly by a patient or other user."
     },
     {
-      "name": "c2s.pcm.config.clinicaldata.extensionsPermittedToUpload",
+      "name": "c2s.pcm.clinicaldata.extensionsPermittedToUpload",
       "type": "java.lang.String",
       "description": "Comma separated list of permitted file extensions for clinical document files uploaded to PCM."
     },
     {
-      "name": "c2s.pcm.config.clamd.host",
+      "name": "c2s.pcm.clamd.host",
       "type": "java.lang.String",
       "description": "Host name or IP address of server instance of ClamAV to use for virus scanning uploaded clinical document files."
     },
     {
-      "name": "c2s.pcm.config.clamd.port",
+      "name": "c2s.pcm.clamd.port",
       "type": "java.lang.String",
       "description": "Port number to connect to on host server instance of ClamAV to use for virus scanning uploaded clinical document files."
     },
     {
-      "name": "c2s.pcm.config.clamd.connTimeOut",
+      "name": "c2s.pcm.clamd.connTimeOut",
       "type": "java.lang.String",
       "description": "Time in seconds to wait before timing out when sending a clinical document file to ClamAV server."
     },
     {
-      "name": "c2s.pcm.config.pid.domain.id",
+      "name": "c2s.pcm.pid.domain.id",
       "type": "java.lang.String",
       "description": "PCM's PID."
     },
     {
-      "name": "c2s.pcm.config.pid.domain.type",
+      "name": "c2s.pcm.pid.domain.type",
       "type": "java.lang.String",
       "description": "PCM's PID type."
     }

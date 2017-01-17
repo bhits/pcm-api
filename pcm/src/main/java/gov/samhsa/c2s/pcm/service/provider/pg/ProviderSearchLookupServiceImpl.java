@@ -79,7 +79,7 @@ public class ProviderSearchLookupServiceImpl
      */
     @Autowired
     public ProviderSearchLookupServiceImpl(
-            @Value("${c2s.pcm.config.pls.api}") String providerSearchURL,
+            @Value("${c2s.pcm.pls.api}") String providerSearchURL,
             StateCodeService stateCodeService,
             IndividualProviderService individualProviderService,
             OrganizationalProviderService organizationalProviderService,
