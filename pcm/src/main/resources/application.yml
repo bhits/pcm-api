@@ -109,7 +109,7 @@ c2s:
         enabled: false
         # If SSL is turned on in the IExHub application, you must change/override the 'serverUrl' property below
         #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
-        serverUrl: http://fhirtest.uhn.ca/baseDstu3
+        serverUrl: http://localhost:8080/iexhub/services
         ClientSocketTimeoutInMs: 768000
   vss:
     conceptCodeListPageSize: 20
