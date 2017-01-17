@@ -5,7 +5,7 @@
 
     <groupId>gov.samhsa.c2s</groupId>
     <artifactId>pcm</artifactId>
-    <version>1.19.0-SNAPSHOT</version>
+    <version>1.21.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Patient Consent Management API</name>
@@ -79,8 +79,9 @@
         <libclamav.version>1.0</libclamav.version>
         <itextpdf.version>5.5.3</itextpdf.version>
         <docker.maven.version>0.4.3</docker.maven.version>
-        <hapi.fhir.version>1.4</hapi.fhir.version>
+        <hapi.fhir.version>2.2</hapi.fhir.version>
         <clamav-client.version>1.0.1</clamav-client.version>
+        <lombok.version>1.16.6</lombok.version>
     </properties>
 
     <dependencies>
@@ -199,12 +200,16 @@
         </dependency>
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
-            <artifactId>hapi-fhir-validation-resources-dstu2</artifactId>
+            <artifactId>hapi-fhir-validation-resources-dstu3</artifactId>
         </dependency>
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
-            <artifactId>hapi-fhir-structures-dstu2</artifactId>
+            <artifactId>hapi-fhir-structures-dstu3</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>		
         <!-- HAPI FHIR JARS -->
         <!-- Test -->
         <dependency>
@@ -237,13 +242,18 @@
             </dependency>
             <dependency>
                 <groupId>ca.uhn.hapi.fhir</groupId>
-                <artifactId>hapi-fhir-validation-resources-dstu2</artifactId>
+                <artifactId>hapi-fhir-validation-resources-dstu3</artifactId>
                 <version>${hapi.fhir.version}</version>
             </dependency>
             <dependency>
                 <groupId>ca.uhn.hapi.fhir</groupId>
-                <artifactId>hapi-fhir-structures-dstu2</artifactId>
+                <artifactId>hapi-fhir-structures-dstu3</artifactId>
                 <version>${hapi.fhir.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
             </dependency>
             <!-- HAPI FHIR JARS -->
         </dependencies>
@@ -255,6 +265,13 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <configuration>
+                    <dotGitDirectory>${project.basedir}/../.git</dotGitDirectory>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.spotify</groupId>

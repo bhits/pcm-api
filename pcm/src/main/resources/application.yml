@@ -119,6 +119,7 @@ c2s:
         domain:
           # PCM's PID
           id: 1.3.6.1.4.1.21367.13.20.200
+          system: https://bhits.github.io/consent2share/
           type: ISO
         org: C2S Health
         prefix: C2S
@@ -132,7 +133,7 @@ c2s:
         sql:
           path: activity/PatientActivityHistory.sql
       ssn:
-        system: http://hl7.org/fhir/v2/0203
+        system: http://hl7.org/fhir/sid/us-ssn
         oid: urn:oid:2.16.840.1.113883.4.1
         label: SSN
       npi:
@@ -140,9 +141,15 @@ c2s:
         oid: urn:oid:2.16.840.1.113883.4.6
         label: PRN
       pou:
-        system: http://hl7.org/fhir/ValueSet/v3-PurposeOfUse
+        system: http://hl7.org/fhir/v3/ActReason
         oid: urn:oid:2.16.840.1.113883.1.11.20448
         label: PurposeOfUse
+      consentType:
+        system: http://hl7.org/fhir/ValueSet/v3-ActConsentType
+        oid: urn:oid:2.16.840.1.113883.1.11.19897
+        label: information disclosure
+        code: IDSCL
+      keepExcludeList: false
       hie-connection:
         fhir:
           enabled: false
@@ -150,7 +157,7 @@ c2s:
           #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
           serverUrl: http://localhost:8080/iexhub/services
           ClientSocketTimeoutInMs: 768000
-          keepExcludeList: false
+
   vss:
     config:
       conceptCodeListPageSize: 20

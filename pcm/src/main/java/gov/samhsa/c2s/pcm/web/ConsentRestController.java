@@ -25,20 +25,20 @@
  ******************************************************************************/
 package gov.samhsa.c2s.pcm.web;
 
+import gov.samhsa.c2s.common.consentgen.ConsentGenException;
 import gov.samhsa.c2s.pcm.infrastructure.eventlistener.EventService;
+import gov.samhsa.c2s.pcm.infrastructure.securityevent.FileDownloadedEvent;
 import gov.samhsa.c2s.pcm.service.consent.ConsentHelper;
 import gov.samhsa.c2s.pcm.service.consent.ConsentService;
 import gov.samhsa.c2s.pcm.service.consent.ConsentStatus;
 import gov.samhsa.c2s.pcm.service.dto.*;
 import gov.samhsa.c2s.pcm.service.exception.*;
+import gov.samhsa.c2s.pcm.service.fhir.FhirConsentService;
+import gov.samhsa.c2s.pcm.service.notification.NotificationService;
 import gov.samhsa.c2s.pcm.service.patient.PatientService;
 import gov.samhsa.c2s.pcm.service.reference.PurposeOfUseCodeService;
 import gov.samhsa.c2s.vss.service.ValueSetCategoryService;
 import gov.samhsa.c2s.vss.service.dto.AddConsentFieldsDto;
-import gov.samhsa.c2s.common.consentgen.ConsentGenException;
-import gov.samhsa.c2s.pcm.infrastructure.securityevent.FileDownloadedEvent;
-import gov.samhsa.c2s.pcm.service.fhir.FhirContractService;
-import gov.samhsa.c2s.pcm.service.notification.NotificationService;
 import gov.samhsa.c2s.vss.service.dto.ValueSetCategoryFieldsDto;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -105,7 +105,7 @@ public class ConsentRestController {
     private ResourceServerProperties resourceServerProperties;
 
     @Autowired
-    private FhirContractService fhirContractService;
+    private FhirConsentService fhirConsentService;
 
     @RequestMapping(value = "consents/pageNumber/{pageNumber}")
     public ConsentsListDto listConsents(@PathVariable("pageNumber") String pageNumber) {

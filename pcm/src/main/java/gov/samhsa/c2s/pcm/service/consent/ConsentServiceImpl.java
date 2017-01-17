@@ -37,7 +37,7 @@ import gov.samhsa.c2s.pcm.infrastructure.dto.PatientDto;
 import gov.samhsa.c2s.pcm.service.consentexport.ConsentExportService;
 import gov.samhsa.c2s.pcm.service.dto.*;
 import gov.samhsa.c2s.pcm.service.exception.AttestedConsentException;
-import gov.samhsa.c2s.pcm.service.fhir.FhirContractService;
+import gov.samhsa.c2s.pcm.service.fhir.FhirConsentService;
 import gov.samhsa.c2s.pcm.service.patient.PatientService;
 import gov.samhsa.c2s.common.consentgen.ConsentBuilder;
 import gov.samhsa.c2s.common.consentgen.ConsentGenException;
@@ -224,7 +224,7 @@ public class ConsentServiceImpl implements ConsentService {
     private ConsentRevocationTermsVersionsService consentRevocationTermsVersionsService;
 
     @Autowired
-    FhirContractService fhirContractService;
+    FhirConsentService fhirConsentService;
 
     /**
      * The model mapper.
@@ -935,7 +935,7 @@ public class ConsentServiceImpl implements ConsentService {
         PatientDto patientDto = phrService.getPatientProfile();
 
         if(null != hieEnable && hieEnable.equalsIgnoreCase("true")){
-            fhirContractService.publishFhirContractToHie(consent,patientDto);
+            fhirConsentService.publishFhirConsentToHie(consent,patientDto);
         }
 
         if (consent != null && consent.getAttestedConsent() == null && patientDto!= null && consentId != null && attesterIdAddress != null) {

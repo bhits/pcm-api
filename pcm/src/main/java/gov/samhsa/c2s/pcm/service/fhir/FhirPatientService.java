@@ -1,7 +1,8 @@
 package gov.samhsa.c2s.pcm.service.fhir;
 
-import ca.uhn.fhir.model.dstu2.resource.Patient;
+
 import gov.samhsa.c2s.pcm.infrastructure.dto.PatientDto;
+import org.hl7.fhir.dstu3.model.Patient;
 
 public interface FhirPatientService {
 
