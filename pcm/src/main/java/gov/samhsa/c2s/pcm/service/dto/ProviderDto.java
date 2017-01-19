@@ -82,9 +82,6 @@ public class ProviderDto
     @Size(max = 30)
     private String practiceLocationAddressTelephoneNumber;
 
-    /** The provider taxonomy description. */
-    @Size(max = 255)
-    private String providerTaxonomyDescription;
 
     /** The deletable. */
     private boolean deletable;
@@ -220,14 +217,5 @@ public class ProviderDto
         this.practiceLocationAddressTelephoneNumber = practiceLocationAddressTelephoneNumber;
     }
 
-    public String getProviderTaxonomyDescription()
-    {
-        return providerTaxonomyDescription;
-    }
-
-    public void setProviderTaxonomyDescription(String providerTaxonomyDescription)
-    {
-        this.providerTaxonomyDescription = providerTaxonomyDescription;
-    }
 
 }

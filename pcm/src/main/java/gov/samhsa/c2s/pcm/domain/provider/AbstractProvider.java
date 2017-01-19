@@ -50,7 +50,7 @@ public abstract class AbstractProvider {
     /** The entity type. */
     @Enumerated
     private EntityType entityType;
-    
+
     /** The first line mailing address. */
     @NotNull
     @Size(max = 255)
@@ -84,12 +84,12 @@ public abstract class AbstractProvider {
     /** The mailing address telephone number. */
     @NotNull
     @Size(max = 30)
-    private String mailingAddressTelephoneNumber;
+    private String mailingAddressTelephoneNumber;// TODO To be remove
 
     /** The mailing address fax number. */
     @NotNull
     @Size(max = 30)
-    private String mailingAddressFaxNumber;
+    private String mailingAddressFaxNumber;// TODO To be remove
 
     /** The first line practice location address. */
     @NotNull
@@ -140,16 +140,6 @@ public abstract class AbstractProvider {
     @NotNull
     @Size(max = 30)
     private String lastUpdateDate;
-
-    /** The provider taxonomy code. */
-    @NotNull
-    @Size(max = 30)
-    private String providerTaxonomyCode;
-
-    /** The provider taxonomy description. */
-    @NotNull
-    @Size(max = 255)
-    private String providerTaxonomyDescription;
 
 	/**
      * Gets the npi.
@@ -511,41 +501,6 @@ public abstract class AbstractProvider {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-	/**
-	 * Gets the provider taxonomy code.
-	 *
-	 * @return the provider taxonomy code
-	 */
-	public String getProviderTaxonomyCode() {
-        return this.providerTaxonomyCode;
-    }
-
-	/**
-	 * Sets the provider taxonomy code.
-	 *
-	 * @param providerTaxonomyCode the new provider taxonomy code
-	 */
-	public void setProviderTaxonomyCode(String providerTaxonomyCode) {
-        this.providerTaxonomyCode = providerTaxonomyCode;
-    }
-
-	/**
-	 * Gets the provider taxonomy description.
-	 *
-	 * @return the provider taxonomy description
-	 */
-	public String getProviderTaxonomyDescription() {
-        return this.providerTaxonomyDescription;
-    }
-
-	/**
-	 * Sets the provider taxonomy description.
-	 *
-	 * @param providerTaxonomyDescription the new provider taxonomy description
-	 */
-	public void setProviderTaxonomyDescription(String providerTaxonomyDescription) {
-        this.providerTaxonomyDescription = providerTaxonomyDescription;
-    }
 
 	/** The id. */
 	@Id 
