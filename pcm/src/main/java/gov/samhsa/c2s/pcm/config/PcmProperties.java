@@ -91,7 +91,7 @@ public class PcmProperties {
             private String serverUrl;
 
             @NotEmpty
-            private String ClientSocketTimeoutInMs;
+            private String clientSocketTimeoutInMs;
         }
     }
 
