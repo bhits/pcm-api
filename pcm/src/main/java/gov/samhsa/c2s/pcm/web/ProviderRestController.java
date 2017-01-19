@@ -124,27 +124,22 @@ public class ProviderRestController {
     public void deleteProvider(Principal principal, @PathVariable("npi") String npi) {
 
         Set<ProviderDto> providerDtos = patientService.findProvidersByUsername(principal.getName());
-        try {
-            ProviderDto providerDto = providerDtos.stream().filter(t -> t.getNpi().equals(npi)).findAny().orElseThrow(() -> new ProviderNotFoundException("This patient doesn't have this provider"));
+        ProviderDto providerDto = providerDtos.stream().filter(t -> t.getNpi().equals(npi)).findAny().orElseThrow(() -> new ProviderNotFoundException("This patient doesn't have this provider"));
 
-            if (providerDto == null)
-                new CannotDeleteProviderException("ERROR: Unable to delete this provider.");
-            else {
-                if (providerDto.isDeletable() == false)
-                    throw new ProviderAlreadyInUseException("Error: Unable to delete this provider because it is currently used in one or more of your consents.");
-                if (providerDto.isDeletable() == true && providerDto.getEntityType().equals("Individual"))
-                    individualProviderService.deleteIndividualProviderByNpi(principal.getName(), npi);
-                else
-                    organizationalProviderService.deleteOrganizationalProviderByNpi(principal.getName(), npi);
+        if (providerDto == null) {
+            new CannotDeleteProviderException("ERROR: Unable to delete this provider.");
+        } else {
+            if (providerDto.isDeletable() == false) {
+                throw new ProviderAlreadyInUseException("Error: Unable to delete this provider because it is currently used in one or more of your consents.");
             }
 
-        } catch (Exception e) {
-            logger.error(
-                    "Unable to delete individual provider: PatientConnectionDto could not be found for specified patientId...");
-            logger.error("...STACK TRACE: ", e);
-            throw e;
-        }
+            if (providerDto.isDeletable() == true && providerDto.getEntityType().equals("Individual")) {
+                individualProviderService.deleteIndividualProviderByNpi(principal.getName(), npi);
+            } else {
+                organizationalProviderService.deleteOrganizationalProviderByNpi(principal.getName(), npi);
+            }
 
+        }
     }
 
     /**
