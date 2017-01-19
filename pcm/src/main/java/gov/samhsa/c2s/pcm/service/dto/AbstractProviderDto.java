@@ -141,15 +141,6 @@ public abstract class AbstractProviderDto implements HasId {
 	@Size(max = 30)
 	private String lastUpdateDate;
 
-	/** The provider taxonomy code. */
-	@NotNull
-	@Size(max = 30)
-	private String providerTaxonomyCode;
-
-	/** The provider taxonomy description. */
-	@NotNull
-	@Size(max = 255)
-	private String providerTaxonomyDescription;
 
 	/** The username. */
 	@NotNull
@@ -603,45 +594,6 @@ public abstract class AbstractProviderDto implements HasId {
 	 */
 	public void setLastUpdateDate(String lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
-	}
-
-	/**
-	 * Gets the provider taxonomy code.
-	 *
-	 * @return the provider taxonomy code
-	 */
-	public String getProviderTaxonomyCode() {
-		return providerTaxonomyCode;
-	}
-
-	/**
-	 * Sets the provider taxonomy code.
-	 *
-	 * @param providerTaxonomyCode
-	 *            the new provider taxonomy code
-	 */
-	public void setProviderTaxonomyCode(String providerTaxonomyCode) {
-		this.providerTaxonomyCode = providerTaxonomyCode;
-	}
-
-	/**
-	 * Gets the provider taxonomy description.
-	 *
-	 * @return the provider taxonomy description
-	 */
-	public String getProviderTaxonomyDescription() {
-		return providerTaxonomyDescription;
-	}
-
-	/**
-	 * Sets the provider taxonomy description.
-	 *
-	 * @param providerTaxonomyDescription
-	 *            the new provider taxonomy description
-	 */
-	public void setProviderTaxonomyDescription(
-			String providerTaxonomyDescription) {
-		this.providerTaxonomyDescription = providerTaxonomyDescription;
 	}
 
 	/**

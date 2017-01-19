@@ -61,21 +61,6 @@ public class IndividualProvider extends AbstractProvider {
     @Size(max = 30)
     private String middleName;
 
-    /** The name prefix. */
-    @NotNull
-    @Size(max = 30)
-    private String namePrefix;
-
-    /** The name suffix. */
-    @NotNull
-    @Size(max = 30)
-    private String nameSuffix;
-
-    /** The credential. */
-    @NotNull
-    @Size(max = 30)
-    private String credential;
-    
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -137,58 +122,5 @@ public class IndividualProvider extends AbstractProvider {
         this.middleName = middleName;
     }
 
-	/**
-	 * Gets the name prefix.
-	 *
-	 * @return the name prefix
-	 */
-	public String getNamePrefix() {
-        return this.namePrefix;
-    }
-
-	/**
-	 * Sets the name prefix.
-	 *
-	 * @param namePrefix the new name prefix
-	 */
-	public void setNamePrefix(String namePrefix) {
-        this.namePrefix = namePrefix;
-    }
-
-	/**
-	 * Gets the name suffix.
-	 *
-	 * @return the name suffix
-	 */
-	public String getNameSuffix() {
-        return this.nameSuffix;
-    }
-
-	/**
-	 * Sets the name suffix.
-	 *
-	 * @param nameSuffix the new name suffix
-	 */
-	public void setNameSuffix(String nameSuffix) {
-        this.nameSuffix = nameSuffix;
-    }
-
-	/**
-	 * Gets the credential.
-	 *
-	 * @return the credential
-	 */
-	public String getCredential() {
-        return this.credential;
-    }
-
-	/**
-	 * Sets the credential.
-	 *
-	 * @param credential the new credential
-	 */
-	public void setCredential(String credential) {
-        this.credential = credential;
-    }
 
 }
