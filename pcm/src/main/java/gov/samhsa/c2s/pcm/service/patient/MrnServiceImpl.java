@@ -25,11 +25,11 @@
  ******************************************************************************/
 package gov.samhsa.c2s.pcm.service.patient;
 
-import gov.samhsa.c2s.pcm.domain.patient.PatientRepository;
 import gov.samhsa.c2s.common.util.UniqueValueGenerator;
+import gov.samhsa.c2s.pcm.config.PcmProperties;
+import gov.samhsa.c2s.pcm.domain.patient.PatientRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 /**
  * The Class MrnServiceImpl.
@@ -42,11 +42,8 @@ public class MrnServiceImpl implements MrnService {
      */
     private static final int RANDOM_STRING_LENGTH = 6;
 
-    /**
-     * The prefix.
-     */
-    @Value("${c2s.pcm.config.pid.prefix}")
-    private String prefix;
+    @Autowired
+    private PcmProperties pcmProperties;
 
     /**
      * The patient repository.
@@ -76,6 +73,7 @@ public class MrnServiceImpl implements MrnService {
      */
     private String generateRandomMrn() {
         StringBuilder localIdIdBuilder = new StringBuilder();
+        String prefix = pcmProperties.getPid().getPrefix();
         if (null != prefix) {
             localIdIdBuilder.append(new String(prefix));
             localIdIdBuilder.append(".");

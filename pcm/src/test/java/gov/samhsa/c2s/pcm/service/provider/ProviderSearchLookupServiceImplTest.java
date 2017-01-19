@@ -1,13 +1,6 @@
 package gov.samhsa.c2s.pcm.service.provider;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
 import gov.samhsa.c2s.pcm.service.dto.LookupDto;
-import gov.samhsa.c2s.pcm.service.provider.ProviderSearchLookupService;
-import gov.samhsa.c2s.pcm.service.provider.ProviderSearchLookupServiceImpl;
 import gov.samhsa.c2s.pcm.service.reference.StateCodeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +11,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 @RunWith(MockitoJUnitRunner.class)
 public class ProviderSearchLookupServiceImplTest {
 
@@ -26,65 +23,6 @@ public class ProviderSearchLookupServiceImplTest {
 
     @InjectMocks
     ProviderSearchLookupServiceImpl providerSearchLookupServiceImpl;
-
-    @Test
-    public void testGenerateProviderSearchURL_When_State_and_City_Given() {
-        ProviderSearchLookupService pss = spy(providerSearchLookupServiceImpl);
-        when(pss.getProviderSearchURL()).thenReturn("providerSearchUrl");
-        String usstate = "MD";
-        String city = "baltimore";
-        String callUrl = pss.generateProviderSearchURL(usstate, city, null,
-                null, null, null, null, null, null, 0);
-        assertEquals(
-                "providerSearchUrl/pageNumber/0/usstate/MD/city/baltimore",
-                callUrl);
-    }
-
-    @Test
-    public void testGenerateProviderSearchURL_When_Zipcode_Given() {
-        ProviderSearchLookupService pss = spy(providerSearchLookupServiceImpl);
-        when(pss.getProviderSearchURL()).thenReturn("providerSearchUrl");
-        String zipcode = "21046";
-        String callUrl = pss.generateProviderSearchURL(null, null, zipcode,
-                null, null, null, null, null, null, 0);
-        assertEquals("providerSearchUrl/pageNumber/0/zipcode/21046", callUrl);
-    }
-
-    @Test
-    public void testGenerateProviderSearchURL_When_Firstname_and_Lastname_Given() {
-        ProviderSearchLookupService pss = spy(providerSearchLookupServiceImpl);
-        when(pss.getProviderSearchURL()).thenReturn("providerSearchUrl");
-        String firstname = "abc";
-        String lastname = "cba";
-        String callUrl = pss.generateProviderSearchURL(null, null, null, null,
-                null, null, firstname, lastname, null, 0);
-        assertEquals(
-                "providerSearchUrl/pageNumber/0/firstname/abc/lastname/cba",
-                callUrl);
-    }
-
-    @Test
-    public void testGenerateProviderSearchURL_When_Specialty_And_Gender_Given() {
-        ProviderSearchLookupService pss = spy(providerSearchLookupServiceImpl);
-        when(pss.getProviderSearchURL()).thenReturn("providerSearchUrl");
-        String gender = "male";
-        String specialty = "dentist";
-        String callUrl = pss.generateProviderSearchURL(null, null, null,
-                gender, specialty, null, null, null, null, 0);
-        assertEquals(
-                "providerSearchUrl/pageNumber/0/gender/male/specialty/dentist",
-                callUrl);
-    }
-
-    @Test
-    public void testGenerateProviderSearchURL_When_Phone_Given() {
-        ProviderSearchLookupService pss = spy(providerSearchLookupServiceImpl);
-        when(pss.getProviderSearchURL()).thenReturn("providerSearchUrl");
-        String phone = "410123456";
-        String callUrl = pss.generateProviderSearchURL(null, null, null, null,
-                null, phone, null, null, null, 0);
-        assertEquals("providerSearchUrl/pageNumber/0/phone/410123456", callUrl);
-    }
 
     @Test
     public void testIsValidatedSearch_All_Field_Is_Blank() {

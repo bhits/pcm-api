@@ -4,6 +4,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.client.IGenericClient;
 import ca.uhn.fhir.validation.FhirValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,38 +12,35 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FhirServiceConfig {
 
-    @Value("${c2s.pcm.config.hie-connection.fhir.serverUrl}")
-    String fhirServerUrl;
-
-    @Value("${c2s.pcm.config.hie-connection.fhir.ClientSocketTimeoutInMs}")
-    String fhirClientSocketTimeout;
+    @Autowired
+    private PcmProperties pcmProperties;
 
     @Bean
-    public FhirContext fhirContext(){
+    public FhirContext fhirContext() {
         FhirContext fhirContext = FhirContext.forDstu3();
-        fhirContext.getRestfulClientFactory().setSocketTimeout(Integer.parseInt(fhirClientSocketTimeout));
+        fhirContext.getRestfulClientFactory().setSocketTimeout(Integer.parseInt(pcmProperties.getHieConnection().getFhir().getClientSocketTimeoutInMs()));
         return fhirContext;
     }
 
     @Bean
     public IGenericClient fhirClient() {
         // Create a client
-        return fhirContext().newRestfulGenericClient(fhirServerUrl);
+        return fhirContext().newRestfulGenericClient(pcmProperties.getHieConnection().getFhir().getServerUrl());
     }
 
     @Bean
     public IParser fhirXmlParser() {
-        return  fhirContext().newXmlParser();
+        return fhirContext().newXmlParser();
     }
 
     @Bean
     public IParser fhirJsonParser() {
-        return  fhirContext().newJsonParser();
+        return fhirContext().newJsonParser();
     }
 
     @Bean
     public FhirValidator fhirValidator() {
-        return  fhirContext().newValidator();
+        return fhirContext().newValidator();
     }
 
 

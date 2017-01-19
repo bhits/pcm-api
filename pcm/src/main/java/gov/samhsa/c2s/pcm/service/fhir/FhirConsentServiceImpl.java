@@ -239,8 +239,6 @@ public class FhirConsentServiceImpl implements FhirConsentService {
             HumanName indName = new HumanName();
             indName.setFamily(individualProvider.getLastName());
             indName.addGiven(individualProvider.getFirstName());
-            indName.addPrefix(individualProvider.getNamePrefix());
-            indName.addSuffix(individualProvider.getNameSuffix());
             sourcePractitionerResource.addName(indName);
             //setting the address
             sourcePractitionerResource.addAddress().addLine(individualProvider.getFirstLinePracticeLocationAddress())

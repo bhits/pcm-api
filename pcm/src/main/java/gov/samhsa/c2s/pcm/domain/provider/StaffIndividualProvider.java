@@ -132,68 +132,6 @@ public class StaffIndividualProvider {
 	}
 
 	/**
-	 * Gets the name prefix.
-	 * 
-	 * @return the name prefix
-	 */
-	public String getNamePrefix() {
-		return this.individualProvider.getNamePrefix();
-	}
-
-	/**
-	 * Sets the name prefix.
-	 * 
-	 * @param namePrefix
-	 *            the new name prefix
-	 */
-	public void setNamePrefix(String namePrefix) {
-		this.individualProvider.setNamePrefix(namePrefix);
-	}
-
-	/**
-	 * Gets the name suffix.
-	 * 
-	 * @return the name suffix
-	 */
-	public String getNameSuffix() {
-		return this.individualProvider.getNameSuffix();
-	}
-
-	/**
-	 * Sets the name suffix.
-	 * 
-	 * @param nameSuffix
-	 *            the new name suffix
-	 */
-	public void setNameSuffix(String nameSuffix) {
-		this.individualProvider.setNameSuffix(nameSuffix);
-	}
-
-	/**
-	 * Gets the credential.
-	 * 
-	 * @return the credential
-	 */
-	public String getCredential() {
-		return this.individualProvider.getCredential();
-	}
-
-	/**
-	 * Sets the credential.
-	 * 
-	 * @param credential
-	 *            the new credential
-	 */
-	public void setCredential(String credential) {
-		this.individualProvider.setCredential(credential);
-	}
-	
-	
-	
-	
-	
-	
-	/**
      * Gets the npi.
      *
      * @return the npi
@@ -551,42 +489,6 @@ public class StaffIndividualProvider {
 	 */
 	public void setLastUpdateDate(String lastUpdateDate) {
         this.individualProvider.setLastUpdateDate(lastUpdateDate);
-    }
-
-	/**
-	 * Gets the provider taxonomy code.
-	 *
-	 * @return the provider taxonomy code
-	 */
-	public String getProviderTaxonomyCode() {
-        return this.individualProvider.getProviderTaxonomyCode();
-    }
-
-	/**
-	 * Sets the provider taxonomy code.
-	 *
-	 * @param providerTaxonomyCode the new provider taxonomy code
-	 */
-	public void setProviderTaxonomyCode(String providerTaxonomyCode) {
-        this.individualProvider.setProviderTaxonomyCode(providerTaxonomyCode);
-    }
-
-	/**
-	 * Gets the provider taxonomy description.
-	 *
-	 * @return the provider taxonomy description
-	 */
-	public String getProviderTaxonomyDescription() {
-        return this.individualProvider.getProviderTaxonomyDescription();
-    }
-
-	/**
-	 * Sets the provider taxonomy description.
-	 *
-	 * @param providerTaxonomyDescription the new provider taxonomy description
-	 */
-	public void setProviderTaxonomyDescription(String providerTaxonomyDescription) {
-        this.individualProvider.setProviderTaxonomyDescription(providerTaxonomyDescription);
     }
 
 }

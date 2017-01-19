@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ValueSetServiceConfig {
 
-    @Value("${c2s.vss.config.conceptCodeListPageSize}")
-    private int conceptCodeListPageSize;
+    @Autowired
+    private VssProperties vssProperties;
 
     @Autowired
     private ConsentRepository consentRepository;
@@ -22,7 +22,7 @@ public class ValueSetServiceConfig {
 
     @Bean
     public ValueSetMgmtHelper valueSetMgmtHelper() {
-        return new ValueSetMgmtHelper(conceptCodeListPageSize);
+        return new ValueSetMgmtHelper(vssProperties.getConceptCodeListPageSize());
     }
 
     @Bean

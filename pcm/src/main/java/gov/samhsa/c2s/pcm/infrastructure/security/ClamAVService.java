@@ -21,19 +21,19 @@ public class ClamAVService {
     /**
      * Host where 'clamd' process is running.
      */
-    @Value("${c2s.pcm.config.clamd.host}")
+    @Value("${c2s.pcm.clamd.host}")
     private String clamdHost;
 
     /**
      * Port on which 'clamd' process is listening.
      */
-    @Value("${c2s.pcm.config.clamd.port}")
+    @Value("${c2s.pcm.clamd.port}")
     private int clamdPort;
 
     /**
      * Connection time out to connect 'clamd' process.
      */
-    @Value("${c2s.pcm.config.clamd.connTimeOut}")
+    @Value("${c2s.pcm.clamd.connTimeOut}")
     private int connTimeOut;
     /**
      * The scanner.
