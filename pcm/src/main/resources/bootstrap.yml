@@ -43,9 +43,6 @@ eureka:
 ---
 # updates configuration for docker environment
 spring.profiles: docker
-spring:
-  profiles:
-    include: config-client,eureka-instance,oauth2-resource-default,mysql
 eureka:
   client:
     service-url:
