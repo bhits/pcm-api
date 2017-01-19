@@ -24,9 +24,6 @@ public class ProviderSearchLookupServiceImplTest {
     @InjectMocks
     ProviderSearchLookupServiceImpl providerSearchLookupServiceImpl;
 
-    // @Value("${ProviderSearchURL}")
-    // String providerSearchURL;
-
     @Test
     public void testIsValidatedSearch_All_Field_Is_Blank() {
         Boolean validateCall = providerSearchLookupServiceImpl

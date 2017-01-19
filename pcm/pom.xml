@@ -110,6 +110,23 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-feign</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+        </dependency>
         <!-- Third-party dependencies used by Spring -->
         <dependency>
             <groupId>mysql</groupId>
@@ -209,7 +226,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>		
+        </dependency>
         <!-- HAPI FHIR JARS -->
         <!-- Test -->
         <dependency>
@@ -217,19 +234,13 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-parent</artifactId>
+                <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring.cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -257,7 +268,6 @@
             </dependency>
             <!-- HAPI FHIR JARS -->
         </dependencies>
-
     </dependencyManagement>
 
     <build>
@@ -313,10 +323,9 @@
             </snapshots>
         </repository>
         <repository>
-                <id>repo.spring.io</id>
-                <name>Spring Milestone Repository</name>
-                <url>https://repo.spring.io/libs-milestone-local</url>
+            <id>repo.spring.io</id>
+            <name>Spring Milestone Repository</name>
+            <url>https://repo.spring.io/libs-milestone-local</url>
         </repository>
     </repositories>
-
 </project>

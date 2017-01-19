@@ -1,11 +1,11 @@
 package gov.samhsa.c2s.pcm.service.clinicaldata;
 
+import gov.samhsa.c2s.pcm.config.PcmProperties;
 import gov.samhsa.c2s.pcm.domain.clinicaldata.ClinicalDocument;
 import gov.samhsa.c2s.pcm.domain.clinicaldata.ClinicalDocumentRepository;
 import gov.samhsa.c2s.pcm.domain.patient.Patient;
 import gov.samhsa.c2s.pcm.domain.patient.PatientRepository;
 import gov.samhsa.c2s.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
-import gov.samhsa.c2s.pcm.service.clinicaldata.ClinicalDocumentServiceImpl;
 import gov.samhsa.c2s.pcm.service.dto.ClinicalDocumentDto;
 import gov.samhsa.c2s.pcm.service.dto.PatientProfileDto;
 import jdk.nashorn.internal.ir.annotations.Ignore;
@@ -21,8 +21,13 @@ import javax.validation.Validator;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 /**
  * The Class ClinicalDocumentServiceImplTest.
@@ -81,8 +86,13 @@ public class ClinicalDocumentServiceImplTest {
      */
     @Before
     public void setUp() throws Exception {
+        PcmProperties pcmProperties = new PcmProperties();
+        PcmProperties.ClinicalData clinicalData = new PcmProperties.ClinicalData();
+        clinicalData.setMaximumUploadFileSize(maxFileSize);
+        clinicalData.setExtensionsPermittedToUpload(permittedExtensions);
+        pcmProperties.setClinicaldata(clinicalData);
         ClinicalDocumentServiceImpl clinicalDocumentServiceImpl = new ClinicalDocumentServiceImpl(
-                maxFileSize, permittedExtensions,
+                pcmProperties,
                 clinicalDocumentRepository, clinicalDocumentTypeCodeRepository,
                 modelMapper, patientRepository, validator);
         clinicalDocumentServiceImpl.afterPropertiesSet();

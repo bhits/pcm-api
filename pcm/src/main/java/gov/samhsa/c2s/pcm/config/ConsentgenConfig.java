@@ -10,6 +10,7 @@ import gov.samhsa.c2s.common.consentgen.pg.XacmlXslUrlProviderImpl;
 import gov.samhsa.c2s.pcm.service.consentexport.ConsentDtoFactoryImpl;
 import gov.samhsa.c2s.pcm.service.consentexport.ConsentExportMapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,13 +18,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ConsentgenConfig {
 
-    @Value("${c2s.pcm.config.pid.org}")
-    private String pcmOrg;
+    @Autowired
+    private PcmProperties pcmProperties;
 
     @Bean
     public ConsentBuilder consentBuilder(ConsentDtoFactory consentDtoFactory,
                                          XmlTransformer xmlTransformer) {
-        return new ConsentBuilderImpl(pcmOrg,
+        return new ConsentBuilderImpl(pcmProperties.getPid().getOrg(),
                 xacmlXslUrlProvider(),
                 consentDtoFactory,
                 xmlTransformer);

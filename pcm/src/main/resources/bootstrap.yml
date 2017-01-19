@@ -1,3 +1,51 @@
 spring:
   application:
     name: pcm
+  profiles:
+    active: application-default
+# Configure a symmetric key to use for Encryption and Decryption
+# Please change THE FOLLOWING DEFAULT KEY OUTSIDE OF DEVELOPMENT ENVIRONMENTS!
+encrypt:
+  key: changeit
+---
+spring.profiles: application-default
+spring:
+  profiles:
+    include: config-client,eureka-instance,eureka-client,oauth2-resource-default,mysql
+---
+spring.profiles: config-client
+spring:
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+      fail-fast: true
+      retry:
+        initial-interval: 2000
+        max-attempts: 20
+        multiplier: 2
+        max-interval: 20000
+---
+spring.profiles: eureka-instance
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.value}}
+    secure-port-enabled: false
+    non-secure-port-enabled: true
+---
+spring.profiles: eureka-client
+eureka:
+  client:
+    service-url:
+      # endpoint for discovery-server, pass '--eureka.client.protocol=https' if discovery-server is running on https
+      defaultZone: ${eureka.client.protocol:http}://localhost:8761/eureka/
+---
+# updates configuration for docker environment
+spring.profiles: docker
+eureka:
+  client:
+    service-url:
+      defaultZone: ${eureka.client.protocol:http}://discovery-server.c2s.com:8761/eureka/
+  instance:
+    prefer-ip-address: true

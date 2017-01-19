@@ -1,5 +1,6 @@
 package gov.samhsa.c2s.pcm.service.consent;
 
+import gov.samhsa.c2s.pcm.config.PcmProperties;
 import gov.samhsa.c2s.pcm.service.consent.PolicyIdServiceImpl;
 import gov.samhsa.c2s.common.util.UniqueValueGeneratorException;
 import gov.samhsa.c2s.pcm.domain.consent.Consent;
@@ -43,8 +44,14 @@ public class PolicyIdServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        ReflectionTestUtils.setField(sut, "pidDomainId", PIDDOMAINIDMOCK);
-        ReflectionTestUtils.setField(sut, "pidDomainType", PIDDOMAINTYPEMOCK);
+        PcmProperties pcmProperties = PcmProperties.builder()
+                .pid(PcmProperties.Pid.builder()
+                        .domain(PcmProperties.Pid.Domain.builder()
+                                .id(PIDDOMAINIDMOCK)
+                                .type(PIDDOMAINTYPEMOCK).build())
+                        .build())
+                .build();
+        ReflectionTestUtils.setField(sut, "pcmProperties", pcmProperties);
     }
 
     @Test

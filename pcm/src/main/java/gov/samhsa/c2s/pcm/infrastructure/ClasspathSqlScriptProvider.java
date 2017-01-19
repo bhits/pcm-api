@@ -1,10 +1,11 @@
 package gov.samhsa.c2s.pcm.infrastructure;
 
+import gov.samhsa.c2s.pcm.config.PcmProperties;
 import gov.samhsa.c2s.pcm.infrastructure.exception.SqlScriptFileException;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -24,11 +25,8 @@ public class ClasspathSqlScriptProvider implements SqlScriptProvider {
      */
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    /**
-     * The sql script file location.
-     */
-    @Value("${c2s.pcm.config.activity.sql.path}")
-    private String sqlScriptFileLocation;
+    @Autowired
+    private PcmProperties pcmProperties;
 
     public ClasspathSqlScriptProvider() throws SqlScriptFileException {
     }
@@ -36,7 +34,7 @@ public class ClasspathSqlScriptProvider implements SqlScriptProvider {
     @Override
     public String getSqlScript() throws SqlScriptFileException {
         try {
-            final Resource sqlResource = new ClassPathResource(this.sqlScriptFileLocation);
+            final Resource sqlResource = new ClassPathResource(pcmProperties.getActivity().getSql().getPath());
             final String sql = IOUtils.toString(sqlResource.getInputStream(), UTF_8);
             logger.debug(sqlResource.getFilename() + " SQL Script:");
             logger.debug(sql);
