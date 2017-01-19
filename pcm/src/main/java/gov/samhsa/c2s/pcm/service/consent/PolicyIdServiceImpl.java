@@ -1,5 +1,6 @@
 package gov.samhsa.c2s.pcm.service.consent;
 
+import gov.samhsa.c2s.pcm.config.PcmProperties;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentRepository;
 import gov.samhsa.c2s.pcm.service.dto.ConsentDto;
 import gov.samhsa.c2s.common.util.UniqueValueGenerator;
@@ -20,17 +21,8 @@ public class PolicyIdServiceImpl implements PolicyIdService {
      */
     private static final int RANDOM_STRING_LENGTH = 6;
 
-    /**
-     * The pid domain id.
-     */
-    @Value("${c2s.pcm.pid.domain.id}")
-    private String pidDomainId;
-
-    /**
-     * The pid domain type.
-     */
-    @Value("${c2s.pcm.pid.domain.type}")
-    private String pidDomainType;
+    @Autowired
+    private PcmProperties pcmProperties;
 
     /**
      * The consent repository.
@@ -66,9 +58,9 @@ public class PolicyIdServiceImpl implements PolicyIdService {
         StringBuilder consentReferenceIdBuilder = new StringBuilder();
         consentReferenceIdBuilder.append(mrn);
         consentReferenceIdBuilder.append(":&");
-        consentReferenceIdBuilder.append(this.pidDomainId);
+        consentReferenceIdBuilder.append(this.pcmProperties.getPid().getDomain().getId());
         consentReferenceIdBuilder.append("&");
-        consentReferenceIdBuilder.append(this.pidDomainType);
+        consentReferenceIdBuilder.append(this.pcmProperties.getPid().getDomain().getType());
 
         consentReferenceIdBuilder.append(":");
         if (consentDto.getOrganizationalProvidersDisclosureIsMadeToNpi() != null) {

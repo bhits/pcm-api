@@ -1,6 +1,9 @@
 package gov.samhsa.c2s.pcm.config;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +15,9 @@ import javax.validation.constraints.NotNull;
 @Configuration
 @ConfigurationProperties(prefix = "c2s.pcm")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class PcmProperties {
 
     @NotNull
@@ -35,6 +41,9 @@ public class PcmProperties {
     private HieConnection hieConnection;
 
     @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Pid {
         @Valid
         private Domain domain;
@@ -46,6 +55,9 @@ public class PcmProperties {
         private String prefix;
 
         @Data
+        @Builder
+        @AllArgsConstructor
+        @NoArgsConstructor
         public static class Domain {
             @NotEmpty
             private String id;
@@ -59,6 +71,9 @@ public class PcmProperties {
     }
 
     @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Pagination {
         @NotNull
         @Min(0)
@@ -66,6 +81,9 @@ public class PcmProperties {
     }
 
     @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Activity {
         @Valid
         private Sql sql;
@@ -78,6 +96,9 @@ public class PcmProperties {
     }
 
     @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class HieConnection {
         @Valid
         private Fhir fhir;
@@ -96,6 +117,9 @@ public class PcmProperties {
     }
 
     @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class ClinicalData{
         @Min(0)
         private long maximumUploadFileSize;
