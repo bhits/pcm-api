@@ -45,7 +45,6 @@ public class MapProviderResultToProviderDtoConverter {
 
         //TODO: Remove
         abstractProviderDto.setProviderTaxonomyCode("");
-        abstractProviderDto.setProviderTaxonomyDescription("");
         return abstractProviderDto;
     }
 }
