@@ -25,6 +25,7 @@
  ******************************************************************************/
 package gov.samhsa.c2s.pcm.service.clinicaldata;
 
+import gov.samhsa.c2s.pcm.config.PcmProperties;
 import gov.samhsa.c2s.pcm.domain.clinicaldata.ClinicalDocument;
 import gov.samhsa.c2s.pcm.domain.clinicaldata.ClinicalDocumentRepository;
 import gov.samhsa.c2s.pcm.domain.patient.Patient;
@@ -40,7 +41,6 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -68,16 +68,17 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
      */
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    private PcmProperties pcmProperties;
+
     /**
      * The max file size.
      */
-    @Value("${c2s.pcm.clinicaldata.maximumUploadFileSize}")
     private Long maxFileSize;
 
     /**
      * The permitted extensions.
      */
-    @Value("${c2s.pcm.clinicaldata.extensionsPermittedToUpload}")
     private String permittedExtensions;
 
     /**
@@ -124,8 +125,7 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
     /**
      * Instantiates a new clinical document service impl.
      *
-     * @param maxFileSize                        the max file size
-     * @param permittedExtensions                the permitted extensions
+     * @param pcmProperties                      PCM properties
      * @param clinicalDocumentRepository         the clinical document repository
      * @param clinicalDocumentTypeCodeRepository the clinical document type code repository
      * @param modelMapper                        the model mapper
@@ -133,14 +133,14 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
      * @param validator                          the validator
      */
     public ClinicalDocumentServiceImpl(
-            long maxFileSize,
-            String permittedExtensions,
+            PcmProperties pcmProperties,
             ClinicalDocumentRepository clinicalDocumentRepository,
             ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository,
             ModelMapper modelMapper, PatientRepository patientRepository, Validator validator) {
         super();
-        this.maxFileSize = maxFileSize;
-        this.permittedExtensions = permittedExtensions;
+        this.pcmProperties = pcmProperties;
+        this.maxFileSize = pcmProperties.getClinicaldata().getMaximumUploadFileSize();
+        this.permittedExtensions = pcmProperties.getClinicaldata().getExtensionsPermittedToUpload();
         this.clinicalDocumentRepository = clinicalDocumentRepository;
         this.clinicalDocumentTypeCodeRepository = clinicalDocumentTypeCodeRepository;
         this.modelMapper = modelMapper;
@@ -150,7 +150,9 @@ public class ClinicalDocumentServiceImpl implements ClinicalDocumentService {
 
     @PostConstruct
     public void afterPropertiesSet() throws Exception {
-        permittedExtensionsArray = permittedExtensions.split(",");
+        this.maxFileSize = pcmProperties.getClinicaldata().getMaximumUploadFileSize();
+        this.permittedExtensions = pcmProperties.getClinicaldata().getExtensionsPermittedToUpload();
+        this.permittedExtensionsArray = permittedExtensions.split(",");
     }
 
     /*

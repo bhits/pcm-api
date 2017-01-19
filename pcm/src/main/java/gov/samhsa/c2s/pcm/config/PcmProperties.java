@@ -16,6 +16,10 @@ public class PcmProperties {
 
     @NotNull
     @Valid
+    private ClinicalData clinicaldata;
+
+    @NotNull
+    @Valid
     private Pid pid;
 
     @NotNull
@@ -89,5 +93,14 @@ public class PcmProperties {
             @NotEmpty
             private String ClientSocketTimeoutInMs;
         }
+    }
+
+    @Data
+    public static class ClinicalData{
+        @Min(0)
+        private long maximumUploadFileSize;
+
+        @NotEmpty
+        private String extensionsPermittedToUpload;
     }
 }
