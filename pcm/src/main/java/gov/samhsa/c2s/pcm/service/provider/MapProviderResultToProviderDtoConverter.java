@@ -43,8 +43,6 @@ public class MapProviderResultToProviderDtoConverter {
         abstractProviderDto.setEnumerationDate(providerDto.getEnumerationDate() == null ? "" : providerDto.getEnumerationDate());
         abstractProviderDto.setLastUpdateDate(providerDto.getLastUpdateDate() == null ? "" : providerDto.getLastUpdateDate());
 
-        //TODO: Remove
-        abstractProviderDto.setProviderTaxonomyCode("");
         return abstractProviderDto;
     }
 }
