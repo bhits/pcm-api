@@ -114,19 +114,10 @@ c2s:
   vss:
     conceptCodeListPageSize: 20
 ---
-# If the ssl spring profile below is enabled, you must follow the instructions at
-#   the top of this file to set the key-store and key-store-password properties as well.
-spring.profiles: ssl
-server:
-  # configure keystore and keystore password for ssl per environment
-  ssl:
-    key-store: /ssl_keystore.keystore
-    key-store-password: changeit
----
 spring.profiles: standalone-ssl
 spring:
   profiles:
-    include: ssl
+    include: ssl-default
 server:
   context-path: /pcm
 ---
