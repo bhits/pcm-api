@@ -108,8 +108,8 @@ public class ProviderRestController {
     public void deleteProvider(Principal principal, @PathVariable("npi") String npi) {
 
         Set<gov.samhsa.c2s.pcm.service.dto.ProviderDto> providerDtos = patientService.findProvidersByUsername(principal.getName());
-        try {
-            gov.samhsa.c2s.pcm.service.dto.ProviderDto providerDto = providerDtos.stream().filter(t -> t.getNpi().equals(npi)).findAny().orElseThrow(() -> new ProviderNotFoundException("This patient doesn't have this provider"));
+
+        gov.samhsa.c2s.pcm.service.dto.ProviderDto providerDto = providerDtos.stream().filter(t -> t.getNpi().equals(npi)).findAny().orElseThrow(() -> new ProviderNotFoundException("This patient doesn't have this provider"));
 
             if (providerDto == null)
                 new CannotDeleteProviderException("ERROR: Unable to delete this provider.");
@@ -121,14 +121,6 @@ public class ProviderRestController {
                 else
                     organizationalProviderService.deleteOrganizationalProviderByNpi(principal.getName(), npi);
             }
-
-        } catch (Exception e) {
-            logger.error(
-                    "Unable to delete individual provider: PatientConnectionDto could not be found for specified patientId...");
-            logger.error("...STACK TRACE: ", e);
-            throw e;
-        }
-
     }
 
     /**
