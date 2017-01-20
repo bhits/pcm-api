@@ -77,10 +77,6 @@ c2s:
         type: ISO
       org: C2S Health
       prefix: C2S
-    pls:
-      # If SSL is turned on in the PLS application, you must change/override the 'api' property below
-      #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
-      api: http://localhost:8080/pls/providers
     pagination:
       itemsPerPage: 10
     activity:
@@ -133,9 +129,5 @@ security:
       user-info-uri: http://uaa.c2s.com:8080/uaa/userinfo
 c2s:
   pcm:
-    pls:
-      # If SSL is turned on in the PLS application, you must change/override the 'api' property below
-      #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
-      api: http://pls.c2s.com:8080/pls/providers
     clamd:
       host: clamd.c2s.com
