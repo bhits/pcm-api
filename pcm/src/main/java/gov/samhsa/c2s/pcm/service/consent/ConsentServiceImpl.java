@@ -25,6 +25,12 @@
  ******************************************************************************/
 package gov.samhsa.c2s.pcm.service.consent;
 
+import gov.samhsa.c2s.common.consentgen.ConsentBuilder;
+import gov.samhsa.c2s.common.consentgen.ConsentGenException;
+import gov.samhsa.c2s.common.document.accessor.DocumentAccessor;
+import gov.samhsa.c2s.common.document.converter.DocumentXmlConverter;
+import gov.samhsa.c2s.common.document.transformer.XmlTransformer;
+import gov.samhsa.c2s.common.util.UniqueValueGeneratorException;
 import gov.samhsa.c2s.pcm.domain.consent.*;
 import gov.samhsa.c2s.pcm.domain.patient.Patient;
 import gov.samhsa.c2s.pcm.domain.patient.PatientRepository;
@@ -33,26 +39,22 @@ import gov.samhsa.c2s.pcm.domain.reference.*;
 import gov.samhsa.c2s.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.c2s.pcm.domain.valueset.ValueSetCategoryRepository;
 import gov.samhsa.c2s.pcm.infrastructure.AbstractConsentRevokationPdfGenerator;
+import gov.samhsa.c2s.pcm.infrastructure.PhrService;
 import gov.samhsa.c2s.pcm.infrastructure.dto.PatientDto;
 import gov.samhsa.c2s.pcm.service.consentexport.ConsentExportService;
 import gov.samhsa.c2s.pcm.service.dto.*;
 import gov.samhsa.c2s.pcm.service.exception.AttestedConsentException;
-import gov.samhsa.c2s.pcm.service.fhir.FhirContractService;
-import gov.samhsa.c2s.pcm.service.patient.PatientService;
-import gov.samhsa.c2s.common.consentgen.ConsentBuilder;
-import gov.samhsa.c2s.common.consentgen.ConsentGenException;
-import gov.samhsa.c2s.common.document.accessor.DocumentAccessor;
-import gov.samhsa.c2s.common.document.converter.DocumentXmlConverter;
-import gov.samhsa.c2s.common.document.transformer.XmlTransformer;
-import gov.samhsa.c2s.common.util.UniqueValueGeneratorException;
-import gov.samhsa.c2s.pcm.infrastructure.PhrService;
 import gov.samhsa.c2s.pcm.service.exception.AttestedConsentRevocationException;
 import gov.samhsa.c2s.pcm.service.exception.XacmlNotFoundException;
+import gov.samhsa.c2s.pcm.service.fhir.FhirContractService;
+import gov.samhsa.c2s.pcm.service.patient.PatientService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -63,6 +65,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -231,6 +236,10 @@ public class ConsentServiceImpl implements ConsentService {
      */
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private MessageSource messageSource;
+
     /*
      * (non-Javadoc)
      *
@@ -474,6 +483,7 @@ public class ConsentServiceImpl implements ConsentService {
         return pageResultsMap;
     }
 
+    //deal with review consent
     @Override
     public ConsentAttestationDto getConsentAttestationDto(String userName, Long consentId) {
 
@@ -518,15 +528,41 @@ public class ConsentServiceImpl implements ConsentService {
             }
 
             final Set<String> shareSensitivityPolicyDisplayName = new HashSet<String>();
+            //used to deal with multi-language display name <code, text>- added by Wentao
+            final Map<String, String> multiLangDisplayName = new HashMap<String, String>();
+            Locale locale = LocaleContextHolder.getLocale();
+
             List<ValueSetCategory> valueSetCategoryList = valueSetCategoryRepository
                     .findAll();
             //All possible VSC
             for (ValueSetCategory valueSetCategory : valueSetCategoryList) {
                 String valueSetName = valueSetCategory.getName();
-                shareSensitivityPolicyDisplayName.add(valueSetName);
+
+                if (locale.getLanguage().equalsIgnoreCase("en")) {
+                    shareSensitivityPolicyDisplayName.add(valueSetName);
+                } else {
+                    shareSensitivityPolicyDisplayName.add(messageSource.getMessage(valueSetCategory.getCode() + ".NAME", null, locale));
+                    //multiLangDisplayName.put(valueSetCategory.getCode(), valueSetName);
+                }
             }
             for (final ConsentDoNotShareSensitivityPolicyCode item : consent.getDoNotShareSensitivityPolicyCodes()) {
-                shareSensitivityPolicyDisplayName.remove(item.getValueSetCategory().getName());
+
+                if (locale.getLanguage().equalsIgnoreCase("en")) {
+                    shareSensitivityPolicyDisplayName.remove(item.getValueSetCategory().getName());
+                } else {
+                    shareSensitivityPolicyDisplayName.remove(messageSource.getMessage(item.getValueSetCategory().getCode() + ".NAME", null, locale));
+                    //multiLangDisplayName.remove(item.getValueSetCategory().getCode());
+                }
+            }
+
+            //traverse the map to alter display name
+            if (!locale.getLanguage().equalsIgnoreCase("en")) {
+                Iterator<Map.Entry<String, String>> it = multiLangDisplayName.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry<String, String> entry = it.next();
+                    String message = messageSource.getMessage(entry.getKey() + ".NAME", null, locale);
+                    shareSensitivityPolicyDisplayName.add(message);
+                }
             }
 
             // Set fields
@@ -559,6 +595,7 @@ public class ConsentServiceImpl implements ConsentService {
         return consentAttestationDto;
     }
 
+    //review evocation terms etc.
     @Override
     @Transactional(readOnly = true)
     public ConsentRevocationAttestationDto getConsentRevocationAttestationDto(String userName, Long consentId) {
@@ -590,7 +627,13 @@ public class ConsentServiceImpl implements ConsentService {
             consentRevocationAttestationDto.setConsentRevokeTermsAccepted(false);
 
             String currentConsentRevokeTermsText = consentRevocationTermsVersionsService.findByLatestEnabledVersion().getConsentRevokeTermsText();
-            consentRevocationAttestationDto.setConsentRevokeTermsText(currentConsentRevokeTermsText);
+            // set revocation term text according to locale  - Wentao
+            Locale locale = LocaleContextHolder.getLocale();
+            if (locale.getLanguage().equalsIgnoreCase("en")) {
+                consentRevocationAttestationDto.setConsentRevokeTermsText(currentConsentRevokeTermsText);
+            } else {
+                consentRevocationAttestationDto.setConsentRevokeTermsText(messageSource.getMessage("REVOCATION.TERMS.TEXT", null, locale));
+            }
         }
 
         return consentRevocationAttestationDto;
@@ -962,7 +1005,12 @@ public class ConsentServiceImpl implements ConsentService {
 
             attestedConsent.setPatientGuid(consent.getPatient().getMedicalRecordNumber());
 
-            String term = consentTerms.getConsentTermsText();
+            String term = "";
+            if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
+                term = consentTerms.getConsentTermsText();
+            } else {
+                term = messageSource.getMessage("CONSENT.TERMS.TEXT", null, LocaleContextHolder.getLocale());
+            }
             attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, true, attestedOn, term));
 
             consent.setAttestedConsent(attestedConsent);
@@ -1420,7 +1468,15 @@ public class ConsentServiceImpl implements ConsentService {
         consent.setName("Consent");
         consent.setDescription("This is a consent made by "
                 + patient.getFirstName() + " " + patient.getLastName());
-        String terms = consentTermsVersionsService.getEnabledConsentTermsVersion().getConsentTermsText();
+
+        //get multi-language consent terms - Wentao
+        String terms = "";
+        if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
+            terms = consentTermsVersionsService.getEnabledConsentTermsVersion().getConsentTermsText();
+        } else {
+            terms = messageSource.getMessage("CONSENT.TERMS.TEXT", null, LocaleContextHolder.getLocale());
+        }
+        //String terms = consentTermsVersionsService.getEnabledConsentTermsVersion().getConsentTermsText();
 
         consent.setUnAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent,patient, false, null, terms));
 

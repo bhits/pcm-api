@@ -38,6 +38,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -46,6 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * The Class AuditServiceImpl.
@@ -76,6 +79,9 @@ public class AuditServiceImpl implements AuditService {
     @Value("${c2s.pcm.config.pagination.itemsPerPage}")
     private int itemsPerPage;
 
+    @Autowired
+    private MessageSource messageSource;
+
     public AuditServiceImpl() {
     }
 
@@ -104,7 +110,7 @@ public class AuditServiceImpl implements AuditService {
                                 a -> {
                                     a.setChangedBy(getFullName(a.getChangedBy()));
                                     a.setRecType(convertAttestedConsentRevType(a.getRecType(), convertRevClassNameToType(a.getType())));
-                                    a.setType(convertRevClassNameToType(a.getType()));
+                                    a.setType(convertRevClassNameToTypeWithLang(a.getType()));
                                 });
 
             } else {
@@ -157,6 +163,16 @@ public class AuditServiceImpl implements AuditService {
         return type;
     }
 
+    //convert type name with desired language  - Wentao
+    private String convertRevClassNameToTypeWithLang(String revType) {
+        String type = convertRevClassNameToType (revType);
+        if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
+            return type;
+        } else {
+            return replaceWithDesignedLang(type);
+        }
+    }
+
     private String convertAttestedConsentRevType(String revType, String type) {
         switch (type) {
             case "Attested Consent":
@@ -165,9 +181,50 @@ public class AuditServiceImpl implements AuditService {
             case "Attested Consent Revocation":
                 type = "Revoke entry";
                 break;
-            default:
-                return revType;
+            //default:
+                //return revType;
         }
-        return type;
+        if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
+            return type;
+        } else {
+            return replaceWithDesignedLang(type);
+        }
+        //return type;
+    }
+
+    /**
+     * get type name in designed language
+     * Wentao
+     * */
+    private String replaceWithDesignedLang(String str) {
+        Locale locale = LocaleContextHolder.getLocale();
+        switch (str) {
+            case "Patient Provider":
+                return messageSource.getMessage("REV.TYPE.PATIENT.PROVIDER", null, locale);
+            case "Patient":
+                return messageSource.getMessage("REV.TYPE.PATIENT", null, locale);
+            case "Consent":
+                return messageSource.getMessage("REV.TYPE.CONSENT", null, locale);
+            case "Attested Consent":
+                return messageSource.getMessage("REV.TYPE.ATTESTED.CONSENT", null, locale);
+            case "Attested Consent Revocation":
+                return messageSource.getMessage("REV.TYPE.ATTESTED.CONSENT.REVOCATION", null, locale);
+            case "Clinical Document":
+                return messageSource.getMessage("REV.TYPE.CLINICAL.DOC", null, locale);
+            case "Consent Terms Versions":
+                return messageSource.getMessage("REV.TYPE.CONSENT.TERM", null, locale);
+            case "Sign entry":
+                return messageSource.getMessage("TYPE.SIGN.ENTRY", null, locale);
+            case "Revoke entry":
+                return messageSource.getMessage("TYPE.REVOKE.ENTRY", null, locale);
+            case "Create new entry":
+                return messageSource.getMessage("TYPE.CREATE.NEW.ENTRY", null, locale);
+            case "Delete entry":
+                return messageSource.getMessage("TYPE.DELETE.ENTRY", null, locale);
+            case "Changed entry":
+                return messageSource.getMessage("TYPE.CHANGED.ENTRY", null, locale);
+            default:
+                return str;
+        }
     }
 }

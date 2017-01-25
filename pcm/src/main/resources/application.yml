@@ -66,7 +66,7 @@ spring:
     # DO NOT USE THE FOLLOWING DEFAULT USERNAME OUTSIDE OF DEVELOPMENT ENVIRONMENTS!
     username: root
     # DO NOT USE THE FOLLOWING DEFAULT PASSWORD OUTSIDE OF DEVELOPMENT ENVIRONMENTS!
-    password: admin
+    password: wtzhou
     driver-class-name: com.mysql.jdbc.Driver
     validation-query: select 1
     test-on-borrow: true
@@ -89,16 +89,17 @@ spring:
     # Please configure valid e-mail server below to connect to SMTP server
     # Configure host, port, username and password per environment
     host: mail_host
-    port: 25
+    port: 587
     protocol: smtp
     username: mail_username
     password: mail_password
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
-      mail.smtp.ssl.trust: mail_host
+      mail.smtp.ssl.trust: smtp.gmail.com
   messages:
-    basename: i18n/messages
+    basename: i18n/messages/messages
+    encoding: UTF-8
 c2s:
   pcm:
     config:
