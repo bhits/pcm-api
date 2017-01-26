@@ -223,10 +223,6 @@
             <groupId>ca.uhn.hapi.fhir</groupId>
             <artifactId>hapi-fhir-structures-dstu3</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
         <!-- HAPI FHIR JARS -->
         <!-- Test -->
         <dependency>
