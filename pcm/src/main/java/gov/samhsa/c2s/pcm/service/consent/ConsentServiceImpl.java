@@ -290,6 +290,7 @@ public class ConsentServiceImpl implements ConsentService {
     public List<ConsentListDto> consentListToConsentListDtosConverter(
             List<Consent> consents) {
         final List<ConsentListDto> consentListDtos = makeConsentListDtos();
+        Locale locale = LocaleContextHolder.getLocale();
         for (final Consent consent : consents) {
             final ConsentListDto consentListDto = new ConsentListDto();
             // Get fields
@@ -332,14 +333,24 @@ public class ConsentServiceImpl implements ConsentService {
             final Set<String> consentDoNotShareSensitivityPolicyCode = new HashSet<String>();
             for (final ConsentDoNotShareSensitivityPolicyCode item : consent
                     .getDoNotShareSensitivityPolicyCodes()) {
-                consentDoNotShareSensitivityPolicyCode.add(item
-                        .getValueSetCategory().getName());
+                if (locale.getLanguage().equalsIgnoreCase("en")) {
+                    consentDoNotShareSensitivityPolicyCode.add(item
+                            .getValueSetCategory().getName());
+                } else {
+                    consentDoNotShareSensitivityPolicyCode.add(messageSource.getMessage(item.getValueSetCategory().getCode()+ ".NAME", null, locale));
+                }
+
             }
 
             final Set<String> consentShareForPurposeOfUseCode = new HashSet<String>();
             for (final ConsentShareForPurposeOfUseCode item : consent
                     .getShareForPurposeOfUseCodes()) {
-                consentShareForPurposeOfUseCode.add(item.getPurposeOfUseCode().getDisplayName());
+                if (locale.getLanguage().equalsIgnoreCase("en")) {
+                    consentShareForPurposeOfUseCode.add(item.getPurposeOfUseCode().getDisplayName());
+                } else {
+                    consentShareForPurposeOfUseCode.add(messageSource.getMessage(item.getPurposeOfUseCode().getCode() + ".NAME", null, locale));
+                }
+
             }
 
             final Set<PurposeOfUseCode> shareForPurposeOfUse = new HashSet<PurposeOfUseCode>();
