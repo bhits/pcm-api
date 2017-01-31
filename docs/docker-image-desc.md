@@ -35,8 +35,7 @@ Be sure to familiarize yourself with the repository's [README.md](https://github
 
 `docker run  --name pcm -d bhits/pcm:latest <additional program arguments>`
 
-*NOTE: In order for this API to fully function as a microservice in the Consent2Share application, it is required to setup the dependency microservices and support level infrastructure. Please refer to the [Consent2Share Deployment Guide](https://github.com/bhits/consent2share/releases/download/2.1.0/c2s-deployment-guide.pdf) for instructions to setup the Consent2Share infrastructure.*
-
+*NOTE: In order for this API to fully function as a microservice in the Consent2Share application, it is required to setup the dependency microservices and support level infrastructure. Please refer to the [Consent2Share Deployment Guide](https://github.com/bhits/consent2share/releases) in the corresponding Consent2Share release for instructions to setup the Consent2Share infrastructure.*
 
 ## Configure
 
