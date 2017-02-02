@@ -32,7 +32,6 @@ import gov.samhsa.c2s.pcm.service.reference.StateCodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,18 +64,16 @@ public class ProviderSearchLookupServiceImpl
     /**
      * Instantiates a new provider search lookup service impl.
      *
-     * @param providerSearchURL             the provider search url
      * @param stateCodeService              the state code service
      * @param individualProviderService     the individual provider service
      * @param organizationalProviderService the organizational provider service
      */
     @Autowired
     public ProviderSearchLookupServiceImpl(
-            @Value("${c2s.pcm.pls.api}") String providerSearchURL,
             StateCodeService stateCodeService,
             IndividualProviderService individualProviderService,
             OrganizationalProviderService organizationalProviderService) {
-        super(providerSearchURL, stateCodeService);
+        super(stateCodeService);
         this.individualProviderService = individualProviderService;
         this.organizationalProviderService = organizationalProviderService;
     }

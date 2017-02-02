@@ -65,13 +65,11 @@ public class ProviderSearchLookupServiceImpl implements
     /**
      * Instantiates a new provider search lookup service impl.
      *
-     * @param providerSearchURL the provider search url
      * @param stateCodeService  the state code service
      */
-    public ProviderSearchLookupServiceImpl(String providerSearchURL,
+    public ProviderSearchLookupServiceImpl(
                                            StateCodeService stateCodeService) {
         super();
-        this.providerSearchURL = providerSearchURL;
         this.stateCodeService = stateCodeService;
     }
 

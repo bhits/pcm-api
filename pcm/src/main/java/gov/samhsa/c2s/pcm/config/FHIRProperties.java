@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "c2s.pcm.config")
+@ConfigurationProperties(prefix = "c2s.pcm")
 @Data
 public class FHIRProperties {
 
