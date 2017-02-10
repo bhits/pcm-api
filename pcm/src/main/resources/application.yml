@@ -131,3 +131,6 @@ c2s:
   pcm:
     clamd:
       host: clamd.c2s.com
+    hie-connection:
+      fhir:
+        serverUrl: http://iexhub.c2s.com:8080/iexhub/services
