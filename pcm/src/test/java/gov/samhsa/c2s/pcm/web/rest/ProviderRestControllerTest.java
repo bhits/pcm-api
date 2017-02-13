@@ -1,9 +1,8 @@
 package gov.samhsa.c2s.pcm.web.rest;
 
-import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
-import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProvider;
-import gov.samhsa.c2s.pcm.infrastructure.dto.EntityType;
+import gov.samhsa.c2s.pcm.service.dto.MultiProviderRequestDto;
 import gov.samhsa.c2s.pcm.service.dto.ProviderDto;
+import gov.samhsa.c2s.pcm.service.exception.ProviderAlreadyInUseException;
 import gov.samhsa.c2s.pcm.service.patient.PatientService;
 import gov.samhsa.c2s.pcm.service.provider.IndividualProviderService;
 import gov.samhsa.c2s.pcm.service.provider.OrganizationalProviderService;
@@ -14,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,9 +23,7 @@ import java.security.AccessControlException;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -125,76 +123,28 @@ public class ProviderRestControllerTest {
     }
 
     @Test
-    public void testAddProvider_individual() throws Exception {
-        gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto providerDto = new gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto();
-        EntityType entityType = new EntityType();
-        entityType.setDisplayName("Individual");
-
-        providerDto.setNpi("1234567890");
-        providerDto.setEntityType(entityType);
-        providerDto.setFirstName("albert");
-        providerDto.setLastName("smith");
-
-        IndividualProvider individualProvider = mock(IndividualProvider.class);
-
-        when(providerSearchLookupService.providerSearchByNpi(anyString())).thenReturn(providerDto);
-        when(individualProviderService.addNewIndividualProvider(any(gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto.class), anyString()))
-                .thenReturn(individualProvider);
-        mockMvc.perform(post("/patients/providers/1234567890").principal(principal)).andExpect(status().isOk());
+    public void testAddProvider() throws Exception {
+        String npi = "1234567890";
+        String url = "/patients/providers/" + npi;
+        String principalName = "test";
+        when(principal.getName()).thenReturn(principalName);
+        Mockito.doThrow(ProviderAlreadyInUseException.class).when(providerSearchLookupService).addProvider(principalName,npi);
+        mockMvc.perform(post(url).principal(principal)).andExpect(status().is4xxClientError());
     }
 
     @Test
-    public void testAddProvider_organization() throws Exception {
-        gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto providerDto = new gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto();
-        EntityType entityType = new EntityType();
-        entityType.setDisplayName("Organization");
+    public void testAddMultipleProviders() throws Exception {
+        Set<String> npiList = new HashSet<String>();
+        npiList.add("1234567890");
+        npiList.add("1234567891");
+        MultiProviderRequestDto multiProviderRequestDto  = new MultiProviderRequestDto();
+        multiProviderRequestDto.setNpiList(npiList);
 
-        providerDto.setNpi("1234567890");
-        providerDto.setEntityType(entityType);
-        providerDto.setOrganizationName("albert");
-        providerDto.setFirstLineBusinessMailingAddress("smith road");
+        String url = "/patients/providers/";
+        String principalName = "test";
 
-        OrganizationalProvider organizationalProvider = mock(OrganizationalProvider.class);
-
-        when(providerSearchLookupService.providerSearchByNpi(anyString())).thenReturn(providerDto);
-        when(organizationalProviderService.addNewOrganizationalProvider(any(gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto.class), anyString()))
-                .thenReturn(organizationalProvider);
-
-        mockMvc.perform(post("/patients/providers/1234567890").principal(principal)).andExpect(status().isOk());
-    }
-
-    @Test
-    public void testAddProvider_individual_existing() throws Exception {
-        gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto providerDto = new gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto();
-        EntityType entityType = new EntityType();
-
-        entityType.setDisplayName("Individual");
-        providerDto.setNpi("1234567890");
-        providerDto.setLastName("albert");
-        providerDto.setFirstName("smith");
-        providerDto.setEntityType(entityType);
-
-        when(providerSearchLookupService.providerSearchByNpi(anyString())).thenReturn(providerDto);
-        when(individualProviderService.addNewIndividualProvider(any(gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto.class), anyString())).thenReturn(null);
-
-        mockMvc.perform(post("/patients/providers/1234567890").principal(principal)).andExpect(status().is4xxClientError());
-    }
-
-    @Test
-    public void testAddProvider_organization_existing() throws Exception {
-        gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto providerDto = new gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto();
-        EntityType entityType = new EntityType();
-
-        entityType.setDisplayName("Organization");
-        providerDto.setNpi("1234567890");
-        providerDto.setOrganizationName("albert");
-        providerDto.setFirstLineBusinessMailingAddress("smith road");
-        providerDto.setEntityType(entityType);
-
-        when(providerSearchLookupService.providerSearchByNpi(anyString())).thenReturn(providerDto);
-        when(organizationalProviderService.addNewOrganizationalProvider(any(gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto.class), anyString()))
-                .thenReturn(null);
-
-        mockMvc.perform(post("/patients/providers/1234567890").principal(principal)).andExpect(status().is4xxClientError());
+        when(principal.getName()).thenReturn(principalName);
+        Mockito.doThrow(ProviderAlreadyInUseException.class).when(providerSearchLookupService).addMultipleProviders(principal,multiProviderRequestDto);
+        mockMvc.perform(post(url).principal(principal)).andExpect(status().is4xxClientError());
     }
 }

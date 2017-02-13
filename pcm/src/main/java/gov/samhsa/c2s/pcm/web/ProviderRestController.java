@@ -53,10 +53,6 @@ import java.util.Set;
 public class ProviderRestController {
 
     /**
-     * The Constant NPI_LENGTH.
-     */
-    public static final int NPI_LENGTH = 10;
-    /**
      * The logger.
      */
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -121,42 +117,16 @@ public class ProviderRestController {
             }
     }
 
-    /**
+     /**
      * Adds the provider.
      *
      * @param npi the npi
      */
     @RequestMapping(value = "providers/{npi}", method = RequestMethod.POST)
     public void addProvider(Principal principal, @PathVariable("npi") String npi) {
-        final String username = principal.getName();
-        OrganizationalProvider organizationalProviderReturned = null;
-        IndividualProvider individualProviderReturned = null;
-        boolean isOrgProvider = false;
-
-        if (npi.length() == NPI_LENGTH && npi.matches("[0-9]+")) {
-
-            ProviderDto providerDto = providerSearchLookupService.providerSearchByNpi(npi);
-
-            if ((EntityType.valueOf(providerDto.getEntityType().getDisplayName()) == EntityType.Organization)) {
-                isOrgProvider = true;
-                organizationalProviderReturned = organizationalProviderService
-                        .addNewOrganizationalProvider(providerDto, username);
-            } else {
-                isOrgProvider = false;
-                individualProviderReturned = individualProviderService.addNewIndividualProvider(providerDto, username);
-            }
-
-            if (isOrgProvider == true) {
-                if (organizationalProviderReturned == null)
-                    throw new ProviderAlreadyInUseException("Error: The provider could not be added because the provider already exists in the patient’s account.");
-            } else {
-                if (individualProviderReturned == null)
-                    throw new ProviderAlreadyInUseException("Error: The provider could not be added because the provider already exists in the patient’s account.");
-            }
-        } else {
-            throw new ProviderNotFoundException("Error:The provider could not be added because the specified NPI could not be found.");
-        }
+        providerSearchLookupService.addProvider( principal.getName(), npi);
     }
+
 
     /**
      * Adds multiple providers.
@@ -164,7 +134,7 @@ public class ProviderRestController {
      * @param npiList list of the npi
      */
     @RequestMapping(value = "providers", method = RequestMethod.POST)
-    public void addMultipleProvider(Principal principal, @RequestBody MultiProviderRequestDto npiList) {
+    public void addMultipleProviders(Principal principal, @RequestBody MultiProviderRequestDto npiList) {
         providerSearchLookupService.addMultipleProviders(principal, npiList);
     }
 }

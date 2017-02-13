@@ -44,8 +44,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
 import java.util.List;
 
-import static gov.samhsa.c2s.pcm.web.ProviderRestController.NPI_LENGTH;
-
 /**
  * The Class ProviderSearchLookupServiceImpl.
  */
@@ -66,6 +64,11 @@ public class ProviderSearchLookupServiceImpl implements ProviderSearchLookupServ
     String providerSearchURL;
 
     /**
+     * The Constant NPI_LENGTH.
+     */
+    public static final int NPI_LENGTH = 10;
+
+    /**
      * The state code service.
      */
     protected StateCodeService stateCodeService;
@@ -81,6 +84,12 @@ public class ProviderSearchLookupServiceImpl implements ProviderSearchLookupServ
      */
     @Autowired
     private OrganizationalProviderService organizationalProviderService;
+
+    /**
+     * The provider search lookup service.
+     */
+    @Autowired
+    private ProviderSearchLookupService providerSearchLookupService;
 
 
     /**
@@ -107,36 +116,41 @@ public class ProviderSearchLookupServiceImpl implements ProviderSearchLookupServ
     }
 
     @Override
-    public void addMultipleProviders(Principal principal, MultiProviderRequestDto npiList) {
-        final String username = principal.getName();
+    public void addProvider(String username, String npi){
         OrganizationalProvider organizationalProviderReturned = null;
         IndividualProvider individualProviderReturned = null;
         boolean isOrgProvider = false;
 
-        for(String npi : npiList.getNpiList()){
-            if (npi.length() == NPI_LENGTH && npi.matches("[0-9]+")) {
+        if (npi.length() == NPI_LENGTH && npi.matches("[0-9]+")) {
 
-                ProviderDto providerDto = providerSearchByNpi(npi);
+            ProviderDto providerDto = providerSearchByNpi(npi);
 
-                if ((EntityType.valueOf(providerDto.getEntityType().getDisplayName()) == EntityType.Organization)) {
-                    isOrgProvider = true;
-                    organizationalProviderReturned = organizationalProviderService
-                            .addNewOrganizationalProvider(providerDto, username);
-                } else {
-                    isOrgProvider = false;
-                    individualProviderReturned = individualProviderService.addNewIndividualProvider(providerDto, username);
-                }
-
-                if (isOrgProvider == true) {
-                    if (organizationalProviderReturned == null)
-                        throw new ProviderAlreadyInUseException("Error: The provider could not be added because the provider already exists in the patient’s account.");
-                } else {
-                    if (individualProviderReturned == null)
-                        throw new ProviderAlreadyInUseException("Error: The provider could not be added because the provider already exists in the patient’s account.");
-                }
+            if ((EntityType.valueOf(providerDto.getEntityType().getDisplayName()) == EntityType.Organization)) {
+                isOrgProvider = true;
+                organizationalProviderReturned = organizationalProviderService
+                        .addNewOrganizationalProvider(providerDto, username);
             } else {
-                throw new ProviderNotFoundException("Error:The provider could not be added because the specified NPI could not be found.");
+                isOrgProvider = false;
+                individualProviderReturned = individualProviderService.addNewIndividualProvider(providerDto, username);
             }
+
+            if (isOrgProvider == true) {
+                if (organizationalProviderReturned == null)
+                    throw new ProviderAlreadyInUseException("Error: The provider could not be added because the provider already exists in the patient’s account.");
+            } else {
+                if (individualProviderReturned == null)
+                    throw new ProviderAlreadyInUseException("Error: The provider could not be added because the provider already exists in the patient’s account.");
+            }
+        } else {
+            throw new ProviderNotFoundException("Error:The provider could not be added because the specified NPI could not be found.");
+        }
+    }
+
+    @Override
+    public void addMultipleProviders(Principal principal, MultiProviderRequestDto npiList) {
+        final String username = principal.getName();
+        for(String npi : npiList.getNpiList()){
+            addProvider(username,npi);
         }
     }
 

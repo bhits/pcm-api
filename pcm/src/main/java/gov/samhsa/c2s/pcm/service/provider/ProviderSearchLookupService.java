@@ -71,6 +71,8 @@ public interface ProviderSearchLookupService {
 	 */
 	public ProviderDto providerSearchByNpi(String npi);
 
+	public void addProvider(String username, String npi);
+
 	public void addMultipleProviders(Principal principal,MultiProviderRequestDto npiList);
 
 }

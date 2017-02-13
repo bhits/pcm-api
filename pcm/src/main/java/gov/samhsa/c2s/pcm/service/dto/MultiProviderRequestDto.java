@@ -26,21 +26,17 @@
 package gov.samhsa.c2s.pcm.service.dto;
 
 
+import lombok.Data;
+
 import java.util.Set;
 
 /**
  * The Class ConsentListDto.
  */
+@Data
 public class MultiProviderRequestDto {
 
 	/** The to disclose name. */
 	private Set<String> npiList;
 
-	public Set<String> getNpiList() {
-		return npiList;
-	}
-
-	public void setNpiList(Set<String> npiList) {
-		this.npiList = npiList;
-	}
 }
