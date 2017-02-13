@@ -135,6 +135,6 @@ public class ProviderRestController {
      */
     @RequestMapping(value = "providers", method = RequestMethod.POST)
     public void addMultipleProviders(Principal principal, @RequestBody MultiProviderRequestDto npiList) {
-        providerSearchLookupService.addMultipleProviders(principal, npiList);
+        providerSearchLookupService.addMultipleProviders(principal.getName(), npiList);
     }
 }

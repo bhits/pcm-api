@@ -147,8 +147,7 @@ public class ProviderSearchLookupServiceImpl implements ProviderSearchLookupServ
     }
 
     @Override
-    public void addMultipleProviders(Principal principal, MultiProviderRequestDto npiList) {
-        final String username = principal.getName();
+    public void addMultipleProviders(String username, MultiProviderRequestDto npiList) {
         for(String npi : npiList.getNpiList()){
             addProvider(username,npi);
         }

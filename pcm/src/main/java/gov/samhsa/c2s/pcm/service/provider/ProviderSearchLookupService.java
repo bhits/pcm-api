@@ -73,6 +73,6 @@ public interface ProviderSearchLookupService {
 
 	public void addProvider(String username, String npi);
 
-	public void addMultipleProviders(Principal principal,MultiProviderRequestDto npiList);
+	public void addMultipleProviders(String username,MultiProviderRequestDto npiList);
 
 }
