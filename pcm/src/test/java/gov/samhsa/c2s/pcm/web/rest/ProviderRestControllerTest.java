@@ -144,7 +144,7 @@ public class ProviderRestControllerTest {
         String principalName = "test";
 
         when(principal.getName()).thenReturn(principalName);
-        Mockito.doThrow(ProviderAlreadyInUseException.class).when(providerSearchLookupService).addMultipleProviders(principal,multiProviderRequestDto);
+        Mockito.doThrow(ProviderAlreadyInUseException.class).when(providerSearchLookupService).addMultipleProviders(principalName,multiProviderRequestDto);
         mockMvc.perform(post(url).principal(principal)).andExpect(status().is4xxClientError());
     }
 }
