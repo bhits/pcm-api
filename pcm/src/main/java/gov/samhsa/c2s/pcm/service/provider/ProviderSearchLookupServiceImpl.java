@@ -26,23 +26,29 @@
 package gov.samhsa.c2s.pcm.service.provider;
 
 
+import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
+import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProvider;
+import gov.samhsa.c2s.pcm.domain.reference.EntityType;
 import gov.samhsa.c2s.pcm.infrastructure.PlsService;
 import gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto;
 import gov.samhsa.c2s.pcm.service.dto.LookupDto;
+import gov.samhsa.c2s.pcm.service.dto.MultiProviderRequestDto;
+import gov.samhsa.c2s.pcm.service.exception.ProviderAlreadyInUseException;
+import gov.samhsa.c2s.pcm.service.exception.ProviderNotFoundException;
 import gov.samhsa.c2s.pcm.service.reference.StateCodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 
 /**
  * The Class ProviderSearchLookupServiceImpl.
  */
 @Transactional
-public class ProviderSearchLookupServiceImpl implements
-        ProviderSearchLookupService {
+public class ProviderSearchLookupServiceImpl implements ProviderSearchLookupService {
 
     /**
      * The logger.
@@ -58,9 +64,33 @@ public class ProviderSearchLookupServiceImpl implements
     String providerSearchURL;
 
     /**
+     * The Constant NPI_LENGTH.
+     */
+    public static final int NPI_LENGTH = 10;
+
+    /**
      * The state code service.
      */
     protected StateCodeService stateCodeService;
+
+    /**
+     * The individual provider service.
+     */
+    @Autowired
+    private IndividualProviderService individualProviderService;
+
+    /**
+     * The organizational provider service.
+     */
+    @Autowired
+    private OrganizationalProviderService organizationalProviderService;
+
+    /**
+     * The provider search lookup service.
+     */
+    @Autowired
+    private ProviderSearchLookupService providerSearchLookupService;
+
 
     /**
      * Instantiates a new provider search lookup service impl.
@@ -83,6 +113,44 @@ public class ProviderSearchLookupServiceImpl implements
     @Override
     public ProviderDto providerSearchByNpi(String npi) {
         return plsService.getProvider(npi);
+    }
+
+    @Override
+    public void addProvider(String username, String npi){
+        OrganizationalProvider organizationalProviderReturned = null;
+        IndividualProvider individualProviderReturned = null;
+        boolean isOrgProvider = false;
+
+        if (npi.length() == NPI_LENGTH && npi.matches("[0-9]+")) {
+
+            ProviderDto providerDto = providerSearchByNpi(npi);
+
+            if ((EntityType.valueOf(providerDto.getEntityType().getDisplayName()) == EntityType.Organization)) {
+                isOrgProvider = true;
+                organizationalProviderReturned = organizationalProviderService
+                        .addNewOrganizationalProvider(providerDto, username);
+            } else {
+                isOrgProvider = false;
+                individualProviderReturned = individualProviderService.addNewIndividualProvider(providerDto, username);
+            }
+
+            if (isOrgProvider == true) {
+                if (organizationalProviderReturned == null)
+                    throw new ProviderAlreadyInUseException("Error: The provider could not be added because the provider already exists in the patient’s account.");
+            } else {
+                if (individualProviderReturned == null)
+                    throw new ProviderAlreadyInUseException("Error: The provider could not be added because the provider already exists in the patient’s account.");
+            }
+        } else {
+            throw new ProviderNotFoundException("Error:The provider could not be added because the specified NPI could not be found.");
+        }
+    }
+
+    @Override
+    public void addMultipleProviders(String username, MultiProviderRequestDto npiList) {
+        for(String npi : npiList.getNpiList()){
+            addProvider(username,npi);
+        }
     }
 
     /*

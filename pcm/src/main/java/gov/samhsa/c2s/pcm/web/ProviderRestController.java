@@ -29,6 +29,7 @@ import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProvider;
 import gov.samhsa.c2s.pcm.domain.reference.EntityType;
 import gov.samhsa.c2s.pcm.infrastructure.dto.ProviderDto;
+import gov.samhsa.c2s.pcm.service.dto.MultiProviderRequestDto;
 import gov.samhsa.c2s.pcm.service.exception.CannotDeleteProviderException;
 import gov.samhsa.c2s.pcm.service.exception.ProviderAlreadyInUseException;
 import gov.samhsa.c2s.pcm.service.exception.ProviderNotFoundException;
@@ -39,10 +40,7 @@ import gov.samhsa.c2s.pcm.service.provider.ProviderSearchLookupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Set;
@@ -54,10 +52,6 @@ import java.util.Set;
 @RequestMapping("/patients")
 public class ProviderRestController {
 
-    /**
-     * The Constant NPI_LENGTH.
-     */
-    public static final int NPI_LENGTH = 10;
     /**
      * The logger.
      */
@@ -123,40 +117,24 @@ public class ProviderRestController {
             }
     }
 
-    /**
+     /**
      * Adds the provider.
      *
      * @param npi the npi
      */
     @RequestMapping(value = "providers/{npi}", method = RequestMethod.POST)
     public void addProvider(Principal principal, @PathVariable("npi") String npi) {
-        final String username = principal.getName();
-        OrganizationalProvider organizationalProviderReturned = null;
-        IndividualProvider individualProviderReturned = null;
-        boolean isOrgProvider = false;
+        providerSearchLookupService.addProvider( principal.getName(), npi);
+    }
 
-        if (npi.length() == NPI_LENGTH && npi.matches("[0-9]+")) {
 
-            ProviderDto providerDto = providerSearchLookupService.providerSearchByNpi(npi);
-
-            if ((EntityType.valueOf(providerDto.getEntityType().getDisplayName()) == EntityType.Organization)) {
-                isOrgProvider = true;
-                organizationalProviderReturned = organizationalProviderService
-                        .addNewOrganizationalProvider(providerDto, username);
-            } else {
-                isOrgProvider = false;
-                individualProviderReturned = individualProviderService.addNewIndividualProvider(providerDto, username);
-            }
-
-            if (isOrgProvider == true) {
-                if (organizationalProviderReturned == null)
-                    throw new ProviderAlreadyInUseException("Error: The provider could not be added because the provider already exists in the patient’s account.");
-            } else {
-                if (individualProviderReturned == null)
-                    throw new ProviderAlreadyInUseException("Error: The provider could not be added because the provider already exists in the patient’s account.");
-            }
-        } else {
-            throw new ProviderNotFoundException("Error:The provider could not be added because the specified NPI could not be found.");
-        }
+    /**
+     * Adds multiple providers.
+     *
+     * @param npiList list of the npi
+     */
+    @RequestMapping(value = "providers", method = RequestMethod.POST)
+    public void addMultipleProviders(Principal principal, @RequestBody MultiProviderRequestDto npiList) {
+        providerSearchLookupService.addMultipleProviders(principal.getName(), npiList);
     }
 }
