@@ -26,13 +26,33 @@
 package gov.samhsa.c2s.pcm.web;
 
 import gov.samhsa.c2s.common.consentgen.ConsentGenException;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentTermsVersions;
+import gov.samhsa.c2s.pcm.domain.reference.PurposeOfUseCode;
 import gov.samhsa.c2s.pcm.infrastructure.eventlistener.EventService;
 import gov.samhsa.c2s.pcm.infrastructure.securityevent.FileDownloadedEvent;
 import gov.samhsa.c2s.pcm.service.consent.ConsentHelper;
 import gov.samhsa.c2s.pcm.service.consent.ConsentService;
 import gov.samhsa.c2s.pcm.service.consent.ConsentStatus;
-import gov.samhsa.c2s.pcm.service.dto.*;
-import gov.samhsa.c2s.pcm.service.exception.*;
+import gov.samhsa.c2s.pcm.service.dto.AbstractPdfDto;
+import gov.samhsa.c2s.pcm.service.dto.AttestationDto;
+import gov.samhsa.c2s.pcm.service.dto.AttestedDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentAttestationDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentPdfDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentRevocationAttestationDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentValidationDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentsListDto;
+import gov.samhsa.c2s.pcm.service.dto.PatientProfileDto;
+import gov.samhsa.c2s.pcm.service.dto.RevocationDto;
+import gov.samhsa.c2s.pcm.service.dto.SpecificMedicalInfoDto;
+import gov.samhsa.c2s.pcm.service.exception.CannotDeleteConsentException;
+import gov.samhsa.c2s.pcm.service.exception.ConflictingConsentException;
+import gov.samhsa.c2s.pcm.service.exception.ConsentNotBelongingToPatientException;
+import gov.samhsa.c2s.pcm.service.exception.InternalServerErrorException;
+import gov.samhsa.c2s.pcm.service.exception.InvalidConsentDatesException;
+import gov.samhsa.c2s.pcm.service.exception.MissingPurposeOfUseException;
+import gov.samhsa.c2s.pcm.service.exception.TooManyProvidersSelectedException;
+import gov.samhsa.c2s.pcm.service.exception.UnprocessableConsentAddRequestException;
 import gov.samhsa.c2s.pcm.service.fhir.FhirConsentService;
 import gov.samhsa.c2s.pcm.service.notification.NotificationService;
 import gov.samhsa.c2s.pcm.service.patient.PatientService;
@@ -45,14 +65,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * The Class ConsentRestController.
@@ -107,6 +141,9 @@ public class ConsentRestController {
     @Autowired
     private FhirConsentService fhirConsentService;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @RequestMapping(value = "consents/pageNumber/{pageNumber}")
     public ConsentsListDto listConsents(@PathVariable("pageNumber") String pageNumber) {
         // FIXME (#7): remove this line when patient creation concept in PCM is finalized
@@ -121,15 +158,55 @@ public class ConsentRestController {
 
         List<AddConsentFieldsDto> purposeOfUseDto = purposeOfUseCodeService
                 .findAllPurposeOfUseCodesAddConsentFieldsDto();
+        Locale locale = LocaleContextHolder.getLocale();
+        if (!locale.getLanguage().equalsIgnoreCase("en")) {
+            for (AddConsentFieldsDto addConsentFieldsDto : purposeOfUseDto) {
+
+                //the properties file: key-value should be like : code.name=value, code.description=value
+                List<String> purposeNameAndDescription = getMultiLangName (locale, addConsentFieldsDto.getCode());
+                addConsentFieldsDto.setDisplayName(purposeNameAndDescription.get(0));//displayName
+                addConsentFieldsDto.setDescription(purposeNameAndDescription.get(1));//description
+            }
+        }
         return purposeOfUseDto;
     }
 
     @RequestMapping(value = "sensitivityPolicy")
     public List<ValueSetCategoryFieldsDto> sensitivityPolicyLookup() {
 
+        //String language = request.getHeader("Accept-Language");
+        //get Locale - solution 1: do not rely on request  -- added by Wentao
+        Locale locale = LocaleContextHolder.getLocale();
+        //solution 2: Locale locale = RequestContextUtils.getLocale(request);
+
         List<ValueSetCategoryFieldsDto> sensitivityPolicyDtos = valueSetCategoryService
                 .findAllValueSetCategoriesAddConsentFieldsDto();
+
+        // re-set name and description for multi-language - added by Wentao
+        if (!locale.getLanguage().equalsIgnoreCase("en")) {
+            for (ValueSetCategoryFieldsDto vssCategory : sensitivityPolicyDtos) {
+                //the properties file: key-value should be like : code.name=value, code.description=value
+                List<String> vssNameAndDescription = getMultiLangName (locale, vssCategory.getCode());
+                vssCategory.setDisplayName(vssNameAndDescription.get(0));//displayName
+                vssCategory.setDescription(vssNameAndDescription.get(1));//Description
+            }
+        }
+
+
         return sensitivityPolicyDtos;
+    }
+
+    /**
+     * get display name and description for vss catergories according to locale
+     * author:  Wentao
+     * */
+    public List<String> getMultiLangName (Locale locale, String vssCode) {
+
+        List<String> vssNameAndDescription = new ArrayList<String>();
+        vssNameAndDescription.add(messageSource.getMessage(vssCode + ".NAME", null, locale));
+        vssNameAndDescription.add(messageSource.getMessage(vssCode + ".DESCRIPTION", null, locale));
+
+        return vssNameAndDescription;
     }
 
     @RequestMapping(value = "consents/{consentId}", method = RequestMethod.DELETE)
@@ -404,11 +481,23 @@ public class ConsentRestController {
     @RequestMapping(value = "consents/{consentId}/attestation", method = RequestMethod.GET)
     public ConsentAttestationDto getConsentAttestationDto(Principal principal, @PathVariable("consentId") Long consentId) throws ConsentGenException {
         final Long patientId = patientService.findIdByUsername(principal.getName());
-
+        Locale locale = LocaleContextHolder.getLocale();
         //TODO (#10): Move check for consent belonging to this user and consent signed stage to service
         if (consentService.isConsentBelongToThisUser(consentId, patientId)
                 && consentService.getConsentStatus(consentId).equals(ConsentStatus.CONSENT_SAVED)) {
-            return consentService.getConsentAttestationDto(principal.getName(),consentId);
+            ConsentAttestationDto consentAttestationDto = consentService.getConsentAttestationDto(principal.getName(),consentId);
+            //return consentService.getConsentAttestationDto(principal.getName(),consentId);
+            if (!locale.getLanguage().equalsIgnoreCase("en")) {
+                for (PurposeOfUseCode purposeOfUseCode : consentAttestationDto.getPurposeOfUseCodes()) {
+                    String useCode = purposeOfUseCode.getCode();
+                    purposeOfUseCode.setDisplayName(messageSource.getMessage(useCode + ".NAME", null, locale));
+                    purposeOfUseCode.setOriginalText(messageSource.getMessage(useCode + ".DESCRIPTION", null, locale));
+                }
+                ConsentTermsVersions consentTerm = consentAttestationDto.getConsentTermsVersions();
+                consentTerm.setConsentTermsText(messageSource.getMessage("CONSENT.TERMS.TEXT", null, locale));
+            }
+
+            return consentAttestationDto;
         } else
             throw new InternalServerErrorException("Consent Attestation Dto Not Found");
     }

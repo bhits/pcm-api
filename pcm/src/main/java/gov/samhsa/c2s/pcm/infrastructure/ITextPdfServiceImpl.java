@@ -4,6 +4,9 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import gov.samhsa.c2s.pcm.domain.consent.Consent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -14,6 +17,10 @@ import java.util.Objects;
 
 @Service
 public class ITextPdfServiceImpl implements ITextPdfService {
+
+    @Autowired
+    MessageSource messageSource;
+
     //Create document title
     @Override
     public Paragraph createParagraphWithContent(String title, Font font) {
@@ -128,7 +135,7 @@ public class ITextPdfServiceImpl implements ITextPdfService {
         PdfPTable consentReferenceNumberTable = createBorderlessTable(1);
 
         if (consent != null) {
-            consentReferenceNumberTable.addCell(createBorderlessCell("Consent Reference Number:", null));
+            consentReferenceNumberTable.addCell(createBorderlessCell(messageSource.getMessage("CONSENT.REFERENCE.NUMBER", null, LocaleContextHolder.getLocale()), null));
             Font consentRefNumberFont = new Font(Font.FontFamily.TIMES_ROMAN, 11);
             consentReferenceNumberTable.addCell(createBorderlessCell(consent.getConsentReferenceId(), consentRefNumberFont));
         }
@@ -143,15 +150,15 @@ public class ITextPdfServiceImpl implements ITextPdfService {
         if (isSigned && StringUtils.hasText(firstName) && StringUtils.hasText(lastName) && StringUtils.hasText(email) && Objects.nonNull(attestedOn)) {
             Font patientInfoFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
 
-            PdfPCell attesterName = new PdfPCell(createCellContent("Signed by: ", patientInfoFont, getFullName(firstName, lastName), null));
+            PdfPCell attesterName = new PdfPCell(createCellContent(messageSource.getMessage("SIGNED.BY", null, LocaleContextHolder.getLocale()), patientInfoFont, getFullName(firstName, lastName), null));
             attesterName.setBorder(Rectangle.NO_BORDER);
             signingDetailsTable.addCell(attesterName);
 
-            PdfPCell attesterEmailCell = new PdfPCell(createCellContent("Email: ", patientInfoFont, email, null));
+            PdfPCell attesterEmailCell = new PdfPCell(createCellContent(messageSource.getMessage("EMAIL", null, LocaleContextHolder.getLocale()), patientInfoFont, email, null));
             attesterEmailCell.setBorder(Rectangle.NO_BORDER);
             signingDetailsTable.addCell(attesterEmailCell);
 
-            PdfPCell attesterSignDateCell = new PdfPCell(createCellContent("Signed on: ", patientInfoFont, formatDate(attestedOn), null));
+            PdfPCell attesterSignDateCell = new PdfPCell(createCellContent(messageSource.getMessage("SIGNED.ON", null, LocaleContextHolder.getLocale()), patientInfoFont, formatDate(attestedOn), null));
             attesterSignDateCell.setBorder(Rectangle.NO_BORDER);
             signingDetailsTable.addCell(attesterSignDateCell);
         }
@@ -169,10 +176,10 @@ public class ITextPdfServiceImpl implements ITextPdfService {
 
         if (StringUtils.hasText(firstName) && StringUtils.hasText(lastName) && Objects.nonNull(birthDate)) {
             Font patientInfoFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
-            PdfPCell patientNameCell = new PdfPCell(createCellContent("Patient Name: ", null, getFullName(firstName, lastName), patientInfoFont));
+            PdfPCell patientNameCell = new PdfPCell(createCellContent(messageSource.getMessage("PATIENT.NAME", null, LocaleContextHolder.getLocale()), null, getFullName(firstName, lastName), patientInfoFont));
             patientNameCell.setBorder(Rectangle.NO_BORDER);
 
-            PdfPCell patientDOBCell = new PdfPCell(createCellContent("Patient DOB: ", null, formatDate(birthDate), patientInfoFont));
+            PdfPCell patientDOBCell = new PdfPCell(createCellContent(messageSource.getMessage("PATIENT.DOB", null, LocaleContextHolder.getLocale()), null, formatDate(birthDate), patientInfoFont));
             patientDOBCell.setBorder(Rectangle.NO_BORDER);
 
             consentReferenceNumberTable.addCell(patientNameCell);
