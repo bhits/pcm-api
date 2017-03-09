@@ -174,6 +174,7 @@ public class AuditServiceImpl implements AuditService {
     }
 
     private String convertAttestedConsentRevType(String revType, String type) {
+        boolean returnRevType = false;
         switch (type) {
             case "Attested Consent":
                 type = "Sign entry";
@@ -181,13 +182,13 @@ public class AuditServiceImpl implements AuditService {
             case "Attested Consent Revocation":
                 type = "Revoke entry";
                 break;
-            //default:
-                //return revType;
+            default:
+                returnRevType = true;
         }
         if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
-            return type;
+            return returnRevType ? revType : type;
         } else {
-            return replaceWithDesignedLang(type);
+            return returnRevType ? replaceWithDesignedLang(revType) : replaceWithDesignedLang(type);
         }
         //return type;
     }
