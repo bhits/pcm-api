@@ -32,18 +32,49 @@ import gov.samhsa.c2s.common.document.converter.DocumentXmlConverter;
 import gov.samhsa.c2s.common.document.transformer.XmlTransformer;
 import gov.samhsa.c2s.common.util.UniqueValueGeneratorException;
 import gov.samhsa.c2s.pcm.config.PcmProperties;
-import gov.samhsa.c2s.pcm.domain.consent.*;
+import gov.samhsa.c2s.pcm.domain.consent.AttestedConsent;
+import gov.samhsa.c2s.pcm.domain.consent.AttestedConsentRevocation;
+import gov.samhsa.c2s.pcm.domain.consent.Consent;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentDoNotShareClinicalDocumentTypeCode;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentDoNotShareSensitivityPolicyCode;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentFactory;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentIndividualProviderDisclosureIsMadeTo;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentIndividualProviderPermittedToDisclose;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentOrganizationalProviderDisclosureIsMadeTo;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentOrganizationalProviderPermittedToDisclose;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentPdfGenerator;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentRepository;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentShareForPurposeOfUseCode;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentTermsVersions;
 import gov.samhsa.c2s.pcm.domain.patient.Patient;
 import gov.samhsa.c2s.pcm.domain.patient.PatientRepository;
-import gov.samhsa.c2s.pcm.domain.provider.*;
-import gov.samhsa.c2s.pcm.domain.reference.*;
+import gov.samhsa.c2s.pcm.domain.provider.AbstractProvider;
+import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
+import gov.samhsa.c2s.pcm.domain.provider.IndividualProviderRepository;
+import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProvider;
+import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProviderRepository;
+import gov.samhsa.c2s.pcm.domain.reference.ClinicalConceptCode;
+import gov.samhsa.c2s.pcm.domain.reference.ClinicalDocumentTypeCode;
+import gov.samhsa.c2s.pcm.domain.reference.ClinicalDocumentTypeCodeRepository;
+import gov.samhsa.c2s.pcm.domain.reference.PurposeOfUseCode;
+import gov.samhsa.c2s.pcm.domain.reference.PurposeOfUseCodeRepository;
 import gov.samhsa.c2s.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.c2s.pcm.domain.valueset.ValueSetCategoryRepository;
 import gov.samhsa.c2s.pcm.infrastructure.AbstractConsentRevokationPdfGenerator;
 import gov.samhsa.c2s.pcm.infrastructure.PhrService;
 import gov.samhsa.c2s.pcm.infrastructure.dto.PatientDto;
 import gov.samhsa.c2s.pcm.service.consentexport.ConsentExportService;
-import gov.samhsa.c2s.pcm.service.dto.*;
+import gov.samhsa.c2s.pcm.service.dto.AbstractPdfDto;
+import gov.samhsa.c2s.pcm.service.dto.AttestationDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentAttestationDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentListDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentPdfDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentRevocationAttestationDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentRevokationPdfDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentValidationDto;
+import gov.samhsa.c2s.pcm.service.dto.SpecificMedicalInfoDto;
+import gov.samhsa.c2s.pcm.service.dto.XacmlDto;
 import gov.samhsa.c2s.pcm.service.exception.AttestedConsentException;
 import gov.samhsa.c2s.pcm.service.exception.AttestedConsentRevocationException;
 import gov.samhsa.c2s.pcm.service.exception.XacmlNotFoundException;
@@ -53,6 +84,9 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -62,7 +96,9 @@ import org.springframework.util.Assert;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -70,7 +106,16 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * The Class ConsentServiceImpl.
@@ -217,6 +262,9 @@ public class ConsentServiceImpl implements ConsentService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private MessageSource messageSource;
+
     /*
      * (non-Javadoc)
      *
@@ -267,6 +315,7 @@ public class ConsentServiceImpl implements ConsentService {
     public List<ConsentListDto> consentListToConsentListDtosConverter(
             List<Consent> consents) {
         final List<ConsentListDto> consentListDtos = makeConsentListDtos();
+        Locale locale = LocaleContextHolder.getLocale();
         for (final Consent consent : consents) {
             final ConsentListDto consentListDto = new ConsentListDto();
             // Get fields
@@ -309,14 +358,23 @@ public class ConsentServiceImpl implements ConsentService {
             final Set<String> consentDoNotShareSensitivityPolicyCode = new HashSet<String>();
             for (final ConsentDoNotShareSensitivityPolicyCode item : consent
                     .getDoNotShareSensitivityPolicyCodes()) {
-                consentDoNotShareSensitivityPolicyCode.add(item
-                        .getValueSetCategory().getName());
+                if (locale.getLanguage().equalsIgnoreCase("en")) {
+                    consentDoNotShareSensitivityPolicyCode.add(item
+                            .getValueSetCategory().getName());
+                }else {
+                    consentDoNotShareSensitivityPolicyCode.add(messageSource.getMessage(item.getValueSetCategory().getCode()+ ".NAME", null, locale));
+                }
             }
 
             final Set<String> consentShareForPurposeOfUseCode = new HashSet<String>();
             for (final ConsentShareForPurposeOfUseCode item : consent
                     .getShareForPurposeOfUseCodes()) {
-                consentShareForPurposeOfUseCode.add(item.getPurposeOfUseCode().getDisplayName());
+                if (locale.getLanguage().equalsIgnoreCase("en")) {
+                    consentShareForPurposeOfUseCode.add(item.getPurposeOfUseCode().getDisplayName());
+                } else {
+                    consentShareForPurposeOfUseCode.add(messageSource.getMessage(item.getPurposeOfUseCode().getCode() + ".NAME", null, locale));
+                }
+
             }
 
             final Set<PurposeOfUseCode> shareForPurposeOfUse = new HashSet<PurposeOfUseCode>();
@@ -504,15 +562,37 @@ public class ConsentServiceImpl implements ConsentService {
             }
 
             final Set<String> shareSensitivityPolicyDisplayName = new HashSet<String>();
+            //used to deal with multi-language display name <code, text>- added by Wentao
+            final Map<String, String> multiLangDisplayName = new HashMap<String, String>();
+            Locale locale = LocaleContextHolder.getLocale();
             List<ValueSetCategory> valueSetCategoryList = valueSetCategoryRepository
                     .findAll();
             //All possible VSC
             for (ValueSetCategory valueSetCategory : valueSetCategoryList) {
                 String valueSetName = valueSetCategory.getName();
-                shareSensitivityPolicyDisplayName.add(valueSetName);
+                if (locale.getLanguage().equalsIgnoreCase("en")) {
+                    shareSensitivityPolicyDisplayName.add(valueSetName);
+                } else {
+                    shareSensitivityPolicyDisplayName.add(messageSource.getMessage(valueSetCategory.getCode() + ".NAME", null, locale));
+                }
             }
             for (final ConsentDoNotShareSensitivityPolicyCode item : consent.getDoNotShareSensitivityPolicyCodes()) {
-                shareSensitivityPolicyDisplayName.remove(item.getValueSetCategory().getName());
+
+                if (locale.getLanguage().equalsIgnoreCase("en")) {
+                    shareSensitivityPolicyDisplayName.remove(item.getValueSetCategory().getName());
+                } else {
+                    shareSensitivityPolicyDisplayName.remove(messageSource.getMessage(item.getValueSetCategory().getCode() + ".NAME", null, locale));
+                }
+            }
+
+            //traverse the map to alter display name
+            if (!locale.getLanguage().equalsIgnoreCase("en")) {
+                Iterator<Map.Entry<String, String>> it = multiLangDisplayName.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry<String, String> entry = it.next();
+                    String message = messageSource.getMessage(entry.getKey() + ".NAME", null, locale);
+                    shareSensitivityPolicyDisplayName.add(message);
+                }
             }
 
             // Set fields
@@ -576,7 +656,12 @@ public class ConsentServiceImpl implements ConsentService {
             consentRevocationAttestationDto.setConsentRevokeTermsAccepted(false);
 
             String currentConsentRevokeTermsText = consentRevocationTermsVersionsService.findByLatestEnabledVersion().getConsentRevokeTermsText();
-            consentRevocationAttestationDto.setConsentRevokeTermsText(currentConsentRevokeTermsText);
+            Locale locale = LocaleContextHolder.getLocale();
+            if (locale.getLanguage().equalsIgnoreCase("en")) {
+                consentRevocationAttestationDto.setConsentRevokeTermsText(currentConsentRevokeTermsText);
+            } else {
+                consentRevocationAttestationDto.setConsentRevokeTermsText(messageSource.getMessage("REVOCATION.TERMS.TEXT", null, locale));
+            }
         }
 
         return consentRevocationAttestationDto;
@@ -948,7 +1033,12 @@ public class ConsentServiceImpl implements ConsentService {
 
             attestedConsent.setPatientGuid(consent.getPatient().getMedicalRecordNumber());
 
-            String term = consentTerms.getConsentTermsText();
+            String term = "";
+            if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
+                term = consentTerms.getConsentTermsText();
+            } else {
+                term = messageSource.getMessage("CONSENT.TERMS.TEXT", null, LocaleContextHolder.getLocale());
+            }
             attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent, patient, true, attestedOn, term));
 
             consent.setAttestedConsent(attestedConsent);
@@ -1406,8 +1496,12 @@ public class ConsentServiceImpl implements ConsentService {
         consent.setName("Consent");
         consent.setDescription("This is a consent made by "
                 + patient.getFirstName() + " " + patient.getLastName());
-        String terms = consentTermsVersionsService.getEnabledConsentTermsVersion().getConsentTermsText();
-
+        String terms = "";
+        if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
+            terms = consentTermsVersionsService.getEnabledConsentTermsVersion().getConsentTermsText();
+        } else {
+            terms = messageSource.getMessage("CONSENT.TERMS.TEXT", null, LocaleContextHolder.getLocale());
+        }
         consent.setUnAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent, patient, false, null, terms));
 
         try {
