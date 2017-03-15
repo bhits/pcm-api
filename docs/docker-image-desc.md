@@ -5,7 +5,7 @@ PCM provides APIs to manage patient provider lists and enables patients to manag
 
 # Supported Source Code Tags and Current `Dockerfile` Link
 
-[`1.22.0 (latest)`](https://github.com/bhits/pcm-api/releases/tag/1.22.0), [`1.18.0`](https://github.com/bhits/pcm-api/releases/tag/1.18.0)
+[`1.23.0 (latest)`](https://github.com/bhits/pcm-api/releases/tag/1.23.0), [`1.22.0`](https://github.com/bhits/pcm-api/releases/tag/1.22.0), [`1.18.0`](https://github.com/bhits/pcm-api/releases/tag/1.18.0)
 
 [`Current Dockerfile`](hhttps://github.com/bhits/pcm-api/blob/master/pcm/src/main/docker/Dockerfile)
 
