@@ -1,9 +1,5 @@
 package gov.samhsa.c2s.pcm.infrastructure;
 
-/**
- * Created by tomson.ngassa on 11/14/2016.
- */
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategy;

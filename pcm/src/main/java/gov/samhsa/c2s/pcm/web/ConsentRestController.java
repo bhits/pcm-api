@@ -174,15 +174,12 @@ public class ConsentRestController {
     @RequestMapping(value = "sensitivityPolicy")
     public List<ValueSetCategoryFieldsDto> sensitivityPolicyLookup() {
 
-        //String language = request.getHeader("Accept-Language");
-        //get Locale - solution 1: do not rely on request  -- added by Wentao
         Locale locale = LocaleContextHolder.getLocale();
-        //solution 2: Locale locale = RequestContextUtils.getLocale(request);
 
         List<ValueSetCategoryFieldsDto> sensitivityPolicyDtos = valueSetCategoryService
                 .findAllValueSetCategoriesAddConsentFieldsDto();
 
-        // re-set name and description for multi-language - added by Wentao
+        // re-set name and description for multi-language
         if (!locale.getLanguage().equalsIgnoreCase("en")) {
             for (ValueSetCategoryFieldsDto vssCategory : sensitivityPolicyDtos) {
                 //the properties file: key-value should be like : code.name=value, code.description=value
@@ -198,7 +195,7 @@ public class ConsentRestController {
 
     /**
      * get display name and description for vss catergories according to locale
-     * author:  Wentao
+     *
      * */
     public List<String> getMultiLangName (Locale locale, String vssCode) {
 

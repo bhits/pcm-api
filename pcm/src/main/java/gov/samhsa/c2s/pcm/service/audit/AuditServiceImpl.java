@@ -163,7 +163,7 @@ public class AuditServiceImpl implements AuditService {
         return type;
     }
 
-    //convert type name with desired language  - Wentao
+    //convert type name with desired language
     private String convertRevClassNameToTypeWithLang(String revType) {
         String type = convertRevClassNameToType (revType);
         if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
@@ -195,7 +195,7 @@ public class AuditServiceImpl implements AuditService {
 
     /**
      * get type name in designed language
-     * Wentao
+     *
      * */
     private String replaceWithDesignedLang(String str) {
         Locale locale = LocaleContextHolder.getLocale();

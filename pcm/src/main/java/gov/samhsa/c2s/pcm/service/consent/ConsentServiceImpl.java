@@ -562,7 +562,7 @@ public class ConsentServiceImpl implements ConsentService {
             }
 
             final Set<String> shareSensitivityPolicyDisplayName = new HashSet<String>();
-            //used to deal with multi-language display name <code, text>- added by Wentao
+            //Used to deal with multi-language display name <code, text>
             final Map<String, String> multiLangDisplayName = new HashMap<String, String>();
             Locale locale = LocaleContextHolder.getLocale();
             List<ValueSetCategory> valueSetCategoryList = valueSetCategoryRepository

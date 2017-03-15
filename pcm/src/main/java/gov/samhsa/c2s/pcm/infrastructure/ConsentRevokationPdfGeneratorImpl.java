@@ -176,7 +176,7 @@ public class ConsentRevokationPdfGeneratorImpl extends
 
     /**
      * get regarding terms text based on locale
-     * author: Wentao
+     *
      * */
     public String getRegardingTermsText () {
         Locale locale = LocaleContextHolder.getLocale();
