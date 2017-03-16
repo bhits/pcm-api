@@ -37,11 +37,14 @@ import gov.samhsa.c2s.pcm.service.consent.ConsentRevocationTermsVersionsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * The Class ConsentRevokationPdfGeneratorImpl.
@@ -60,6 +63,9 @@ public class ConsentRevokationPdfGeneratorImpl extends
 
     @Autowired
     private ConsentRevocationTermsVersionsService consentRevocationTermsVersionsService;
+
+    @Autowired
+    private MessageSource messageSource;
 
     /*
      * (non-Javadoc)
@@ -84,13 +90,13 @@ public class ConsentRevokationPdfGeneratorImpl extends
 
             // Title
             Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.BOLD);
-            document.add(iTextPdfService.createParagraphWithContent("Revocation of Consent to Participate in Health Information Exchange", titleFont));
+            document.add(iTextPdfService.createParagraphWithContent(messageSource.getMessage("REVOCATION.PDF.TITLE", null, LocaleContextHolder.getLocale()), titleFont));
 
             // Blank line
             document.add(Chunk.NEWLINE);
 
             // Consent Created Date
-            document.add(iTextPdfService.createParagraphWithContent("Created On: " + iTextPdfService.formatDate(consent.getCreatedDateTime()), null));
+            document.add(iTextPdfService.createParagraphWithContent(messageSource.getMessage("REVOCATION.PDF.DATE", null, LocaleContextHolder.getLocale()) + iTextPdfService.formatDate(consent.getCreatedDateTime()), null));
 
             //consent Reference Number
             document.add(iTextPdfService.createConsentReferenceNumberTable(consent));
@@ -102,7 +108,7 @@ public class ConsentRevokationPdfGeneratorImpl extends
 
             document.add(new Paragraph(" "));
 
-            document.add(new Paragraph(consentRevocationTermsVersionsService.findDtoByLatestEnabledVersion().getConsentRevokeTermsText()));
+            document.add(new Paragraph(getRegardingTermsText ()));
 
             document.add(new Paragraph(" "));
 
@@ -136,13 +142,13 @@ public class ConsentRevokationPdfGeneratorImpl extends
 
             // Title
             Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.BOLD);
-            document.add(iTextPdfService.createParagraphWithContent("Revocation of Consent to Participate in Health Information Exchange", titleFont));
+            document.add(iTextPdfService.createParagraphWithContent(messageSource.getMessage("REVOCATION.PDF.TITLE", null, LocaleContextHolder.getLocale()), titleFont));
 
             // Blank line
             document.add(Chunk.NEWLINE);
 
             // Consent Created Date
-            document.add(iTextPdfService.createParagraphWithContent("Created On: " + iTextPdfService.formatDate(consent.getCreatedDateTime()), null));
+            document.add(iTextPdfService.createParagraphWithContent(messageSource.getMessage("REVOCATION.PDF.DATE", null, LocaleContextHolder.getLocale()) + iTextPdfService.formatDate(consent.getCreatedDateTime()), null));
 
             //consent Reference Number
             document.add(iTextPdfService.createConsentReferenceNumberTable(consent));
@@ -154,7 +160,7 @@ public class ConsentRevokationPdfGeneratorImpl extends
 
             document.add(new Paragraph(" "));
 
-            document.add(new Paragraph(consentRevocationTermsVersionsService.findDtoByLatestEnabledVersion().getConsentRevokeTermsText()));
+            document.add(new Paragraph(getRegardingTermsText ()));
 
             document.close();
 
@@ -166,5 +172,22 @@ public class ConsentRevokationPdfGeneratorImpl extends
         byte[] pdfBytes = pdfOutputStream.toByteArray();
 
         return pdfBytes;
+    }
+
+    /**
+     * get regarding terms text based on locale
+     *
+     * */
+    public String getRegardingTermsText () {
+        Locale locale = LocaleContextHolder.getLocale();
+        if (locale.getLanguage().equalsIgnoreCase("en")
+                || locale.getLanguage().equalsIgnoreCase("")
+                || locale.getLanguage() == null) {
+            return consentRevocationTermsVersionsService.findDtoByLatestEnabledVersion().getConsentRevokeTermsText();
+        } else {
+            //String revocationTerm = consentRevocationTermsVersionsService.findDtoByLatestEnabledVersion().getConsentRevokeTermsText();
+            // due to there is only one term text
+            return messageSource.getMessage("REVOCATION.TERMS.TEXT", null, locale);
+        }
     }
 }

@@ -53,7 +53,8 @@ spring:
       mail.smtp.starttls.enable: true
       mail.smtp.ssl.trust: mail_host
   messages:
-    basename: i18n/messages
+    basename: i18n/messages/messages
+    encoding: UTF-8
 c2s:
   pcm:
     clinicaldata:

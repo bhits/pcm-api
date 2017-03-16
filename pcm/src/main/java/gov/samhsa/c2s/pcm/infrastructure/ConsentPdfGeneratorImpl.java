@@ -41,6 +41,8 @@ import gov.samhsa.c2s.pcm.infrastructure.exception.ConsentPdfGenerationException
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -75,6 +77,9 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     @Autowired
     private ClinicalDocumentTypeCodeRepository clinicalDocumentTypeCodeRepository;
 
+    @Autowired
+    private MessageSource messageSource;
+
     /*
      * (non-Javadoc)
      *
@@ -96,13 +101,13 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
             // Title
             Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.BOLD);
-            document.add(iTextPdfService.createParagraphWithContent("Consent to Share My Health Information", titleFont));
+            document.add(iTextPdfService.createParagraphWithContent(messageSource.getMessage("CONSENT.PDF.TITLE", null, LocaleContextHolder.getLocale()), titleFont));
 
             // Blank line
             document.add(Chunk.NEWLINE);
 
             // Consent Created Date
-            document.add(iTextPdfService.createParagraphWithContent("Created On: " + iTextPdfService.formatDate(consent.getCreatedDateTime()), null));
+            document.add(iTextPdfService.createParagraphWithContent(messageSource.getMessage("REVOCATION.PDF.DATE", null, LocaleContextHolder.getLocale()) + iTextPdfService.formatDate(consent.getCreatedDateTime()), null));
 
             //consent Reference Number
             document.add(iTextPdfService.createConsentReferenceNumberTable(consent));
@@ -115,27 +120,27 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             document.add(new Paragraph(" "));
 
             //Authorization to disclose section
-            document.add(iTextPdfService.createSectionTitle(" AUTHORIZATION TO DISCLOSE"));
+            document.add(iTextPdfService.createSectionTitle(messageSource.getMessage("CONSENT.PDF.SECTION1.TITLE", null, LocaleContextHolder.getLocale())));
             //Authorizes
-            document.add(new Paragraph("Authorizes: "));
+            document.add(new Paragraph(messageSource.getMessage("CONSENT.PDF.SECTION1.CONTENT1", null, LocaleContextHolder.getLocale())));
 
             document.add(createProviderPermittedToDiscloseTable(consent));
             //To disclose to
-            document.add(new Paragraph("To disclose to: "));
+            document.add(new Paragraph(messageSource.getMessage("CONSENT.PDF.SECTION1.CONTENT2", null, LocaleContextHolder.getLocale())));
 
             document.add(createProviderDisclosureIsMadeToTable(consent));
 
             document.add(new Paragraph(" "));
 
             //Health information to be disclosed section
-            document.add(iTextPdfService.createSectionTitle(" HEALTH INFORMATION TO BE DISCLOSED"));
+            document.add(iTextPdfService.createSectionTitle(messageSource.getMessage("CONSENT.PDF.SECTION2.TITLE", null, LocaleContextHolder.getLocale())));
 
             document.add(createHealthInformationToBeDisclose(consent));
 
             document.add(new Paragraph(" "));
 
             //Consent terms section
-            document.add(iTextPdfService.createSectionTitle(" CONSENT TERMS"));
+            document.add(iTextPdfService.createSectionTitle(messageSource.getMessage("CONSENT.PDF.SECTION3.TITLE", null, LocaleContextHolder.getLocale())));
 
             // Consent term
             document.add(createConsentTerms(terms, patientProfile));
@@ -171,10 +176,10 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
         if (consent != null) {
             Font patientDateFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
-            PdfPCell EffectiveDateCell = new PdfPCell(iTextPdfService.createCellContent("Effective Date: ", patientDateFont, iTextPdfService.formatDate(consent.getStartDate()), patientDateFont));
+            PdfPCell EffectiveDateCell = new PdfPCell(iTextPdfService.createCellContent(messageSource.getMessage("CONSENT.EFFECTIVE.DATE", null, LocaleContextHolder.getLocale()), patientDateFont, iTextPdfService.formatDate(consent.getStartDate()), patientDateFont));
             EffectiveDateCell.setBorder(Rectangle.NO_BORDER);
 
-            PdfPCell expirationDateCell = new PdfPCell(iTextPdfService.createCellContent("Expiration Date: ", patientDateFont, iTextPdfService.formatDate(consent.getEndDate()), patientDateFont));
+            PdfPCell expirationDateCell = new PdfPCell(iTextPdfService.createCellContent(messageSource.getMessage("CONSENT.EXPIRATION.DATE", null, LocaleContextHolder.getLocale()), patientDateFont, iTextPdfService.formatDate(consent.getEndDate()), patientDateFont));
             expirationDateCell.setBorder(Rectangle.NO_BORDER);
 
             PdfPCell emptyCell = new PdfPCell();
@@ -239,9 +244,9 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     }
 
     private void setNpiAddressState(PdfPTable providerTable, AbstractProvider provider) {
-        providerTable.addCell(createProviderPropertyValueTable("NPI Number", provider.getNpi()));
-        providerTable.addCell(createProviderPropertyValueTable("Address", composeAddress(provider)));
-        providerTable.addCell(createProviderPropertyValueTable("Phone", provider.getPracticeLocationAddressTelephoneNumber()));
+        providerTable.addCell(createProviderPropertyValueTable(messageSource.getMessage("CONSENT.PDF.NPI", null, LocaleContextHolder.getLocale()), provider.getNpi()));
+        providerTable.addCell(createProviderPropertyValueTable(messageSource.getMessage("CONSENT.PDF.ADDRESS", null, LocaleContextHolder.getLocale()), composeAddress(provider)));
+        providerTable.addCell(createProviderPropertyValueTable(messageSource.getMessage("CONSENT.PDF.PHONE", null, LocaleContextHolder.getLocale()), provider.getPracticeLocationAddressTelephoneNumber()));
     }
 
     private PdfPTable createProviderPermittedToDiscloseTable(Consent consent) {
@@ -249,14 +254,14 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         Set<OrganizationalProvider> ordProvidersPermittedToDisclose = getOrdProvidersPermittedToDisclose(consent);
 
         for (OrganizationalProvider provider : ordProvidersPermittedToDisclose) {
-            providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getOrgName()));
+            providerTable.addCell(createProviderPropertyValueTable(messageSource.getMessage("CONSENT.PDF.PROVIDER.NAME", null, LocaleContextHolder.getLocale()), provider.getOrgName()));
             setNpiAddressState(providerTable, provider);
         }
 
         Set<IndividualProvider> indProvidersPermittedToDisclose = getIndProvidersPermittedToDisclose(consent);
 
         for (IndividualProvider provider : indProvidersPermittedToDisclose) {
-            providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getFirstName() + " " + provider.getLastName()));
+            providerTable.addCell(createProviderPropertyValueTable(messageSource.getMessage("CONSENT.PDF.PROVIDER.NAME", null, LocaleContextHolder.getLocale()), provider.getFirstName() + " " + provider.getLastName()));
             setNpiAddressState(providerTable, provider);
         }
 
@@ -268,14 +273,14 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         Set<OrganizationalProvider> ordProvidersDisclosureIsMadeTo = getOrgProvidersDisclosureIsMadeTo(consent);
 
         for (OrganizationalProvider provider : ordProvidersDisclosureIsMadeTo) {
-            providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getOrgName()));
+            providerTable.addCell(createProviderPropertyValueTable(messageSource.getMessage("CONSENT.PDF.PROVIDER.NAME", null, LocaleContextHolder.getLocale()), provider.getOrgName()));
             setNpiAddressState(providerTable, provider);
         }
 
         Set<IndividualProvider> indProvidersDisclosureIsMadeTo = getIndProvidersDisclosureIsMadeTo(consent);
 
         for (IndividualProvider provider : indProvidersDisclosureIsMadeTo) {
-            providerTable.addCell(createProviderPropertyValueTable("Provider Name", provider.getFirstName() + " " + provider.getLastName()));
+            providerTable.addCell(createProviderPropertyValueTable(messageSource.getMessage("CONSENT.PDF.PROVIDER.NAME", null, LocaleContextHolder.getLocale()), provider.getFirstName() + " " + provider.getLastName()));
             setNpiAddressState(providerTable, provider);
         }
 
@@ -330,16 +335,16 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         PdfPTable healthInformationToBeDisclose = iTextPdfService.createBorderlessTable(2);
 
         // Medical Information
-        PdfPCell medicalInformation = iTextPdfService.createCellWithUnderlineContent("To SHARE the following medical information:");
+        PdfPCell medicalInformation = iTextPdfService.createCellWithUnderlineContent(messageSource.getMessage("CONSENT.PDF.CATEGORY.TITLE", null, LocaleContextHolder.getLocale()));
 
         ArrayList<String> medicalInformationList = getMedicalInformation(consent);
 
         if(medicalInformationList.size() < 1){
-            Paragraph sensitivityCategory = iTextPdfService.createParagraphWithContent("Sensitivity Categories: None", null);
+            Paragraph sensitivityCategory = iTextPdfService.createParagraphWithContent(messageSource.getMessage("SENSITIVE.CATEGORY.NONE", null, LocaleContextHolder.getLocale()), null);
             medicalInformation.addElement(sensitivityCategory);
             healthInformationToBeDisclose.addCell(medicalInformation);
         } else {
-            Paragraph sensitivityCategory = iTextPdfService.createParagraphWithContent("Sensitivity Categories:", null);
+            Paragraph sensitivityCategory = iTextPdfService.createParagraphWithContent(messageSource.getMessage("SENSITIVE.CATEGORY", null, LocaleContextHolder.getLocale()), null);
             medicalInformation.addElement(sensitivityCategory);
 
             medicalInformation.addElement(iTextPdfService.createUnorderList(medicalInformationList));
@@ -347,7 +352,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         }
 
         //Purposes of use
-        PdfPCell purposeOfUseCell = iTextPdfService.createCellWithUnderlineContent("To SHARE for the following purpose(s):");
+        PdfPCell purposeOfUseCell = iTextPdfService.createCellWithUnderlineContent(messageSource.getMessage("CONSENT.PDF.PURPOSE.TITLE", null, LocaleContextHolder.getLocale()));
         ArrayList<String> purposes = getPurposeOfUse(consent);
         purposeOfUseCell.addElement(iTextPdfService.createUnorderList(purposes));
         healthInformationToBeDisclose.addCell(purposeOfUseCell);
@@ -363,12 +368,22 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         //All possible VSC
         for (ValueSetCategory valueSetCategory : valueSetCategoryList) {
             String valueSetName = valueSetCategory.getName();
-            medicalInformationListToShare.add(valueSetName);
+            if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
+                medicalInformationListToShare.add(valueSetName);
+            } else {
+                medicalInformationListToShare.add(messageSource.getMessage(valueSetCategory.getCode() + ".NAME", null, LocaleContextHolder.getLocale()));
+            }
+            //medicalInformationListToShare.add(valueSetName);
         }
 
         for (final ConsentDoNotShareSensitivityPolicyCode item : consent.getDoNotShareSensitivityPolicyCodes()) {
             String vscName = item.getValueSetCategory().getName();
-            medicalInformationListToShare.remove(vscName);
+            if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
+                medicalInformationListToShare.remove(vscName);
+            } else {
+                medicalInformationListToShare.remove(messageSource.getMessage(item.getValueSetCategory().getCode() + ".NAME", null, LocaleContextHolder.getLocale()));
+            }
+            /*medicalInformationListToShare.remove(vscName);*/
 
         }
         return  new ArrayList<String>(medicalInformationListToShare);
@@ -377,7 +392,12 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     private ArrayList<String> getPurposeOfUse(Consent consent) {
         ArrayList<String> purposesOfUseList = new ArrayList<String>();
         for (final ConsentShareForPurposeOfUseCode purposeOfUseCode : consent.getShareForPurposeOfUseCodes()) {
-            purposesOfUseList.add(purposeOfUseCode.getPurposeOfUseCode().getDisplayName());
+            if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
+                purposesOfUseList.add(purposeOfUseCode.getPurposeOfUseCode().getDisplayName());
+            } else {
+                purposesOfUseList.add(messageSource.getMessage(purposeOfUseCode.getPurposeOfUseCode().getCode() + ".NAME", null, LocaleContextHolder.getLocale()));
+            }
+
         }
         return purposesOfUseList;
     }
