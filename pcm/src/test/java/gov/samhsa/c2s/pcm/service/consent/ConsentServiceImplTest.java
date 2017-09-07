@@ -1,7 +1,10 @@
 package gov.samhsa.c2s.pcm.service.consent;
 
-import gov.samhsa.c2s.pcm.domain.consent.*;
-import gov.samhsa.c2s.pcm.service.consent.*;
+import gov.samhsa.c2s.pcm.domain.consent.AttestedConsent;
+import gov.samhsa.c2s.pcm.domain.consent.AttestedConsentRevocation;
+import gov.samhsa.c2s.pcm.domain.consent.Consent;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentRepository;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentTermsVersions;
 import gov.samhsa.c2s.pcm.domain.patient.Patient;
 import gov.samhsa.c2s.pcm.domain.patient.PatientRepository;
 import gov.samhsa.c2s.pcm.domain.provider.IndividualProviderRepository;
@@ -27,14 +30,26 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * The Class ConsentServiceImplTest.
@@ -52,11 +67,6 @@ public class ConsentServiceImplTest {
      */
     @Mock
     ConsentRepository consentRepository;
-    /**
-     * The consent pdf generator.
-     */
-    @Mock
-    ConsentPdfGenerator consentPdfGenerator;
     /**
      * The individual provider repository.
      */

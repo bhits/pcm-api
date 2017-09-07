@@ -26,11 +26,23 @@
 package gov.samhsa.c2s.pcm.service.consent;
 
 
-import gov.samhsa.c2s.pcm.service.dto.*;
 import gov.samhsa.c2s.common.consentgen.ConsentGenException;
 import gov.samhsa.c2s.pcm.domain.consent.Consent;
+import gov.samhsa.c2s.pcm.service.dto.AbstractPdfDto;
+import gov.samhsa.c2s.pcm.service.dto.AttestationDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentAttestationDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentListDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentPdfDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentRevocationAttestationDto;
+import gov.samhsa.c2s.pcm.service.dto.ConsentRevokationPdfDto;
+import gov.samhsa.c2s.pcm.service.dto.XacmlDto;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -243,14 +255,6 @@ public interface ConsentService {
     ConsentRevokationPdfDto findConsentRevokationPdfDto(Long consentId);
 
     /**
-     * Adds the unsigned consent revokation pdf.
-     *
-     * @param consentId      the consent id
-     * @param revokationType the revokation type
-     */
-    void addUnsignedConsentRevokationPdf(Long consentId, String revokationType);
-
-    /**
      * Find all consents dto by user name.
      *
      * @param userName the user name
@@ -284,7 +288,7 @@ public interface ConsentService {
     /**
      * Gets the ConsentRevocationAttestationDto
      *
-     * @param userName the user/patient name for whom to search for the consent to be revoked
+     * @param userName  the user/patient name for whom to search for the consent to be revoked
      * @param consentId the consent id for the consent to be revoked
      * @return ConsentRevocationAttestationDto
      */

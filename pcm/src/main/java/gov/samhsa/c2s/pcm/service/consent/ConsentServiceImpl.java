@@ -42,7 +42,6 @@ import gov.samhsa.c2s.pcm.domain.consent.ConsentIndividualProviderDisclosureIsMa
 import gov.samhsa.c2s.pcm.domain.consent.ConsentIndividualProviderPermittedToDisclose;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentOrganizationalProviderDisclosureIsMadeTo;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentOrganizationalProviderPermittedToDisclose;
-import gov.samhsa.c2s.pcm.domain.consent.ConsentPdfGenerator;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentRepository;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentShareForPurposeOfUseCode;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentTermsVersions;
@@ -60,7 +59,6 @@ import gov.samhsa.c2s.pcm.domain.reference.PurposeOfUseCode;
 import gov.samhsa.c2s.pcm.domain.reference.PurposeOfUseCodeRepository;
 import gov.samhsa.c2s.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.c2s.pcm.domain.valueset.ValueSetCategoryRepository;
-import gov.samhsa.c2s.pcm.infrastructure.AbstractConsentRevokationPdfGenerator;
 import gov.samhsa.c2s.pcm.infrastructure.PhrService;
 import gov.samhsa.c2s.pcm.infrastructure.dto.PatientDto;
 import gov.samhsa.c2s.pcm.service.consentexport.ConsentExportService;
@@ -80,11 +78,12 @@ import gov.samhsa.c2s.pcm.service.exception.AttestedConsentRevocationException;
 import gov.samhsa.c2s.pcm.service.exception.XacmlNotFoundException;
 import gov.samhsa.c2s.pcm.service.fhir.FhirConsentService;
 import gov.samhsa.c2s.pcm.service.patient.PatientService;
+import gov.samhsa.c2s.pcm.service.pdf.ConsentPdfGenerator;
+import gov.samhsa.c2s.pcm.service.pdf.ConsentRevocationPdfGenerator;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -96,9 +95,7 @@ import org.springframework.util.Assert;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -130,6 +127,9 @@ public class ConsentServiceImpl implements ConsentService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
+    FhirConsentService fhirConsentService;
+
+    @Autowired
     private PcmProperties pcmProperties;
 
     /**
@@ -144,6 +144,11 @@ public class ConsentServiceImpl implements ConsentService {
     @Autowired
     private ConsentPdfGenerator consentPdfGenerator;
 
+    /**
+     * The consent revocation pdf generator.
+     */
+    @Autowired
+    private ConsentRevocationPdfGenerator consentRevocationPdfGenerator;
     /**
      * The patient repository.
      */
@@ -179,12 +184,6 @@ public class ConsentServiceImpl implements ConsentService {
      */
     @Autowired
     private PurposeOfUseCodeRepository purposeOfUseCodeRepository;
-
-    /**
-     * The consent revokation pdf generator.
-     */
-    @Autowired
-    private AbstractConsentRevokationPdfGenerator consentRevokationPdfGenerator;
 
     /**
      * The consent export service.
@@ -253,9 +252,6 @@ public class ConsentServiceImpl implements ConsentService {
     @Autowired
     private ConsentRevocationTermsVersionsService consentRevocationTermsVersionsService;
 
-    @Autowired
-    FhirConsentService fhirConsentService;
-
     /**
      * The model mapper.
      */
@@ -264,28 +260,6 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Autowired
     private MessageSource messageSource;
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see gov.samhsa.consent2share.service.consent.ConsentService#
-     * addUnsignedConsentRevokationPdf(java.lang.Long, java.lang.String)
-     */
-    @Override
-    public void addUnsignedConsentRevokationPdf(Long consentId,
-                                                String revokationType) {
-        final Consent consent = consentRepository.findOne(consentId);
-        if (revokationType.equals("EMERGENCY ONLY")) {
-            consent.setConsentRevokationType("EMERGENCY ONLY");
-        } else if (revokationType.equals("NO NEVER")) {
-            consent.setConsentRevokationType("NO NEVER");
-        }
-
-        Patient patient = consent.getPatient();
-
-        consent.setUnAttestedPdfConsentRevoke(consentRevokationPdfGenerator.generateUnattestedConsentRevokationPdf(consent, patient));
-        consentRepository.save(consent);
-    }
 
     /**
      * Are there duplicates.
@@ -361,8 +335,8 @@ public class ConsentServiceImpl implements ConsentService {
                 if (locale.getLanguage().equalsIgnoreCase("en")) {
                     consentDoNotShareSensitivityPolicyCode.add(item
                             .getValueSetCategory().getName());
-                }else {
-                    consentDoNotShareSensitivityPolicyCode.add(messageSource.getMessage(item.getValueSetCategory().getCode()+ ".NAME", null, locale));
+                } else {
+                    consentDoNotShareSensitivityPolicyCode.add(messageSource.getMessage(item.getValueSetCategory().getCode() + ".NAME", null, locale));
                 }
             }
 
@@ -1039,7 +1013,7 @@ public class ConsentServiceImpl implements ConsentService {
             } else {
                 term = messageSource.getMessage("CONSENT.TERMS.TEXT", null, LocaleContextHolder.getLocale());
             }
-            attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent, patient, true, attestedOn, term));
+            attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, true, attestedOn, term));
 
             consent.setAttestedConsent(attestedConsent);
             consent.setSignedDate(new Date());
@@ -1083,7 +1057,8 @@ public class ConsentServiceImpl implements ConsentService {
 
             attestedConsentRevocation.setPatientGuid(consent.getPatient().getMedicalRecordNumber());
 
-            attestedConsentRevocation.setAttestedPdfConsentRevoke(consentRevokationPdfGenerator.generateConsentRevokationPdf(consent, patient, revokedOn));
+            String consentRevocationTerm = null;
+            attestedConsentRevocation.setAttestedPdfConsentRevoke(consentRevocationPdfGenerator.generateConsentRevocationPdf(consent, patient, revokedOn, consentRevocationTerm));
 
             consent.setAttestedConsentRevocation(attestedConsentRevocation);
             consent.setRevocationDate(new Date());
@@ -1502,7 +1477,7 @@ public class ConsentServiceImpl implements ConsentService {
         } else {
             terms = messageSource.getMessage("CONSENT.TERMS.TEXT", null, LocaleContextHolder.getLocale());
         }
-        consent.setUnAttestedPdfConsent(consentPdfGenerator.generate42CfrPart2Pdf(consent, patient, false, null, terms));
+        consent.setUnAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, false, null, terms));
 
         try {
 
@@ -1693,7 +1668,6 @@ public class ConsentServiceImpl implements ConsentService {
      * @param consentId the consent id
      * @return xacmlFile
      */
-    @Transactional(readOnly = true)
     private String findConsentXACMLById(Long consentId) {
         String xacmlFile = "";
 
