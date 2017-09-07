@@ -75,6 +75,7 @@ import gov.samhsa.c2s.pcm.service.dto.SpecificMedicalInfoDto;
 import gov.samhsa.c2s.pcm.service.dto.XacmlDto;
 import gov.samhsa.c2s.pcm.service.exception.AttestedConsentException;
 import gov.samhsa.c2s.pcm.service.exception.AttestedConsentRevocationException;
+import gov.samhsa.c2s.pcm.service.exception.ConsentPdfGenerateException;
 import gov.samhsa.c2s.pcm.service.exception.XacmlNotFoundException;
 import gov.samhsa.c2s.pcm.service.fhir.FhirConsentService;
 import gov.samhsa.c2s.pcm.service.patient.PatientService;
@@ -96,6 +97,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -1013,7 +1015,13 @@ public class ConsentServiceImpl implements ConsentService {
             } else {
                 term = messageSource.getMessage("CONSENT.TERMS.TEXT", null, LocaleContextHolder.getLocale());
             }
-            attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, true, attestedOn, term));
+
+            try {
+                attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, true, attestedOn, term));
+            } catch (IOException e) {
+                logger.error(e.getMessage(), e);
+                throw new ConsentPdfGenerateException(e);
+            }
 
             consent.setAttestedConsent(attestedConsent);
             consent.setSignedDate(new Date());
@@ -1477,11 +1485,15 @@ public class ConsentServiceImpl implements ConsentService {
         } else {
             terms = messageSource.getMessage("CONSENT.TERMS.TEXT", null, LocaleContextHolder.getLocale());
         }
-        consent.setUnAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, false, null, terms));
 
         try {
+            consent.setUnAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, false, null, terms));
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            throw new ConsentPdfGenerateException(e);
+        }
 
-
+        try {
             consent.setXacmlCcd(consentExportService.exportConsent2XACML(
                     consent).getBytes());
 
