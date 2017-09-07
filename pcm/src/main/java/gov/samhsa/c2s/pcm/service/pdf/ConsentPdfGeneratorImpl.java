@@ -7,8 +7,10 @@ import gov.samhsa.c2s.pcm.domain.consent.Consent;
 import gov.samhsa.c2s.pcm.domain.patient.Patient;
 import gov.samhsa.c2s.pcm.infrastructure.exception.InvalidContentException;
 import gov.samhsa.c2s.pcm.infrastructure.exception.PdfGenerationException;
+import gov.samhsa.c2s.pcm.infrastructure.pdfbox.Column;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.PdfBoxService;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.PdfBoxStyle;
+import gov.samhsa.c2s.pcm.infrastructure.pdfbox.TableAttribute;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.util.PdfBoxHandler;
 import gov.samhsa.c2s.pcm.service.exception.PdfConfigMissingException;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +27,10 @@ import org.springframework.util.Assert;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -110,6 +115,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             final float titleSectionStartYCoordinate = page.getMediaBox().getHeight() - PdfBoxStyle.TOP_BOTTOM_MARGINS_OF_LETTER;
             final float consentReferenceNumberSectionStartYCoordinate = 690f;
             final float consentTermsSectionStartYCoordinate = 270f;
+            final float consentEffectiveDateSectionStartYCoordinate = 120f;
 
             // Title
             addConsentTitle(CONSENT_PDF, titleSectionStartYCoordinate, page, contentStream);
@@ -119,6 +125,9 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
             // Consent terms section
             addConsentTerms(consentTerms, patient, consentTermsSectionStartYCoordinate, defaultFont, page, contentStream);
+
+            // Consent effective and expiration date
+            addEffectiveAndExpirationDate(consent, consentEffectiveDateSectionStartYCoordinate, contentStream);
 
             // Make sure that the content stream is closed
             contentStream.close();
@@ -172,4 +181,36 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
         pdfBoxService.addTextAtOffset(title, titleFont, titleFontSize, titleColor, cardXCoordinate + 4f, titleYCoordinate, contentStream);
     }
+
+    private void addEffectiveAndExpirationDate(Consent consent, float startYCoordinate, PDPageContentStream contentStream) throws IOException {
+        final float columnWidth = 180f;
+        final float rowHeight = PdfBoxStyle.DEFAULT_TABLE_ROW_HEIGHT;
+        final float cellMargin = 1f;
+
+        // Prepare table content
+        String col1 = "Effective Date: ".concat(PdfBoxHandler.formatDate(consent.getStartDate(), DATE_FORMAT_PATTERN));
+        String col2 = "Expiration Date: ".concat(PdfBoxHandler.formatDate(consent.getEndDate(), DATE_FORMAT_PATTERN));
+        java.util.List<String> firstRowContent = Arrays.asList(col1, col2);
+
+        List<List<String>> tableContent = Collections.singletonList(firstRowContent);
+
+        // Config each column width
+        Column column1 = new Column(columnWidth);
+        Column column2 = new Column(columnWidth);
+
+        // Config Table attribute
+        TableAttribute tableAttribute = TableAttribute.builder()
+                .xCoordinate(PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER)
+                .yCoordinate(startYCoordinate)
+                .rowHeight(rowHeight)
+                .cellMargin(cellMargin)
+                .contentFont(PDType1Font.TIMES_BOLD)
+                .contentFontSize(PdfBoxStyle.TEXT_SMALL_SIZE)
+                .borderColor(Color.WHITE)
+                .columns(Arrays.asList(column1, column2))
+                .build();
+
+        pdfBoxService.addTableContent(contentStream, tableAttribute, tableContent);
+    }
+
 }
