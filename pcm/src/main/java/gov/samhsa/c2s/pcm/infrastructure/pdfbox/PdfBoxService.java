@@ -28,4 +28,10 @@ public interface PdfBoxService {
 
     void addTableContent(PDPageContentStream contentStream, TableAttribute tableAttribute,
                          List<List<String>> content) throws IOException;
+
+    void addWrappedParagraph(String text, PDFont font, float fontSize, Color textColor, TextAlignment align, float xCoordinate, float topYCoordinate,
+                             float width, PDPage page, PDPageContentStream contentStream) throws IOException;
+
+    void addWrappedParagraphByLineBreaks(String content, PDFont font, float fontSize, Color textColor, float yCoordinate, float leftRightMargin,
+                                         PDPage page, PDPageContentStream contentStream) throws IOException;
 }
