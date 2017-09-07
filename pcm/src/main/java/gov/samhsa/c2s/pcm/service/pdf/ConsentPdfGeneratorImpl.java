@@ -4,7 +4,11 @@ package gov.samhsa.c2s.pcm.service.pdf;
 import com.google.common.collect.ImmutableMap;
 import gov.samhsa.c2s.pcm.config.PdfProperties;
 import gov.samhsa.c2s.pcm.domain.consent.Consent;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentDoNotShareSensitivityPolicyCode;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentShareForPurposeOfUseCode;
 import gov.samhsa.c2s.pcm.domain.patient.Patient;
+import gov.samhsa.c2s.pcm.domain.valueset.ValueSetCategory;
+import gov.samhsa.c2s.pcm.domain.valueset.ValueSetCategoryRepository;
 import gov.samhsa.c2s.pcm.infrastructure.exception.InvalidContentException;
 import gov.samhsa.c2s.pcm.infrastructure.exception.PdfGenerationException;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.Column;
@@ -22,16 +26,21 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -42,11 +51,15 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
     private final PdfBoxService pdfBoxService;
     private final PdfProperties pdfProperties;
+    private final MessageSource messageSource;
+    private final ValueSetCategoryRepository valueSetCategoryRepository;
 
     @Autowired
-    public ConsentPdfGeneratorImpl(PdfBoxService pdfBoxService, PdfProperties pdfProperties) {
+    public ConsentPdfGeneratorImpl(PdfBoxService pdfBoxService, PdfProperties pdfProperties, MessageSource messageSource, ValueSetCategoryRepository valueSetCategoryRepository) {
         this.pdfBoxService = pdfBoxService;
         this.pdfProperties = pdfProperties;
+        this.messageSource = messageSource;
+        this.valueSetCategoryRepository = valueSetCategoryRepository;
     }
 
     @Override
@@ -146,6 +159,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             // Configure each drawing section yCoordinate in order to centralized adjust layout
             final float titleSectionStartYCoordinate = page.getMediaBox().getHeight() - PdfBoxStyle.TOP_BOTTOM_MARGINS_OF_LETTER;
             final float consentReferenceNumberSectionStartYCoordinate = 690f;
+            final float healthInformationSectionStartYCoordinate = 455f;
             final float consentTermsSectionStartYCoordinate = 270f;
             final float consentEffectiveDateSectionStartYCoordinate = 120f;
             final float consentSigningSectionStartYCoordinate = 75f;
@@ -155,6 +169,9 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
             // Consent Reference Number and Patient information
             addConsentReferenceNumberAndPatientInfo(consent, patient, consentReferenceNumberSectionStartYCoordinate, defaultFont, contentStream);
+
+            // Health information to be disclosed section
+            addHealthInformationToBeDisclose(consent, healthInformationSectionStartYCoordinate, defaultFont, page, contentStream);
 
             // Consent terms section
             addConsentTerms(consentTerms, patient, consentTermsSectionStartYCoordinate, defaultFont, page, contentStream);
@@ -184,10 +201,93 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         }
     }
 
+    private void addHealthInformationToBeDisclose(Consent consent, float startYCoordinate, PDFont font, PDPage page, PDPageContentStream contentStream) throws IOException {
+        float cardXCoordinate = PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER;
+        float labelYCoordinate = startYCoordinate - PdfBoxStyle.XLARGE_LINE_SPACE;
+
+        String title = messageSource.getMessage("CONSENT.PDF.SECTION2.TITLE", null, LocaleContextHolder.getLocale());
+        drawSectionHeader(title, cardXCoordinate, startYCoordinate, page, contentStream);
+
+        // Medical Information
+        addMedicalInformation(consent, labelYCoordinate, font, contentStream);
+
+        // Purposes of use
+        addPurposeOfUse(consent, labelYCoordinate, font, contentStream);
+    }
+
+    private void addMedicalInformation(Consent consent, float labelYCoordinate, PDFont font, PDPageContentStream contentStream) throws IOException {
+        final float xCoordinate = PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER;
+        final float listWidth = 286f;
+        final String itemMarkerSymbol = "-";
+        float subLabelYCoordinate = labelYCoordinate - 15f;
+        float listYCoordinate = labelYCoordinate - 20f;
+        String label = messageSource.getMessage("CONSENT.PDF.CATEGORY.TITLE", null, LocaleContextHolder.getLocale());
+        String subLabel = messageSource.getMessage("SENSITIVE.CATEGORY", null, LocaleContextHolder.getLocale());
+
+        pdfBoxService.addTextAtOffset(label, PDType1Font.TIMES_BOLD, PdfBoxStyle.TEXT_SMALL_SIZE, Color.BLACK, xCoordinate, labelYCoordinate, contentStream);
+        pdfBoxService.addTextAtOffset(subLabel, font, PdfBoxStyle.TEXT_SMALL_SIZE, Color.BLACK, xCoordinate, subLabelYCoordinate, contentStream);
+
+        List<String> sensitivityCategories = getMedicalInformation(consent);
+
+        pdfBoxService.addUnorderedListContent(sensitivityCategories, itemMarkerSymbol, xCoordinate, listYCoordinate, listWidth, font, PdfBoxStyle.TEXT_SMALL_SIZE, contentStream);
+    }
+
+    private List<String> getMedicalInformation(Consent consent) {
+        Set<String> medicalInformationListToShare = new HashSet<String>();
+
+        List<ValueSetCategory> valueSetCategoryList = valueSetCategoryRepository
+                .findAll();
+        //All possible VSC
+        for (ValueSetCategory valueSetCategory : valueSetCategoryList) {
+            String valueSetName = valueSetCategory.getName();
+            if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
+                medicalInformationListToShare.add(valueSetName);
+            } else {
+                medicalInformationListToShare.add(messageSource.getMessage(valueSetCategory.getCode() + ".NAME", null, LocaleContextHolder.getLocale()));
+            }
+        }
+
+        for (final ConsentDoNotShareSensitivityPolicyCode item : consent.getDoNotShareSensitivityPolicyCodes()) {
+            String vscName = item.getValueSetCategory().getName();
+            if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
+                medicalInformationListToShare.remove(vscName);
+            } else {
+                medicalInformationListToShare.remove(messageSource.getMessage(item.getValueSetCategory().getCode() + ".NAME", null, LocaleContextHolder.getLocale()));
+            }
+        }
+        return new ArrayList<>(medicalInformationListToShare);
+    }
+
+    private void addPurposeOfUse(Consent consent, float labelYCoordinate, PDFont font, PDPageContentStream contentStream) throws IOException {
+        final float xCoordinate = 326f;
+        final float listWidth = 280f;
+        final String itemMarkerSymbol = "-";
+        float listYCoordinate = labelYCoordinate - 5f;
+        String label = messageSource.getMessage("CONSENT.PDF.PURPOSE.TITLE", null, LocaleContextHolder.getLocale());
+
+        pdfBoxService.addTextAtOffset(label, PDType1Font.TIMES_BOLD, PdfBoxStyle.TEXT_SMALL_SIZE, Color.BLACK, xCoordinate, labelYCoordinate, contentStream);
+
+        List<String> purposes = getPurposeOfUse(consent);
+
+        pdfBoxService.addUnorderedListContent(purposes, itemMarkerSymbol, xCoordinate, listYCoordinate, listWidth, font, PdfBoxStyle.TEXT_SMALL_SIZE, contentStream);
+    }
+
+    private List<String> getPurposeOfUse(Consent consent) {
+        ArrayList<String> purposesOfUseList = new ArrayList<String>();
+        for (final ConsentShareForPurposeOfUseCode purposeOfUseCode : consent.getShareForPurposeOfUseCodes()) {
+            if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
+                purposesOfUseList.add(purposeOfUseCode.getPurposeOfUseCode().getDisplayName());
+            } else {
+                purposesOfUseList.add(messageSource.getMessage(purposeOfUseCode.getPurposeOfUseCode().getCode() + ".NAME", null, LocaleContextHolder.getLocale()));
+            }
+        }
+        return purposesOfUseList;
+    }
+
     private void addConsentTerms(String consentTerms, Patient patient, float startYCoordinate, PDFont font, PDPage page, PDPageContentStream contentStream) throws IOException {
         float cardXCoordinate = PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER;
         final float paragraphYCoordinate = startYCoordinate - PdfBoxStyle.XLARGE_LINE_SPACE;
-        final String title = "CONSENT TERMS";
+        final String title = messageSource.getMessage("CONSENT.PDF.SECTION3.TITLE", null, LocaleContextHolder.getLocale());
 
         drawSectionHeader(title, cardXCoordinate, startYCoordinate, page, contentStream);
 
@@ -250,5 +350,4 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
         pdfBoxService.addTableContent(contentStream, tableAttribute, tableContent);
     }
-
 }
