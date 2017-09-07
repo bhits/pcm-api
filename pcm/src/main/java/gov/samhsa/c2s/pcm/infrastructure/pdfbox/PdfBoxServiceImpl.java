@@ -13,6 +13,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +61,35 @@ public class PdfBoxServiceImpl implements PdfBoxService {
                 .map(pdfConfig -> PdfBoxHandler.convertPdfBoxPageSizeToPDRectangle(pdfConfig.pdfPageSize))
                 .findAny()
                 .orElse(PDRectangle.LETTER);
+    }
+
+    @Override
+    public void addTextAtOffset(String text, PDFont font, float fontSize, Color textColor, float xCoordinate, float yCoordinate, PDPageContentStream contentStream) throws IOException {
+        if (text.isEmpty()) {
+            log.warn("The inputs are empty string start from the position: ".concat(xCoordinate + ", " + yCoordinate));
+        }
+        if (textColor == null) {
+            textColor = Color.BLACK;
+        }
+        contentStream.setNonStrokingColor(textColor);
+        contentStream.setFont(font, fontSize);
+        contentStream.beginText();
+        contentStream.newLineAtOffset(xCoordinate, yCoordinate);
+        contentStream.showText(text);
+        contentStream.endText();
+
+        // Reset changed color
+        resetChangedColorToDefault(contentStream);
+    }
+
+    @Override
+    public void addCenteredTextAtOffset(String text, PDFont font, float fontSize, Color textColor, float yCoordinate, PDPage page, PDPageContentStream contentStream) throws IOException {
+        float textWidth = PdfBoxHandler.targetedStringWidth(text, font, fontSize);
+        float textHeight = PdfBoxHandler.targetedStringHeight(font, fontSize);
+        float centeredXCoordinate = (page.getMediaBox().getWidth() - textWidth) / 2;
+        float centeredYCoordinate = yCoordinate - textHeight;
+
+        addTextAtOffset(text, font, fontSize, textColor, centeredXCoordinate, centeredYCoordinate, contentStream);
     }
 
     @Override
@@ -148,6 +178,10 @@ public class PdfBoxServiceImpl implements PdfBoxService {
     private float calculateDrawPositionInVertical(TableAttribute tableAttribute) {
         return tableAttribute.getYCoordinate() - (tableAttribute.getRowHeight() / 2)
                 - ((tableAttribute.getContentFont().getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * tableAttribute.getContentFontSize()) / 4);
+    }
+
+    private void resetChangedColorToDefault(PDPageContentStream contentStream) throws IOException {
+        contentStream.setNonStrokingColor(Color.BLACK);
     }
 
     private void assertValidTableAttribute(TableAttribute tableAttribute) {
