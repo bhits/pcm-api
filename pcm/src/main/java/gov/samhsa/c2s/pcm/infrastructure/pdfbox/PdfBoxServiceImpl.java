@@ -93,6 +93,16 @@ public class PdfBoxServiceImpl implements PdfBoxService {
     }
 
     @Override
+    public void addColorBox(Color color, float xCoordinate, float yCoordinate, float width, float height, PDPage page, PDPageContentStream contents) throws IOException {
+        contents.setNonStrokingColor(color);
+        contents.addRect(page.getMediaBox().getLowerLeftX() + xCoordinate, page.getMediaBox().getLowerLeftY() + yCoordinate, width, height);
+        contents.fill();
+
+        // Reset changed color
+        resetChangedColorToDefault(contents);
+    }
+
+    @Override
     public void addTableContent(PDPageContentStream contentStream, TableAttribute tableAttribute, List<List<String>> content) throws IOException {
         assertValidTableAttribute(tableAttribute);
         String[][] tableContent = content.stream()
