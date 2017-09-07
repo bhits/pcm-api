@@ -7,10 +7,10 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,9 +35,9 @@ public class PdfBoxHandler {
         return font.getFontDescriptor().getFontBoundingBox().getHeight() * fontSize / 1000F;
     }
 
-    public static String formatLocalDate(LocalDate localDate, String formatPattern) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatPattern);
-        return localDate.format(formatter);
+    public static String formatDate(Date date, String formatPattern) {
+        SimpleDateFormat formatter = new SimpleDateFormat(formatPattern);
+        return formatter.format(date);
     }
 
     private static Map<PdfBoxFont, PDFont> buildPDFontMap() {
