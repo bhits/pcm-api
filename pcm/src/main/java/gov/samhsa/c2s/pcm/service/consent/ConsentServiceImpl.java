@@ -76,6 +76,7 @@ import gov.samhsa.c2s.pcm.service.dto.XacmlDto;
 import gov.samhsa.c2s.pcm.service.exception.AttestedConsentException;
 import gov.samhsa.c2s.pcm.service.exception.AttestedConsentRevocationException;
 import gov.samhsa.c2s.pcm.service.exception.ConsentPdfGenerateException;
+import gov.samhsa.c2s.pcm.service.exception.ConsentRevocationPdfGenerateException;
 import gov.samhsa.c2s.pcm.service.exception.XacmlNotFoundException;
 import gov.samhsa.c2s.pcm.service.fhir.FhirConsentService;
 import gov.samhsa.c2s.pcm.service.patient.PatientService;
@@ -1066,7 +1067,13 @@ public class ConsentServiceImpl implements ConsentService {
             attestedConsentRevocation.setPatientGuid(consent.getPatient().getMedicalRecordNumber());
 
             String consentRevocationTerm = null;
-            attestedConsentRevocation.setAttestedPdfConsentRevoke(consentRevocationPdfGenerator.generateConsentRevocationPdf(consent, patient, revokedOn, consentRevocationTerm));
+
+            try {
+                attestedConsentRevocation.setAttestedPdfConsentRevoke(consentRevocationPdfGenerator.generateConsentRevocationPdf(consent, patient, revokedOn, consentRevocationTerm));
+            } catch (IOException e) {
+                logger.error(e.getMessage(), e);
+                throw new ConsentRevocationPdfGenerateException(e);
+            }
 
             consent.setAttestedConsentRevocation(attestedConsentRevocation);
             consent.setRevocationDate(new Date());
