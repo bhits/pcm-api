@@ -51,9 +51,13 @@ public class ConsentRevocationPdfGeneratorImpl implements ConsentRevocationPdfGe
 
             // Configure each drawing section yCoordinate in order to centralized adjust layout
             final float titleSectionStartYCoordinate = page.getMediaBox().getHeight() - PdfBoxStyle.TOP_BOTTOM_MARGINS_OF_LETTER;
+            final float consentReferenceNumberSectionStartYCoordinate = 670f;
 
             // Title
             consentPdfGenerator.addConsentTitle(CONSENT_REVOCATION_PDF, titleSectionStartYCoordinate, page, contentStream);
+
+            // Consent Reference Number and Patient information
+            consentPdfGenerator.addConsentReferenceNumberAndPatientInfo(consent, patient, consentReferenceNumberSectionStartYCoordinate, defaultFont, contentStream);
 
             // Make sure that the content stream is closed
             contentStream.close();
