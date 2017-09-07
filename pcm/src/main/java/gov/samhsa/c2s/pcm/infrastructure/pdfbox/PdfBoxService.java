@@ -34,4 +34,6 @@ public interface PdfBoxService {
 
     void addWrappedParagraphByLineBreaks(String content, PDFont font, float fontSize, Color textColor, float yCoordinate, float leftRightMargin,
                                          PDPage page, PDPageContentStream contentStream) throws IOException;
+
+    void addUnorderedListContent(List<String> content, String itemMarkerSymbol, float xCoordinate, float yCoordinate, float cellWidth, PDFont font, float fontSize, PDPageContentStream contentStream) throws IOException;
 }

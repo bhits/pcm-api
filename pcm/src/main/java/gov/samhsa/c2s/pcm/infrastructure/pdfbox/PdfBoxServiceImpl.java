@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -161,6 +162,30 @@ public class PdfBoxServiceImpl implements PdfBoxService {
 
         // Reset changed color
         resetChangedColorToDefault(contentStream);
+    }
+
+    @Override
+    public void addUnorderedListContent(List<String> content, String itemMarkerSymbol, float xCoordinate, float yCoordinate, float cellWidth, PDFont font, float fontSize, PDPageContentStream contentStream) throws IOException {
+        final float rowHeight = 20f;
+        final float cellMargin = 1f;
+        List<List<String>> tableContent = new ArrayList<>();
+
+        for (String itemText : content) {
+            tableContent.add(Collections.singletonList(itemMarkerSymbol.concat(" " + itemText)));
+        }
+
+        TableAttribute tableAttribute = TableAttribute.builder()
+                .xCoordinate(xCoordinate)
+                .yCoordinate(yCoordinate)
+                .rowHeight(rowHeight)
+                .cellMargin(cellMargin)
+                .contentFont(font)
+                .contentFontSize(fontSize)
+                .borderColor(Color.WHITE)
+                .columns(Collections.singletonList(new Column(cellWidth)))
+                .build();
+
+        addTableContent(contentStream, tableAttribute, tableContent);
     }
 
     private List<String> calculateLinesToWrap(String content, PDFont font, float fontSize, float width) throws IOException {
