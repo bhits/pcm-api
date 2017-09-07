@@ -1018,7 +1018,7 @@ public class ConsentServiceImpl implements ConsentService {
             }
 
             try {
-                attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, true, attestedOn, term));
+                attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, attestedOn, term));
             } catch (IOException e) {
                 logger.error(e.getMessage(), e);
                 throw new ConsentPdfGenerateException(e);
@@ -1493,7 +1493,7 @@ public class ConsentServiceImpl implements ConsentService {
         }
 
         try {
-            consent.setUnAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, false, null, terms));
+            consent.setUnAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, null, terms));
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
             throw new ConsentPdfGenerateException(e);

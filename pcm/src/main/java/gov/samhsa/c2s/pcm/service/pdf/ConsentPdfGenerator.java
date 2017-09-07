@@ -18,13 +18,14 @@ public interface ConsentPdfGenerator {
 
     void addConsentReferenceNumberAndPatientInfo(Consent consent, Patient patient, float startYCoordinate, PDFont defaultFont, PDPageContentStream contentStream) throws IOException;
 
+    void addConsentSigningDetails(Patient patient, Date signedOnDateTime, float startYCoordinate, PDFont defaultFont, PDPageContentStream contentStream) throws IOException;
+
     /**
      * Generate consent pdf.
      *
-     * @param consent  the consent
-     * @param patient  the patient information
-     * @param isSigned determine whether to add the signing information
+     * @param consent the consent
+     * @param patient the patient information
      * @return the byte[]
      */
-    byte[] generateConsentPdf(Consent consent, Patient patient, boolean isSigned, Date attestedOn, String terms) throws IOException;
+    byte[] generateConsentPdf(Consent consent, Patient patient, Date attestedOn, String terms) throws IOException;
 }

@@ -12,6 +12,7 @@ import gov.samhsa.c2s.pcm.infrastructure.pdfbox.PdfBoxService;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.PdfBoxStyle;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.TableAttribute;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.util.PdfBoxHandler;
+import gov.samhsa.c2s.pcm.service.consent.ConsentStatus;
 import gov.samhsa.c2s.pcm.service.exception.PdfConfigMissingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.text.StrSubstitutor;
@@ -94,7 +95,38 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     }
 
     @Override
-    public byte[] generateConsentPdf(Consent consent, Patient patient, boolean isSigned, Date attestedOn, String consentTerms) throws IOException {
+    public void addConsentSigningDetails(Patient patient, Date signedOnDateTime, float startYCoordinate, PDFont defaultFont, PDPageContentStream contentStream) throws IOException {
+        String patientName = patient.getFirstName().concat(SPACE_PATTERN + patient.getLastName());
+        String email = patient.getEmail();
+
+        final String signedByLabel = "Signed by: ";
+        final String emailLabel = "Email: ";
+        final String signedOnLabel = "Signed on: ";
+
+        final PDFont contentFont = PDType1Font.TIMES_BOLD;
+        final Color textColor = Color.BLACK;
+        final float fontSize = PdfBoxStyle.TEXT_SMALL_SIZE;
+
+        // Add Signed by
+        pdfBoxService.addTextAtOffset(signedByLabel, defaultFont, fontSize, textColor, PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER, startYCoordinate, contentStream);
+        final float crnXCoordinate = PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER + PdfBoxHandler.targetedStringWidth(signedByLabel, defaultFont, fontSize);
+        pdfBoxService.addTextAtOffset(patientName, contentFont, fontSize, textColor, crnXCoordinate, startYCoordinate, contentStream);
+
+        // Add Email
+        final float emailYCoordinate = startYCoordinate - PdfBoxStyle.XLARGE_LINE_SPACE;
+        pdfBoxService.addTextAtOffset(emailLabel, defaultFont, fontSize, textColor, PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER, emailYCoordinate, contentStream);
+        final float nameXCoordinate = PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER + PdfBoxHandler.targetedStringWidth(emailLabel, defaultFont, fontSize);
+        pdfBoxService.addTextAtOffset(email, contentFont, fontSize, textColor, nameXCoordinate, emailYCoordinate, contentStream);
+
+        // Add Signed on
+        final float signedOnYCoordinate = emailYCoordinate - PdfBoxStyle.XLARGE_LINE_SPACE;
+        pdfBoxService.addTextAtOffset(signedOnLabel, defaultFont, fontSize, textColor, PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER, signedOnYCoordinate, contentStream);
+        final float dobXCoordinate = PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER + PdfBoxHandler.targetedStringWidth(signedOnLabel, defaultFont, fontSize);
+        pdfBoxService.addTextAtOffset(PdfBoxHandler.formatDate(signedOnDateTime, DATE_FORMAT_PATTERN), contentFont, fontSize, textColor, dobXCoordinate, signedOnYCoordinate, contentStream);
+    }
+
+    @Override
+    public byte[] generateConsentPdf(Consent consent, Patient patient, Date attestedOn, String consentTerms) throws IOException {
         Assert.notNull(consent, "Consent is required.");
 
         ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
@@ -116,6 +148,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             final float consentReferenceNumberSectionStartYCoordinate = 690f;
             final float consentTermsSectionStartYCoordinate = 270f;
             final float consentEffectiveDateSectionStartYCoordinate = 120f;
+            final float consentSigningSectionStartYCoordinate = 75f;
 
             // Title
             addConsentTitle(CONSENT_PDF, titleSectionStartYCoordinate, page, contentStream);
@@ -128,6 +161,11 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
             // Consent effective and expiration date
             addEffectiveAndExpirationDate(consent, consentEffectiveDateSectionStartYCoordinate, contentStream);
+
+            // Consent signing details
+            if (consent.getStatus().equals(ConsentStatus.CONSENT_SIGNED)) {
+                addConsentSigningDetails(patient, attestedOn, consentSigningSectionStartYCoordinate, defaultFont, contentStream);
+            }
 
             // Make sure that the content stream is closed
             contentStream.close();
