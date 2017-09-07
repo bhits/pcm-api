@@ -2,6 +2,7 @@ package gov.samhsa.c2s.pcm.service.pdf;
 
 import gov.samhsa.c2s.pcm.domain.consent.Consent;
 import gov.samhsa.c2s.pcm.domain.patient.Patient;
+import gov.samhsa.c2s.pcm.infrastructure.exception.InvalidContentException;
 import gov.samhsa.c2s.pcm.infrastructure.exception.PdfGenerationException;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.PdfBoxService;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.PdfBoxStyle;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
@@ -52,12 +54,16 @@ public class ConsentRevocationPdfGeneratorImpl implements ConsentRevocationPdfGe
             // Configure each drawing section yCoordinate in order to centralized adjust layout
             final float titleSectionStartYCoordinate = page.getMediaBox().getHeight() - PdfBoxStyle.TOP_BOTTOM_MARGINS_OF_LETTER;
             final float consentReferenceNumberSectionStartYCoordinate = 670f;
+            final float consentRevocationTermsSectionStartYCoordinate = 600f;
 
             // Title
             consentPdfGenerator.addConsentTitle(CONSENT_REVOCATION_PDF, titleSectionStartYCoordinate, page, contentStream);
 
             // Consent Reference Number and Patient information
             consentPdfGenerator.addConsentReferenceNumberAndPatientInfo(consent, patient, consentReferenceNumberSectionStartYCoordinate, defaultFont, contentStream);
+
+            // Consent revocation terms
+            addConsentRevocationTerms(consentRevocationTerm, consentRevocationTermsSectionStartYCoordinate, defaultFont, page, contentStream);
 
             // Make sure that the content stream is closed
             contentStream.close();
@@ -73,6 +79,15 @@ public class ConsentRevocationPdfGeneratorImpl implements ConsentRevocationPdfGe
             pdfOutputStream.close();
             // finally make sure that the document is properly closed
             document.close();
+        }
+    }
+
+    private void addConsentRevocationTerms(String consentRevocationTerm, float startYCoordinate, PDFont defaultFont, PDPage page, PDPageContentStream contentStream) {
+        try {
+            pdfBoxService.addWrappedParagraphByLineBreaks(consentRevocationTerm, defaultFont, PdfBoxStyle.TEXT_SMALL_SIZE, Color.BLACK, startYCoordinate, PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER, page, contentStream);
+        } catch (Exception e) {
+            log.error("Invalid character for cast specification", e);
+            throw new InvalidContentException(e);
         }
     }
 }

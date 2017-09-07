@@ -1066,8 +1066,7 @@ public class ConsentServiceImpl implements ConsentService {
 
             attestedConsentRevocation.setPatientGuid(consent.getPatient().getMedicalRecordNumber());
 
-            String consentRevocationTerm = null;
-
+            String consentRevocationTerm = getConsentRevocationTerm();
             try {
                 attestedConsentRevocation.setAttestedPdfConsentRevoke(consentRevocationPdfGenerator.generateConsentRevocationPdf(consent, patient, revokedOn, consentRevocationTerm));
             } catch (IOException e) {
@@ -1858,5 +1857,16 @@ public class ConsentServiceImpl implements ConsentService {
         logger.info("Node value: " + nodeValue + "   Is redactable: "
                 + redacted);
         return redacted;
+    }
+
+    /**
+     * get regarding terms text based on locale
+     */
+    private String getConsentRevocationTerm() {
+        if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
+            return consentRevocationTermsVersionsService.findDtoByLatestEnabledVersion().getConsentRevokeTermsText();
+        } else {
+            return messageSource.getMessage("CONSENT.TERMS.TEXT", null, LocaleContextHolder.getLocale());
+        }
     }
 }
