@@ -1,15 +1,18 @@
 package gov.samhsa.c2s.pcm.service.pdf;
 
 
+import com.google.common.collect.ImmutableMap;
 import gov.samhsa.c2s.pcm.config.PdfProperties;
 import gov.samhsa.c2s.pcm.domain.consent.Consent;
 import gov.samhsa.c2s.pcm.domain.patient.Patient;
+import gov.samhsa.c2s.pcm.infrastructure.exception.InvalidContentException;
 import gov.samhsa.c2s.pcm.infrastructure.exception.PdfGenerationException;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.PdfBoxService;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.PdfBoxStyle;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.util.PdfBoxHandler;
 import gov.samhsa.c2s.pcm.service.exception.PdfConfigMissingException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -86,7 +89,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     }
 
     @Override
-    public byte[] generateConsentPdf(Consent consent, Patient patient, boolean isSigned, Date attestedOn, String terms) throws IOException {
+    public byte[] generateConsentPdf(Consent consent, Patient patient, boolean isSigned, Date attestedOn, String consentTerms) throws IOException {
         Assert.notNull(consent, "Consent is required.");
 
         ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
@@ -106,12 +109,16 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             // Configure each drawing section yCoordinate in order to centralized adjust layout
             final float titleSectionStartYCoordinate = page.getMediaBox().getHeight() - PdfBoxStyle.TOP_BOTTOM_MARGINS_OF_LETTER;
             final float consentReferenceNumberSectionStartYCoordinate = 690f;
+            final float consentTermsSectionStartYCoordinate = 270f;
 
             // Title
             addConsentTitle(CONSENT_PDF, titleSectionStartYCoordinate, page, contentStream);
 
             // Consent Reference Number and Patient information
             addConsentReferenceNumberAndPatientInfo(consent, patient, consentReferenceNumberSectionStartYCoordinate, defaultFont, contentStream);
+
+            // Consent terms section
+            addConsentTerms(consentTerms, patient, consentTermsSectionStartYCoordinate, defaultFont, page, contentStream);
 
             // Make sure that the content stream is closed
             contentStream.close();
@@ -128,5 +135,41 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             // finally make sure that the document is properly closed
             document.close();
         }
+    }
+
+    private void addConsentTerms(String consentTerms, Patient patient, float startYCoordinate, PDFont font, PDPage page, PDPageContentStream contentStream) throws IOException {
+        float cardXCoordinate = PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER;
+        final float paragraphYCoordinate = startYCoordinate - PdfBoxStyle.XLARGE_LINE_SPACE;
+        final String title = "CONSENT TERMS";
+
+        drawSectionHeader(title, cardXCoordinate, startYCoordinate, page, contentStream);
+
+        final String userNameKey = "ATTESTER_FULL_NAME";
+        String termsWithAttestedName = StrSubstitutor.replace(consentTerms,
+                ImmutableMap.of(userNameKey, patient.getFirstName().concat(SPACE_PATTERN + patient.getLastName())));
+
+        try {
+            pdfBoxService.addWrappedParagraphByLineBreaks(termsWithAttestedName, font, PdfBoxStyle.TEXT_SMALL_SIZE, Color.BLACK, paragraphYCoordinate, PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER, page, contentStream);
+        } catch (Exception e) {
+            log.error("Invalid character for cast specification", e);
+            throw new InvalidContentException(e);
+        }
+    }
+
+    private void drawSectionHeader(String title, float cardXCoordinate, float cardYCoordinate, PDPage page, PDPageContentStream contentStream) throws IOException {
+        // Set background color
+        Color color = new Color(73, 89, 105);
+        float colorBoxWidth = page.getMediaBox().getWidth() - 2 * PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER;
+        float colorBoxHeight = PdfBoxStyle.DEFAULT_TABLE_ROW_HEIGHT;
+        PDFont titleFont = PDType1Font.TIMES_BOLD;
+        float titleFontSize = PdfBoxStyle.TEXT_MEDIUM_SIZE;
+        Color titleColor = Color.WHITE;
+
+        pdfBoxService.addColorBox(color, cardXCoordinate, cardYCoordinate, colorBoxWidth, colorBoxHeight, page, contentStream);
+
+        float titleYCoordinate = cardYCoordinate + (colorBoxHeight / 2)
+                - ((titleFont.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * titleFontSize) / 4);
+
+        pdfBoxService.addTextAtOffset(title, titleFont, titleFontSize, titleColor, cardXCoordinate + 4f, titleYCoordinate, contentStream);
     }
 }
