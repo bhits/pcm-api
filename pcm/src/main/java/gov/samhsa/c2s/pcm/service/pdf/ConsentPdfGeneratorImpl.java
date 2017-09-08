@@ -1,7 +1,6 @@
 package gov.samhsa.c2s.pcm.service.pdf;
 
 
-import com.google.common.collect.ImmutableMap;
 import gov.samhsa.c2s.pcm.domain.consent.Consent;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentDoNotShareSensitivityPolicyCode;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentIndividualProviderDisclosureIsMadeTo;
@@ -23,9 +22,7 @@ import gov.samhsa.c2s.pcm.infrastructure.pdfbox.PdfBoxStyle;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.TableAttribute;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.TextAlignment;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.util.PdfBoxHandler;
-import gov.samhsa.c2s.pcm.service.consent.ConsentStatus;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -74,7 +71,8 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         float titleFontSize = 20f;
         PDFont titleFont = PDType1Font.TIMES_BOLD;
         Color titleColor = Color.BLACK;
-        pdfBoxService.addCenteredTextAtOffset(consentTitle, titleFont, titleFontSize, titleColor, startYCoordinate, page, contentStream);
+        float width = page.getMediaBox().getWidth() - 2 * PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER;
+        pdfBoxService.addWrappedParagraph(consentTitle, titleFont, titleFontSize, titleColor, TextAlignment.LEFT, PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER, startYCoordinate, width, page, contentStream);
     }
 
     @Override
@@ -148,7 +146,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     }
 
     @Override
-    public byte[] generateConsentPdf(Consent consent, Patient patient, Date attestedOn, String consentTerms) throws IOException {
+    public byte[] generateConsentPdf(Consent consent, Patient patient, boolean isSigned, Date attestedOn, String consentTerms) throws IOException {
         Assert.notNull(consent, "Consent is required.");
 
         ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
@@ -157,7 +155,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
         // Create a new blank page with configured page size and add it to the document
         PDPage page = pdfBoxService.generatePage(CONSENT_PDF, document);
-        log.debug("Configured page size is: " + pdfBoxService.getConfiguredPdfFont(CONSENT_PDF));
+        log.debug("Configured page size is: " + pdfBoxService.getConfiguredPdfPageSize(CONSENT_PDF));
 
         // Set configured font
         PDFont defaultFont = pdfBoxService.getConfiguredPdfFont(CONSENT_PDF);
@@ -166,13 +164,13 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
 
             // Configure each drawing section yCoordinate in order to centralized adjust layout
-            final float titleSectionStartYCoordinate = page.getMediaBox().getHeight() - PdfBoxStyle.TOP_BOTTOM_MARGINS_OF_LETTER;
+            final float titleSectionStartYCoordinate = PdfBoxStyle.TOP_BOTTOM_MARGINS_OF_LETTER;
             final float consentReferenceNumberSectionStartYCoordinate = 690f;
             final float authorizationSectionStartYCoordinate = 590f;
             final float healthInformationSectionStartYCoordinate = 405f;
             final float consentTermsSectionStartYCoordinate = 220f;
             final float consentEffectiveDateSectionStartYCoordinate = 105f;
-            final float consentSigningSectionStartYCoordinate = 75f;
+            final float consentSigningSectionStartYCoordinate = 70f;
 
             // Title
             final String titleMessageKey = "CONSENT.PDF.TITLE";
@@ -194,7 +192,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             addEffectiveAndExpirationDate(consent, consentEffectiveDateSectionStartYCoordinate, contentStream);
 
             // Consent signing details
-            if (consent.getStatus().equals(ConsentStatus.CONSENT_SIGNED)) {
+            if (isSigned) {
                 addConsentSigningDetails(patient, attestedOn, consentSigningSectionStartYCoordinate, defaultFont, contentStream);
             }
 
@@ -433,8 +431,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         drawSectionHeader(title, cardXCoordinate, startYCoordinate, page, contentStream);
 
         final String userNameKey = "ATTESTER_FULL_NAME";
-        String termsWithAttestedName = StrSubstitutor.replace(consentTerms,
-                ImmutableMap.of(userNameKey, patient.getFirstName().concat(SPACE_PATTERN + patient.getLastName())));
+        String termsWithAttestedName = consentTerms.replace(userNameKey, patient.getFirstName().concat(SPACE_PATTERN + patient.getLastName()));
 
         try {
             pdfBoxService.addWrappedParagraphByLineBreaks(termsWithAttestedName, font, PdfBoxStyle.TEXT_SMALL_SIZE, Color.BLACK, paragraphYCoordinate, PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER, page, contentStream);
@@ -503,7 +500,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
     private static String filterNullAddressValue(String value) {
         final String commaPattern = ", ";
-        if (value == null) {
+        if (value == null || value.isEmpty()) {
             return "";
         } else {
             return commaPattern.concat(value);

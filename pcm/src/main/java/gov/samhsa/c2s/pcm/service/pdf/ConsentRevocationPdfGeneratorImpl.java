@@ -52,9 +52,10 @@ public class ConsentRevocationPdfGeneratorImpl implements ConsentRevocationPdfGe
         try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
 
             // Configure each drawing section yCoordinate in order to centralized adjust layout
-            final float titleSectionStartYCoordinate = page.getMediaBox().getHeight() - PdfBoxStyle.TOP_BOTTOM_MARGINS_OF_LETTER;
+            final float titleSectionStartYCoordinate = PdfBoxStyle.TOP_BOTTOM_MARGINS_OF_LETTER;
             final float consentReferenceNumberSectionStartYCoordinate = 670f;
-            final float consentRevocationTermsSectionStartYCoordinate = 600f;
+            final float consentRevocationTermsSectionStartYCoordinate = 570f;
+            final float consentRevocationSigningSectionStartYCoordinate = 230f;
 
             // Title
             final String titleMessageKey = "REVOCATION.PDF.TITLE";
@@ -65,6 +66,9 @@ public class ConsentRevocationPdfGeneratorImpl implements ConsentRevocationPdfGe
 
             // Consent revocation terms
             addConsentRevocationTerms(consentRevocationTerm, consentRevocationTermsSectionStartYCoordinate, defaultFont, page, contentStream);
+
+            // Revocation signing details
+            consentPdfGenerator.addConsentSigningDetails(patient, revokedOnDateTime, consentRevocationSigningSectionStartYCoordinate, defaultFont, contentStream);
 
             // Make sure that the content stream is closed
             contentStream.close();

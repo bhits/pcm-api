@@ -1018,7 +1018,7 @@ public class ConsentServiceImpl implements ConsentService {
             }
 
             try {
-                attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, attestedOn, term));
+                attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, true, attestedOn, term));
             } catch (IOException e) {
                 logger.error(e.getMessage(), e);
                 throw new ConsentPdfGenerateException(e);
@@ -1493,7 +1493,7 @@ public class ConsentServiceImpl implements ConsentService {
         }
 
         try {
-            consent.setUnAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, null, terms));
+            consent.setUnAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, false, null, terms));
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
             throw new ConsentPdfGenerateException(e);
@@ -1866,7 +1866,7 @@ public class ConsentServiceImpl implements ConsentService {
         if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
             return consentRevocationTermsVersionsService.findDtoByLatestEnabledVersion().getConsentRevokeTermsText();
         } else {
-            return messageSource.getMessage("CONSENT.TERMS.TEXT", null, LocaleContextHolder.getLocale());
+            return messageSource.getMessage("REVOCATION.TERMS.TEXT", null, LocaleContextHolder.getLocale());
         }
     }
 }

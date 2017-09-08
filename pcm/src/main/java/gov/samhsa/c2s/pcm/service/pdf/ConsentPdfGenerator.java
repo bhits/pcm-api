@@ -27,5 +27,5 @@ public interface ConsentPdfGenerator {
      * @param patient the patient information
      * @return the byte[]
      */
-    byte[] generateConsentPdf(Consent consent, Patient patient, Date attestedOn, String terms) throws IOException;
+    byte[] generateConsentPdf(Consent consent, Patient patient, boolean isSigned, Date attestedOn, String terms) throws IOException;
 }
