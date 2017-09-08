@@ -5,8 +5,15 @@ import com.google.common.collect.ImmutableMap;
 import gov.samhsa.c2s.pcm.config.PdfProperties;
 import gov.samhsa.c2s.pcm.domain.consent.Consent;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentDoNotShareSensitivityPolicyCode;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentIndividualProviderDisclosureIsMadeTo;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentIndividualProviderPermittedToDisclose;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentOrganizationalProviderDisclosureIsMadeTo;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentOrganizationalProviderPermittedToDisclose;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentShareForPurposeOfUseCode;
 import gov.samhsa.c2s.pcm.domain.patient.Patient;
+import gov.samhsa.c2s.pcm.domain.provider.AbstractProvider;
+import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
+import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProvider;
 import gov.samhsa.c2s.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.c2s.pcm.domain.valueset.ValueSetCategoryRepository;
 import gov.samhsa.c2s.pcm.infrastructure.exception.InvalidContentException;
@@ -15,6 +22,7 @@ import gov.samhsa.c2s.pcm.infrastructure.pdfbox.Column;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.PdfBoxService;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.PdfBoxStyle;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.TableAttribute;
+import gov.samhsa.c2s.pcm.infrastructure.pdfbox.TextAlignment;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.util.PdfBoxHandler;
 import gov.samhsa.c2s.pcm.service.consent.ConsentStatus;
 import gov.samhsa.c2s.pcm.service.exception.PdfConfigMissingException;
@@ -41,6 +49,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -159,6 +168,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             // Configure each drawing section yCoordinate in order to centralized adjust layout
             final float titleSectionStartYCoordinate = page.getMediaBox().getHeight() - PdfBoxStyle.TOP_BOTTOM_MARGINS_OF_LETTER;
             final float consentReferenceNumberSectionStartYCoordinate = 690f;
+            final float authorizationSectionStartYCoordinate = 640f;
             final float healthInformationSectionStartYCoordinate = 455f;
             final float consentTermsSectionStartYCoordinate = 270f;
             final float consentEffectiveDateSectionStartYCoordinate = 120f;
@@ -169,6 +179,9 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
             // Consent Reference Number and Patient information
             addConsentReferenceNumberAndPatientInfo(consent, patient, consentReferenceNumberSectionStartYCoordinate, defaultFont, contentStream);
+
+            // Authorization to disclose section
+            addAuthorizationToDisclose(consent, authorizationSectionStartYCoordinate, defaultFont, page, contentStream);
 
             // Health information to be disclosed section
             addHealthInformationToBeDisclose(consent, healthInformationSectionStartYCoordinate, defaultFont, page, contentStream);
@@ -201,11 +214,139 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         }
     }
 
+    private void addAuthorizationToDisclose(Consent consent, float startYCoordinate, PDFont font, PDPage page, PDPageContentStream contentStream) throws IOException {
+        final float cardXCoordinate = PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER;
+        final float colAWidth = 180f;
+        final float colBWidth = 90f;
+        final float colCWidth = 200f;
+        final float colDWidth = 90f;
+        String title = getI18nMessage("CONSENT.PDF.SECTION1.TITLE");
+        drawSectionHeader(title, cardXCoordinate, startYCoordinate, page, contentStream);
+
+        List<Column> tableColumns = Arrays.asList(new Column(colAWidth), new Column(colBWidth), new Column(colCWidth), new Column(colDWidth));
+
+        // Provider permitted to disclose
+        float providerPermittedStartYCoordinate = startYCoordinate - PdfBoxStyle.XLARGE_LINE_SPACE;
+        addProviderPermittedToDisclose(consent, tableColumns, providerPermittedStartYCoordinate, font, page, contentStream);
+
+        // Provider disclosure is made to
+        float providerDisclosureIsMadeToStartYCoordinate = 535f;
+        addProviderDisclosureIsMadeTo(consent, tableColumns, providerDisclosureIsMadeToStartYCoordinate, font, page, contentStream);
+    }
+
+    private void addProviderPermittedToDisclose(Consent consent, List<Column> tableColumns, float startYCoordinate, PDFont font, PDPage page, PDPageContentStream contentStream) throws IOException {
+        String label = getI18nMessage("CONSENT.PDF.SECTION1.CONTENT1");
+        addAuthorizationTableHeader(label, startYCoordinate, tableColumns, font, contentStream);
+
+        // From providers details
+        final float fromProviderDetailsYCoordinate = 207f;
+
+        Set<OrganizationalProvider> fromOrganizations = consent.getOrganizationalProvidersPermittedToDisclose().stream()
+                .map(ConsentOrganizationalProviderPermittedToDisclose::getOrganizationalProvider)
+                .collect(Collectors.toSet());
+
+        Set<IndividualProvider> fromPractitioners = consent.getProvidersPermittedToDisclose().stream()
+                .map(ConsentIndividualProviderPermittedToDisclose::getIndividualProvider)
+                .collect(Collectors.toSet());
+
+        addConsentProvidersDetails(fromOrganizations, fromPractitioners, tableColumns, fromProviderDetailsYCoordinate, page, contentStream);
+    }
+
+    private void addProviderDisclosureIsMadeTo(Consent consent, List<Column> tableColumns, float startYCoordinate, PDFont font, PDPage page, PDPageContentStream contentStream) throws IOException {
+        String label = getI18nMessage("CONSENT.PDF.SECTION1.CONTENT2");
+        addAuthorizationTableHeader(label, startYCoordinate, tableColumns, font, contentStream);
+
+        // To providers details
+        final float toProviderDetailsYCoordinate = 292f;
+        Set<OrganizationalProvider> fromOrganizations = consent.getOrganizationalProvidersDisclosureIsMadeTo().stream()
+                .map(ConsentOrganizationalProviderDisclosureIsMadeTo::getOrganizationalProvider)
+                .collect(Collectors.toSet());
+
+        Set<IndividualProvider> fromPractitioners = consent.getProvidersDisclosureIsMadeTo().stream()
+                .map(ConsentIndividualProviderDisclosureIsMadeTo::getIndividualProvider)
+                .collect(Collectors.toSet());
+
+        addConsentProvidersDetails(fromOrganizations, fromPractitioners, tableColumns, toProviderDetailsYCoordinate, page, contentStream);
+    }
+
+    private void addConsentProvidersDetails(Set<OrganizationalProvider> organizations, Set<IndividualProvider> practitioners, List<Column> columns, float startYCoordinate, PDPage page, PDPageContentStream contentStream) throws IOException {
+        float providerNameColWidth = columns.get(0).getCellWidth();
+        float providerNPIColWidth = columns.get(1).getCellWidth();
+        float providerAddressColWidth = columns.get(2).getCellWidth();
+        float providerPhoneColWidth = columns.get(3).getCellWidth();
+
+        for (OrganizationalProvider organization : organizations) {
+            // Provider Name
+            drawProviderDetails(organization.getOrgName(), PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER,
+                    startYCoordinate, providerNameColWidth, page, contentStream);
+            // Provider NPI Number
+            drawProviderDetails(organization.getNpi(), PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER + providerNameColWidth,
+                    startYCoordinate, providerNPIColWidth, page, contentStream);
+            // Provider Address
+            drawProviderDetails(composeAddress(organization), PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER + providerNameColWidth + providerNPIColWidth,
+                    startYCoordinate, providerAddressColWidth, page, contentStream);
+            // Provider Phone
+            drawProviderDetails(organization.getPracticeLocationAddressTelephoneNumber(), PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER + providerNameColWidth + providerNPIColWidth + providerAddressColWidth,
+                    startYCoordinate, providerPhoneColWidth, page, contentStream);
+        }
+
+        for (IndividualProvider practitioner : practitioners) {
+            // Provider Name
+            drawProviderDetails(getFullName(practitioner.getFirstName(), practitioner.getMiddleName(), practitioner.getLastName()),
+                    PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER, startYCoordinate, providerNameColWidth, page, contentStream);
+            // Provider NPI Number
+            drawProviderDetails(practitioner.getNpi(), PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER + providerNameColWidth,
+                    startYCoordinate, providerNPIColWidth, page, contentStream);
+            // Provider Address
+            drawProviderDetails(composeAddress(practitioner), PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER + providerNameColWidth + providerNPIColWidth,
+                    startYCoordinate, providerAddressColWidth, page, contentStream);
+            // Provider Phone
+            drawProviderDetails(practitioner.getPracticeLocationAddressTelephoneNumber(), PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER + providerNameColWidth + providerNPIColWidth + providerAddressColWidth,
+                    startYCoordinate, providerPhoneColWidth, page, contentStream);
+        }
+    }
+
+    private void drawProviderDetails(String providerInfo, float startXCoordinate, float startYCoordinate, float width, PDPage page, PDPageContentStream contentStream) throws IOException {
+        final PDFont font = PDType1Font.TIMES_BOLD;
+        final float fontSize = PdfBoxStyle.TEXT_SMALL_SIZE;
+        final Color textColor = Color.BLACK;
+        pdfBoxService.addWrappedParagraph(providerInfo, font, fontSize, textColor, TextAlignment.LEFT, startXCoordinate, startYCoordinate, width, page, contentStream);
+    }
+
+    private void addAuthorizationTableHeader(String label, float labelYCoordinate, List<Column> columnsWidth, PDFont font, PDPageContentStream contentStream) throws IOException {
+        final float xCoordinate = PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER;
+        final float headerYCoordinate = labelYCoordinate - PdfBoxStyle.SMALL_LINE_SPACE;
+        pdfBoxService.addTextAtOffset(label, PDType1Font.TIMES_BOLD, PdfBoxStyle.TEXT_MEDIUM_SIZE, Color.BLACK, xCoordinate, labelYCoordinate, contentStream);
+
+        final float rowHeight = 15f;
+        final float cellMargin = 1f;
+        // Provider table header
+        String a1 = getI18nMessage("CONSENT.PDF.PROVIDER.NAME");
+        String b1 = getI18nMessage("CONSENT.PDF.NPI");
+        String c1 = getI18nMessage("CONSENT.PDF.ADDRESS");
+        String d1 = getI18nMessage("CONSENT.PDF.PHONE");
+        List<String> tableHeader = Arrays.asList(a1, b1, c1, d1);
+        List<List<String>> header = Collections.singletonList(tableHeader);
+
+        TableAttribute tableAttribute = TableAttribute.builder()
+                .xCoordinate(PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER)
+                .yCoordinate(headerYCoordinate)
+                .rowHeight(rowHeight)
+                .cellMargin(cellMargin)
+                .contentFont(font)
+                .contentFontSize(PdfBoxStyle.TEXT_SMALL_SIZE)
+                .borderColor(Color.WHITE)
+                .columns(columnsWidth)
+                .build();
+
+        pdfBoxService.addTableContent(contentStream, tableAttribute, header);
+    }
+
     private void addHealthInformationToBeDisclose(Consent consent, float startYCoordinate, PDFont font, PDPage page, PDPageContentStream contentStream) throws IOException {
         float cardXCoordinate = PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER;
         float labelYCoordinate = startYCoordinate - PdfBoxStyle.XLARGE_LINE_SPACE;
 
-        String title = messageSource.getMessage("CONSENT.PDF.SECTION2.TITLE", null, LocaleContextHolder.getLocale());
+        String title = getI18nMessage("CONSENT.PDF.SECTION2.TITLE");
         drawSectionHeader(title, cardXCoordinate, startYCoordinate, page, contentStream);
 
         // Medical Information
@@ -221,8 +362,8 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         final String itemMarkerSymbol = "-";
         float subLabelYCoordinate = labelYCoordinate - 15f;
         float listYCoordinate = labelYCoordinate - 20f;
-        String label = messageSource.getMessage("CONSENT.PDF.CATEGORY.TITLE", null, LocaleContextHolder.getLocale());
-        String subLabel = messageSource.getMessage("SENSITIVE.CATEGORY", null, LocaleContextHolder.getLocale());
+        String label = getI18nMessage("CONSENT.PDF.CATEGORY.TITLE");
+        String subLabel = getI18nMessage("SENSITIVE.CATEGORY");
 
         pdfBoxService.addTextAtOffset(label, PDType1Font.TIMES_BOLD, PdfBoxStyle.TEXT_SMALL_SIZE, Color.BLACK, xCoordinate, labelYCoordinate, contentStream);
         pdfBoxService.addTextAtOffset(subLabel, font, PdfBoxStyle.TEXT_SMALL_SIZE, Color.BLACK, xCoordinate, subLabelYCoordinate, contentStream);
@@ -243,7 +384,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
                 medicalInformationListToShare.add(valueSetName);
             } else {
-                medicalInformationListToShare.add(messageSource.getMessage(valueSetCategory.getCode() + ".NAME", null, LocaleContextHolder.getLocale()));
+                medicalInformationListToShare.add(getI18nMessage(valueSetCategory.getCode() + ".NAME"));
             }
         }
 
@@ -252,7 +393,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
                 medicalInformationListToShare.remove(vscName);
             } else {
-                medicalInformationListToShare.remove(messageSource.getMessage(item.getValueSetCategory().getCode() + ".NAME", null, LocaleContextHolder.getLocale()));
+                medicalInformationListToShare.remove(getI18nMessage(item.getValueSetCategory().getCode() + ".NAME"));
             }
         }
         return new ArrayList<>(medicalInformationListToShare);
@@ -263,7 +404,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         final float listWidth = 280f;
         final String itemMarkerSymbol = "-";
         float listYCoordinate = labelYCoordinate - 5f;
-        String label = messageSource.getMessage("CONSENT.PDF.PURPOSE.TITLE", null, LocaleContextHolder.getLocale());
+        String label = getI18nMessage("CONSENT.PDF.PURPOSE.TITLE");
 
         pdfBoxService.addTextAtOffset(label, PDType1Font.TIMES_BOLD, PdfBoxStyle.TEXT_SMALL_SIZE, Color.BLACK, xCoordinate, labelYCoordinate, contentStream);
 
@@ -273,12 +414,12 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     }
 
     private List<String> getPurposeOfUse(Consent consent) {
-        ArrayList<String> purposesOfUseList = new ArrayList<String>();
+        ArrayList<String> purposesOfUseList = new ArrayList<>();
         for (final ConsentShareForPurposeOfUseCode purposeOfUseCode : consent.getShareForPurposeOfUseCodes()) {
             if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
                 purposesOfUseList.add(purposeOfUseCode.getPurposeOfUseCode().getDisplayName());
             } else {
-                purposesOfUseList.add(messageSource.getMessage(purposeOfUseCode.getPurposeOfUseCode().getCode() + ".NAME", null, LocaleContextHolder.getLocale()));
+                purposesOfUseList.add(getI18nMessage(purposeOfUseCode.getPurposeOfUseCode().getCode() + ".NAME"));
             }
         }
         return purposesOfUseList;
@@ -287,7 +428,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     private void addConsentTerms(String consentTerms, Patient patient, float startYCoordinate, PDFont font, PDPage page, PDPageContentStream contentStream) throws IOException {
         float cardXCoordinate = PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER;
         final float paragraphYCoordinate = startYCoordinate - PdfBoxStyle.XLARGE_LINE_SPACE;
-        final String title = messageSource.getMessage("CONSENT.PDF.SECTION3.TITLE", null, LocaleContextHolder.getLocale());
+        final String title = getI18nMessage("CONSENT.PDF.SECTION3.TITLE");
 
         drawSectionHeader(title, cardXCoordinate, startYCoordinate, page, contentStream);
 
@@ -326,8 +467,8 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         final float cellMargin = 1f;
 
         // Prepare table content
-        String col1 = "Effective Date: ".concat(PdfBoxHandler.formatDate(consent.getStartDate(), DATE_FORMAT_PATTERN));
-        String col2 = "Expiration Date: ".concat(PdfBoxHandler.formatDate(consent.getEndDate(), DATE_FORMAT_PATTERN));
+        String col1 = getI18nMessage("CONSENT.EFFECTIVE.DATE").concat(PdfBoxHandler.formatDate(consent.getStartDate(), DATE_FORMAT_PATTERN));
+        String col2 = getI18nMessage("CONSENT.EXPIRATION.DATE").concat(PdfBoxHandler.formatDate(consent.getEndDate(), DATE_FORMAT_PATTERN));
         java.util.List<String> firstRowContent = Arrays.asList(col1, col2);
 
         List<List<String>> tableContent = Collections.singletonList(firstRowContent);
@@ -349,5 +490,41 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
                 .build();
 
         pdfBoxService.addTableContent(contentStream, tableAttribute, tableContent);
+    }
+
+    private String composeAddress(AbstractProvider provider) {
+        return provider.getFirstLinePracticeLocationAddress()
+                .concat(filterNullAddressValue(provider.getSecondLinePracticeLocationAddress()))
+                .concat(filterNullAddressValue(provider.getPracticeLocationAddressCityName()))
+                .concat(filterNullAddressValue(provider.getPracticeLocationAddressStateName()))
+                .concat(filterNullAddressValue(provider.getPracticeLocationAddressPostalCode()))
+                .concat(filterNullAddressValue(provider.getPracticeLocationAddressCountryCode()));
+    }
+
+    private static String filterNullAddressValue(String value) {
+        final String commaPattern = ", ";
+        if (value == null) {
+            return "";
+        } else {
+            return commaPattern.concat(value);
+        }
+    }
+
+    private String getFullName(String firstName, String middleName, String lastName) {
+        return firstName
+                .concat(getMiddleName(middleName))
+                .concat(SPACE_PATTERN + lastName);
+    }
+
+    private String getMiddleName(String middleName) {
+        if (middleName == null) {
+            return "";
+        } else {
+            return SPACE_PATTERN.concat(middleName);
+        }
+    }
+
+    private String getI18nMessage(String messageKey) {
+        return messageSource.getMessage(messageKey, null, LocaleContextHolder.getLocale());
     }
 }
