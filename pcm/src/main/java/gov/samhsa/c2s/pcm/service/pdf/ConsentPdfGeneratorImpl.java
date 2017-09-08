@@ -79,6 +79,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
 
     @Override
     public void addConsentReferenceNumberAndPatientInfo(Consent consent, Patient patient, float startYCoordinate, PDFont defaultFont, PDPageContentStream contentStream) throws IOException {
+        String consentCreatedOn = PdfBoxHandler.formatDate(consent.getCreatedDateTime(), DATE_FORMAT_PATTERN);
         String consentReferenceNumber = consent.getConsentReferenceId();
         String patientFullName = patient.getFirstName().concat(SPACE_PATTERN + patient.getLastName());
         String patientBirthDate = PdfBoxHandler.formatDate(patient.getBirthDay(), DATE_FORMAT_PATTERN);
@@ -87,22 +88,29 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         final float fontSize = PdfBoxStyle.TEXT_SMALL_SIZE;
         final PDFont contentFont = PDType1Font.TIMES_BOLD;
 
+        // Add Consent Created On
+        final String createdOnLabel = getI18nMessage("REVOCATION.PDF.DATE");
+        pdfBoxService.addTextAtOffset(createdOnLabel, defaultFont, fontSize, textColor, PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER, startYCoordinate, contentStream);
+        final float createdOnXCoordinate = PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER + PdfBoxHandler.targetedStringWidth(createdOnLabel, defaultFont, fontSize);
+        pdfBoxService.addTextAtOffset(consentCreatedOn, contentFont, fontSize, textColor, createdOnXCoordinate, startYCoordinate, contentStream);
+
         // Add Consent Reference Number
-        final String crnLabel = "Consent Reference Number: ";
-        pdfBoxService.addTextAtOffset(crnLabel, defaultFont, fontSize, textColor, PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER, startYCoordinate, contentStream);
-        final float crnXCoordinate = PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER + PdfBoxHandler.targetedStringWidth(crnLabel, defaultFont, fontSize);
-        pdfBoxService.addTextAtOffset(consentReferenceNumber, contentFont, fontSize, textColor, crnXCoordinate, startYCoordinate, contentStream);
+        final float crnLabelYCoordinate = startYCoordinate - PdfBoxStyle.XLARGE_LINE_SPACE;
+        final String crnLabel = getI18nMessage("CONSENT.REFERENCE.NUMBER");
+        pdfBoxService.addTextAtOffset(crnLabel, defaultFont, fontSize, textColor, PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER, crnLabelYCoordinate, contentStream);
+        final float crnYCoordinate = crnLabelYCoordinate - PdfBoxStyle.XLARGE_LINE_SPACE;
+        pdfBoxService.addTextAtOffset(consentReferenceNumber, contentFont, fontSize, textColor, PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER, crnYCoordinate, contentStream);
 
         // Add patient name
-        final float nameYCoordinate = startYCoordinate - PdfBoxStyle.XLARGE_LINE_SPACE;
-        final String nameLabel = "Patient Name: ";
+        final float nameYCoordinate = crnYCoordinate - PdfBoxStyle.XLARGE_LINE_SPACE;
+        final String nameLabel = getI18nMessage("PATIENT.NAME");
         pdfBoxService.addTextAtOffset(nameLabel, defaultFont, fontSize, textColor, PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER, nameYCoordinate, contentStream);
         final float nameXCoordinate = PdfBoxStyle.LEFT_RIGHT_MARGINS_OF_LETTER + PdfBoxHandler.targetedStringWidth(nameLabel, defaultFont, fontSize);
         pdfBoxService.addTextAtOffset(patientFullName, contentFont, fontSize, textColor, nameXCoordinate, nameYCoordinate, contentStream);
 
         // Add patient DOB
-        final String dobLabel = "Patient DOB: ";
-        final float dobLabelXCoordinate = 300f;
+        final String dobLabel = getI18nMessage("PATIENT.DOB");
+        final float dobLabelXCoordinate = 310f;
         pdfBoxService.addTextAtOffset(dobLabel, defaultFont, fontSize, textColor, dobLabelXCoordinate, nameYCoordinate, contentStream);
         final float dobXCoordinate = dobLabelXCoordinate + PdfBoxHandler.targetedStringWidth(dobLabel, defaultFont, fontSize);
         pdfBoxService.addTextAtOffset(patientBirthDate, contentFont, fontSize, textColor, dobXCoordinate, nameYCoordinate, contentStream);
@@ -113,9 +121,9 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         String patientName = patient.getFirstName().concat(SPACE_PATTERN + patient.getLastName());
         String email = patient.getEmail();
 
-        final String signedByLabel = "Signed by: ";
-        final String emailLabel = "Email: ";
-        final String signedOnLabel = "Signed on: ";
+        final String signedByLabel = getI18nMessage("SIGNED.BY");
+        final String emailLabel = getI18nMessage("EMAIL");
+        final String signedOnLabel = getI18nMessage("SIGNED.ON");
 
         final PDFont contentFont = PDType1Font.TIMES_BOLD;
         final Color textColor = Color.BLACK;
@@ -160,10 +168,10 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             // Configure each drawing section yCoordinate in order to centralized adjust layout
             final float titleSectionStartYCoordinate = page.getMediaBox().getHeight() - PdfBoxStyle.TOP_BOTTOM_MARGINS_OF_LETTER;
             final float consentReferenceNumberSectionStartYCoordinate = 690f;
-            final float authorizationSectionStartYCoordinate = 640f;
-            final float healthInformationSectionStartYCoordinate = 455f;
-            final float consentTermsSectionStartYCoordinate = 270f;
-            final float consentEffectiveDateSectionStartYCoordinate = 120f;
+            final float authorizationSectionStartYCoordinate = 590f;
+            final float healthInformationSectionStartYCoordinate = 405f;
+            final float consentTermsSectionStartYCoordinate = 220f;
+            final float consentEffectiveDateSectionStartYCoordinate = 105f;
             final float consentSigningSectionStartYCoordinate = 75f;
 
             // Title
@@ -223,7 +231,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         addProviderPermittedToDisclose(consent, tableColumns, providerPermittedStartYCoordinate, font, page, contentStream);
 
         // Provider disclosure is made to
-        float providerDisclosureIsMadeToStartYCoordinate = 535f;
+        float providerDisclosureIsMadeToStartYCoordinate = 485f;
         addProviderDisclosureIsMadeTo(consent, tableColumns, providerDisclosureIsMadeToStartYCoordinate, font, page, contentStream);
     }
 
@@ -232,8 +240,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         addAuthorizationTableHeader(label, startYCoordinate, tableColumns, font, contentStream);
 
         // From providers details
-        final float fromProviderDetailsYCoordinate = 207f;
-
+        final float fromProviderDetailsYCoordinate = 257f;
         Set<OrganizationalProvider> fromOrganizations = consent.getOrganizationalProvidersPermittedToDisclose().stream()
                 .map(ConsentOrganizationalProviderPermittedToDisclose::getOrganizationalProvider)
                 .collect(Collectors.toSet());
@@ -250,7 +257,7 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         addAuthorizationTableHeader(label, startYCoordinate, tableColumns, font, contentStream);
 
         // To providers details
-        final float toProviderDetailsYCoordinate = 292f;
+        final float toProviderDetailsYCoordinate = 342f;
         Set<OrganizationalProvider> fromOrganizations = consent.getOrganizationalProvidersDisclosureIsMadeTo().stream()
                 .map(ConsentOrganizationalProviderDisclosureIsMadeTo::getOrganizationalProvider)
                 .collect(Collectors.toSet());
