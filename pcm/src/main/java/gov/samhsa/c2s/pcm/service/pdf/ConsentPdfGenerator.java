@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public interface ConsentPdfGenerator {
 
-    void addConsentTitle(String pdfType, float startYCoordinate, PDPage page, PDPageContentStream contentStream) throws IOException;
+    void addConsentTitle(String titleMessageKey, float startYCoordinate, PDPage page, PDPageContentStream contentStream) throws IOException;
 
     void addConsentReferenceNumberAndPatientInfo(Consent consent, Patient patient, float startYCoordinate, PDFont defaultFont, PDPageContentStream contentStream) throws IOException;
 

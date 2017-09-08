@@ -22,6 +22,7 @@ import gov.samhsa.c2s.pcm.service.dto.ConsentListDto;
 import gov.samhsa.c2s.pcm.service.dto.ConsentPdfDto;
 import gov.samhsa.c2s.pcm.service.dto.ConsentRevokationPdfDto;
 import gov.samhsa.c2s.pcm.service.patient.PatientService;
+import gov.samhsa.c2s.pcm.service.pdf.ConsentPdfGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -67,6 +68,11 @@ public class ConsentServiceImplTest {
      */
     @Mock
     ConsentRepository consentRepository;
+    /**
+     * The consent pdf generator.
+     */
+    @Mock
+    ConsentPdfGenerator consentPdfGenerator;
     /**
      * The individual provider repository.
      */
@@ -123,7 +129,7 @@ public class ConsentServiceImplTest {
      */
     @InjectMocks
     ConsentServiceImpl cst;
-    byte[] DOCUMENT_BYTES = "text" .getBytes();
+    byte[] DOCUMENT_BYTES = "text".getBytes();
     String DOCUMENT_FILE_NAME = "documentFileName";
     String DOCUMENT_NAME = "documentName";
     String SIGNED_DOCUMENT_URL = "signedDocumentUrl";
@@ -720,8 +726,8 @@ public class ConsentServiceImplTest {
 
     @Test
     public void testValidateConsentDate_true() {
-        assertEquals(true, cst.validateConsentDate(new Date(117, 06, 04),
-                new Date(117, 06, 19)));
+        assertEquals(true, cst.validateConsentDate(new Date(3117, 06, 04),
+                new Date(3117, 06, 19)));
     }
 
 }

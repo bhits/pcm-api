@@ -2,7 +2,6 @@ package gov.samhsa.c2s.pcm.service.pdf;
 
 
 import com.google.common.collect.ImmutableMap;
-import gov.samhsa.c2s.pcm.config.PdfProperties;
 import gov.samhsa.c2s.pcm.domain.consent.Consent;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentDoNotShareSensitivityPolicyCode;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentIndividualProviderDisclosureIsMadeTo;
@@ -25,7 +24,6 @@ import gov.samhsa.c2s.pcm.infrastructure.pdfbox.TableAttribute;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.TextAlignment;
 import gov.samhsa.c2s.pcm.infrastructure.pdfbox.util.PdfBoxHandler;
 import gov.samhsa.c2s.pcm.service.consent.ConsentStatus;
-import gov.samhsa.c2s.pcm.service.exception.PdfConfigMissingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -59,25 +57,19 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     private static final String SPACE_PATTERN = " ";
 
     private final PdfBoxService pdfBoxService;
-    private final PdfProperties pdfProperties;
     private final MessageSource messageSource;
     private final ValueSetCategoryRepository valueSetCategoryRepository;
 
     @Autowired
-    public ConsentPdfGeneratorImpl(PdfBoxService pdfBoxService, PdfProperties pdfProperties, MessageSource messageSource, ValueSetCategoryRepository valueSetCategoryRepository) {
+    public ConsentPdfGeneratorImpl(PdfBoxService pdfBoxService, MessageSource messageSource, ValueSetCategoryRepository valueSetCategoryRepository) {
         this.pdfBoxService = pdfBoxService;
-        this.pdfProperties = pdfProperties;
         this.messageSource = messageSource;
         this.valueSetCategoryRepository = valueSetCategoryRepository;
     }
 
     @Override
-    public void addConsentTitle(String pdfType, float startYCoordinate, PDPage page, PDPageContentStream contentStream) throws IOException {
-        String consentTitle = pdfProperties.getPdfConfigs().stream()
-                .filter(pdfConfig -> pdfConfig.type.equalsIgnoreCase(pdfType))
-                .map(PdfProperties.PdfConfig::getTitle)
-                .findAny()
-                .orElseThrow(PdfConfigMissingException::new);
+    public void addConsentTitle(String titleMessageKey, float startYCoordinate, PDPage page, PDPageContentStream contentStream) throws IOException {
+        String consentTitle = getI18nMessage(titleMessageKey);
 
         float titleFontSize = 20f;
         PDFont titleFont = PDType1Font.TIMES_BOLD;
@@ -175,7 +167,8 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
             final float consentSigningSectionStartYCoordinate = 75f;
 
             // Title
-            addConsentTitle(CONSENT_PDF, titleSectionStartYCoordinate, page, contentStream);
+            final String titleMessageKey = "CONSENT.PDF.TITLE";
+            addConsentTitle(titleMessageKey, titleSectionStartYCoordinate, page, contentStream);
 
             // Consent Reference Number and Patient information
             addConsentReferenceNumberAndPatientInfo(consent, patient, consentReferenceNumberSectionStartYCoordinate, defaultFont, contentStream);

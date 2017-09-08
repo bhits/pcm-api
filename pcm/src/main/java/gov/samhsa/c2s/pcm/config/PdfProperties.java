@@ -27,9 +27,6 @@ public class PdfProperties {
         @NotBlank
         public String type;
 
-        @NotBlank
-        public String title;
-
         //Not required
         public PdfBoxFont pdFont;
 

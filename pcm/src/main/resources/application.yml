@@ -110,11 +110,9 @@ c2s:
         clientSocketTimeoutInMs: 768000
     pdfConfigs:
       - type: consent-pdf
-        title: Consent to Share My Health Information
         pdFont: TIMES_ROMAN
         pdfPageSize: LETTER
       - type: consent-revocation-pdf
-        title: Revocation of Consent to Participate in Health Information Exchange
         pdFont: TIMES_ROMAN
         pdfPageSize: LETTER
   vss:

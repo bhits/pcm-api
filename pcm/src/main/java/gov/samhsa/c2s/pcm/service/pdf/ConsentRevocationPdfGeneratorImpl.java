@@ -57,7 +57,8 @@ public class ConsentRevocationPdfGeneratorImpl implements ConsentRevocationPdfGe
             final float consentRevocationTermsSectionStartYCoordinate = 600f;
 
             // Title
-            consentPdfGenerator.addConsentTitle(CONSENT_REVOCATION_PDF, titleSectionStartYCoordinate, page, contentStream);
+            final String titleMessageKey = "REVOCATION.PDF.TITLE";
+            consentPdfGenerator.addConsentTitle(titleMessageKey, titleSectionStartYCoordinate, page, contentStream);
 
             // Consent Reference Number and Patient information
             consentPdfGenerator.addConsentReferenceNumberAndPatientInfo(consent, patient, consentReferenceNumberSectionStartYCoordinate, defaultFont, contentStream);
