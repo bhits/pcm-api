@@ -7,12 +7,10 @@ import gov.samhsa.c2s.pcm.domain.consent.ConsentIndividualProviderDisclosureIsMa
 import gov.samhsa.c2s.pcm.domain.consent.ConsentIndividualProviderPermittedToDisclose;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentOrganizationalProviderDisclosureIsMadeTo;
 import gov.samhsa.c2s.pcm.domain.consent.ConsentOrganizationalProviderPermittedToDisclose;
-import gov.samhsa.c2s.pcm.domain.consent.ConsentShareForPurposeOfUseCode;
 import gov.samhsa.c2s.pcm.domain.patient.Patient;
 import gov.samhsa.c2s.pcm.domain.provider.AbstractProvider;
 import gov.samhsa.c2s.pcm.domain.provider.IndividualProvider;
 import gov.samhsa.c2s.pcm.domain.provider.OrganizationalProvider;
-import gov.samhsa.c2s.pcm.domain.valueset.ValueSetCategory;
 import gov.samhsa.c2s.pcm.domain.valueset.ValueSetCategoryRepository;
 import gov.samhsa.c2s.pcm.infrastructure.exception.InvalidContentException;
 import gov.samhsa.c2s.pcm.infrastructure.exception.PdfGenerationException;
@@ -41,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -372,23 +369,14 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     }
 
     private List<String> getMedicalInformation(Consent consent) {
-        Set<String> medicalInformationListToShare = new HashSet<String>();
-
-        List<ValueSetCategory> valueSetCategoryList = valueSetCategoryRepository
-                .findAll();
         //All possible VSC
-        for (ValueSetCategory valueSetCategory : valueSetCategoryList) {
-            String valueSetName = valueSetCategory.getName();
-            if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
-                medicalInformationListToShare.add(valueSetName);
-            } else {
-                medicalInformationListToShare.add(getI18nMessage(valueSetCategory.getCode() + ".NAME"));
-            }
-        }
+        Set<String> medicalInformationListToShare = valueSetCategoryRepository.findAll().stream()
+                .map(valueSetCategory -> isSelectedEnglish() ? valueSetCategory.getName() : getI18nMessage(valueSetCategory.getCode() + ".NAME"))
+                .collect(Collectors.toSet());
 
         for (final ConsentDoNotShareSensitivityPolicyCode item : consent.getDoNotShareSensitivityPolicyCodes()) {
             String vscName = item.getValueSetCategory().getName();
-            if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
+            if (isSelectedEnglish()) {
                 medicalInformationListToShare.remove(vscName);
             } else {
                 medicalInformationListToShare.remove(getI18nMessage(item.getValueSetCategory().getCode() + ".NAME"));
@@ -412,15 +400,11 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
     }
 
     private List<String> getPurposeOfUse(Consent consent) {
-        ArrayList<String> purposesOfUseList = new ArrayList<>();
-        for (final ConsentShareForPurposeOfUseCode purposeOfUseCode : consent.getShareForPurposeOfUseCodes()) {
-            if (LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en")) {
-                purposesOfUseList.add(purposeOfUseCode.getPurposeOfUseCode().getDisplayName());
-            } else {
-                purposesOfUseList.add(getI18nMessage(purposeOfUseCode.getPurposeOfUseCode().getCode() + ".NAME"));
-            }
-        }
-        return purposesOfUseList;
+        Set<String> purposesOfUseList = consent.getShareForPurposeOfUseCodes().stream()
+                .map(shareForPurposeOfUseCode -> isSelectedEnglish() ? shareForPurposeOfUseCode.getPurposeOfUseCode().getDisplayName() : getI18nMessage(shareForPurposeOfUseCode.getPurposeOfUseCode().getCode() + ".NAME"))
+                .collect(Collectors.toSet());
+
+        return new ArrayList<>(purposesOfUseList);
     }
 
     private void addConsentTerms(String consentTerms, Patient patient, float startYCoordinate, PDFont font, PDPage page, PDPageContentStream contentStream) throws IOException {
@@ -519,6 +503,10 @@ public class ConsentPdfGeneratorImpl implements ConsentPdfGenerator {
         } else {
             return SPACE_PATTERN.concat(middleName);
         }
+    }
+
+    private boolean isSelectedEnglish() {
+        return LocaleContextHolder.getLocale().getLanguage().equalsIgnoreCase("en");
     }
 
     private String getI18nMessage(String messageKey) {
