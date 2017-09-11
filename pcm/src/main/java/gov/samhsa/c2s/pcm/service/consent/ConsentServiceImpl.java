@@ -75,8 +75,8 @@ import gov.samhsa.c2s.pcm.service.dto.SpecificMedicalInfoDto;
 import gov.samhsa.c2s.pcm.service.dto.XacmlDto;
 import gov.samhsa.c2s.pcm.service.exception.AttestedConsentException;
 import gov.samhsa.c2s.pcm.service.exception.AttestedConsentRevocationException;
-import gov.samhsa.c2s.pcm.service.exception.ConsentPdfGenerateException;
-import gov.samhsa.c2s.pcm.service.exception.ConsentRevocationPdfGenerateException;
+import gov.samhsa.c2s.pcm.service.exception.ConsentPdfGenerationException;
+import gov.samhsa.c2s.pcm.service.exception.ConsentRevocationPdfGenerationException;
 import gov.samhsa.c2s.pcm.service.exception.XacmlNotFoundException;
 import gov.samhsa.c2s.pcm.service.fhir.FhirConsentService;
 import gov.samhsa.c2s.pcm.service.patient.PatientService;
@@ -1021,7 +1021,7 @@ public class ConsentServiceImpl implements ConsentService {
                 attestedConsent.setAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, true, attestedOn, term));
             } catch (IOException e) {
                 logger.error(e.getMessage(), e);
-                throw new ConsentPdfGenerateException(e);
+                throw new ConsentPdfGenerationException(e);
             }
 
             consent.setAttestedConsent(attestedConsent);
@@ -1071,7 +1071,7 @@ public class ConsentServiceImpl implements ConsentService {
                 attestedConsentRevocation.setAttestedPdfConsentRevoke(consentRevocationPdfGenerator.generateConsentRevocationPdf(consent, patient, revokedOn, consentRevocationTerm));
             } catch (IOException e) {
                 logger.error(e.getMessage(), e);
-                throw new ConsentRevocationPdfGenerateException(e);
+                throw new ConsentRevocationPdfGenerationException(e);
             }
 
             consent.setAttestedConsentRevocation(attestedConsentRevocation);
@@ -1496,7 +1496,7 @@ public class ConsentServiceImpl implements ConsentService {
             consent.setUnAttestedPdfConsent(consentPdfGenerator.generateConsentPdf(consent, patient, false, null, terms));
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
-            throw new ConsentPdfGenerateException(e);
+            throw new ConsentPdfGenerationException(e);
         }
 
         try {
