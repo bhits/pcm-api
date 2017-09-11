@@ -108,6 +108,13 @@ c2s:
         #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
         serverUrl: http://localhost:8080/iexhub/services
         clientSocketTimeoutInMs: 768000
+    pdfConfigs:
+      - type: consent-pdf
+        pdFont: TIMES_ROMAN
+        pdfPageSize: LETTER
+      - type: consent-revocation-pdf
+        pdFont: TIMES_ROMAN
+        pdfPageSize: LETTER
   vss:
     conceptCodeListPageSize: 20
 ---

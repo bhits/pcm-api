@@ -1,7 +1,10 @@
 package gov.samhsa.c2s.pcm.service.consent;
 
-import gov.samhsa.c2s.pcm.domain.consent.*;
-import gov.samhsa.c2s.pcm.service.consent.*;
+import gov.samhsa.c2s.pcm.domain.consent.AttestedConsent;
+import gov.samhsa.c2s.pcm.domain.consent.AttestedConsentRevocation;
+import gov.samhsa.c2s.pcm.domain.consent.Consent;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentRepository;
+import gov.samhsa.c2s.pcm.domain.consent.ConsentTermsVersions;
 import gov.samhsa.c2s.pcm.domain.patient.Patient;
 import gov.samhsa.c2s.pcm.domain.patient.PatientRepository;
 import gov.samhsa.c2s.pcm.domain.provider.IndividualProviderRepository;
@@ -19,6 +22,7 @@ import gov.samhsa.c2s.pcm.service.dto.ConsentListDto;
 import gov.samhsa.c2s.pcm.service.dto.ConsentPdfDto;
 import gov.samhsa.c2s.pcm.service.dto.ConsentRevokationPdfDto;
 import gov.samhsa.c2s.pcm.service.patient.PatientService;
+import gov.samhsa.c2s.pcm.service.pdf.ConsentPdfGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,14 +31,26 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * The Class ConsentServiceImplTest.
@@ -113,7 +129,7 @@ public class ConsentServiceImplTest {
      */
     @InjectMocks
     ConsentServiceImpl cst;
-    byte[] DOCUMENT_BYTES = "text" .getBytes();
+    byte[] DOCUMENT_BYTES = "text".getBytes();
     String DOCUMENT_FILE_NAME = "documentFileName";
     String DOCUMENT_NAME = "documentName";
     String SIGNED_DOCUMENT_URL = "signedDocumentUrl";
@@ -710,8 +726,8 @@ public class ConsentServiceImplTest {
 
     @Test
     public void testValidateConsentDate_true() {
-        assertEquals(true, cst.validateConsentDate(new Date(117, 06, 04),
-                new Date(117, 06, 19)));
+        assertEquals(true, cst.validateConsentDate(new Date(3117, 06, 04),
+                new Date(3117, 06, 19)));
     }
 
 }
